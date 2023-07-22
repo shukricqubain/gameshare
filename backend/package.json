@@ -1,0 +1,33 @@
+{
+  "name": "demo_node",
+  "version": "1.0.0",
+  "description": "Node.js Rest Apis with Express, Sequelize & MySQL.",
+  "main": "app.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "sequelize",
+    "mysql",
+    "rest",
+    "api"
+  ],
+  "author": "shukri",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jwt-simple": "^0.5.6",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.3.4",
+    "sequelize": "^6.32.0"
+  },
+  "devDependencies": {
+    "nodemon": "..."
+  }
+}
