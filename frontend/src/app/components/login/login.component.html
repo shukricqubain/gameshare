@@ -1,1 +1,24 @@
-<p>login works!</p>
+<div class="child-component" style="margin-top: 2rem;">
+    <div class="form-container">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="field-container">
+                <mat-form-field MatFormFieldAppearance="outline">
+                    <label>Username</label>
+                    <input matInput name="username" id="username" type="text" formControlName="username" placeholder="Enter username" required/>
+                </mat-form-field>
+                <mat-form-field MatFormFieldAppearance="outline">
+                    <label>Password</label>
+                    <input matInput name="password" id="password" type="text" formControlName="password" placeholder="Enter password" required/>
+                </mat-form-field>
+                <div *ngIf="loginForm.controls.username.invalid && (loginForm.controls.username.dirty || loginForm.controls.username.touched)">
+                    <div *ngIf="loginForm.controls.username.errors?.['required']">
+                        Name is required.
+                    </div>
+                </div>
+            </div>
+            <div class="form-container">
+                <button type="submit">Submit</button> 
+            </div>
+          </form> 
+    </div>
+</div>

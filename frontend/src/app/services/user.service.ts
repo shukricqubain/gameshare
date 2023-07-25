@@ -19,6 +19,10 @@ export class UserService {
     return this.http.get(`${baseUrl}/${id}`);
   }
 
+  login(data:any): Observable<any>{
+    return this.http.post(`${baseUrl}/loginUser`, data);
+  }
+
   create(data: any): Observable<any> {
     return this.http.post(baseUrl, data);
   }
