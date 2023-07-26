@@ -2,25 +2,19 @@ const db = require('../models/index');
 
 async function getAll(){
     try{
-        return await db.user.findAll({
+        return await db.token.findAll({
             raw: true,
         });
     } catch(err){
         console.log(err)
     }
 }
-async function create(user){
+async function create(token){
     try{
-        return await db.user.create({
-            userID: user.userID,
-            userName: user.userName,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            dateOfBirth: user.dateOfBirth,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            userRole: user.userRole,
-            password: user.password
+        return await db.token.create({
+            tokenID: token.tokenID,
+            token: token.token,
+            userName: token.userName,
         });
     } catch(err){
         console.log(err)
@@ -30,10 +24,10 @@ async function create(user){
     }
 }
 
-async function getOne(userID){
+async function getOne(tokenID){
     try{
-        return await db.user.findOne({
-            where: {userID: userID},
+        return await db.token.findOne({
+            where: {tokenID: tokenID},
             raw: true
         });
     } catch(err){
@@ -41,9 +35,9 @@ async function getOne(userID){
     }
 }
 
-async function getUserByUserName(username){
+async function getTokenByUserName(username){
     try{
-        return await db.user.findOne({
+        return await db.token.findOne({
             where: {userName: username},
             raw: true
         });
@@ -52,14 +46,13 @@ async function getUserByUserName(username){
     }
 }
 
-async function update(userID, user){
+async function update(tokenID, token){
     try{
-        console.log(user)
-        return result = await db.user.update(
-            user,
+        return result = await db.token.update(
+            token,
             {
                 where:{
-                    userID: userID
+                    tokenID: tokenID
                 }
             }
         );
@@ -71,11 +64,11 @@ async function update(userID, user){
     }
 }
 
-async function deleteUser(userID){
+async function deleteToken(tokenID){
     try{
-        return result = await db.user.destroy({
+        return result = await db.token.destroy({
             where:{
-                userID: userID
+                tokenID: tokenID
             }
         });
     } catch(err){
@@ -86,8 +79,8 @@ async function deleteUser(userID){
 module.exports = {
     getAll,
     getOne,
-    getUserByUserName,
+    getTokenByUserName,
     create,
     update,
-    deleteUser
+    deleteToken
 };

@@ -26,10 +26,12 @@ db.sequelize.sync({alter: true, force: false}).then(() => {
 const home = require('./routes/home.route');
 const role = require('./routes/role.route');
 const user = require('./routes/user.route');
+const token = require('./routes/token.route');
 
 app.use("/home", home);
 app.use("/user", user);
 app.use("/role", role);
+app.use("/token", token);
 
 
 // set port, listen for requests

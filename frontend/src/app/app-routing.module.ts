@@ -8,11 +8,11 @@ import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'all-users', component: AllUsersComponent },
-  { path: 'user-profile/:id', component: UserProfileComponent },
-  { path: 'add-user', component: AddUserComponent },
-  { path: 'login', component: LoginComponent}
+  { path: 'home', component: HomeComponent, title: 'Home' },
+  { path: 'all-users', component: AllUsersComponent, title: 'All Users' },
+  { path: 'user-profile/:id', component: UserProfileComponent, title: 'User Profile' },
+  { path: 'add-user', component: AddUserComponent, title: 'Add User' },
+  { path: 'login', component: LoginComponent, title: 'Login'}
 ];
 
 @NgModule({

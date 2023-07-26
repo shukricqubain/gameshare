@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent {
   });
   constructor(
     private userService: UserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ){
   }
 
@@ -28,10 +30,13 @@ export class LoginComponent {
   }
 
   async onSubmit(){
-    console.log(this.loginForm.value)
-    let result = this.userService.login(this.loginForm.value).subscribe(res => {
+    this.userService.login(this.loginForm.value).subscribe(res => {
       console.log(res);
       if (res.message === 'Logged in successfully.') {
+        this.snackBar.open(res.message, 'dismiss');
+        this.router.navigate(['/home']);
+
+      } else {
         this.snackBar.open(res.message, 'dismiss');
       }
     });

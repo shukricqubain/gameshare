@@ -2,9 +2,10 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/user.controller");
+const tokenController = require('../controllers/token.controller');
 const bcrypt = require('bcrypt');
 const user = require('../models/user.model');
-const jwt = require('jwt-simple');
+const jwt = require('jsonwebtoken');
 
 // sign up user
 router.post('/signupUser', async function(req, res){
@@ -54,20 +55,46 @@ router.post('/loginUser', async function(req,res){
             if(user == undefined || typeof user === 'string'){
                 res.status(404).send(user);
             }
-            console.log(user)
-            ///compare the password and the user hash
-            bcrypt.compare(password, user.password).then(compare_result => {
-                if(compare_result == true){
-                    res.status(200).send({
-                        message:"Logged in successfully.",
-                        user: user
-                    });
-                } else {
-                    res.status(400).json({
-                        message:"Either the password or username is incorrect."
-                    });
-                }
-            }).catch(err => console.error(err.message));
+            
+            //find user token and return
+            let token = await tokenController.findUsername(username);
+            if(token !== null && token !== 'Cannot find token with specified username.'){
+                ///verify token
+                let result = verfiyToken(token);
+                console.log('checking result')
+                console.log(result)
+                res.status(200).send({
+                    message:"Logged in successfully.",
+                    token: token.token
+                });
+
+            ///need to check username and password, then generate new token
+            } else {
+                ///compare the password and the user hash
+                bcrypt.compare(password, user.password).then(compare_result => {
+                    if(compare_result == true){
+
+                        //generate token
+                        try{
+                            const token = generateToken(user);
+                            res.status(200).send({
+                                message:"Logged in successfully.",
+                                token: token
+                            });
+                        } catch(err){
+                            res.status(500).send({
+                                message:"Error generating token."
+                            });
+                        }
+                        
+                    } else {
+                        res.status(400).json({
+                            message:"Either the password or username is incorrect."
+                        });
+                    }
+                }).catch(err => console.error(err.message));
+            }
+
         } else if(req.body.username == undefined){
             res.status(400).json({
                 message:"The password is required."
@@ -103,7 +130,7 @@ router.get('/allUsers', async function(req, res) {
 });
 
 // Todo add token functionality to check that the user call this request has the priviledge.
-// get a single user app by their userID
+// get a single user by their userID
 router.get('/singleUser/:userID', async function(req, res){
     try{
         if(req.params.userID !== undefined){
@@ -123,10 +150,10 @@ router.get('/singleUser/:userID', async function(req, res){
 });
 
 // Todo add token functionality to check that the user call this request has the priviledge.
-// get a single user app by their username
+// get a single user by their username
 router.get('/singleUserByName/:userName', async function(req, res){
     try{
-        if(req.body.userName !== undefined){
+        if(req.params.userName !== undefined){
             let userName = req.params.userName;
             let user = await userController.findUsername(userName);
             if(user !== undefined && typeof user !== 'string'){
@@ -184,7 +211,7 @@ router.put('/editUser', async function(req, res){
             }
         } else {
             res.status(400).json({
-                message:"The userID is required to update an employee."
+                message:"The userID is required to update a user."
             });
         }
     } catch(err){
@@ -220,14 +247,44 @@ router.delete('/deleteUser/:userID', async function(req, res){
     }
 });
 
-function generateToken(user){
-    const payload = {
-        userid: user.userID,
-        firstName: user.firstName
-    };
-    const secret = 'TU0GFSR2RWCGK7FQ25VXNB58U37SWGJK2B4BQZU3VAP8YMYYJPICIEKQPAEVK1ZABQOA5XLTQPJ93Y8KI6UWRDDR9AZEH86V9CZ9LPI0TDVUHL180TGEP8IUWGT3JYGLFTWCUBL1RJ3XDPM0';
-    const token = jwt.encode(payload, secret);
-    return token;
+async function generateToken(user){
+    console.log('generating token')
+    try{
+        const token = jwt.sign(
+            { data: `${user.userName}`}, 
+            '3310969166433653447079416612547342880134738789931871978370073798795133211999047787078905511792111667', 
+            { expiresIn: '1h' }
+        );
+        const token_obj = {
+            token: token,
+            userName: user.userName
+        }
+        await tokenController.create(token_obj);
+        return token;
+    } catch(err){
+        console.log(err);
+    }
+}
+
+function verfiyToken(token){
+    console.log('verifying token')
+    console.log(token)
+    jwt.verify(
+        token, 
+        '3310969166433653447079416612547342880134738789931871978370073798795133211999047787078905511792111667', 
+        function(err, decoded) {
+            if (err) {
+                console.log(err);
+                return err;
+            /*
+                err = {
+                name: 'TokenExpiredError',
+                message: 'jwt expired',
+                expiredAt: 1408621000
+                }
+            */
+            }
+    });
 }
 
 module.exports = router;
