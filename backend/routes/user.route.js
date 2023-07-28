@@ -6,6 +6,7 @@ const tokenController = require('../controllers/token.controller');
 const bcrypt = require('bcrypt');
 const user = require('../models/user.model');
 const jwt = require('jsonwebtoken');
+const secret = '3310969166433653447079416612547342880134738789931871978370073798795133211999047787078905511792111667';
 
 // sign up user
 router.post('/signupUser', async function(req, res){
@@ -60,12 +61,27 @@ router.post('/loginUser', async function(req,res){
             let token = await tokenController.findUsername(username);
             if(token !== null && token !== 'Cannot find token with specified username.'){
                 ///verify token
-                let result = verfiyToken(token);
-                console.log('checking result')
-                console.log(result)
-                res.status(200).send({
-                    message:"Logged in successfully.",
-                    token: token.token
+                jwt.verify(token.token, secret, (err, decoded) => {
+                    if (err) {
+                        if(err.name === 'TokenExpiredError'){
+                            res.status(401).send({
+                                message: 'Session expired.'
+                            });
+                        } else if(err.name === 'NotBeforeError'){
+                            res.status(401).send({
+                                message: 'JWT Not Before Error.'
+                            });
+                        } else {
+                            res.status(401).send({
+                                message: 'JsonWebTokenError'
+                            });
+                        }
+                        
+                    } else {
+                        res.status(200).send({
+                            message:"Logged in successfully.",
+                        });
+                    }
                 });
 
             ///need to check username and password, then generate new token
@@ -253,7 +269,10 @@ async function generateToken(user){
         const token = jwt.sign(
             { data: `${user.userName}`}, 
             '3310969166433653447079416612547342880134738789931871978370073798795133211999047787078905511792111667', 
-            { expiresIn: '1h' }
+            { expiresIn: '1m' }
+            // { expiresIn: '1h' }
+            
+
         );
         const token_obj = {
             token: token,
@@ -264,27 +283,6 @@ async function generateToken(user){
     } catch(err){
         console.log(err);
     }
-}
-
-function verfiyToken(token){
-    console.log('verifying token')
-    console.log(token)
-    jwt.verify(
-        token, 
-        '3310969166433653447079416612547342880134738789931871978370073798795133211999047787078905511792111667', 
-        function(err, decoded) {
-            if (err) {
-                console.log(err);
-                return err;
-            /*
-                err = {
-                name: 'TokenExpiredError',
-                message: 'jwt expired',
-                expiredAt: 1408621000
-                }
-            */
-            }
-    });
 }
 
 module.exports = router;

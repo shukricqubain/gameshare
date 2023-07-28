@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="form-container">
-                <button type="submit">Submit</button> 
+                <button [disabled]="!loginForm.dirty || !loginForm.valid" type="submit">Submit</button> 
             </div>
           </form> 
     </div>
