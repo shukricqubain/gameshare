@@ -269,8 +269,7 @@ async function generateToken(user){
         const token = jwt.sign(
             { data: `${user.userName}`}, 
             '3310969166433653447079416612547342880134738789931871978370073798795133211999047787078905511792111667', 
-            { expiresIn: '1m' }
-            // { expiresIn: '1h' }
+            { expiresIn: '4h' }
             
 
         );
