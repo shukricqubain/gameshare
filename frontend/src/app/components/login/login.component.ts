@@ -22,34 +22,39 @@ export class LoginComponent {
     private userService: UserService,
     private snackBar: MatSnackBar,
     private router: Router
-  ){
+  ) {
   }
 
-  ngOnInit(){
-
+  ngOnInit() {
   }
 
-  async onSubmit(){
-    this.userService.login(this.loginForm.value).subscribe(
-      (res) => {
-        if (res.message === 'Logged in successfully.') {
-          this.snackBar.open(res.message, 'dismiss',{
-            duration: 3000
-          });
-          this.router.navigate(['/home']);
-        }
-      },
-      (err) => {
-        if(err.error.message !== undefined){
-          this.snackBar.open(err.error.message, 'dismiss',{
-            duration: 3000
-          });
-        } else {
-          this.snackBar.open(err.message, 'dismiss',{
-            duration: 3000
-          });
-        }
-      }
-    );
+  async onSubmit() {
+    this.userService.login(this.loginForm.value).subscribe({
+      next: this.handleLoginResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
   }
+
+  handleLoginResponse(data: any) {
+    if (data.message === 'Logged in successfully.') {
+      this.snackBar.open(data.message, 'dismiss', {
+        duration: 3000
+      });
+      localStorage.setItem('userName', data.userName);
+      this.router.navigate(['/home']);
+    }
+  }
+
+  handleErrorResponse(error: any) {
+    if (error.error.message !== undefined) {
+      this.snackBar.open(error.error.message, 'dismiss', {
+        duration: 3000
+      });
+    } else {
+      this.snackBar.open(error.message, 'dismiss', {
+        duration: 3000
+      });
+    }
+  }
+
 }

@@ -53,7 +53,7 @@ router.post('/loginUser', async function(req,res){
             const password = req.body.password;
             //find user by username
             const user = await userController.findUsername(username);
-            if(user == undefined || typeof user === 'string'){
+            if(typeof user === 'string'){
                 res.status(404).send(user);
             }
             
@@ -80,6 +80,7 @@ router.post('/loginUser', async function(req,res){
                     } else {
                         res.status(200).send({
                             message:"Logged in successfully.",
+                            userName: user.userName
                         });
                     }
                 });
@@ -113,11 +114,11 @@ router.post('/loginUser', async function(req,res){
 
         } else if(req.body.username == undefined){
             res.status(400).json({
-                message:"The password is required."
+                message:"The username is required."
             });
         } else if(req.body.password == undefined){
             res.status(400).json({
-                message:"The username is required."
+                message:"The password is required."
             });
         }
     
@@ -128,6 +129,53 @@ router.post('/loginUser', async function(req,res){
         });
     }
     
+});
+
+router.post('/checkUserIsLoggedIn', async function(req, res){
+    try{
+        if(req.body.userName !== undefined){
+            let userName = req.body.userName;
+            //find user token and return
+            let token = await tokenController.findUsername(userName);
+            if(token !== null && token !== 'Cannot find token with specified username.'){
+                ///verify token
+                jwt.verify(token.token, secret, (err, decoded) => {
+                    if (err) {
+                        if(err.name === 'TokenExpiredError'){
+                            res.status(401).send({
+                                message: 'Session expired.'
+                            });
+                        } else if(err.name === 'NotBeforeError'){
+                            res.status(401).send({
+                                message: 'JWT Not Before Error.'
+                            });
+                        } else {
+                            res.status(401).send({
+                                message: 'JsonWebTokenError'
+                            });
+                        }
+                    } else {
+                        res.status(200).send({
+                            message:"Logged in successfully.",
+                        });
+                    }
+                });
+            } else {
+                res.status(200).send({
+                    message:"Token is null.",
+                });
+            }
+        } else if(req.body.username == undefined){
+            res.status(400).json({
+                message:"The username is required."
+            });
+        }
+    } catch(err){
+        res.status(500).json({
+            message:"There was an error when trying to login a user.",
+            err
+        });
+    }
 });
 
 // Todo add token functionality to check that the user call this request has the priviledge.
@@ -264,7 +312,6 @@ router.delete('/deleteUser/:userID', async function(req, res){
 });
 
 async function generateToken(user){
-    console.log('generating token')
     try{
         const token = jwt.sign(
             { data: `${user.userName}`}, 

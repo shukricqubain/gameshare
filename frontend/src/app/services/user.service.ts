@@ -23,6 +23,10 @@ export class UserService {
     return this.http.post(`${baseUrl}/loginUser`, data);
   }
 
+  checkLoggedIn(data: any): Observable<any>{
+    return this.http.post(`${baseUrl}/checkUserIsLoggedIn`, data);
+  }
+
   create(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/signupUser`, data);
   }

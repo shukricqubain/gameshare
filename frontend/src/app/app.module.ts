@@ -14,6 +14,7 @@ import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -55,6 +56,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatSnackBarModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatIconModule
     
   ],
   exports: [
@@ -63,6 +65,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatRippleModule,
     MatInputModule,
     MatSnackBarModule,
+    MatIconModule
   ],
   providers: [
     MatDatepickerModule,
