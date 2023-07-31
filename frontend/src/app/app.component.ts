@@ -22,7 +22,6 @@ export class AppComponent {
 
     /// check if userName is in local storage
     let logged_user = localStorage.getItem('userName');
-
     ///see if token is expired
     if(logged_user !== null){
       let data = {

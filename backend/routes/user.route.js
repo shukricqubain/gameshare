@@ -96,6 +96,7 @@ router.post('/loginUser', async function(req,res){
                             const token = generateToken(user);
                             res.status(200).send({
                                 message:"Logged in successfully.",
+                                userName: username,
                                 token: token
                             });
                         } catch(err){
@@ -157,6 +158,7 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
                     } else {
                         res.status(200).send({
                             message:"Logged in successfully.",
+                            userName: userName
                         });
                     }
                 });

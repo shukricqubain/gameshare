@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-user-profile',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class UserProfileComponent {
 
+  constructor(private location: Location){
+  }
+
+  ngOnInit(){
+    let user = this.location.getState();
+  }
 }

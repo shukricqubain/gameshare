@@ -19,6 +19,10 @@ export class UserService {
     return this.http.get(`${baseUrl}/${id}`);
   }
 
+  getUserByName(userName: string): Observable<User>{
+    return this.http.get(`${baseUrl}/singleUserByName/${userName}`);
+  }
+
   login(data:any): Observable<any>{
     return this.http.post(`${baseUrl}/loginUser`, data);
   }
