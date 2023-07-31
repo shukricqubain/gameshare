@@ -143,7 +143,7 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
                 jwt.verify(token.token, secret, (err, decoded) => {
                     if (err) {
                         if(err.name === 'TokenExpiredError'){
-                            res.status(401).send({
+                            res.status(200).send({
                                 message: 'Session expired.'
                             });
                         } else if(err.name === 'NotBeforeError'){

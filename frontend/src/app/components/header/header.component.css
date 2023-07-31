@@ -23,3 +23,14 @@ a {
     display: flex;
     justify-content: space-evenly;
 }
+
+.user-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header-icon {
+    cursor: pointer;
+    margin-top: 4px;
+    margin-left: 10px;
+}

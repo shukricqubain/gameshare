@@ -5,13 +5,19 @@
             <br>
             <a routerLink="/all-users" routerLinkActive="active" ariaCurrentWhenActive="page">Users</a>
             <br>
-            <a routerLink="/user-profile/:id" routerLinkActive="active" ariaCurrentWhenActive="page">Profile</a>
-            <br>
             <a routerLink="/add-user" routerLinkActive="active" ariaCurrentWhenActive="page">Add User</a>
         </div>
         <br>
-        <mat-icon style="cursor: pointer" (click)="viewProfile()">
-            account_circle
-        </mat-icon>
+        <div class="user-container">
+            <h2>{{userName}}</h2>
+            <br>
+            <mat-icon class="header-icon" (click)="viewProfile()">
+                account_circle
+            </mat-icon>
+            <br>
+            <mat-icon class="header-icon" (click)="logout()">
+                logout
+            </mat-icon>
+        </div>
     </mat-toolbar-row>
 </mat-toolbar>

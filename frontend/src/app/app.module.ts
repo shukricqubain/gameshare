@@ -15,6 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +27,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
+// import { PopUpComponent } from './components/pop-up/pop-up.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,8 @@ import { HttpClientModule } from '@angular/common/http';
     AllUsersComponent,
     HeaderComponent,
     UserProfileComponent,
-    LoginComponent
+    LoginComponent,
+    // PopUpComponent
   ],
   imports: [
     BrowserModule,
@@ -56,8 +60,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatSnackBarModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
-    
+    MatIconModule,
+    MatSlideToggleModule,
+    FormsModule
   ],
   exports: [
     MatButtonModule,
@@ -65,7 +70,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatRippleModule,
     MatInputModule,
     MatSnackBarModule,
-    MatIconModule
+    MatIconModule,
+    MatSlideToggleModule
   ],
   providers: [
     MatDatepickerModule,

@@ -17,16 +17,25 @@ export class HeaderComponent {
   ){
   }
 
+  userName: string = '';
   ngOnInit(){
+    let data = localStorage.getItem('userName');
+    if(data !== null){
+      this.userName = data;
+    }
   }
 
   async viewProfile(){
-    let userName = localStorage.getItem('userName');
-    if(userName !== null){
-      await this.userService.getUserByName(userName).subscribe(user => {
+    if(this.userName !== null || this.userName === ''){
+      await this.userService.getUserByName(this.userName).subscribe(user => {
         this.router.navigate([`/user-profile/${user.userID}`], { state: {user: user}});
       });
     }
+  }
+
+  logout(){
+    localStorage.removeItem("userName"); 
+    this.router.navigate(['/login']);
   }
 
 }

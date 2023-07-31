@@ -18,6 +18,7 @@ export class LoginComponent {
     password: new FormControl('',
       [Validators.required])
   });
+
   constructor(
     private userService: UserService,
     private snackBar: MatSnackBar,
@@ -26,6 +27,9 @@ export class LoginComponent {
   }
 
   ngOnInit() {
+    let logged_user = localStorage.getItem('userName');
+    console.log('login')
+    console.log(logged_user)
   }
 
   async onSubmit() {
