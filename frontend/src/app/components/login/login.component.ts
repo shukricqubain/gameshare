@@ -4,6 +4,8 @@ import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { UsernameService } from 'src/app/services/username.service';
 
 @Component({
   selector: 'app-login',
@@ -18,18 +20,17 @@ export class LoginComponent {
     password: new FormControl('',
       [Validators.required])
   });
+  unsubscribe$: Subject<boolean> = new Subject();
 
   constructor(
     private userService: UserService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private usernameService: UsernameService
   ) {
   }
 
   ngOnInit() {
-    let logged_user = localStorage.getItem('userName');
-    console.log('login')
-    console.log(logged_user)
   }
 
   async onSubmit() {
@@ -44,6 +45,7 @@ export class LoginComponent {
       this.snackBar.open(data.message, 'dismiss', {
         duration: 3000
       });
+      this.usernameService.setUsernameObs(data.userName);
       localStorage.setItem('userName', data.userName);
       this.router.navigate(['/home']);
     }
