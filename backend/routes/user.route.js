@@ -30,7 +30,6 @@ router.post('/signupUser', async function(req, res){
         } else {
             newUser = newUser['dataValues'];
             const token = generateToken(newUser);
-            console.log(token)
             res.status(201).json({
                 created_user: newUser,
                 token: token,

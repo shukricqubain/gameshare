@@ -26,7 +26,6 @@ export class HeaderComponent {
     this.usernameService.getUsernameObs()
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(username => this.userName = username);
-    console.log(this.userName)
     let data = localStorage.getItem('userName');
     if(data !== null){
       this.userName = data;

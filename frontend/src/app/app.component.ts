@@ -50,7 +50,6 @@ export class AppComponent {
         duration: 3000
       });
       localStorage.setItem('userName', data.userName);
-      console.log(data)
       this.router.navigate(['/home']);
     ///if no token exists on db reroute to login page
     } else {

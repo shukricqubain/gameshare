@@ -17,6 +17,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
+import { MatSortModule } from '@angular/material/sort';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -62,7 +63,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatNativeDateModule,
     MatIconModule,
     MatSlideToggleModule,
-    FormsModule
+    FormsModule,
+    MatSortModule
   ],
   exports: [
     MatButtonModule,
@@ -71,7 +73,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatInputModule,
     MatSnackBarModule,
     MatIconModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatSortModule
   ],
   providers: [
     MatDatepickerModule,

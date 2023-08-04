@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { UserService } from 'src/app/services/user.service';
+import { UsernameService } from 'src/app/services/username.service';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class UserProfileComponent {
   constructor(
     private location: Location,
     private snackBar: MatSnackBar,
-    private userService: UserService
+    private userService: UserService,
+    private usernameService: UsernameService
   ) {
   }
 
@@ -58,6 +60,11 @@ export class UserProfileComponent {
   }
 
   async onSubmit(){
+    let initial_username = this.user.userName;
+    let updated_username = this.userProfileForm.controls.userName.value;
+    if(initial_username !== null && updated_username !== null && initial_username !== updated_username){
+      this.usernameService.setUsernameObs(updated_username);
+    }
     await this.userService.update(this.userProfileForm.value).subscribe({
       next: this.handleUpdateResponse.bind(this),
       error: this.handleErrorResponse.bind(this)

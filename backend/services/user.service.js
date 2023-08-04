@@ -54,7 +54,6 @@ async function getUserByUserName(username){
 
 async function update(userID, user){
     try{
-        console.log(user)
         return result = await db.user.update(
             user,
             {

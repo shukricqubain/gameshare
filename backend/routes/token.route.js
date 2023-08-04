@@ -13,7 +13,6 @@ router.post('/addToken', async function(req, res){
             res.status(403).send(newToken);
         } else {
             newToken = newToken['dataValues'];
-            console.log(newToken)
             res.status(201).json({
                 newToken: newToken
             });
