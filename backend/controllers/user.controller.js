@@ -14,9 +14,23 @@ exports.create = async (req, res) => {
 };
 
 // Get all users
-exports.findAll = async (req, res) => {
+exports.findCount = async (searchCriteria) => {
     try{
-        let all_users = await userService.getAll();
+        let userCount = await userService.findCount(searchCriteria);
+        if(userCount > 0){
+            return userCount;
+        } else {
+            return {message: 'No data in user table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
+// Get all users
+exports.findAll = async (searchCriteria) => {
+    try{
+        let all_users = await userService.getAll(searchCriteria);
         if(all_users.length > 0){
             return all_users;
         } else {

@@ -181,13 +181,27 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
 
 // Todo add token functionality to check that the user call this request has the priviledge.
 // get all users 
-router.get('/allUsers', async function(req, res) {
+router.post('/allUsers', async function(req, res) {
     try{
-        let all_users = await userController.findAll();
-        if(all_users.message !== 'No data in user table to fetch.'){
-            res.status(200).send(all_users);
+        if(req.body !== null){
+            let searchCriteria = req.body;
+            let all_users;
+            let user_count;
+            if(searchCriteria.pagination){
+                user_count = await userController.findCount(searchCriteria);
+                searchCriteria.user_count = user_count;
+                all_users = await userController.findAll(searchCriteria);
+            } else {
+                all_users = await userController.findAll(searchCriteria);
+                user_count = all_users.length;
+            }
+            if(all_users.message !== 'No data in user table to fetch.'){
+                res.status(200).json({all_users, user_count});
+            } else {
+                res.status(204).send(all_users);
+            }
         } else {
-            res.status(204).send(all_users);
+            res.status(400).send('Search criteria is required.');
         }
     } catch(err){
         console.log(err)

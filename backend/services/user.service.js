@@ -1,10 +1,55 @@
 const db = require('../models/index');
 
-async function getAll(){
+async function findCount(searchCriteria){
     try{
-        return await db.user.findAll({
+        let sort = searchCriteria.sort;
+        let sortDirection = searchCriteria.sortDirection;
+        let users = await db.user.findAll({
+            order: [
+                [sort, sortDirection],
+                ['userName', 'ASC'],
+            ],
+            attributes: ['userID'],
             raw: true,
         });
+        return users.length;
+    } catch(err){
+        console.log(err)
+    }
+}
+
+async function getAll(searchCriteria){
+    try{
+        let sort = searchCriteria.sort;
+        let sortDirection = searchCriteria.sortDirection;
+        let pagination = searchCriteria.pagination;
+        let limit;
+        let offset;
+        let page = searchCriteria.page + 1;
+        if(pagination){
+            limit = searchCriteria.limit;
+            offset = (page - 1) * limit;
+            return await db.user.findAll({
+                order: [
+                    [sort, sortDirection],
+                    ['userName', 'ASC'],
+                ],
+                limit: limit,
+                offset: offset,
+                attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                raw: true,
+            });
+        } else {
+            return await db.user.findAll({
+                order: [
+                    [sort, sortDirection],
+                    ['userName', 'ASC'],
+                ],
+                attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                raw: true,
+            });
+        }
+        
     } catch(err){
         console.log(err)
     }
@@ -88,5 +133,6 @@ module.exports = {
     getUserByUserName,
     create,
     update,
-    deleteUser
+    deleteUser,
+    findCount
 };

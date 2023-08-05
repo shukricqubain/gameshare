@@ -11,8 +11,8 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<User[]> {
-    return this.http.get<User[]>(`${baseUrl}/AllUsers`);
+  getAll(search: object): Observable<any> {
+    return this.http.post(`${baseUrl}/AllUsers`, search);
   }
 
   get(id: any): Observable<User> {

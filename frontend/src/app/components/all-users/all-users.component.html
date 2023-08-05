@@ -1,7 +1,7 @@
 <div>
   <div class="example-container mat-elevation-z8">
     <mat-form-field>
-      <mat-label>Filter</mat-label>
+      <mat-label>Search</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Search Table" #input>
     </mat-form-field>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
@@ -40,9 +40,12 @@
     </table>
   
     <mat-paginator #paginator
-                   [pageSize]="5"
+                   [pageSize]="pageSize"
                    [pageSizeOptions]="[5, 10, 20, 100]"
-                   [showFirstLastButtons]="true">
+                   [showFirstLastButtons]="true"
+                   [pageIndex]="currentPage"
+                   [length]="totalSize"
+                   (page)="handlePage($event)">
     </mat-paginator>
   </div>
 </div>

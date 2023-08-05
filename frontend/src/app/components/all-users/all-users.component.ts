@@ -17,6 +17,10 @@ export class AllUsersComponent implements AfterViewInit {
   displayedColumns: string[] = ['userID', 'userName', 'userRole', 'email'];
   dataSource = new MatTableDataSource<any>;
   userData: User[];
+  search: any;
+  public pageSize = 5;
+  public currentPage = 0;
+  public totalSize = 0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -27,13 +31,41 @@ export class AllUsersComponent implements AfterViewInit {
   }
 
   async ngOnInit(){
-    await this.userService.getAll().subscribe(res => {
-      this.userData = res;
+    this.search = {
+      searchTerm: '',
+      sort: 'userID',
+      sortDirection: 'asc',
+      pagination: 'true',
+      limit: this.pageSize,
+      page: this.currentPage,
+    };
+    await this.userService.getAll(this.search).subscribe(res => {
+      this.userData = res.all_users;
+      this.totalSize = res.user_count;
       this.dataSource.data = this.userData;
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
 
+  }
+
+  public async handlePage(e: any) {
+    this.currentPage = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.search = {
+      searchTerm: '',
+      sort: 'userID',
+      sortDirection: 'asc',
+      pagination: 'true',
+      limit: this.pageSize,
+      page: this.currentPage,
+    }
+    await this.userService.getAll(this.search).subscribe(res => {
+      this.userData = res.all_users;
+      this.dataSource.data = this.userData;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    });
   }
 
   ngAfterViewInit() {
