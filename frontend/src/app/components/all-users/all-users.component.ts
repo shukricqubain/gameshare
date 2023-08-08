@@ -3,6 +3,7 @@ import { FormControl, FormGroup} from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule} from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import {catchError, map, merge, Observable, of as observableOf, startWith, switchMap} from 'rxjs';
 
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
@@ -20,8 +21,8 @@ export class AllUsersComponent implements AfterViewInit {
   search: any;
   pageSize = 5;
   currentPage = 0;
-  totalSize = 0;
-  loading: boolean = false;
+  resultsLength = 0;
+  isLoadingResults: boolean = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -35,31 +36,38 @@ export class AllUsersComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    await this.loadUsers();
-  }
+    //await this.loadUsers();
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          let searchCriteria = {
+            searchTerm: '',
+            sort: this.sort.active,
+            pagination: 'true',
+            direction: this.sort.direction,
+            limit: this.pageSize,
+            page: this.paginator.pageIndex
+          }
+          return this.userService!.getAll(searchCriteria).pipe(catchError(() => observableOf(null)));
+        }),
+        map(data => {
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+          if (data === null) {
+            return [];
+          }
 
-  public async loadUsers(obj?: any){
-    this.search = {
-      searchTerm: '',
-      sort: 'userID',
-      sortDirection: 'asc',
-      pagination: 'true',
-      limit: this.pageSize,
-      page: this.currentPage,
-    };
-    await this.userService.getAll(this.search).subscribe(res => {
-      this.userData = res.data;
-      this.totalSize = res.user_count;
-      this.dataSource.data = this.userData;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    });
-  }
-
-  public async changePage(e: any) {
-    this.currentPage = e.pageIndex;
-    this.pageSize = e.pageSize;
-    await this.loadUsers();
+          // Only refresh the result length if there is new data. In case of rate
+          // limit errors, we do not want to reset the paginator to zero, as that
+          // would prevent users from re-triggering requests.
+          this.resultsLength = data.user_count;
+          return data.data;
+        }),
+      )
+      .subscribe(data => (this.dataSource = data));
   }
 
   public applyFilter = ($event: Event) => {

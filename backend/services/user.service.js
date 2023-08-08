@@ -3,7 +3,7 @@ const db = require('../models/index');
 async function findCount(searchCriteria){
     try{
         let sort = searchCriteria.sort;
-        let sortDirection = searchCriteria.sortDirection;
+        let sortDirection = searchCriteria.direction;
         let users = await db.user.findAll({
             order: [
                 [sort, sortDirection],
@@ -21,7 +21,7 @@ async function findCount(searchCriteria){
 async function getAll(searchCriteria){
     try{
         let sort = searchCriteria.sort;
-        let sortDirection = searchCriteria.sortDirection;
+        let sortDirection = searchCriteria.direction;
         let pagination = searchCriteria.pagination;
         let limit;
         let offset;
