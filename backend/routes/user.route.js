@@ -196,7 +196,8 @@ router.post('/allUsers', async function(req, res) {
                 user_count = all_users.length;
             }
             if(all_users.message !== 'No data in user table to fetch.'){
-                res.status(200).json({all_users, user_count});
+                searchCriteria.data = all_users;
+                res.status(200).json(searchCriteria);
             } else {
                 res.status(204).send(all_users);
             }

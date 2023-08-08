@@ -25,20 +25,32 @@ async function getAll(searchCriteria){
         let pagination = searchCriteria.pagination;
         let limit;
         let offset;
-        let page = searchCriteria.page + 1;
+        let page = searchCriteria.page;
         if(pagination){
             limit = searchCriteria.limit;
-            offset = (page - 1) * limit;
-            return await db.user.findAll({
-                order: [
-                    [sort, sortDirection],
-                    ['userName', 'ASC'],
-                ],
-                limit: limit,
-                offset: offset,
-                attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
-                raw: true,
-            });
+            if(page != 0){
+                offset = page * limit;
+                return await db.user.findAll({
+                    order: [
+                        [sort, sortDirection],
+                        ['userName', 'ASC'],
+                    ],
+                    limit: limit,
+                    offset: offset,
+                    attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                    raw: true,
+                });
+            } else {
+                return await db.user.findAll({
+                    order: [
+                        [sort, sortDirection],
+                        ['userName', 'ASC'],
+                    ],
+                    limit: limit,
+                    attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                    raw: true,
+                });
+            }
         } else {
             return await db.user.findAll({
                 order: [
