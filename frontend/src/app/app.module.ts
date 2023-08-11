@@ -18,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -64,7 +65,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     MatSlideToggleModule,
     FormsModule,
-    MatSortModule
+    MatSortModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     MatButtonModule,
@@ -74,7 +76,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatSnackBarModule,
     MatIconModule,
     MatSlideToggleModule,
-    MatSortModule
+    MatSortModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     MatDatepickerModule,

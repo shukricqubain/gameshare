@@ -53,7 +53,7 @@ router.post('/loginUser', async function(req,res){
             //find user by username
             const user = await userController.findUsername(username);
             if(typeof user === 'string'){
-                res.status(404).send(user);
+                return res.status(404).send(user);
             }
             
             //find user token and return
@@ -63,21 +63,21 @@ router.post('/loginUser', async function(req,res){
                 jwt.verify(token.token, secret, (err, decoded) => {
                     if (err) {
                         if(err.name === 'TokenExpiredError'){
-                            res.status(401).send({
+                            return res.status(401).send({
                                 message: 'Session expired.'
                             });
                         } else if(err.name === 'NotBeforeError'){
-                            res.status(401).send({
+                            return res.status(401).send({
                                 message: 'JWT Not Before Error.'
                             });
                         } else {
-                            res.status(401).send({
+                            return res.status(401).send({
                                 message: 'JsonWebTokenError'
                             });
                         }
                         
                     } else {
-                        res.status(200).send({
+                        return res.status(200).json({
                             message:"Logged in successfully.",
                             userName: user.userName
                         });
@@ -93,19 +93,19 @@ router.post('/loginUser', async function(req,res){
                         //generate token
                         try{
                             const token = generateToken(user);
-                            res.status(200).send({
+                            return res.status(200).send({
                                 message:"Logged in successfully.",
                                 userName: username,
                                 token: token
                             });
                         } catch(err){
-                            res.status(500).send({
+                            return res.status(500).send({
                                 message:"Error generating token."
                             });
                         }
                         
                     } else {
-                        res.status(400).json({
+                        return res.status(400).json({
                             message:"Either the password or username is incorrect."
                         });
                     }
@@ -113,17 +113,17 @@ router.post('/loginUser', async function(req,res){
             }
 
         } else if(req.body.username == undefined){
-            res.status(400).json({
+            return res.status(400).json({
                 message:"The username is required."
             });
         } else if(req.body.password == undefined){
-            res.status(400).json({
+            return res.status(400).json({
                 message:"The password is required."
             });
         }
     
     } catch(err){
-        res.status(500).json({
+        return res.status(500).json({
             message:"There was an error when trying to login a user.",
             err
         });
@@ -188,18 +188,27 @@ router.post('/allUsers', async function(req, res) {
             let all_users;
             let user_count;
             if(searchCriteria.pagination){
+                console.log(searchCriteria)
                 user_count = await userController.findCount(searchCriteria);
+                console.log(user_count)
                 searchCriteria.user_count = user_count;
                 all_users = await userController.findAll(searchCriteria);
+                console.log(all_users)
+                if(all_users.message !== 'No data in user table to fetch.'){
+                    searchCriteria.data = all_users;
+                    return res.status(200).json(searchCriteria);
+                } else {
+                    return res.status(204).json(all_users.message);
+                }
             } else {
                 all_users = await userController.findAll(searchCriteria);
                 user_count = all_users.length;
-            }
-            if(all_users.message !== 'No data in user table to fetch.'){
-                searchCriteria.data = all_users;
-                res.status(200).json(searchCriteria);
-            } else {
-                res.status(204).send(all_users);
+                if(all_users.message !== 'No data in user table to fetch.'){
+                    searchCriteria.data = all_users;
+                    return res.status(200).json(searchCriteria);
+                } else {
+                    return res.status(204).json(all_users);
+                }
             }
         } else {
             res.status(400).send('Search criteria is required.');

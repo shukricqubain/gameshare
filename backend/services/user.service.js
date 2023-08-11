@@ -1,17 +1,38 @@
 const db = require('../models/index');
+var Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 async function findCount(searchCriteria){
     try{
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
-        let users = await db.user.findAll({
-            order: [
-                [sort, sortDirection],
-                ['userName', 'ASC'],
-            ],
-            attributes: ['userID'],
-            raw: true,
-        });
+        let searchTerm = searchCriteria.searchTerm;
+        let users;
+        if(searchTerm !== ''){
+            users = await db.user.findAll({
+                where: {
+                    userID: {[Op.like]: '%' + searchTerm + '%'}, 
+                    userName: {[Op.like]: '%' + searchTerm + '%'},
+                    userRole: {[Op.like]: '%' + searchTerm + '%'},
+                    email: {[Op.like]: '%' + searchTerm + '%'}
+                },
+                order: [
+                    [sort, sortDirection],
+                    ['userName', 'ASC'],
+                ],
+                attributes: ['userID'],
+                raw: true,
+            });
+        } else {
+            users = await db.user.findAll({
+                order: [
+                    [sort, sortDirection],
+                    ['userName', 'ASC'],
+                ],
+                attributes: ['userID'],
+                raw: true,
+            });
+        }
         return users.length;
     } catch(err){
         console.log(err)
@@ -23,45 +44,102 @@ async function getAll(searchCriteria){
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
         let pagination = searchCriteria.pagination;
+        let searchTerm = searchCriteria.searchTerm;
         let limit;
         let offset;
         let page = searchCriteria.page;
-        if(pagination){
-            limit = searchCriteria.limit;
-            if(page != 0){
-                offset = page * limit;
+        if(searchTerm !== ''){
+            if(pagination){
+                limit = searchCriteria.limit;
+                if(page != 0){
+                    offset = page * limit;
+                    return await db.user.findAll({
+                        where: {
+                            userID: {[Op.like]: '%' + searchTerm + '%'}, 
+                            userName: {[Op.like]: '%' + searchTerm + '%'},
+                            userRole: {[Op.like]: '%' + searchTerm + '%'},
+                            email: {[Op.like]: '%' + searchTerm + '%'}
+                        },
+                        order: [
+                            [sort, sortDirection],
+                            ['userName', 'ASC'],
+                        ],
+                        limit: limit,
+                        offset: offset,
+                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                        raw: true,
+                    });
+                } else {
+                    return await db.user.findAll({
+                        where: {
+                            userID: {[Op.like]: '%' + searchTerm + '%'}, 
+                            userName: {[Op.like]: '%' + searchTerm + '%'},
+                            userRole: {[Op.like]: '%' + searchTerm + '%'},
+                            email: {[Op.like]: '%' + searchTerm + '%'}
+                        },
+                        order: [
+                            [sort, sortDirection],
+                            ['userName', 'ASC'],
+                        ],
+                        limit: limit,
+                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                        raw: true,
+                    });
+                }
+            } else {
                 return await db.user.findAll({
+                    where: {
+                        userID: {[Op.like]: '%' + searchTerm + '%'}, 
+                        userName: {[Op.like]: '%' + searchTerm + '%'},
+                        userRole: {[Op.like]: '%' + searchTerm + '%'},
+                        email: {[Op.like]: '%' + searchTerm + '%'}
+                    },
                     order: [
                         [sort, sortDirection],
                         ['userName', 'ASC'],
                     ],
-                    limit: limit,
-                    offset: offset,
                     attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
                     raw: true,
                 });
+            }
+        } else {
+            if(pagination){
+                limit = searchCriteria.limit;
+                if(page != 0){
+                    offset = page * limit;
+                    return await db.user.findAll({
+                        order: [
+                            [sort, sortDirection],
+                            ['userName', 'ASC'],
+                        ],
+                        limit: limit,
+                        offset: offset,
+                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                        raw: true,
+                    });
+                } else {
+                    return await db.user.findAll({
+                        order: [
+                            [sort, sortDirection],
+                            ['userName', 'ASC'],
+                        ],
+                        limit: limit,
+                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                        raw: true,
+                    });
+                }
             } else {
                 return await db.user.findAll({
                     order: [
                         [sort, sortDirection],
                         ['userName', 'ASC'],
                     ],
-                    limit: limit,
                     attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
                     raw: true,
                 });
             }
-        } else {
-            return await db.user.findAll({
-                order: [
-                    [sort, sortDirection],
-                    ['userName', 'ASC'],
-                ],
-                attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
-                raw: true,
-            });
         }
-        
+
     } catch(err){
         console.log(err)
     }
