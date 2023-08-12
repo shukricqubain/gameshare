@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Inject, Optional } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
-
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-user',
@@ -27,12 +27,37 @@ export class AddUserComponent {
   constructor(
     private userService: UserService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    @Optional() private dialogRef?: MatDialogRef<AddUserComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data?: User
   ){
   }
 
+  isEdit: boolean = false;
+  showPassword: boolean = false;
+  
   ngOnInit(){
+    if(this.data !== null && this.data != undefined){
+      this.isEdit = true;
+      let dateOfBirth = `${this.data.dateOfBirth}`;
+      let userName = `${this.data.userName}`;
+      let firstName = `${this.data.firstName}`;
+      let lastName = `${this.data.lastName}`;
+      let email = `${this.data.email}`;
+      let phoneNumber = `${this.data.phoneNumber}`;
+      let userRole = `${this.data.userRole}`;
+      let password = `${this.data.password}`;
+      this.addUserForm.controls.dateOfBirth.patchValue(dateOfBirth);
+      this.addUserForm.controls.userName.patchValue(userName);
+      this.addUserForm.controls.firstName.patchValue(firstName);
+      this.addUserForm.controls.lastName.patchValue(lastName);
+      this.addUserForm.controls.email.patchValue(email);
+      this.addUserForm.controls.phoneNumber.patchValue(phoneNumber);
+      this.addUserForm.controls.userRole.patchValue(userRole);
+      this.addUserForm.controls.password.patchValue(password);
 
+
+    }
   }
   
   async onSubmit(){
@@ -43,20 +68,39 @@ export class AddUserComponent {
       password: '',
       userRole: 0,
       email: '',
-      dateOfBirth: ''
+      dateOfBirth: '',
+      userID: 0
     };
     newUser.firstName = this.addUserForm.controls.firstName.value || '';
     newUser.lastName = this.addUserForm.controls.lastName.value || '';
     newUser.userName = this.addUserForm.controls.userName.value || '';
     newUser.password = this.addUserForm.controls.password.value || '';
-    newUser.userRole = Number(this.addUserForm.controls.firstName.value) || 2;
+    newUser.userRole = Number(this.addUserForm.controls.userRole.value) || 2;
     newUser.email = this.addUserForm.controls.email.value || '';
     newUser.dateOfBirth = this.addUserForm.controls.dateOfBirth.value || ''; 
     newUser.phoneNumber = this.addUserForm.controls.phoneNumber.value || '';
-    this.userService.create(newUser).subscribe({
-      next: this.handleCreateResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+    if(this.isEdit){
+      newUser.userID = this.data?.userID;
+      this.userService.update(newUser).subscribe({
+        next: this.handleEditResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    } else {
+      this.userService.create(newUser).subscribe({
+        next: this.handleCreateResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
+    
+  }
+
+  handleEditResponse(data:any){
+    if(data.user_id !== null && data.created_user !== null){
+      this.snackBar.open('Successfully edited a user!', 'dismiss',{
+        duration: 3000
+      });
+      this.closeDialog(data)
+    }
   }
 
   handleCreateResponse(data:any){
@@ -72,6 +116,20 @@ export class AddUserComponent {
     this.snackBar.open(error.message, 'dismiss',{
       duration: 3000
     });
+  }
+
+  editUser(){
+    this.dialogRef?.close({
+      data:this.data
+    });
+  }
+
+  closeDialog(data?:any){
+    if(data !== null){
+      this.dialogRef?.close({event: 'Edited User', data: data});
+    } else {
+      this.dialogRef?.close({event:'Cancel'});
+    }
   }
 
 }

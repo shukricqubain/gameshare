@@ -66,7 +66,7 @@ async function getAll(searchCriteria){
                         ],
                         limit: limit,
                         offset: offset,
-                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'password', 'createdAt', 'updatedAt'],
                         raw: true,
                     });
                 } else {
@@ -82,7 +82,7 @@ async function getAll(searchCriteria){
                             ['userName', 'ASC'],
                         ],
                         limit: limit,
-                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'password', 'createdAt', 'updatedAt'],
                         raw: true,
                     });
                 }
@@ -98,7 +98,7 @@ async function getAll(searchCriteria){
                         [sort, sortDirection],
                         ['userName', 'ASC'],
                     ],
-                    attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                    attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'password', 'createdAt', 'updatedAt'],
                     raw: true,
                 });
             }
@@ -114,7 +114,7 @@ async function getAll(searchCriteria){
                         ],
                         limit: limit,
                         offset: offset,
-                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'password', 'createdAt', 'updatedAt'],
                         raw: true,
                     });
                 } else {
@@ -124,7 +124,7 @@ async function getAll(searchCriteria){
                             ['userName', 'ASC'],
                         ],
                         limit: limit,
-                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                        attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'password', 'createdAt', 'updatedAt'],
                         raw: true,
                     });
                 }
@@ -134,7 +134,7 @@ async function getAll(searchCriteria){
                         [sort, sortDirection],
                         ['userName', 'ASC'],
                     ],
-                    attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'createdAt', 'updatedAt'],
+                    attributes: ['userID', 'userName', 'firstName', 'lastName', 'dateOfBirth', 'email', 'phoneNumber', 'userRole', 'password', 'createdAt', 'updatedAt'],
                     raw: true,
                 });
             }

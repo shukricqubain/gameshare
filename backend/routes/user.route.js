@@ -188,12 +188,9 @@ router.post('/allUsers', async function(req, res) {
             let all_users;
             let user_count;
             if(searchCriteria.pagination){
-                console.log(searchCriteria)
                 user_count = await userController.findCount(searchCriteria);
-                console.log(user_count)
                 searchCriteria.user_count = user_count;
                 all_users = await userController.findAll(searchCriteria);
-                console.log(all_users)
                 if(all_users.message !== 'No data in user table to fetch.'){
                     searchCriteria.data = all_users;
                     return res.status(200).json(searchCriteria);

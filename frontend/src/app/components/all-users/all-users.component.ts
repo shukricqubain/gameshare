@@ -7,6 +7,10 @@ import {catchError, map, merge, Observable, of as observableOf, startWith, switc
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AddUserComponent } from '../add-user/add-user.component';
+
 @Component({
   selector: 'app-all-users',
   templateUrl: './all-users.component.html',
@@ -37,7 +41,8 @@ export class AllUsersComponent implements AfterViewInit {
 
   constructor(
     private userService: UserService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private matDialog: MatDialog
   ){
   }
 
@@ -94,8 +99,16 @@ export class AllUsersComponent implements AfterViewInit {
 
   }
 
-  public editUser(){
-    console.log('edit user')
+  public editUser(element: any){
+    const dialogRef = this.matDialog.open(AddUserComponent, {
+      width: '100%',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+      this.ngAfterViewInit();
+    });
   }
 
 }
