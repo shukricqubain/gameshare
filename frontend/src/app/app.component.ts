@@ -3,6 +3,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { UserService } from './services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { RoleService } from './services/roleID.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -15,17 +17,19 @@ export class AppComponent {
   constructor (
     private userService: UserService,
     private router: Router,
-    private snackBar: MatSnackBar,) {
+    private snackBar: MatSnackBar
+  ) {
   }
 
   ngOnInit(){
-
-    /// check if userName is in local storage
-    let logged_user = localStorage.getItem('userName');
+    /// check if userName and roleID is in local storage
+    let localUserName = localStorage.getItem('userName');
+    let localRoleID = localStorage.getItem('roleID');
     ///see if token is expired
-    if(logged_user !== null){
+    if(localUserName !== null && localRoleID !== null){
       let data = {
-        userName: logged_user
+        userName: localUserName,
+        roleID: localRoleID
       }
       this.userService.checkLoggedIn(data).subscribe({
         next: this.handleLoginResponse.bind(this),
@@ -50,10 +54,12 @@ export class AppComponent {
         duration: 3000
       });
       localStorage.setItem('userName', data.userName);
+      localStorage.setItem('roleID', data.roleID);
       this.router.navigate(['/home']);
     ///if no token exists on db reroute to login page
     } else {
       localStorage.removeItem("userName"); 
+      localStorage.removeItem("roleID");
       this.router.navigate(['/login']);
     }
   }

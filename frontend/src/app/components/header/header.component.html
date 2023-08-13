@@ -2,10 +2,8 @@
     <mat-toolbar-row class="row-container">
         <div class="links-container">
             <a routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a>
-            <br>
-            <a routerLink="/all-users" routerLinkActive="active" ariaCurrentWhenActive="page">Users</a>
-            <br>
-            <a routerLink="/add-user" routerLinkActive="active" ariaCurrentWhenActive="page">Add User</a>
+            <a *ngIf="roleID == 1" routerLink="/all-users" routerLinkActive="active" ariaCurrentWhenActive="page">Users</a>
+            <a *ngIf="roleID == 1" routerLink="/add-user" routerLinkActive="active" ariaCurrentWhenActive="page">Add User</a>
         </div>
         <br>
         <div class="user-container">

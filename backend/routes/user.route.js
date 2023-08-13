@@ -55,7 +55,6 @@ router.post('/loginUser', async function(req,res){
             if(typeof user === 'string'){
                 return res.status(404).send(user);
             }
-            
             //find user token and return
             let token = await tokenController.findUsername(username);
             if(token !== null && token !== 'Cannot find token with specified username.'){
@@ -79,7 +78,8 @@ router.post('/loginUser', async function(req,res){
                     } else {
                         return res.status(200).json({
                             message:"Logged in successfully.",
-                            userName: user.userName
+                            userName: user.userName,
+                            roleID: user.userRole
                         });
                     }
                 });
@@ -87,16 +87,17 @@ router.post('/loginUser', async function(req,res){
             ///need to check username and password, then generate new token
             } else {
                 ///compare the password and the user hash
-                bcrypt.compare(password, user.password).then(compare_result => {
+                bcrypt.compare(password, user.password).then(async compare_result => {
                     if(compare_result == true){
 
                         //generate token
                         try{
-                            const token = generateToken(user);
+                            const token = await generateToken(user);
                             return res.status(200).send({
                                 message:"Logged in successfully.",
                                 userName: username,
-                                token: token
+                                token: token,
+                                roleID: user.userRole
                             });
                         } catch(err){
                             return res.status(500).send({
@@ -137,6 +138,14 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
             let userName = req.body.userName;
             //find user token and return
             let token = await tokenController.findUsername(userName);
+            //decode token to get roleID
+            const decodedToken = jwt.decode(token.token, secret, (err, decoded) => {
+                if(err){
+                    res.status(401).send({
+                        message: 'Error decoding token.'
+                    });
+                }
+            });
             if(token !== null && token !== 'Cannot find token with specified username.'){
                 ///verify token
                 jwt.verify(token.token, secret, (err, decoded) => {
@@ -157,7 +166,8 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
                     } else {
                         res.status(200).send({
                             message:"Logged in successfully.",
-                            userName: userName
+                            userName: userName,
+                            roleID: decodedToken.data
                         });
                     }
                 });
@@ -281,6 +291,13 @@ router.put('/editUser', async function(req, res){
                 //user.password = hash;
                 req.body.password = hash;
             }
+
+            ///if roleID is being updated we need to update the token
+            if(req.body.userRole !== undefined){
+                user.userRole = req.body.userRole;
+                await updateToken(user);
+            }
+
             ///update user
             //let updatedUser = await userController.update(userID,user);
             let updatedUser = await userController.update(userID,req.body);
@@ -336,8 +353,8 @@ router.delete('/deleteUser/:userID', async function(req, res){
 async function generateToken(user){
     try{
         const token = jwt.sign(
-            { data: `${user.userName}`}, 
-            '3310969166433653447079416612547342880134738789931871978370073798795133211999047787078905511792111667', 
+            { data: `${user.userRole}`}, 
+            secret, 
             { expiresIn: '4h' }
             
 
@@ -347,6 +364,27 @@ async function generateToken(user){
             userName: user.userName
         }
         await tokenController.create(token_obj);
+        return token;
+    } catch(err){
+        console.log(err);
+    }
+}
+
+async function updateToken(user){
+    try{
+        const token = jwt.sign(
+            { data: `${user.userRole}`}, 
+            secret, 
+            { expiresIn: '4h' }
+            
+
+        );
+        const token_obj = {
+            token: token,
+            userName: user.userName
+        }
+        let token_to_update = await tokenController.findUsername(user.userName);
+        await tokenController.update(token_to_update.tokenID, token_obj);
         return token;
     } catch(err){
         console.log(err);

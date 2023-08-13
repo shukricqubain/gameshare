@@ -5,6 +5,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { UsernameService } from 'src/app/services/username.service';
+import { RoleService } from 'src/app/services/roleID.service';
 
 @Component({
   selector: 'app-add-user',
@@ -28,6 +30,8 @@ export class AddUserComponent {
     private userService: UserService,
     private snackBar: MatSnackBar,
     private router: Router,
+    private usernameService: UsernameService,
+    private roleService: RoleService,
     @Optional() private dialogRef?: MatDialogRef<AddUserComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data?: User
   ){
@@ -80,6 +84,17 @@ export class AddUserComponent {
     newUser.dateOfBirth = this.addUserForm.controls.dateOfBirth.value || ''; 
     newUser.phoneNumber = this.addUserForm.controls.phoneNumber.value || '';
     if(this.isEdit){
+      let initial_username = newUser.userName;
+      let updated_username = this.addUserForm.controls.userName.value;
+      let initial_role = localStorage.getItem('roleID');
+      let updated_role = this.addUserForm.controls.userRole.value;
+      if(initial_username !== null && updated_username !== null && initial_username !== updated_username){
+        this.usernameService.setUsernameObs(updated_username);
+      }
+      if(initial_role !== null && updated_role !== null && initial_role !== updated_role){
+        this.roleService.setRoleObs(updated_role);
+        localStorage.setItem('roleID', updated_role);
+      }
       newUser.userID = this.data?.userID;
       this.userService.update(newUser).subscribe({
         next: this.handleEditResponse.bind(this),

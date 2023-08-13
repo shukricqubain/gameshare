@@ -10,6 +10,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from '../add-user/add-user.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-users',
@@ -42,7 +43,8 @@ export class AllUsersComponent implements AfterViewInit {
   constructor(
     private userService: UserService,
     private changeDetectorRef: ChangeDetectorRef,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private router: Router
   ){
   }
 
@@ -107,7 +109,12 @@ export class AllUsersComponent implements AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result)
-      this.ngAfterViewInit();
+      let userRole = localStorage.getItem('roleID');
+      if(userRole !== '1'){
+        this.router.navigate(['/home']);
+      } else {
+        this.ngAfterViewInit();
+      }
     });
   }
 

@@ -5,6 +5,7 @@ import { User } from 'src/app/models/user.model';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { UserService } from 'src/app/services/user.service';
 import { UsernameService } from 'src/app/services/username.service';
+import { RoleService } from 'src/app/services/roleID.service';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class UserProfileComponent {
     private location: Location,
     private snackBar: MatSnackBar,
     private userService: UserService,
-    private usernameService: UsernameService
+    private usernameService: UsernameService,
+    private roleService: RoleService
   ) {
   }
 
@@ -62,8 +64,14 @@ export class UserProfileComponent {
   async onSubmit(){
     let initial_username = this.user.userName;
     let updated_username = this.userProfileForm.controls.userName.value;
+    let initial_role = localStorage.getItem('roleID');
+    let updated_role = this.userProfileForm.controls.userRole.value;
     if(initial_username !== null && updated_username !== null && initial_username !== updated_username){
       this.usernameService.setUsernameObs(updated_username);
+    }
+    if(initial_role !== null && updated_role !== null && initial_role !== updated_role){
+      this.roleService.setRoleObs(updated_role);
+      localStorage.setItem('roleID', updated_role);
     }
     await this.userService.update(this.userProfileForm.value).subscribe({
       next: this.handleUpdateResponse.bind(this),
