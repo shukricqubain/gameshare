@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup} from '@angular/forms';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule} from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -11,6 +11,7 @@ import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from '../add-user/add-user.component';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-all-users',
@@ -31,20 +32,21 @@ export class AllUsersComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  searchCriteria = {
-    searchTerm: '',
-    sort: '',
-    pagination: 'true',
-    direction: '',
-    limit: this.pageSize,
-    page: 0
-  }
+  searchCriteria = new FormGroup({
+    searchTerm: new FormControl(''),
+    sort: new FormControl('userID', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
+    direction: new FormControl('asc', [Validators.required]),
+    limit: new FormControl(5, [Validators.required]),
+    page: new FormControl(0, [Validators.required])
+  });
 
   constructor(
     private userService: UserService,
     private changeDetectorRef: ChangeDetectorRef,
     private matDialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar,
   ){
   }
 
@@ -58,10 +60,10 @@ export class AllUsersComponent implements AfterViewInit {
         startWith({}),
         switchMap(() => {
           // this.isLoadingResults = true;
-          this.searchCriteria.sort = this.sort.active;
-          this.searchCriteria.direction = this.sort.direction;
-          this.searchCriteria.page = this.paginator.pageIndex;
-          return this.userService!.getAll(this.searchCriteria).pipe(catchError(() => observableOf(null)));
+          this.searchCriteria.controls.sort.patchValue(this.sort.active);
+          this.searchCriteria.controls.direction.patchValue(this.sort.direction);
+          this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
+          return this.userService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
         }),
         map(data => {
           // Flip flag to show that loading has finished.
@@ -80,25 +82,42 @@ export class AllUsersComponent implements AfterViewInit {
       .subscribe(data => (this.dataSource = data));
   }
 
-  public applyFilter = async ($event: Event) => {
-    const filterValue = ($event.target as HTMLInputElement).value;
-    console.log(filterValue)
-    this.searchCriteria.searchTerm = filterValue;
-    this.searchCriteria.sort = this.sort.active;
-    this.searchCriteria.direction = this.sort.direction;
-    this.searchCriteria.page = this.paginator.pageIndex;
-    await this.userService!.getAll(this.searchCriteria).subscribe(res => {
-      console.log(res)
-      if(res.message === 'No data in user table to fetch.'){
-        this.dataSource.data = [];
-        this.resultsLength = 0;
-      } else {
-        this.dataSource.data = res.data;
-        this.resultsLength = res.user_count;
-      }
-      
+  public applySearch = async () => {
+    this.userService.getAll(this.searchCriteria.value).subscribe({
+      next: this.handleSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
     });
+  }
 
+  public handleSearchResponse(data:any){
+    if(data == null){
+      this.dataSource.data = [];
+      this.resultsLength = 0;
+      this.ngAfterViewInit();
+    } else {
+      this.dataSource.data = data.data;
+      this.resultsLength = data.user_count;
+      this.ngAfterViewInit();
+    }
+  }
+
+  public handleErrorResponse(error:any){
+    this.snackBar.open(error.message, 'dismiss',{
+      duration: 3000
+    });
+  }
+
+  public clearSearch(){
+    this.searchCriteria.controls.searchTerm.patchValue('');
+    this.searchCriteria.controls.sort.patchValue('userID');
+    this.searchCriteria.controls.pagination.patchValue('true');
+    this.searchCriteria.controls.direction.patchValue('asc');
+    this.searchCriteria.controls.limit.patchValue(5);
+    this.searchCriteria.controls.page.patchValue(0);
+    this.userService.getAll(this.searchCriteria.value).subscribe({
+      next: this.handleSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
   }
 
   public editUser(element: any){

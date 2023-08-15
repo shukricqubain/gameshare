@@ -1,9 +1,19 @@
 <div>
   <div class="example-container mat-elevation-z8">
-    <mat-form-field>
-      <mat-label>Search</mat-label>
-      <input matInput (blur)="applyFilter($event)" placeholder="Search Table" #input>
-    </mat-form-field>
+    <div class="search-form-container">
+      <form [formGroup]="searchCriteria" (ngSubmit)="applySearch()">
+        <mat-form-field>
+          <mat-label>Search</mat-label>
+          <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
+        </mat-form-field>
+        <mat-icon style="margin-left: 10px;cursor: pointer; color: green;"  (click)="applySearch()">
+          search
+        </mat-icon>
+        <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearSearch()">
+          clear
+        </mat-icon>
+      </form>
+    </div>
     <table mat-table [dataSource]="dataSource" class="table mat-elevation-z8" matSortActive="userID" matSortDisableClear matSortDirection="asc" matSort>
 
       <!-- userID Column -->

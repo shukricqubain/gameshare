@@ -11,10 +11,12 @@ async function findCount(searchCriteria){
         if(searchTerm !== ''){
             users = await db.user.findAll({
                 where: {
-                    userID: {[Op.like]: '%' + searchTerm + '%'}, 
-                    userName: {[Op.like]: '%' + searchTerm + '%'},
-                    userRole: {[Op.like]: '%' + searchTerm + '%'},
-                    email: {[Op.like]: '%' + searchTerm + '%'}
+                    [Op.or]:{
+                        userID: {[Op.like]: '%' + searchTerm + '%'}, 
+                        userName: {[Op.like]: '%' + searchTerm + '%'},
+                        userRole: {[Op.like]: '%' + searchTerm + '%'},
+                        email: {[Op.like]: '%' + searchTerm + '%'}
+                    }
                 },
                 order: [
                     [sort, sortDirection],
@@ -55,10 +57,12 @@ async function getAll(searchCriteria){
                     offset = page * limit;
                     return await db.user.findAll({
                         where: {
-                            userID: {[Op.like]: '%' + searchTerm + '%'}, 
-                            userName: {[Op.like]: '%' + searchTerm + '%'},
-                            userRole: {[Op.like]: '%' + searchTerm + '%'},
-                            email: {[Op.like]: '%' + searchTerm + '%'}
+                            [Op.or]:{
+                                userID: {[Op.like]: '%' + searchTerm + '%'}, 
+                                userName: {[Op.like]: '%' + searchTerm + '%'},
+                                userRole: {[Op.like]: '%' + searchTerm + '%'},
+                                email: {[Op.like]: '%' + searchTerm + '%'}
+                            }
                         },
                         order: [
                             [sort, sortDirection],
@@ -72,10 +76,12 @@ async function getAll(searchCriteria){
                 } else {
                     return await db.user.findAll({
                         where: {
-                            userID: {[Op.like]: '%' + searchTerm + '%'}, 
-                            userName: {[Op.like]: '%' + searchTerm + '%'},
-                            userRole: {[Op.like]: '%' + searchTerm + '%'},
-                            email: {[Op.like]: '%' + searchTerm + '%'}
+                            [Op.or]:{
+                                userID: {[Op.like]: '%' + searchTerm + '%'}, 
+                                userName: {[Op.like]: '%' + searchTerm + '%'},
+                                userRole: {[Op.like]: '%' + searchTerm + '%'},
+                                email: {[Op.like]: '%' + searchTerm + '%'}
+                            }
                         },
                         order: [
                             [sort, sortDirection],
@@ -89,10 +95,12 @@ async function getAll(searchCriteria){
             } else {
                 return await db.user.findAll({
                     where: {
-                        userID: {[Op.like]: '%' + searchTerm + '%'}, 
-                        userName: {[Op.like]: '%' + searchTerm + '%'},
-                        userRole: {[Op.like]: '%' + searchTerm + '%'},
-                        email: {[Op.like]: '%' + searchTerm + '%'}
+                        [Op.or]:{
+                            userID: {[Op.like]: '%' + searchTerm + '%'}, 
+                            userName: {[Op.like]: '%' + searchTerm + '%'},
+                            userRole: {[Op.like]: '%' + searchTerm + '%'},
+                            email: {[Op.like]: '%' + searchTerm + '%'}
+                        }
                     },
                     order: [
                         [sort, sortDirection],

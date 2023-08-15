@@ -6,6 +6,11 @@
     margin-left: 2rem;
 }
 
+.search-form-container{
+    display: flex;
+    justify-content: flex-start;
+}
+
 .icon-class {
     cursor: pointer;
 }
