@@ -21,7 +21,7 @@ export class AppComponent {
   ) {
   }
 
-  ngOnInit(){
+  async ngOnInit(){
     /// check if userName and roleID is in local storage
     let localUserName = localStorage.getItem('userName');
     let localRoleID = localStorage.getItem('roleID');
@@ -31,7 +31,7 @@ export class AppComponent {
         userName: localUserName,
         roleID: localRoleID
       }
-      this.userService.checkLoggedIn(data).subscribe({
+      await this.userService.checkLoggedIn(data).subscribe({
         next: this.handleLoginResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
@@ -56,6 +56,14 @@ export class AppComponent {
       localStorage.setItem('userName', data.userName);
       localStorage.setItem('roleID', data.roleID);
       this.router.navigate(['/home']);
+    ///if token expired, remove role and username from local storage reload login
+    } else if(data.message === 'Token deleted, reload login.') {
+      localStorage.removeItem("userName"); 
+      localStorage.removeItem("roleID");
+      this.router.navigate(['/login']);
+      this.snackBar.open('Token expired. Please login again.', 'dismiss', {
+        duration: 3000
+      });
     ///if no token exists on db reroute to login page
     } else {
       localStorage.removeItem("userName"); 

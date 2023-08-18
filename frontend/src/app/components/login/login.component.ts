@@ -33,10 +33,12 @@ export class LoginComponent {
   }
 
   ngOnInit() {
+    this.loginForm.controls.username.patchValue('');
+    this.loginForm.controls.password.patchValue('');
   }
 
   async onSubmit() {
-    this.userService.login(this.loginForm.value).subscribe({
+    await this.userService.login(this.loginForm.value).subscribe({
       next: this.handleLoginResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
@@ -52,6 +54,19 @@ export class LoginComponent {
       localStorage.setItem('userName', data.userName);
       localStorage.setItem('roleID', data.roleID);
       this.router.navigate(['/home']);
+    } else if(data.message === 'Token deleted, reload login.') {
+      localStorage.removeItem("userName"); 
+      localStorage.removeItem("roleID");
+      this.loginForm.controls.username.patchValue('');
+      this.loginForm.controls.password.patchValue('');
+      this.snackBar.open('Token expired. Please login again.', 'dismiss', {
+        duration: 3000
+      });
+    } else {
+      localStorage.removeItem("userName"); 
+      localStorage.removeItem("roleID");
+      this.loginForm.controls.username.patchValue('');
+      this.loginForm.controls.password.patchValue('');
     }
   }
 

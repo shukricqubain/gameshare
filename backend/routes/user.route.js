@@ -59,18 +59,27 @@ router.post('/loginUser', async function(req,res){
             let token = await tokenController.findUsername(username);
             if(token !== null && token !== 'Cannot find token with specified username.'){
                 ///verify token
-                jwt.verify(token.token, secret, (err, decoded) => {
+                jwt.verify(token.token, secret, async (err, decoded) => {
                     if (err) {
+                        ///if token expired, delete token and reload login page
                         if(err.name === 'TokenExpiredError'){
-                            return res.status(401).send({
-                                message: 'Session expired.'
-                            });
+                            let result = await tokenController.delete(token.tokenID);
+                            
+                            if(result == 1){
+                                return res.status(200).json({
+                                    message: 'Token deleted, reload login.'
+                                });
+                            } else {
+                                return res.status(500).json({
+                                    message: 'Error deleting token.'
+                                });
+                            }
                         } else if(err.name === 'NotBeforeError'){
-                            return res.status(401).send({
+                            return res.status(401).json({
                                 message: 'JWT Not Before Error.'
                             });
                         } else {
-                            return res.status(401).send({
+                            return res.status(401).json({
                                 message: 'JsonWebTokenError'
                             });
                         }
@@ -148,12 +157,22 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
             });
             if(token !== null && token !== 'Cannot find token with specified username.'){
                 ///verify token
-                jwt.verify(token.token, secret, (err, decoded) => {
+                jwt.verify(token.token, secret, async (err, decoded) => {
                     if (err) {
+
+                        ///Token expired
                         if(err.name === 'TokenExpiredError'){
-                            res.status(200).send({
-                                message: 'Session expired.'
-                            });
+                            let result = await tokenController.delete(token.tokenID);
+                            
+                            if(result == 1){
+                                return res.status(200).json({
+                                    message: 'Token deleted, reload login.'
+                                });
+                            } else {
+                                return res.status(500).json({
+                                    message: 'Error deleting token.'
+                                });
+                            }
                         } else if(err.name === 'NotBeforeError'){
                             res.status(401).send({
                                 message: 'JWT Not Before Error.'
