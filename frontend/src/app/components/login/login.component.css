@@ -2,6 +2,16 @@
     margin-top: 2rem;
 }
 
+.outer-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.header-container{
+    margin-top: 6rem;
+    justify-content: center;
+}
+
 .form-container{
     justify-content: center;
 }
@@ -9,4 +19,30 @@
 .field-container{
     display:flex;
     flex-direction: column;
+}
+
+.button{
+    width: 120px !important;
+}
+
+.button-container{
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.login-signup-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.signup-container{
+    justify-content: center;
+}
+
+.title{
+    text-align: center;
+    font-weight: bold;
+    font-size: 50px;
 }

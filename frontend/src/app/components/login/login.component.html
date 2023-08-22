@@ -1,24 +1,35 @@
-<div class="child-component" style="margin-top: 2rem;">
-    <div class="form-container">
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <div class="field-container">
-                <mat-form-field MatFormFieldAppearance="outline">
-                    <label>Username</label>
-                    <input matInput name="username" id="username" type="text" formControlName="username" placeholder="Enter username" required/>
-                </mat-form-field>
-                <mat-form-field MatFormFieldAppearance="outline">
-                    <label>Password</label>
-                    <input matInput name="password" id="password" type="text" formControlName="password" placeholder="Enter password" required/>
-                </mat-form-field>
-                <div *ngIf="loginForm.controls.username.invalid && (loginForm.controls.username.dirty || loginForm.controls.username.touched)">
-                    <div *ngIf="loginForm.controls.username.errors?.['required']">
-                        Name is required.
+<div class="child-component">
+    <div class="outer-container">
+        <div class="header-container">
+            <h1 class="title">GAMESHARE</h1>
+        </div>
+        <div class="form-container">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div class="field-container">
+                    <mat-form-field style="width:100%;" MatFormFieldAppearance="outline">
+                        <label>Username</label>
+                        <input matInput name="username" id="username" type="text" formControlName="username"
+                            placeholder="Enter username" required />
+                    </mat-form-field>
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Password</label>
+                        <input matInput name="password" id="password" type="text" formControlName="password"
+                            placeholder="Enter password" required />
+                    </mat-form-field>
+                    <div
+                        *ngIf="loginForm.controls.username.invalid && (loginForm.controls.username.dirty || loginForm.controls.username.touched)">
+                        <div *ngIf="loginForm.controls.username.errors?.['required']">
+                            Name is required.
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-container">
-                <button [disabled]="!loginForm.dirty || !loginForm.valid" type="submit">Submit</button> 
-            </div>
-          </form> 
+                <div class="button-container">
+                    <button class="button" mat-raised-button [disabled]="!loginForm.dirty || !loginForm.valid"
+                        type="submit">Submit</button>
+                    <button class="button" mat-raised-button style="margin-left: 10px;" type="button"
+                        (click)="onSignup()">Signup</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

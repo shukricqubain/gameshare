@@ -59,8 +59,6 @@ export class AddUserComponent {
       this.addUserForm.controls.phoneNumber.patchValue(phoneNumber);
       this.addUserForm.controls.userRole.patchValue(userRole);
       this.addUserForm.controls.password.patchValue(password);
-
-
     }
   }
   

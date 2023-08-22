@@ -44,6 +44,24 @@ export class LoginComponent {
     });
   }
 
+  async onSignup(){
+    console.log('signup')
+    console.log(this.loginForm.value);
+    if(this.loginForm.controls.username.value){
+      let username: string = this.loginForm.controls.username.value;
+      await this.userService.getUserByName(username).subscribe({
+        next: this.handleGetUser.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
+    
+  }
+
+  handleGetUser(data:any){
+    console.log('got user')
+    console.log(data)
+  }
+
   handleLoginResponse(data: any) {
     if (data.message === 'Logged in successfully.') {
       this.snackBar.open(data.message, 'dismiss', {
