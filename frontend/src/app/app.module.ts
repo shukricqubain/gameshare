@@ -31,6 +31,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PopUpComponent } from './pop-up/pop-up.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { PopUpComponent } from './pop-up/pop-up.component';
     HeaderComponent,
     UserProfileComponent,
     LoginComponent,
-    PopUpComponent
+    PopUpComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

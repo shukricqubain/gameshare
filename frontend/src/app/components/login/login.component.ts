@@ -22,6 +22,7 @@ export class LoginComponent {
       [Validators.required])
   });
   unsubscribe$: Subject<boolean> = new Subject();
+  signupEnabled: false;
 
   constructor(
     private userService: UserService,
@@ -45,11 +46,9 @@ export class LoginComponent {
   }
 
   async onSignup(){
-    console.log('signup')
-    console.log(this.loginForm.value);
     if(this.loginForm.controls.username.value){
       let username: string = this.loginForm.controls.username.value;
-      await this.userService.getUserByName(username).subscribe({
+      await this.userService.checkUserExists(username).subscribe({
         next: this.handleGetUser.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
@@ -58,8 +57,20 @@ export class LoginComponent {
   }
 
   handleGetUser(data:any){
-    console.log('got user')
-    console.log(data)
+    if(data.message === 'User with this username already exists in Gameshare.'){
+      this.snackBar.open(data.message, 'dismiss', {
+        duration: 3000
+      });
+    } else if(data.message === 'Cannot find user with specified username.'){
+      this.snackBar.open(`Let's start the signup process!`, 'dismiss', {
+        duration: 3000
+      });
+      let userPass = {
+        userName: this.loginForm.controls.username.value,
+        password: this.loginForm.controls.password.value
+      }
+      this.router.navigate(['/signup'], {state: {userPass}});
+    }
   }
 
   handleLoginResponse(data: any) {

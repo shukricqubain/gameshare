@@ -11,8 +11,8 @@ import { RoleService } from './services/roleID.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'angular_demo';
-  login: boolean = true;
+  title = 'Gameshare';
+  hideHeader: boolean = true;
 
   constructor (
     private userService: UserService,
@@ -39,10 +39,10 @@ export class AppComponent {
 
     this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
-        if (event.url === '/login' || event.url === '/') {
-          this.login= true;
+        if (event.url === '/login' || event.url === '/' || event.url === '/signup') {
+          this.hideHeader = true;
         } else {
-          this.login= false;
+          this.hideHeader = false;
         }
       }
     });

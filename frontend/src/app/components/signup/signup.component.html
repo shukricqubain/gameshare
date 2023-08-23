@@ -1,0 +1,60 @@
+<div class="child-component">
+    <div class="add-user-container">
+        <h1>Signup</h1>
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            <div class="form-column">
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Firstname</label>
+                        <input matInput name="firstName" id="firstName" type="text" formControlName="firstName"
+                            placeholder="Enter firstname." required />
+                    </mat-form-field>
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Lastname</label>
+                        <input matInput name="lastName" id="lastName" type="text" formControlName="lastName"
+                            placeholder="Enter lastname." required />
+                    </mat-form-field>
+                </div>
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Username</label>
+                        <input matInput name="userName" id="userName" type="text" formControlName="userName"
+                            placeholder="Enter username." required />
+                    </mat-form-field>
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Password</label>
+                        <input matInput name="password" id="password" [type]=" showPassword ? 'text' : 'password'" formControlName="password"
+                            placeholder="Enter password." required />
+                    </mat-form-field>
+                </div>
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Email</label>
+                        <input matInput name="email" id="email" type="text" formControlName="email"
+                            placeholder="Enter email." required />
+                    </mat-form-field>
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Phone Number</label>
+                        <input matInput name="phoneNumber" id="phoneNumber" type="text" formControlName="phoneNumber"
+                            placeholder="Enter phone number." required />
+                    </mat-form-field>
+                </div>
+                <div class="form-row">
+                    <input [matDatepicker]="picker" placeholder="Choose a date" required formControlName="dateOfBirth" />
+                    <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>User Role</label>
+                        <input matInput name="userRole" id="userRole" type="text" formControlName="userRole"
+                            placeholder="Enter user role." required />
+                    </mat-form-field>
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <button mat-raised-button [disabled]="!signupForm.dirty || !signupForm.valid" type="submit">Submit</button>
+                <button mat-raised-button type="button" style="margin-left:10px;" (click)="redirect()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

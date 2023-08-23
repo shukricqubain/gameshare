@@ -150,7 +150,7 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
             //decode token to get roleID
             const decodedToken = jwt.decode(token.token, secret, (err, decoded) => {
                 if(err){
-                    res.status(401).send({
+                    return res.status(401).send({
                         message: 'Error decoding token.'
                     });
                 }
@@ -174,16 +174,16 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
                                 });
                             }
                         } else if(err.name === 'NotBeforeError'){
-                            res.status(401).send({
+                            return res.status(401).send({
                                 message: 'JWT Not Before Error.'
                             });
                         } else {
-                            res.status(401).send({
+                            return res.status(401).send({
                                 message: 'JsonWebTokenError'
                             });
                         }
                     } else {
-                        res.status(200).send({
+                        return res.status(200).send({
                             message:"Logged in successfully.",
                             userName: userName,
                             roleID: decodedToken.data
@@ -191,17 +191,17 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
                     }
                 });
             } else {
-                res.status(200).send({
+                return res.status(200).send({
                     message:"Token is null.",
                 });
             }
         } else if(req.body.username == undefined){
-            res.status(400).json({
+            return res.status(400).json({
                 message:"The username is required."
             });
         }
     } catch(err){
-        res.status(500).json({
+        return res.status(500).json({
             message:"There was an error when trying to login a user.",
             err
         });
@@ -264,7 +264,6 @@ router.get('/singleUser/:userID', async function(req, res){
     }
 });
 
-// Todo add token functionality to check that the user call this request has the priviledge.
 // get a single user by their username
 router.get('/singleUserByName/:userName', async function(req, res){
     try{
@@ -281,6 +280,29 @@ router.get('/singleUserByName/:userName', async function(req, res){
         }
     } catch(err){
         console.log(err);
+    }
+});
+
+// check user exists for signup purposes
+router.get('/checkUserExists/:userName', async function(req, res){
+    try{
+        if(req.params.userName !== undefined){
+            let userName = req.params.userName;
+            let user = await userController.findUsername(userName);
+            if(user !== undefined && user === 'Cannot find user with specified username'){
+                return res.status(200).send({message:'Cannot find user with specified username.'});
+            } else {
+                return res.status(200).send({message:'User with this username already exists in Gameshare.'});
+            }
+        } else {
+            return res.status(400).send({message:'Username is required.'});
+        }
+    } catch(err){
+        console.log(err);
+        return res.status(500).json({
+            message:"There was an error when trying check a user exists.",
+            err
+        });
     }
 });
 

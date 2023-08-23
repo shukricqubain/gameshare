@@ -23,6 +23,10 @@ export class UserService {
     return this.http.get(`${baseUrl}/singleUserByName/${userName}`);
   }
 
+  checkUserExists(userName: string): Observable<User>{
+    return this.http.get(`${baseUrl}/checkUserExists/${userName}`);
+  }
+
   login(data:any): Observable<any>{
     return this.http.post(`${baseUrl}/loginUser`, data);
   }
