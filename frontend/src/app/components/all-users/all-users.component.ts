@@ -128,7 +128,6 @@ export class AllUsersComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
       let userRole = localStorage.getItem('roleID');
       if(userRole !== '1'){
         this.router.navigate(['/home']);
