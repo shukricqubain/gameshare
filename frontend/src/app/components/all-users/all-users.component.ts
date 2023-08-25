@@ -55,7 +55,7 @@ export class AllUsersComponent implements AfterViewInit {
 
   async ngAfterViewInit() {
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-    merge(this.sort.sortChange, this.paginator.page)
+    merge(this.sort.sortChange, this.paginator.page, this.paginator.pageSize)
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -63,6 +63,7 @@ export class AllUsersComponent implements AfterViewInit {
           this.searchCriteria.controls.sort.patchValue(this.sort.active);
           this.searchCriteria.controls.direction.patchValue(this.sort.direction);
           this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
+          this.searchCriteria.controls.limit.patchValue(this.paginator.pageSize);
           return this.userService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
         }),
         map(data => {

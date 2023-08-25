@@ -50,12 +50,8 @@ export class AppComponent {
 
   handleLoginResponse(data: any) {
     if (data.message === 'Logged in successfully.') {
-      this.snackBar.open(data.message, 'dismiss', {
-        duration: 3000
-      });
       localStorage.setItem('userName', data.userName);
       localStorage.setItem('roleID', data.roleID);
-      this.router.navigate(['/home']);
     ///if token expired, remove role and username from local storage reload login
     } else if(data.message === 'Token deleted, reload login.') {
       localStorage.removeItem("userName"); 
