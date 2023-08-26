@@ -7,5 +7,5 @@ export class User {
     email?: string;
     phoneNumber?: string;
     userRole?: Number;
-    password?: string;
+    userPassword?: string;
 }

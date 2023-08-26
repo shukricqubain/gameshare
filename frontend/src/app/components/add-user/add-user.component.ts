@@ -50,7 +50,7 @@ export class AddUserComponent {
       let email = `${this.data.email}`;
       let phoneNumber = `${this.data.phoneNumber}`;
       let userRole = `${this.data.userRole}`;
-      let password = `${this.data.password}`;
+      let password = `${this.data.userPassword}`;
       this.addUserForm.controls.dateOfBirth.patchValue(dateOfBirth);
       this.addUserForm.controls.userName.patchValue(userName);
       this.addUserForm.controls.firstName.patchValue(firstName);
@@ -67,7 +67,7 @@ export class AddUserComponent {
       userName: '',
       firstName: '',
       lastName: '',
-      password: '',
+      userPassword: '',
       userRole: 0,
       email: '',
       dateOfBirth: '',
@@ -76,7 +76,7 @@ export class AddUserComponent {
     newUser.firstName = this.addUserForm.controls.firstName.value || '';
     newUser.lastName = this.addUserForm.controls.lastName.value || '';
     newUser.userName = this.addUserForm.controls.userName.value || '';
-    newUser.password = this.addUserForm.controls.password.value || '';
+    newUser.userPassword = this.addUserForm.controls.password.value || '';
     newUser.userRole = Number(this.addUserForm.controls.userRole.value) || 2;
     newUser.email = this.addUserForm.controls.email.value || '';
     newUser.dateOfBirth = this.addUserForm.controls.dateOfBirth.value || ''; 

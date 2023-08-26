@@ -1,6 +1,9 @@
 const db = require('../models/index');
 var Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const crypto = require('../utility/crypto');
+const config = require('../config/config.js');
+const secretKey = config.SECRET_KEY_HERE;
 
 async function findCount(searchCriteria){
     try{
@@ -154,20 +157,32 @@ async function getAll(searchCriteria){
 }
 async function create(user){
     try{
+        //encrypt values
+        let encryptedFirstName = crypto.encrypt(user.firstName);
+        let encryptedLastName = crypto.encrypt(user.lastName);
+        let encryptedEmail = crypto.encrypt(user.email);
         return await db.user.create({
             userID: user.userID,
             userName: user.userName,
-            firstName: user.firstName,
-            lastName: user.lastName,
+            firstName: encryptedFirstName,
+            lastName: encryptedLastName,
             dateOfBirth: user.dateOfBirth,
-            email: user.email,
+            email: encryptedEmail,
             phoneNumber: user.phoneNumber,
             userRole: user.userRole,
             password: user.password
         });
+        // return await db.sequelize.query(
+        //     `INSERT INTO user (userName, firstName, lastName, dateOfBirth, email, phoneNumber, userRole, userPassword) VALUES ('${user.userName}','${user.firstName}','${user.lastName}',${user.dateOfBirth},'${user.email}','${user.phoneNumber}','${user.userRole}','${user.userPassword}');`,
+        //     {
+        //         type: Sequelize.QueryTypes.Create
+        //     }
+        // );
     } catch(err){
         console.log(err)
-        if(err.errors[0].type === 'unique violation'){
+        if(err.name === 'SequelizeDatabaseError'){
+            return 'Database error';
+        }else if(err.errors[0].type !== undefined && err.errors[0].type === 'unique violation'){
             return err.errors[0].message;
         }
     }

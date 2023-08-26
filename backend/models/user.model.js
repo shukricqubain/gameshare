@@ -44,7 +44,7 @@ module.exports = (sequelize, Sequelize) => {
             validate:{
             }
         },
-        password: {
+        userPassword: {
             type: Sequelize.STRING,
             validate:{
             }

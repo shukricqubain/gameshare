@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const user = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const secret = '3310969166433653447079416612547342880134738789931871978370073798795133211999047787078905511792111667';
+const crypto = require('../utility/crypto');
 
 // sign up user
 router.post('/signupUser', async function(req, res){
@@ -88,6 +89,7 @@ router.post('/loginUser', async function(req,res){
                         return res.status(200).json({
                             message:"Logged in successfully.",
                             userName: user.userName,
+                            token: token.token,
                             roleID: user.userRole
                         });
                     }
@@ -96,7 +98,7 @@ router.post('/loginUser', async function(req,res){
             ///need to check username and password, then generate new token
             } else {
                 ///compare the password and the user hash
-                bcrypt.compare(password, user.password).then(async compare_result => {
+                bcrypt.compare(password, user.userPassword).then(async compare_result => {
                     if(compare_result == true){
 
                         //generate token
@@ -186,6 +188,7 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
                         return res.status(200).send({
                             message:"Logged in successfully.",
                             userName: userName,
+                            token: token.token,
                             roleID: decodedToken.data
                         });
                     }

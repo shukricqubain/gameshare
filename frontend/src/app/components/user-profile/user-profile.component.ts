@@ -52,7 +52,7 @@ export class UserProfileComponent {
       this.userProfileForm.controls.email.setValue(this.user.email ? this.user.email: '');
       this.userProfileForm.controls.phoneNumber.setValue(this.user.phoneNumber ? this.user.phoneNumber: '');
       this.userProfileForm.controls.userRole.setValue(this.user.userRole ? `${this.user.userRole}` : '');
-      this.userProfileForm.controls.password.setValue(this.user.password ? this.user.password: '');
+      this.userProfileForm.controls.password.setValue(this.user.userPassword ? this.user.userPassword: '');
       this.changeForm();
     } else {
       this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{

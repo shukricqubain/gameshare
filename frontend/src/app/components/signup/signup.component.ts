@@ -50,7 +50,7 @@ export class SignupComponent {
       userName: '',
       firstName: '',
       lastName: '',
-      password: '',
+      userPassword: '',
       userRole: 0,
       email: '',
       dateOfBirth: '',
@@ -59,7 +59,7 @@ export class SignupComponent {
     newUser.firstName = this.signupForm.controls.firstName.value || '';
     newUser.lastName = this.signupForm.controls.lastName.value || '';
     newUser.userName = this.signupForm.controls.userName.value || '';
-    newUser.password = this.signupForm.controls.password.value || '';
+    newUser.userPassword = this.signupForm.controls.password.value || '';
     newUser.userRole = Number(this.signupForm.controls.userRole.value) || 2;
     newUser.email = this.signupForm.controls.email.value || '';
     newUser.dateOfBirth = this.signupForm.controls.dateOfBirth.value || ''; 
