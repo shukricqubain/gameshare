@@ -34,7 +34,9 @@ export class UserProfileComponent {
     email: new FormControl('', [Validators.required]),
     phoneNumber: new FormControl('', [Validators.required]),
     userRole: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
+    userPassword: new FormControl('', [Validators.required]),
+    createdAt: new FormControl(''),
+    updatedAt: new FormControl('')
   });
   showPassword: boolean = false;
   editEnabled: boolean = false;
@@ -52,7 +54,9 @@ export class UserProfileComponent {
       this.userProfileForm.controls.email.setValue(this.user.email ? this.user.email: '');
       this.userProfileForm.controls.phoneNumber.setValue(this.user.phoneNumber ? this.user.phoneNumber: '');
       this.userProfileForm.controls.userRole.setValue(this.user.userRole ? `${this.user.userRole}` : '');
-      this.userProfileForm.controls.password.setValue(this.user.userPassword ? this.user.userPassword: '');
+      this.userProfileForm.controls.userPassword.setValue(this.user.userPassword ? this.user.userPassword: '');
+      this.userProfileForm.controls.createdAt.setValue(this.user.createdAt ? this.user.createdAt: '');
+      this.userProfileForm.controls.updatedAt.setValue(this.user.updatedAt ? this.user.updatedAt: '');
       this.changeForm();
     } else {
       this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{
@@ -104,7 +108,7 @@ export class UserProfileComponent {
       this.userProfileForm.controls.email.enable();
       this.userProfileForm.controls.phoneNumber.enable();
       this.userProfileForm.controls.userRole.enable();
-      this.userProfileForm.controls.password.enable();
+      this.userProfileForm.controls.userPassword.enable();
     } else {
       this.enableMessage = `Enable the form for updation.`;
       this.userProfileForm.controls.userID.disable();
@@ -115,7 +119,7 @@ export class UserProfileComponent {
       this.userProfileForm.controls.email.disable();
       this.userProfileForm.controls.phoneNumber.disable();
       this.userProfileForm.controls.userRole.disable();
-      this.userProfileForm.controls.password.disable();
+      this.userProfileForm.controls.userPassword.disable();
     }
   }
 }

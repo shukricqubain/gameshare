@@ -15,12 +15,12 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         firstName: {
-            type: Sequelize.STRING,
+            type: 'VARBINARY(255)',
             validate:{
             }
         },
         lastName: {
-            type: Sequelize.STRING,
+            type: 'VARBINARY(255)',
             validate:{
             }
         },
@@ -30,7 +30,7 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         email: {
-            type: Sequelize.STRING,
+            type: 'VARBINARY(255)',
             validate:{
             }
         },
@@ -49,6 +49,13 @@ module.exports = (sequelize, Sequelize) => {
             validate:{
             }
         },
+        createdAt: {
+            type: Sequelize.DATE,
+        },
+        updatedAt: {
+            type: Sequelize.DATE,
+            defaultValue: null
+        }
     },{
         tableName: 'user'
     },{

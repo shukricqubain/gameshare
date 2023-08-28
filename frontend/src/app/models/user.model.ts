@@ -8,4 +8,6 @@ export class User {
     phoneNumber?: string;
     userRole?: Number;
     userPassword?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }

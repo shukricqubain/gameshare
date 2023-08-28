@@ -14,7 +14,7 @@ router.post('/signupUser', async function(req, res){
     try{
         const saltRounds = 10;
         const user = req.body;
-        const password = req.body.password;
+        const password = req.body.userPassword;
         /// generate salt
         const salt = await bcrypt.genSalt(saltRounds).then(salt => {
             return salt;
@@ -23,19 +23,28 @@ router.post('/signupUser', async function(req, res){
         const hash = await bcrypt.hash(password, salt).then(hash => {
             return hash;
         }).catch(err => console.error(err.message));
-        user.password = hash;
+        user.userPassword = hash;
         ///create new user
         let newUser = await userController.create(user);
         if(typeof newUser === 'string'){
             res.status(403).send(newUser);
         } else {
-            newUser = newUser['dataValues'];
-            const token = generateToken(newUser);
-            res.status(201).json({
-                created_user: newUser,
-                token: token,
-                user_id: newUser.userID
-            });
+            if(newUser[1] == 1){
+                let userID = newUser[0];
+                let addedUser = await userController.findOne(userID);
+                const token = generateToken(addedUser);
+                res.status(201).json({
+                    created_user: addedUser,
+                    token: token,
+                    user_id: addedUser.userID
+                });
+            } else {
+                res.status(500).json({
+                    message:"There was an error adding a user to the database.",
+                    err
+                });
+            }
+            
         }
     } catch(err){
         res.status(500).json({
@@ -321,8 +330,8 @@ router.put('/editUser', async function(req, res){
             }
             
             ///if password is being updated we need to salt and hash it
-            if(req.body.password !== undefined){
-                let password = req.body.password;
+            if(req.body.userPassword !== undefined){
+                let password = req.body.userPassword;
                 const saltRounds = 10;
                 /// generate salt
                 const salt = await bcrypt.genSalt(saltRounds).then(salt => {
@@ -333,9 +342,8 @@ router.put('/editUser', async function(req, res){
                     return hash;
                 }).catch(err => console.error(err.message));
                 //user.password = hash;
-                req.body.password = hash;
-            }
-
+                req.body.userPassword = hash;
+            } 
             ///if roleID is being updated we need to update the token
             if(req.body.userRole !== undefined){
                 user.userRole = req.body.userRole;
@@ -345,13 +353,12 @@ router.put('/editUser', async function(req, res){
             ///update user
             //let updatedUser = await userController.update(userID,user);
             let updatedUser = await userController.update(userID,req.body);
-            
             if(typeof updatedUser === 'string'){
                 res.status(403).send(updatedUser);
-            } else if(updatedUser[0] == 1){ 
+            } else if(updatedUser !== undefined){ 
                 res.status(200).json({
                     message: "The user was updated successfully.",
-                    user_id: updatedUser.userID
+                    user_id: req.body.userID
                 });
             } else {
                 res.status(503).send('User was not updated successfully.');

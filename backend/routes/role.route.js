@@ -80,7 +80,6 @@ router.delete('/deleteRole/:roleID', async function(req, res){
         if(req.params.roleID !== undefined){
             let roleID = Number(req.params.roleID);
             let result = await rolesController.delete({roleID: roleID});
-            console.log(result);
             if(result == 1){
                 res.status(200).send('Role was deleted successfully.');
             } else {
