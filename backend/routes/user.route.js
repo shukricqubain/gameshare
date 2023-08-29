@@ -435,7 +435,12 @@ async function updateToken(user){
             userName: user.userName
         }
         let token_to_update = await tokenController.findUsername(user.userName);
-        await tokenController.update(token_to_update.tokenID, token_obj);
+        if(token_to_update !== 'Cannot find token with specified username.'){
+            await tokenController.update(token_to_update.tokenID, token_obj);
+        } else {
+            await tokenController.create(token_obj);
+        }
+        
         return token;
     } catch(err){
         console.log(err);
