@@ -404,11 +404,9 @@ router.delete('/deleteUser/:userID', async function(req, res){
 async function generateToken(user){
     try{
         const token = jwt.sign(
-            { data: `${user.userRole}`}, 
+            { data: `${user.userRole},${user.userName}`}, 
             secret, 
             { expiresIn: '4h' }
-            
-
         );
         const token_obj = {
             token: token,
@@ -424,11 +422,9 @@ async function generateToken(user){
 async function updateToken(user){
     try{
         const token = jwt.sign(
-            { data: `${user.userRole}`}, 
+            { data: `${user.userRole},${user.userName}`}, 
             secret, 
             { expiresIn: '4h' }
-            
-
         );
         const token_obj = {
             token: token,

@@ -3,8 +3,6 @@ import { NavigationEnd, Router } from '@angular/router';
 import { UserService } from './services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { RoleService } from './services/roleID.service';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
