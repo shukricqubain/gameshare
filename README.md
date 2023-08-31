@@ -95,12 +95,12 @@ Use this space to show useful examples of how a project can be used. Additional 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Login/Signup Functionality
+- [x] Login/Signup Functionality
   - [x] Basic CRUD for Roles
   - [x] Basic CRUD for Users
   - [x] Basic CRUD for tokens
   - [x] Login Workflow
-  - [ ] Signup Workflow
+  - [x] Signup Workflow
 - [ ] Game Collection Functionality
   - [ ] Basic CRUD for Games
   - [ ] Basic CRUD for Achievements
