@@ -5,9 +5,7 @@ const userController = require("../controllers/user.controller");
 const tokenController = require('../controllers/token.controller');
 const bcrypt = require('bcrypt');
 const user = require('../models/user.model');
-const jwt = require('jsonwebtoken');
-const secret = '3310969166433653447079416612547342880134738789931871978370073798795133211999047787078905511792111667';
-const crypto = require('../utility/crypto');
+const tokenUtility = require('../utility/token');
 
 // sign up user
 router.post('/signupUser', async function(req, res){
@@ -32,7 +30,7 @@ router.post('/signupUser', async function(req, res){
             if(newUser[1] == 1){
                 let userID = newUser[0];
                 let addedUser = await userController.findOne(userID);
-                const token = generateToken(addedUser);
+                const token = tokenUtility.generateToken(addedUser);
                 res.status(201).json({
                     created_user: addedUser,
                     token: token,
@@ -112,7 +110,7 @@ router.post('/loginUser', async function(req,res){
 
                         //generate token
                         try{
-                            const token = await generateToken(user);
+                            const token = await tokenUtility.generateToken(user);
                             return res.status(200).send({
                                 message:"Logged in successfully.",
                                 userName: username,
@@ -158,6 +156,12 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
             let userName = req.body.userName;
             //find user token and return
             let token = await tokenController.findUsername(userName);
+            /// if token doesn't exist, log user out
+            if(token === 'Cannot find token with specified username.'){
+                return res.status(401).send({
+                    message: `Token doesn't exist, please login again.`
+                });
+            }
             //decode token to get roleID
             const decodedToken = jwt.decode(token.token, secret, (err, decoded) => {
                 if(err){
@@ -347,7 +351,7 @@ router.put('/editUser', async function(req, res){
             ///if roleID is being updated we need to update the token
             if(req.body.userRole !== undefined){
                 user.userRole = req.body.userRole;
-                await updateToken(user);
+                await tokenUtility.updateToken(user);
             }
 
             ///update user
@@ -400,47 +404,5 @@ router.delete('/deleteUser/:userID', async function(req, res){
         });
     }
 });
-
-async function generateToken(user){
-    try{
-        const token = jwt.sign(
-            { data: `${user.userRole},${user.userName}`}, 
-            secret, 
-            { expiresIn: '4h' }
-        );
-        const token_obj = {
-            token: token,
-            userName: user.userName
-        }
-        await tokenController.create(token_obj);
-        return token;
-    } catch(err){
-        console.log(err);
-    }
-}
-
-async function updateToken(user){
-    try{
-        const token = jwt.sign(
-            { data: `${user.userRole},${user.userName}`}, 
-            secret, 
-            { expiresIn: '4h' }
-        );
-        const token_obj = {
-            token: token,
-            userName: user.userName
-        }
-        let token_to_update = await tokenController.findUsername(user.userName);
-        if(token_to_update !== 'Cannot find token with specified username.'){
-            await tokenController.update(token_to_update.tokenID, token_obj);
-        } else {
-            await tokenController.create(token_obj);
-        }
-        
-        return token;
-    } catch(err){
-        console.log(err);
-    }
-}
 
 module.exports = router;
