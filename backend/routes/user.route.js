@@ -67,41 +67,27 @@ router.post('/loginUser', async function(req,res){
             let token = await tokenController.findUsername(username);
             if(token !== null && token !== 'Cannot find token with specified username.'){
                 ///verify token
-                jwt.verify(token.token, secret, async (err, decoded) => {
-                    if (err) {
-                        ///if token expired, delete token and reload login page
-                        if(err.name === 'TokenExpiredError'){
-                            let result = await tokenController.delete(token.tokenID);
-                            
-                            if(result == 1){
-                                return res.status(200).json({
-                                    message: 'Token deleted, reload login.'
-                                });
-                            } else {
-                                return res.status(500).json({
-                                    message: 'Error deleting token.'
-                                });
-                            }
-                        } else if(err.name === 'NotBeforeError'){
-                            return res.status(401).json({
-                                message: 'JWT Not Before Error.'
-                            });
-                        } else {
-                            return res.status(401).json({
-                                message: 'JsonWebTokenError'
-                            });
-                        }
-                        
-                    } else {
-                        return res.status(200).json({
-                            message:"Logged in successfully.",
-                            userName: user.userName,
-                            token: token.token,
-                            roleID: user.userRole
-                        });
-                    }
-                });
-
+                let result = await tokenUtility.verifyToken(token);
+                if(result === 'Token deleted, reload login.'){
+                    return res.status(200).json({
+                        message: 'Token deleted, reload login.'
+                    });
+                } else if(result === 'Error deleting token.'){
+                    return res.status(500).json({
+                        message: 'Error deleting token.'
+                    });
+                } else if(result === 'JsonWebTokenError'){  
+                    return res.status(401).send({
+                        message: 'JsonWebTokenError'
+                    });
+                } else if(result === 'Logged in successfully.'){
+                    return res.status(200).send({
+                        message: "Logged in successfully.",
+                        userName: userName,
+                        token: token.token,
+                        roleID: decodedToken.data
+                    });
+                }
             ///need to check username and password, then generate new token
             } else {
                 ///compare the password and the user hash
@@ -163,49 +149,34 @@ router.post('/checkUserIsLoggedIn', async function(req, res){
                 });
             }
             //decode token to get roleID
-            const decodedToken = jwt.decode(token.token, secret, (err, decoded) => {
-                if(err){
+            const decodedToken = await tokenUtility.decodeToken(token);
+            if(decodedToken === 'Error decoding token.'){
+                return res.status(401).send({
+                    message: 'Error decoding token.'
+                });
+            }
+            if(token !== null && token !== 'Cannot find token with specified username.'){
+                let result = await tokenUtility.verifyToken(token);
+                if(result === 'Token deleted, reload login.'){
+                    return res.status(200).json({
+                        message: 'Token deleted, reload login.'
+                    });
+                } else if(result === 'Error deleting token.'){
+                    return res.status(500).json({
+                        message: 'Error deleting token.'
+                    });
+                } else if(result === 'JsonWebTokenError'){  
                     return res.status(401).send({
-                        message: 'Error decoding token.'
+                        message: 'JsonWebTokenError'
+                    });
+                } else if(result === 'Logged in successfully.'){
+                    return res.status(200).send({
+                        message: "Logged in successfully.",
+                        userName: userName,
+                        token: token.token,
+                        roleID: decodedToken.data
                     });
                 }
-            });
-            if(token !== null && token !== 'Cannot find token with specified username.'){
-                ///verify token
-                jwt.verify(token.token, secret, async (err, decoded) => {
-                    if (err) {
-
-                        ///Token expired
-                        if(err.name === 'TokenExpiredError'){
-                            let result = await tokenController.delete(token.tokenID);
-                            
-                            if(result == 1){
-                                return res.status(200).json({
-                                    message: 'Token deleted, reload login.'
-                                });
-                            } else {
-                                return res.status(500).json({
-                                    message: 'Error deleting token.'
-                                });
-                            }
-                        } else if(err.name === 'NotBeforeError'){
-                            return res.status(401).send({
-                                message: 'JWT Not Before Error.'
-                            });
-                        } else {
-                            return res.status(401).send({
-                                message: 'JsonWebTokenError'
-                            });
-                        }
-                    } else {
-                        return res.status(200).send({
-                            message:"Logged in successfully.",
-                            userName: userName,
-                            token: token.token,
-                            roleID: decodedToken.data
-                        });
-                    }
-                });
             } else {
                 return res.status(200).send({
                     message:"Token is null.",
