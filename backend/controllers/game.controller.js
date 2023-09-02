@@ -10,10 +10,24 @@ exports.create = async (req) => {
     }
 };
 
-// Get all games
-exports.findAll = async (req, res) => {
+// Get all game
+exports.findCount = async (searchCriteria) => {
     try{
-        let allGames = await gameService.getAll();
+        let gameCount = await gameService.findCount(searchCriteria);
+        if(gameCount > 0){
+            return gameCount;
+        } else {
+            return {message: 'No data in game table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
+// Get all games
+exports.findAll = async (searchCriteria) => {
+    try{
+        let allGames = await gameService.getAll(searchCriteria);
         if(allGames.length > 0){
             return allGames;
         } else {

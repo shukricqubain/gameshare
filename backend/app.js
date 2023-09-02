@@ -27,12 +27,15 @@ const home = require('./routes/home.route');
 const role = require('./routes/role.route');
 const user = require('./routes/user.route');
 const token = require('./routes/token.route');
+const game = require('./routes/game.route');
+const achievement = require('./routes/achievement.route');
 
 app.use("/home", home);
 app.use("/user", user);
 app.use("/role", role);
 app.use("/token", token);
-
+app.use("/game", game);
+app.use("/achievement", achievement);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

@@ -4,6 +4,8 @@
             <a routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a>
             <a *ngIf="roleID == 1" routerLink="/all-users" routerLinkActive="active" ariaCurrentWhenActive="page">Users</a>
             <a *ngIf="roleID == 1" routerLink="/add-user" routerLinkActive="active" ariaCurrentWhenActive="page">Add User</a>
+            <a *ngIf="roleID == 1" routerLink="/all-games" routerLinkActive="active" ariaCurrentWhenActive="page">Games</a>
+            <a *ngIf="roleID == 1" routerLink="/add-game" routerLinkActive="active" ariaCurrentWhenActive="page">Add Game</a>
         </div>
         <br>
         <div class="user-container">

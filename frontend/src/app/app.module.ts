@@ -32,6 +32,8 @@ import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PopUpComponent } from './pop-up/pop-up.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { AddGameComponent } from './components/add-game/add-game.component';
+import { AllGamesComponent } from './components/all-games/all-games.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { SignupComponent } from './components/signup/signup.component';
     UserProfileComponent,
     LoginComponent,
     PopUpComponent,
-    SignupComponent
+    SignupComponent,
+    AddGameComponent,
+    AllGamesComponent
   ],
   imports: [
     BrowserModule,

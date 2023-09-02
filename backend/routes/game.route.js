@@ -25,13 +25,34 @@ router.post('/addGame', async function(req, res){
 });
 
 // get all games
-router.get('/allGames', async function(req, res) {
+router.post('/allGames', async function(req, res) {
     try{
-        let allGames = await gameController.findAll();
-        if(allGames.message !== 'No data in game table to fetch.'){
-            res.status(200).send(allGames);
+        if(req.body !== null){
+            let searchCriteria = req.body;
+            let allUsers;
+            let gameCount;
+            if(searchCriteria.pagination){
+                gameCount = await gameController.findCount(searchCriteria);
+                searchCriteria.gameCount = gameCount;
+                allUsers = await gameController.findAll(searchCriteria);
+                if(allUsers.message !== 'No data in game table to fetch.'){
+                    searchCriteria.data = allUsers;
+                    return res.status(200).json(searchCriteria);
+                } else {
+                    return res.status(204).send({message:'No data in game table to fetch.'});
+                }
+            } else {
+                allGames = await gameController.findAll(searchCriteria);
+                gameCount = allGames.length;
+                if(allGame.message !== 'No data in game table to fetch.'){
+                    searchCriteria.data = allGames;
+                    return res.status(200).json(searchCriteria);
+                } else {
+                    return res.status(204).send({message:'No data in game table to fetch.'});
+                }
+            }
         } else {
-            res.status(204).send(allGames);
+            res.status(400).send('Search criteria is required.');
         }
     } catch(err){
         console.log(err)

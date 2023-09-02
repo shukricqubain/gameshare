@@ -1,0 +1,47 @@
+<div class="child-component">
+    <div class="add-game-container">
+        <h1>Add a Game</h1>
+        <form [formGroup]="addGameForm" (ngSubmit)="onSubmit()">
+            <div class="form-column">
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Game Name</label>
+                        <input matInput name="gameName" id="gameName" type="text" formControlName="gameName"
+                            placeholder="Enter game name." required />
+                    </mat-form-field>
+                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                        <label>Developers</label>
+                        <input matInput name="developers" id="developers" type="text" formControlName="developers"
+                            placeholder="Enter developers." required />
+                    </mat-form-field>
+                </div>
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Publishers</label>
+                        <input matInput name="publishers" id="publishers" type="text" formControlName="publishers"
+                            placeholder="Enter publishers." required />
+                    </mat-form-field>
+                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                        <label>Genre</label>
+                        <input matInput name="genre" id="genre" formControlName="genre"
+                            placeholder="Enter genre." required />
+                    </mat-form-field>
+                </div>
+                <div class="form-row">
+                    <input [matDatepicker]="picker" placeholder="Choose a date" required formControlName="releaseDate" />
+                    <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                        <label>Game Cover</label>
+                        <input matInput name="gameCover" id="gameCover" type="text" formControlName="gameCover"
+                            placeholder="Upload game cover." />
+                    </mat-form-field>
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <button mat-raised-button [disabled]="!addGameForm.dirty || !addGameForm.valid" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

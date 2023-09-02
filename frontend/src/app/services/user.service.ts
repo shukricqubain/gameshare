@@ -46,12 +46,4 @@ export class UserService {
   delete(id: any): Observable<any> {
     return this.http.delete(`${baseUrl}/${id}`);
   }
-
-  deleteAll(): Observable<any> {
-    return this.http.delete(baseUrl);
-  }
-
-  findByProp(property: any): Observable<User[]> {
-    return this.http.get<User[]>(`${baseUrl}?property=${property}`);
-  }
 }
