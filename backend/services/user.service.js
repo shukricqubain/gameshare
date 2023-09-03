@@ -4,6 +4,7 @@ const Op = Sequelize.Op;
 const moment = require('moment');
 const config = require('../config/config.js');
 const secretKey = config.secret_key;
+const outputDateFormat = 'MM-DD-YYYY';
 
 async function findCount(searchCriteria) {
     try {
@@ -362,7 +363,7 @@ async function create(user) {
         dateString = `${dateArray[0]} ${dateArray[1]}`;
         user.dateOfBirth = dateString.slice(0, -5);
         ///clean up createdAt for insertion
-        let createdAt = moment(new Date()).format();
+        let createdAt = moment(new Date()).format(outputDateFormat);
         let createdString = `${createdAt}`;
         let createdArray = createdString.split('T');
         createdString = `${createdArray[0]} ${createdArray[1]}`;
@@ -485,7 +486,7 @@ async function update(userID, user) {
         createdString = `${createdArray[0]} ${createdArray[1]}`;
         user.createdAt = createdString.slice(0, -5);
         ///clean up updatedAt for updation
-        let updatedAt = moment(new Date()).format();
+        let updatedAt = moment(new Date()).format(outputDateFormat);
         let updatedString = `${updatedAt}`;
         let updatedArray = updatedString.split('T');
         updatedString = `${updatedArray[0]} ${updatedArray[1]}`;

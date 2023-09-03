@@ -45,43 +45,38 @@ async function updateToken(user) {
 }
 
 async function verifyToken(token) {
+    let returnString = '';
+    let roleID = 0;
     ///verify token
     jwt.verify(token.token, secret, async (err, decoded) => {
+        roleID = Number(decoded.data);
         if (err) {
             ///Token expired
             if (err.name === 'TokenExpiredError') {
                 let result = await tokenController.delete(token.tokenID);
                 if (result == 1) {
-                    return 'Token deleted, reload login.';
+                    returnString = 'Token deleted, reload login.';
                 } else {
-                    return 'Error deleting token.';
+                    returnString = 'Error deleting token.';
                 }
             } else if (err.name === 'NotBeforeError') {
-                return res.status(401).send({
-                    message: 'JWT Not Before Error.'
-                });
+                returnString = 'JWT Not Before Error.'; 
             } else {
-                return 'JsonWebTokenError';
+                returnString = 'JsonWebTokenError';
             }
         } else {
-            return 'Logged in successfully.';
+            returnString = 'Logged in successfully.';
         }
     });
-}
-
-async function decodeToken(token){
-    jwt.decode(token.token, secret, (err, decoded) => {
-        if(err){
-            return 'Error decoding token.';
-        } else {
-            return ''
-        }
-    });
+    let returnOBJ = {
+        returnString: returnString,
+        roleID: roleID
+    }
+    return returnOBJ;
 }
 
 module.exports = {
     generateToken,
     updateToken,
-    verifyToken,
-    decodeToken
+    verifyToken
 };
