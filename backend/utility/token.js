@@ -47,31 +47,26 @@ async function updateToken(user) {
 async function verifyToken(token) {
     let returnString = '';
     let roleID = 0;
-    ///verify token
-    jwt.verify(token.token, secret, async (err, decoded) => {
-        roleID = Number(decoded.data);
-        if (err) {
-            ///Token expired
-            if (err.name === 'TokenExpiredError') {
-                let result = await tokenController.delete(token.tokenID);
-                if (result == 1) {
-                    returnString = 'Token deleted, reload login.';
-                } else {
-                    returnString = 'Error deleting token.';
-                }
-            } else if (err.name === 'NotBeforeError') {
-                returnString = 'JWT Not Before Error.'; 
-            } else {
-                returnString = 'JsonWebTokenError';
-            }
-        } else {
-            returnString = 'Logged in successfully.';
-        }
-    });
     let returnOBJ = {
         returnString: returnString,
         roleID: roleID
     }
+    ///verify token
+    jwt.verify(token.token, secret, async (err, decoded) => {
+        if (err) {
+            ///Token expired
+            if (err.name === 'TokenExpiredError') {
+                returnOBJ.returnString = 'TokenExpiredError';
+            } else if (err.name === 'NotBeforeError') {
+                returnOBJ.returnString = 'JWT Not Before Error.';
+            } else {
+                returnOBJ.returnString = 'JsonWebTokenError';
+            }
+        } else {
+            returnOBJ.roleID = Number(decoded.data);
+            returnOBJ.returnString = 'Logged in successfully.';
+        }
+    });
     return returnOBJ;
 }
 

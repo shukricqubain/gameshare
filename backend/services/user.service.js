@@ -489,8 +489,8 @@ async function update(userID, user) {
         let updatedAt = moment(new Date()).format(outputDateFormat);
         let updatedString = `${updatedAt}`;
         let updatedArray = updatedString.split('T');
-        updatedString = `${updatedArray[0]} ${updatedArray[1]}`;
-        user.updatedAt = updatedString.slice(0, -6);
+        updatedString = `${updatedArray[0]}`;
+        user.updatedAt = updatedString;
         return await db.sequelize.query(
             `UPDATE user
             SET userName = '${user.userName}', 

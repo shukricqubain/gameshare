@@ -68,14 +68,17 @@ router.post('/loginUser', async function(req,res){
             if(token !== null && token !== 'Cannot find token with specified username.'){
                 ///verify token
                 let result = await tokenUtility.verifyToken(token);
-                if(result.returnString === 'Token deleted, reload login.'){
-                    return res.status(200).json({
-                        message: 'Token deleted, reload login.'
-                    });
-                } else if(result.returnString === 'Error deleting token.'){
-                    return res.status(500).json({
-                        message: 'Error deleting token.'
-                    });
+                if(result.returnString === 'TokenExpiredError'){
+                    let result = await tokenController.delete(token.tokenID);
+                    if (result == 1) {
+                        return res.status(200).json({
+                            message: 'Token deleted, reload login.'
+                        });
+                    } else {
+                        return res.status(500).json({
+                            message: 'Error deleting token.'
+                        });
+                    }
                 } else if(result.returnString === 'JsonWebTokenError'){  
                     return res.status(401).send({
                         message: 'JsonWebTokenError'
