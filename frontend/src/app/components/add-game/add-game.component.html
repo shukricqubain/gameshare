@@ -1,6 +1,12 @@
 <div class="child-component">
     <div class="add-game-container">
-        <h1>Add a Game</h1>
+        <ng-container *ngIf="isEdit; then editGame; else addGame"></ng-container>
+        <ng-template #addGame>
+            <h1>Add a Game</h1>
+        </ng-template>
+        <ng-template #editGame>
+            <h1>Edit a Game</h1>
+        </ng-template>
         <form [formGroup]="addGameForm" (ngSubmit)="onSubmit()">
             <div class="form-column">
                 <div class="form-row">
@@ -41,6 +47,7 @@
             <br>
             <div class="form-row">
                 <button mat-raised-button [disabled]="!addGameForm.dirty || !addGameForm.valid" type="submit">Submit</button>
+                <button [hidden]="!isEdit" mat-raised-button type="button" style="margin-left:10px;" (click)="closeDialog()">Cancel</button>
             </div>
         </form>
     </div>

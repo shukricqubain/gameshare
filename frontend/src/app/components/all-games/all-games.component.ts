@@ -7,7 +7,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { catchError, map, merge, startWith, switchMap, of as observableOf } from 'rxjs';
 import { Game } from 'src/app/models/game.model';
 import { GameService } from 'src/app/services/game.service';
-import * as moment from 'moment';
+import { MatDialog } from '@angular/material/dialog';
+import { AddGameComponent } from '../add-game/add-game.component';
+import { Router } from '@angular/router';
+import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 
 @Component({
   selector: 'app-all-games',
@@ -16,15 +19,20 @@ import * as moment from 'moment';
 })
 export class AllGamesComponent {
 
-  constructor(private gameService: GameService,
+  constructor(
+    private gameService: GameService,
     private changeDetectorRef: ChangeDetectorRef,
-    private snackBar: MatSnackBar,) { }
+    private snackBar: MatSnackBar,
+    private matDialog: MatDialog,
+    private router: Router,
+    private dateFunction: DateFunctionsService
+  ) { }
 
   ngOnInit() {
 
   }
 
-  displayedColumns: string[] = ['gameID', 'gameName', 'developers', 'publishers', 'genre', 'releaseDate'];
+  displayedColumns: string[] = ['gameID', 'gameName', 'developers', 'publishers', 'genre', 'releaseDate', 'actions'];
   dataSource = new MatTableDataSource<any>;
   userData: Game[];
   search: any;
@@ -114,8 +122,23 @@ export class AllGamesComponent {
   }
 
   public formatDate(date: any) {
-    let momentDate = moment(date).format("MM-DD-YYYY");
-    return momentDate;
+    let formattedDate = this.dateFunction.formatDate(date);
+    return formattedDate;
+  }
+
+  public editGame(element: any) {
+    const dialogRef = this.matDialog.open(AddGameComponent, {
+      width: '100%',
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.ngAfterViewInit();
+      } else {
+        this.ngAfterViewInit();
+      }
+    });
   }
 }
 

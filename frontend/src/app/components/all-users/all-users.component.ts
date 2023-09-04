@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from '../add-user/add-user.component';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import swal from 'sweetalert2'
 
 @Component({
   selector: 'app-all-users',
@@ -102,6 +103,14 @@ export class AllUsersComponent implements AfterViewInit {
     }
   }
 
+  public handleDeleteResponse(data:any){
+    if(data == null){
+      this.ngAfterViewInit();
+    } else {
+      this.ngAfterViewInit();
+    }
+  }
+
   public handleErrorResponse(error:any){
     this.snackBar.open(error.message, 'dismiss',{
       duration: 3000
@@ -135,6 +144,35 @@ export class AllUsersComponent implements AfterViewInit {
         this.ngAfterViewInit();
       }
     });
+  }
+
+  public deleteUser(element: any){
+    swal.fire({
+      title: `Are you sure want to delete the user ${element.userName}?`,
+      text: 'You will not be able to recover this user!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.value) {
+        this.userService.delete(element.userID).subscribe({
+          next: this.handleDeleteResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
+        swal.fire(
+          'Deleted!',
+          `${element.username} has been deleted.`,
+          'success'
+        )
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        swal.fire(
+          'Cancelled',
+          `${element.userName} has not been deleted.`,
+          'error'
+        )
+      }
+    })
   }
 
 }
