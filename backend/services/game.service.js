@@ -64,7 +64,8 @@ async function getAll(searchCriteria) {
                                 developers: { [Op.like]: '%' + searchTerm + '%' },
                                 publishers: { [Op.like]: '%' + searchTerm + '%' },
                                 genre: { [Op.like]: '%' + searchTerm + '%' },
-                                releaseDate: { [Op.like]: '%' + searchTerm + '%' }
+                                releaseDate: { [Op.like]: '%' + searchTerm + '%' },
+                                platform: { [Op.like]: '%' + searchTerm + '%' }
                             }
                         },
                         order: [
@@ -81,6 +82,7 @@ async function getAll(searchCriteria) {
                             'genre',
                             'releaseDate',
                             'gameCover',
+                            'platform',
                             'createdAt',
                             'updatedAt'
                         ],
@@ -95,7 +97,8 @@ async function getAll(searchCriteria) {
                                 developers: { [Op.like]: '%' + searchTerm + '%' },
                                 publishers: { [Op.like]: '%' + searchTerm + '%' },
                                 genre: { [Op.like]: '%' + searchTerm + '%' },
-                                releaseDate: { [Op.like]: '%' + searchTerm + '%' }
+                                releaseDate: { [Op.like]: '%' + searchTerm + '%' },
+                                platform: { [Op.like]: '%' + searchTerm + '%' }
                             }
                         },
                         order: [
@@ -111,6 +114,7 @@ async function getAll(searchCriteria) {
                             'genre',
                             'releaseDate',
                             'gameCover',
+                            'platform',
                             'createdAt',
                             'updatedAt'
                         ],
@@ -126,7 +130,8 @@ async function getAll(searchCriteria) {
                             developers: { [Op.like]: '%' + searchTerm + '%' },
                             publishers: { [Op.like]: '%' + searchTerm + '%' },
                             genre: { [Op.like]: '%' + searchTerm + '%' },
-                            releaseDate: { [Op.like]: '%' + searchTerm + '%' }
+                            releaseDate: { [Op.like]: '%' + searchTerm + '%' },
+                            platform: { [Op.like]: '%' + searchTerm + '%' }
                         }
                     },
                     order: [
@@ -141,6 +146,7 @@ async function getAll(searchCriteria) {
                         'genre',
                         'releaseDate',
                         'gameCover',
+                        'platform',
                         'createdAt',
                         'updatedAt'
                     ],
@@ -167,6 +173,7 @@ async function getAll(searchCriteria) {
                             'genre',
                             'releaseDate',
                             'gameCover',
+                            'platform',
                             'createdAt',
                             'updatedAt'
                         ],
@@ -187,6 +194,7 @@ async function getAll(searchCriteria) {
                             'genre',
                             'releaseDate',
                             'gameCover',
+                            'platform',
                             'createdAt',
                             'updatedAt'
                         ],
@@ -207,6 +215,7 @@ async function getAll(searchCriteria) {
                         'genre',
                         'releaseDate',
                         'gameCover',
+                        'platform',
                         'createdAt',
                         'updatedAt'
                     ],
@@ -229,6 +238,7 @@ async function create(game){
             genre: game.genre,
             releaseDate: game.releaseDate,
             gameCover: game.gameCover,
+            platform: game.platform
         });
     } catch(err){
         console.log(err)

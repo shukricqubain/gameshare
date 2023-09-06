@@ -20,6 +20,7 @@ export class AddGameComponent {
     genre: new FormControl('', [Validators.required]),
     releaseDate: new FormControl('', [Validators.required]),
     gameCover: new FormControl(''),
+    platform: new FormControl('', [Validators.required]),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
   });
@@ -44,6 +45,7 @@ export class AddGameComponent {
       let genre = `${this.data.genre}`;
       let releaseDate = `${this.data.releaseDate}`;
       let gameCover = `${this.data.gameCover}`;
+      let platform = `${this.data.platform}`;
       let createdAt = `${this.data.createdAt}`;
       let updatedAt = `${this.data.updatedAt}`;
       this.addGameForm.controls.gameName.patchValue(gameName);
@@ -52,6 +54,7 @@ export class AddGameComponent {
       this.addGameForm.controls.genre.patchValue(genre);
       this.addGameForm.controls.releaseDate.patchValue(releaseDate);
       this.addGameForm.controls.gameCover.patchValue(gameCover);
+      this.addGameForm.controls.platform.patchValue(platform);
       this.addGameForm.controls.createdAt.patchValue(createdAt);
       this.addGameForm.controls.updatedAt.patchValue(updatedAt);
     }
@@ -66,6 +69,7 @@ export class AddGameComponent {
       genre: '',
       releaseDate: '',
       gameCover: '',
+      platform: '',
       createdAt: '',
       updatedAt: ''
     }
@@ -75,6 +79,7 @@ export class AddGameComponent {
     newGame.genre = this.addGameForm.controls.genre.value || '';
     newGame.releaseDate = this.addGameForm.controls.releaseDate.value || '';
     newGame.gameCover = this.addGameForm.controls.gameCover.value || '';
+    newGame.platform = this.addGameForm.controls.platform.value || '';
     newGame.createdAt = this.addGameForm.controls.createdAt.value || '';
     newGame.updatedAt = this.addGameForm.controls.updatedAt.value || '';
     if(this.isEdit){

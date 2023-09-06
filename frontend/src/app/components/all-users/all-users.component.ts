@@ -162,7 +162,7 @@ export class AllUsersComponent implements AfterViewInit {
         });
         swal.fire(
           'Deleted!',
-          `${element.username} has been deleted.`,
+          `${element.userName} has been deleted.`,
           'success'
         )
       } else if (result.dismiss === swal.DismissReason.cancel) {

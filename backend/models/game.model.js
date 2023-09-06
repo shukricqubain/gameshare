@@ -39,6 +39,11 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
             }
         },
+        platform: {
+            type: Sequelize.STRING,
+            validate: {
+            }
+        },
         createdAt: {
             type: Sequelize.DATE,
         },

@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddGameComponent } from '../add-game/add-game.component';
 import { Router } from '@angular/router';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
+import swal from 'sweetalert2'
 
 @Component({
   selector: 'app-all-games',
@@ -32,7 +33,7 @@ export class AllGamesComponent {
 
   }
 
-  displayedColumns: string[] = ['gameID', 'gameName', 'developers', 'publishers', 'genre', 'releaseDate', 'actions'];
+  displayedColumns: string[] = ['gameID', 'gameName', 'developers', 'publishers', 'genre', 'releaseDate', 'platform', 'actions'];
   dataSource = new MatTableDataSource<any>;
   userData: Game[];
   search: any;
@@ -101,6 +102,14 @@ export class AllGamesComponent {
     });
   }
 
+  public handleDeleteResponse(data:any){
+    if(data == null){
+      this.ngAfterViewInit();
+    } else {
+      this.ngAfterViewInit();
+    }
+  }
+
   public applySearch = async () => {
     this.gameService.getAll(this.searchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
@@ -139,6 +148,35 @@ export class AllGamesComponent {
         this.ngAfterViewInit();
       }
     });
+  }
+
+  public deleteGame(element: any){
+    swal.fire({
+      title: `Are you sure want to delete the game ${element.gameName}?`,
+      text: 'You will not be able to recover this game!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
+      if (result.value) {
+        this.gameService.delete(element.gameID).subscribe({
+          next: this.handleDeleteResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
+        swal.fire(
+          'Deleted!',
+          `${element.gameName} has been deleted.`,
+          'success'
+        )
+      } else if (result.dismiss === swal.DismissReason.cancel) {
+        swal.fire(
+          'Cancelled',
+          `${element.gameName} has not been deleted.`,
+          'error'
+        )
+      }
+    })
   }
 }
 
