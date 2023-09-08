@@ -10,7 +10,7 @@ exports.create = async (req) => {
     }
 };
 
-// Get all game
+// Get count of games
 exports.findCount = async (searchCriteria) => {
     try{
         let gameCount = await gameService.findCount(searchCriteria);
@@ -44,6 +44,20 @@ exports.findOne = async (req) => {
         let game = await gameService.getOne(req);
         if(game == null){
             return 'Cannot find game with specified gameID';
+        } else {
+            return game;
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
+// Get single game by name
+exports.findOneByName = async (req) => {
+    try{
+        let game = await gameService.getOneByName(req);
+        if(game == null){
+            return 'Cannot find game with specified gameName';
         } else {
             return game;
         }

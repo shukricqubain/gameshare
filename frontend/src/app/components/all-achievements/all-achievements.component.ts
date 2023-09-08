@@ -1,40 +1,37 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { catchError, map, merge, startWith, switchMap, of as observableOf } from 'rxjs';
-import { Game } from 'src/app/models/game.model';
-import { GameService } from 'src/app/services/game.service';
-import { MatDialog } from '@angular/material/dialog';
-import { AddGameComponent } from '../add-game/add-game.component';
 import { Router } from '@angular/router';
-import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
+import { catchError, map, merge, startWith, switchMap, of as observableOf } from 'rxjs';
+import { Achievement } from 'src/app/models/achievement.model';
+import { AchievementService } from 'src/app/services/achievement.service';
 import swal from 'sweetalert2'
+import { AddAchievementComponent } from '../add-achievement/add-achievement.component';
 
 @Component({
-  selector: 'app-all-games',
-  templateUrl: './all-games.component.html',
-  styleUrls: ['./all-games.component.css']
+  selector: 'app-all-achievements',
+  templateUrl: './all-achievements.component.html',
+  styleUrls: ['./all-achievements.component.css']
 })
-export class AllGamesComponent {
+export class AllAchievementsComponent {
 
   constructor(
-    private gameService: GameService,
-    private changeDetectorRef: ChangeDetectorRef,
+    private achievementService: AchievementService,
     private snackBar: MatSnackBar,
-    private matDialog: MatDialog,
-    private router: Router,
-    private dateFunction: DateFunctionsService
-  ) { }
-
-  ngOnInit() {
+    private matDialog: MatDialog
+  ){
   }
 
-  displayedColumns: string[] = ['gameID', 'gameName', 'developers', 'publishers', 'genre', 'releaseDate', 'platform', 'actions'];
+  ngOnInit(){
+  }
+
+  displayedColumns: string[] = ['achievementID', 'gameID', 'achievementName', 'achievementDescription', 'achievementIcon', 'actions'];
   dataSource = new MatTableDataSource<any>;
-  userData: Game[];
+  userData: Achievement[];
   search: any;
   pageSize = 5;
   currentPage = 0;
@@ -46,7 +43,7 @@ export class AllGamesComponent {
 
   searchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
-    sort: new FormControl('gameID', [Validators.required]),
+    sort: new FormControl('achievementID', [Validators.required]),
     pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
@@ -64,13 +61,13 @@ export class AllGamesComponent {
           this.searchCriteria.controls.direction.patchValue(this.sort.direction);
           this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
           this.searchCriteria.controls.limit.patchValue(this.paginator.pageSize);
-          return this.gameService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
+          return this.achievementService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
         }),
         map(data => {
           if (data === null) {
             return [];
           }
-          this.resultsLength = data.gameCount;
+          this.resultsLength = data.achievementCount;
           return data.data;
         }),
       )
@@ -104,7 +101,7 @@ export class AllGamesComponent {
   }
 
   public applySearch = async () => {
-    this.gameService.getAll(this.searchCriteria.value).subscribe({
+    this.achievementService.getAll(this.searchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
@@ -112,24 +109,19 @@ export class AllGamesComponent {
 
   public clearSearch() {
     this.searchCriteria.controls.searchTerm.patchValue('');
-    this.searchCriteria.controls.sort.patchValue('gameID');
+    this.searchCriteria.controls.sort.patchValue('achievementID');
     this.searchCriteria.controls.pagination.patchValue('true');
     this.searchCriteria.controls.direction.patchValue('asc');
     this.searchCriteria.controls.limit.patchValue(5);
     this.searchCriteria.controls.page.patchValue(0);
-    this.gameService.getAll(this.searchCriteria.value).subscribe({
+    this.achievementService.getAll(this.searchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
   }
 
-  public formatDate(date: any) {
-    let formattedDate = this.dateFunction.formatDate(date);
-    return formattedDate;
-  }
-
-  public editGame(element: any) {
-    const dialogRef = this.matDialog.open(AddGameComponent, {
+  public editAchievement(element: any) {
+    const dialogRef = this.matDialog.open(AddAchievementComponent, {
       width: '100%',
       data: element
     });
@@ -143,34 +135,33 @@ export class AllGamesComponent {
     });
   }
 
-  public deleteGame(element: any){
+  public deleteAchievement(element: any){
     swal.fire({
-      title: `Are you sure want to delete the game ${element.gameName}?`,
-      text: 'You will not be able to recover this game!',
+      title: `Are you sure want to delete the achievement ${element.achievementName}?`,
+      text: 'You will not be able to recover this achievement!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
-        this.gameService.delete(element.gameID).subscribe({
+        this.achievementService.delete(element.achievementID).subscribe({
           next: this.handleDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
         swal.fire(
           'Deleted!',
-          `${element.gameName} has been deleted.`,
+          `${element.achievementName} has been deleted.`,
           'success'
         )
       } else if (result.dismiss === swal.DismissReason.cancel) {
         swal.fire(
           'Cancelled',
-          `${element.gameName} has not been deleted.`,
+          `${element.achievementName} has not been deleted.`,
           'error'
         )
       }
     })
   }
+
 }
-
-

@@ -34,6 +34,8 @@ import { PopUpComponent } from './pop-up/pop-up.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AddGameComponent } from './components/add-game/add-game.component';
 import { AllGamesComponent } from './components/all-games/all-games.component';
+import { AddAchievementComponent } from './components/add-achievement/add-achievement.component';
+import { AllAchievementsComponent } from './components/all-achievements/all-achievements.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { AllGamesComponent } from './components/all-games/all-games.component';
     PopUpComponent,
     SignupComponent,
     AddGameComponent,
-    AllGamesComponent
+    AllGamesComponent,
+    AddAchievementComponent,
+    AllAchievementsComponent
   ],
   imports: [
     BrowserModule,

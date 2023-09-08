@@ -10,10 +10,24 @@ exports.create = async (req) => {
     }
 };
 
-// Get all achievement
+// Get count of all achievements
+exports.findCount = async (searchCriteria) => {
+    try{
+        let achievementCount = await achievementService.findCount(searchCriteria);
+        if(achievementCount > 0){
+            return achievementCount;
+        } else {
+            return {message: 'No data in achievement table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
+// Get all achievements
 exports.findAll = async (req, res) => {
     try{
-        let allAchievements = await achievementService.getAll();
+        let allAchievements = await achievementService.getAll(req);
         if(allAchievements.length > 0){
             return allAchievements;
         } else {

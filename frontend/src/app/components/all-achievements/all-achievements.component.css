@@ -1,0 +1,104 @@
+.example-container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+}
+
+.search-form-container{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.icon-class {
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.mat-column-achievementID {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 8% !important;
+    width: 8% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.mat-column-gameID {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 8% !important;
+    width: 8% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.mat-column-achievementName {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 18% !important;
+    width: 18% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.mat-column-achievementDescription {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 11% !important;
+    width: 11% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.mat-column-achievementIcon {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 13% !important;
+    width: 13% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+
+.mat-column-actions {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 25% !important;
+    width: 25% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}

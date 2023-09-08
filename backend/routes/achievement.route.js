@@ -25,13 +25,34 @@ router.post('/addAchievement', async function(req, res){
 });
 
 // get all achievement
-router.get('/allAchievements', async function(req, res) {
+router.post('/allAchievements', async function(req, res) {
     try{
-        let allAchievements = await achievementController.findAll();
-        if(allAchievements.message !== 'No data in achievement table to fetch.'){
-            res.status(200).send(allAchievements);
+        if(req.body !== null){
+            let searchCriteria = req.body;
+            let allAchievements;
+            let achievementCount;
+            if(searchCriteria.pagination){
+                achievementCount = await achievementController.findCount(searchCriteria);
+                searchCriteria.achievementCount = achievementCount;
+                allAchievements = await achievementController.findAll(searchCriteria);
+                if(allAchievements.message !== 'No data in achievement table to fetch.'){
+                    searchCriteria.data = allAchievements;
+                    return res.status(200).json(searchCriteria);
+                } else {
+                    return res.status(204).send({message:'No data in achievement table to fetch.'});
+                }
+            } else {
+                allAchievements = await achievementController.findAll(searchCriteria);
+                achievementCount = allAchievements.length;
+                if(allAchievements.message !== 'No data in achievement table to fetch.'){
+                    searchCriteria.data = allAchievements;
+                    return res.status(200).json(searchCriteria);
+                } else {
+                    return res.status(204).send({message:'No data in achievement table to fetch.'});
+                }
+            }
         } else {
-            res.status(204).send(allAchievements);
+            res.status(400).send('Search criteria is required.');
         }
     } catch(err){
         console.log(err)

@@ -1,0 +1,46 @@
+<div class="child-component">
+    <div class="add-game-container">
+        <ng-container *ngIf="isEdit; then editAchievement; else addAchievement"></ng-container>
+        <ng-template #addAchievement>
+            <h1>Add an Achievement</h1>
+        </ng-template>
+        <ng-template #editAchievement>
+            <h1>Edit an Achievement</h1>
+        </ng-template>
+        <form [formGroup]="addAchievementForm" (ngSubmit)="onSubmit()">
+            <div class="form-column">
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline">
+                        <label>Game Name</label>
+                        <input matInput name="gameName" id="gameName" type="text" formControlName="gameName"
+                            placeholder="Enter game name." required (blur)="checkGameExists()"/>
+                    </mat-form-field>
+                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                        <label>Achievement Name</label>
+                        <input matInput name="achievementName" id="achievementName" type="text" formControlName="achievementName"
+                            placeholder="Enter achievement name." required />
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field style="width:100%;" MatFormFieldAppearance="outline">
+                        <label>Achievement Description</label>
+                        <textarea matInput name="achievementDescription" id="achievementDescription" type="text" formControlName="achievementDescription"
+                            placeholder="Enter achievement description." required></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                        <label>Achievement Icon</label>
+                        <input matInput name="achievementIcon" id="achievementIcon" formControlName="achievementIcon"
+                            placeholder="Enter achievement icon." />
+                    </mat-form-field>
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <button mat-raised-button [disabled]="!addAchievementForm.dirty || !addAchievementForm.valid" type="submit">Submit</button>
+                <button [hidden]="!isEdit" mat-raised-button type="button" style="margin-left:10px;" (click)="closeDialog()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

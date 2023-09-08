@@ -26,12 +26,7 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
             }
         },
-        achievementProgress: {
-            type: Sequelize.DECIMAL,
-            validate: {
-            }
-        },
-        achievementICON: {
+        achievementIcon: {
             type: Sequelize.STRING,
             validate:{
             }

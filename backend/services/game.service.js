@@ -228,6 +228,7 @@ async function getAll(searchCriteria) {
         console.log(err)
     }
 }
+
 async function create(game){
     try{
         return await db.game.create({
@@ -252,6 +253,17 @@ async function getOne(gameID){
     try{
         return await db.game.findOne({
             where: {gameID: gameID},
+            raw: true
+        });
+    } catch(err){
+        console.log(err);
+    }
+}
+
+async function getOneByName(gameName){
+    try{
+        return await db.game.findOne({
+            where: {gameName: gameName},
             raw: true
         });
     } catch(err){
@@ -291,6 +303,7 @@ async function deleteGame(gameID){
 
 module.exports = {
     getAll,
+    getOneByName,
     findCount,
     getOne,
     create,

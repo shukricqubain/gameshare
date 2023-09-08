@@ -8,6 +8,8 @@ import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AllGamesComponent } from './components/all-games/all-games.component';
 import { AddGameComponent } from './components/add-game/add-game.component';
+import { AllAchievementsComponent } from './components/all-achievements/all-achievements.component';
+import { AddAchievementComponent } from './components/add-achievement/add-achievement.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,7 +20,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, title: 'Login'},
   { path: 'signup', component: SignupComponent, title: 'Signup'},
   { path: 'all-games', component: AllGamesComponent, title: 'All Games'},
-  { path: 'add-game', component: AddGameComponent, title: 'Add Game'}
+  { path: 'add-game', component: AddGameComponent, title: 'Add Game'},
+  { path: 'all-achievements', component: AllAchievementsComponent, title: 'All Achievements'},
+  { path: 'add-achievement', component: AddAchievementComponent, title: 'Add Achievement'}
 ];
 
 @NgModule({

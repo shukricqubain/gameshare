@@ -13,6 +13,15 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class AddGameComponent {
 
+  constructor(
+    private gameService: GameService,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    @Optional() private dialogRef?: MatDialogRef<AddGameComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data?: Game
+  ) {
+  }
+
   addGameForm = new FormGroup({
     gameName: new FormControl('', [Validators.required]),
     developers: new FormControl('', [Validators.required]),
@@ -24,15 +33,6 @@ export class AddGameComponent {
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
   });
-
-  constructor(
-    private gameService: GameService,
-    private snackBar: MatSnackBar,
-    private router: Router,
-    @Optional() private dialogRef?: MatDialogRef<AddGameComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data?: Game
-  ) {
-  }
 
   isEdit: boolean = false;
 

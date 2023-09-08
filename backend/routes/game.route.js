@@ -78,6 +78,25 @@ router.get('/singleGame/:gameID', async function(req, res){
     }
 });
 
+// get a single game by their gameName
+router.get('/singleGameByName/:gameName', async function(req, res){
+    try{
+        if(req.params.gameName !== undefined){
+            let gameName = req.params.gameName;
+            let game = await gameController.findOneByName(gameName);
+            if(game !== undefined && typeof game !== 'string'){
+                res.status(200).send(game);
+            } else {
+                res.status(404).send(game);
+            }
+        } else {
+            res.status(400).send('Game Name is required.');
+        }
+    } catch(err){
+        console.log(err);
+    }
+});
+
 // edit a game by gameID
 router.put('/editGame', async function(req, res){
     try{
