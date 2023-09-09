@@ -135,6 +135,20 @@ export class AllAchievementsComponent {
     });
   }
 
+  public addAchievement(){
+    const dialogRef = this.matDialog.open(AddAchievementComponent, {
+      width: '100%',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.ngAfterViewInit();
+      } else {
+        this.ngAfterViewInit();
+      }
+    });
+  }
+
   public deleteAchievement(element: any){
     swal.fire({
       title: `Are you sure want to delete the achievement ${element.achievementName}?`,

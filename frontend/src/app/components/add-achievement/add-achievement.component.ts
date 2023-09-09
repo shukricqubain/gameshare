@@ -37,6 +37,7 @@ export class AddAchievementComponent {
   
   isEdit: boolean = false;
   existingGame: Game;
+  gameNotFound: boolean = false;
 
   ngOnInit() {
     if(this.data !== null && this.data != undefined){
@@ -113,19 +114,24 @@ export class AddAchievementComponent {
       this.snackBar.open('Please enter a game that exists within the gameshare database.', 'dismiss',{
         duration: 3000
       });
+      this.gameNotFound = true;
     } else {
       this.snackBar.open('Found the game, please enter achievement details.', 'dismiss',{
         duration: 3000
       });
+      this.gameNotFound = false;
       this.existingGame = data;
     }
     
   }
 
   handleErrorResponse(error:any){
-    this.snackBar.open(error.message, 'dismiss',{
-      duration: 3000
-    });
+    if(error.error === 'Cannot find game with specified gameName'){
+      this.snackBar.open('Please enter a game that exists within the gameshare database.', 'dismiss',{
+        duration: 3000
+      });
+      this.gameNotFound = true;
+    }
   }
 
   editGame(){
@@ -144,10 +150,12 @@ export class AddAchievementComponent {
 
   checkGameExists(){
     let gameName = this.addAchievementForm.controls.gameName.value ? this.addAchievementForm.controls.gameName.value: '';
-    this.gameService!.getByName(gameName).subscribe({
-      next: this.handleGetResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+    if(gameName !== ''){
+      this.gameService!.getByName(gameName).subscribe({
+        next: this.handleGetResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
   }
 
 }
