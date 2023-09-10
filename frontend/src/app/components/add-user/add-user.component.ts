@@ -35,7 +35,7 @@ export class AddUserComponent {
     private usernameService: UsernameService,
     private roleService: RoleService,
     @Optional() private dialogRef?: MatDialogRef<AddUserComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data?: User
+    @Optional() @Inject(MAT_DIALOG_DATA) public data?: any
   ){
   }
 
@@ -43,18 +43,18 @@ export class AddUserComponent {
   showPassword: boolean = false;
   
   ngOnInit(){
-    if(this.data !== null && this.data != undefined){
+    if(this.data !== null && this.data != undefined && this.data.isEdit == true){
       this.isEdit = true;
-      let dateOfBirth = `${this.data.dateOfBirth}`;
-      let userName = `${this.data.userName}`;
-      let firstName = `${this.data.firstName}`;
-      let lastName = `${this.data.lastName}`;
-      let email = `${this.data.email}`;
-      let phoneNumber = `${this.data.phoneNumber}`;
-      let userRole = `${this.data.userRole}`;
-      let password = `${this.data.userPassword}`;
-      let createdAt = `${this.data.createdAt}`;
-      let updatedAt = `${this.data.updatedAt}`;
+      let dateOfBirth = `${this.data.element.dateOfBirth}`;
+      let userName = `${this.data.element.userName}`;
+      let firstName = `${this.data.element.firstName}`;
+      let lastName = `${this.data.element.lastName}`;
+      let email = `${this.data.element.email}`;
+      let phoneNumber = `${this.data.element.phoneNumber}`;
+      let userRole = `${this.data.element.userRole}`;
+      let password = `${this.data.element.userPassword}`;
+      let createdAt = `${this.data.element.createdAt}`;
+      let updatedAt = `${this.data.element.updatedAt}`;
       this.addUserForm.controls.dateOfBirth.patchValue(dateOfBirth);
       this.addUserForm.controls.userName.patchValue(userName);
       this.addUserForm.controls.firstName.patchValue(firstName);
@@ -107,7 +107,7 @@ export class AddUserComponent {
           localStorage.setItem('roleID', updated_role);
         }
       }
-      newUser.userID = this.data?.userID;
+      newUser.userID = this.data?.element.userID;
       this.userService.update(newUser).subscribe({
         next: this.handleEditResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
@@ -131,12 +131,20 @@ export class AddUserComponent {
   }
 
   handleCreateResponse(data:any){
-    if(data.user_id !== null && data.created_user !== null){
+    if(this.data !== null){
       this.snackBar.open('Successfully created a new user!', 'dismiss',{
         duration: 3000
       });
-      this.router.navigate(['/all-users']);
+      this.closeDialog();
+    } else {
+      if(data.user_id !== null && data.created_user !== null){
+        this.snackBar.open('Successfully created a new user!', 'dismiss',{
+          duration: 3000
+        });
+        this.router.navigate(['/all-users']);
+      }
     }
+    
   }
 
   handleErrorResponse(error:any){

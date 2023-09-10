@@ -360,14 +360,14 @@ async function create(user) {
         ///clean up dateOfBirth for insertion
         let dateString = `${user.dateOfBirth}`;
         let dateArray = dateString.split('T');
-        dateString = `${dateArray[0]} ${dateArray[1]}`;
-        user.dateOfBirth = dateString.slice(0, -5);
+        dateString = `${dateArray[0]}`;
+        user.dateOfBirth = dateString;
         ///clean up createdAt for insertion
         let createdAt = moment(new Date()).format(outputDateFormat);
         let createdString = `${createdAt}`;
         let createdArray = createdString.split('T');
-        createdString = `${createdArray[0]} ${createdArray[1]}`;
-        user.createdAt = createdString.slice(0, -6);
+        createdString = `${createdArray[0]}`;
+        user.createdAt = createdString;
         return await db.sequelize.query(
             `INSERT INTO user ( userName, firstName, lastName, dateOfBirth, email, phoneNumber, userRole, userPassword, createdAt ) VALUES
             ( '${user.userName}', AES_ENCRYPT('${user.firstName}','${secretKey}'), AES_ENCRYPT('${user.lastName}','${secretKey}'), STR_TO_DATE('${user.dateOfBirth}',"%Y-%m-%d %H:%i:%s"), AES_ENCRYPT('${user.email}','${secretKey}'), '${user.phoneNumber}', '${user.userRole}', '${user.userPassword}', STR_TO_DATE('${user.createdAt}',"%Y-%m-%d %H:%i:%s") );`

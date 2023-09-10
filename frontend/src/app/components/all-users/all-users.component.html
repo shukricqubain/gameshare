@@ -1,7 +1,7 @@
 <div>
   <div class="example-container mat-elevation-z8">
     <div class="search-form-container">
-      <form [formGroup]="searchCriteria" (ngSubmit)="applySearch()">
+      <form [formGroup]="searchCriteria" style="margin-top: 25px;" (ngSubmit)="applySearch()">
         <mat-form-field>
           <mat-label>Search</mat-label>
           <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
@@ -13,6 +13,7 @@
           clear
         </mat-icon>
       </form>
+      <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUser()">Add User</button>
     </div>
     <table mat-table [dataSource]="dataSource" class="table mat-elevation-z8" matSortActive="userID" matSortDisableClear matSortDirection="asc" matSort>
 

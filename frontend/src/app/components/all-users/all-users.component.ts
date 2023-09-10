@@ -133,7 +133,28 @@ export class AllUsersComponent implements AfterViewInit {
   public editUser(element: any){
     const dialogRef = this.matDialog.open(AddUserComponent, {
       width: '100%',
-      data: element
+      data: {
+        isEdit: true,
+        element
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      let userRole = localStorage.getItem('roleID');
+      if(userRole !== '1'){
+        this.router.navigate(['/home']);
+      } else {
+        this.ngAfterViewInit();
+      }
+    });
+  }
+
+  public addUser(){
+    const dialogRef = this.matDialog.open(AddUserComponent, {
+      width: '100%',
+      data: {
+        isEdit: false
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
