@@ -18,7 +18,7 @@ export class AddGameComponent {
     private snackBar: MatSnackBar,
     private router: Router,
     @Optional() private dialogRef?: MatDialogRef<AddGameComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data?: Game
+    @Optional() @Inject(MAT_DIALOG_DATA) public data?: any
   ) {
   }
 
@@ -35,19 +35,21 @@ export class AddGameComponent {
   });
 
   isEdit: boolean = false;
+  gameNotFound: boolean = false;
+  existingGame: Game;
 
   ngOnInit() {
-    if(this.data !== null && this.data != undefined){
+    if(this.data !== null && this.data != undefined && this.data.isEdit == true){
       this.isEdit = true;
-      let gameName = `${this.data.gameName}`;
-      let developers = `${this.data.developers}`;
-      let publishers = `${this.data.publishers}`;
-      let genre = `${this.data.genre}`;
-      let releaseDate = `${this.data.releaseDate}`;
-      let gameCover = `${this.data.gameCover}`;
-      let platform = `${this.data.platform}`;
-      let createdAt = `${this.data.createdAt}`;
-      let updatedAt = `${this.data.updatedAt}`;
+      let gameName = `${this.data.element.gameName}`;
+      let developers = `${this.data.element.developers}`;
+      let publishers = `${this.data.element.publishers}`;
+      let genre = `${this.data.element.genre}`;
+      let releaseDate = `${this.data.element.releaseDate}`;
+      let gameCover = `${this.data.element.gameCover}`;
+      let platform = `${this.data.element.platform}`;
+      let createdAt = `${this.data.element.createdAt}`;
+      let updatedAt = `${this.data.element.updatedAt}`;
       this.addGameForm.controls.gameName.patchValue(gameName);
       this.addGameForm.controls.developers.patchValue(developers);
       this.addGameForm.controls.publishers.patchValue(publishers);
@@ -83,7 +85,7 @@ export class AddGameComponent {
     newGame.createdAt = this.addGameForm.controls.createdAt.value || '';
     newGame.updatedAt = this.addGameForm.controls.updatedAt.value || '';
     if(this.isEdit){
-      newGame.gameID = this.data?.gameID;
+      newGame.gameID = this.data.element?.gameID;
       this.gameService.update(newGame).subscribe({
         next: this.handleEditResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
@@ -99,10 +101,19 @@ export class AddGameComponent {
 
   handleCreateResponse(data:any){
     if(data !== null){
-      this.snackBar.open('Successfully created a new game!', 'dismiss',{
-        duration: 3000
-      });
-      this.router.navigate(['/all-games']);
+
+      if(this.data !== null){
+        this.snackBar.open('Successfully created a new game!', 'dismiss',{
+          duration: 3000
+        });
+        this.closeDialog(data)
+      } else {
+        this.snackBar.open('Successfully created a new game!', 'dismiss',{
+          duration: 3000
+        });
+        this.router.navigate(['/all-games']);
+      }
+      
     }
   }
 
@@ -111,7 +122,7 @@ export class AddGameComponent {
       this.snackBar.open('Successfully edited a game!', 'dismiss',{
         duration: 3000
       });
-      this.closeDialog(data)
+      this.closeDialog(data);
     }
   }
 
@@ -133,6 +144,35 @@ export class AddGameComponent {
     } else {
       this.dialogRef?.close({event:'Cancel'});
     }
+  }
+
+  checkGameExists(){
+    if(!this.isEdit){
+      let gameName = this.addGameForm.controls.gameName.value ? this.addGameForm.controls.gameName.value: '';
+      if(gameName !== ''){
+        this.gameService!.getByName(gameName).subscribe({
+          next: this.handleGetResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
+      }
+    }
+    
+  }
+
+  handleGetResponse(data:any){
+    if(data == null && data == undefined){
+      this.snackBar.open('No game found with that name.', 'dismiss',{
+        duration: 3000
+      });
+      this.gameNotFound = true;
+    } else {
+      this.snackBar.open('Game already exists with this name, please enter another name.', 'dismiss',{
+        duration: 3000
+      });
+      this.gameNotFound = false;
+      this.existingGame = data;
+    }
+    
   }
 
 }

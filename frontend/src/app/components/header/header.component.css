@@ -5,7 +5,7 @@
     overflow: hidden;
 }
 
-a {
+.header-item {
     color: #e7e7e7;
     text-decoration: none;
     font-size: 17px;

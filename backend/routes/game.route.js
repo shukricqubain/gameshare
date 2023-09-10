@@ -87,7 +87,7 @@ router.get('/singleGameByName/:gameName', async function(req, res){
             if(game !== undefined && typeof game !== 'string'){
                 res.status(200).send(game);
             } else {
-                res.status(404).send(game);
+                res.status(204).send(game);
             }
         } else {
             res.status(400).send('Game Name is required.');

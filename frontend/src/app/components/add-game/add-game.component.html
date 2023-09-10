@@ -13,7 +13,7 @@
                     <mat-form-field MatFormFieldAppearance="outline">
                         <label>Game Name</label>
                         <input matInput name="gameName" id="gameName" type="text" formControlName="gameName"
-                            placeholder="Enter game name." required />
+                            placeholder="Enter game name." required (blur)="checkGameExists()" />
                     </mat-form-field>
                     <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
                         <label>Developers</label>
@@ -29,12 +29,13 @@
                     </mat-form-field>
                     <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
                         <label>Genre</label>
-                        <input matInput name="genre" id="genre" formControlName="genre"
-                            placeholder="Enter genre." required />
+                        <input matInput name="genre" id="genre" formControlName="genre" placeholder="Enter genre."
+                            required />
                     </mat-form-field>
                 </div>
                 <div class="form-row">
-                    <input [matDatepicker]="picker" placeholder="Choose a date" required formControlName="releaseDate" />
+                    <input [matDatepicker]="picker" placeholder="Choose a date" required
+                        formControlName="releaseDate" />
                     <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                     <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
@@ -53,8 +54,17 @@
             </div>
             <br>
             <div class="form-row">
-                <button mat-raised-button [disabled]="!addGameForm.dirty || !addGameForm.valid" type="submit">Submit</button>
-                <button [hidden]="!isEdit" mat-raised-button type="button" style="margin-left:10px;" (click)="closeDialog()">Cancel</button>
+                <ng-container *ngIf="isEdit; then dontCheckNameFound; else checkNameFound"></ng-container>
+                <ng-template #checkNameFound>
+                    <button mat-raised-button [disabled]="!addGameForm.dirty || !addGameForm.valid || !gameNotFound"
+                    type="submit">Submit</button>
+                </ng-template>
+                <ng-template #dontCheckNameFound>
+                    <button mat-raised-button [disabled]="!addGameForm.dirty || !addGameForm.valid"
+                    type="submit">Submit</button>
+                </ng-template>
+                <button mat-raised-button type="button" style="margin-left:10px;"
+                    (click)="closeDialog()">Cancel</button>
             </div>
         </form>
     </div>

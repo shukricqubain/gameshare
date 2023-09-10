@@ -131,7 +131,27 @@ export class AllGamesComponent {
   public editGame(element: any) {
     const dialogRef = this.matDialog.open(AddGameComponent, {
       width: '100%',
-      data: element
+      data: {
+        isEdit: true,
+        element
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.ngAfterViewInit();
+      } else {
+        this.ngAfterViewInit();
+      }
+    });
+  }
+
+  public addGame() {
+    const dialogRef = this.matDialog.open(AddGameComponent, {
+      width: '100%',
+      data: {
+        isEdit: false
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
