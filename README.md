@@ -102,8 +102,10 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Login Workflow
   - [x] Signup Workflow
 - [ ] Game Collection Functionality
-  - [ ] Basic CRUD for Games
-  - [ ] Basic CRUD for Achievements
+  - [x] Basic CRUD for Games
+  - [x] Basic CRUD for Achievements
+  - [ ] Basic CRUD for User Collection
+  - [ ] Basic CRUD for User Achievements
 - [ ] Board Functionality
   - [ ] Basic CRUD for Boards
 - [ ] Messaging Functionality
