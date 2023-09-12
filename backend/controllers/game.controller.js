@@ -1,6 +1,6 @@
 const gameService = require('../services/game.service');
 
-// Create and Save a new token
+// Create and Save a new game
 exports.create = async (req) => {
     try{
         let result = await gameService.create(req);

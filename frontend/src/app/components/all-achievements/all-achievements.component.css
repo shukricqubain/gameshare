@@ -37,7 +37,7 @@ table {
     hyphens: auto;
 }
 
-.mat-column-gameID {
+.mat-column-gameName {
     word-wrap: break-word !important;
     white-space: unset !important;
     flex: 0 0 8% !important;

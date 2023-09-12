@@ -29,7 +29,7 @@ export class AllAchievementsComponent {
   ngOnInit(){
   }
 
-  displayedColumns: string[] = ['achievementID', 'gameID', 'achievementName', 'achievementDescription', 'achievementIcon', 'actions'];
+  displayedColumns: string[] = ['achievementID', 'gameName', 'achievementName', 'achievementDescription', 'achievementIcon', 'actions'];
   dataSource = new MatTableDataSource<any>;
   userData: Achievement[];
   search: any;

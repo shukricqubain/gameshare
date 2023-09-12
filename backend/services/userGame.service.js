@@ -7,41 +7,41 @@ async function findCount(searchCriteria) {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
         let searchTerm = searchCriteria.searchTerm;
-        let achievements;
+        let userGames;
         if (searchTerm !== '') {
-            achievements = await db.achievement.findAll({
+            userGames = await db.userGame.findAll({
                 where: {
                     [Op.or]: {
-                        achievementID: { [Op.like]: '%' + searchTerm + '%'},
+                        userGameID: { [Op.like]: '%' + searchTerm + '%' },
                         gameID: { [Op.like]: '%' + searchTerm + '%' },
-                        achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                        achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
+                        userID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
                     }
                 },
                 order: [
                     [sort, sortDirection],
-                    ['achievementName', 'ASC'],
+                    ['gameID', 'ASC'],
                 ],
-                attributes: ['achievementID'],
+                attributes: ['gameID'],
                 raw: true,
             });
         } else {
-            achievements = await db.achievement.findAll({
+            games = await db.userGame.findAll({
                 order: [
                     [sort, sortDirection],
-                    ['achievementName', 'ASC'],
+                    ['gameID', 'ASC'],
                 ],
-                attributes: ['achievementID'],
+                attributes: ['gameID'],
                 raw: true,
             });
         }
-        return achievements.length;
+        return userGames.length;
     } catch (err) {
         console.log(err)
     }
 }
 
-async function getAll(searchCriteria) {
+async function getAllUserGames(searchCriteria) {
     try {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
@@ -55,57 +55,51 @@ async function getAll(searchCriteria) {
                 limit = searchCriteria.limit;
                 if (page != 0) {
                     offset = page * limit;
-                    return await db.achievement.findAll({
+                    return await db.userGame.findAll({
                         where: {
                             [Op.or]: {
-                                achievementID: { [Op.like]: '%' + searchTerm + '%'},
+                                userGameID: { [Op.like]: '%' + searchTerm + '%' },
                                 gameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameName: { [Op.like]: '%' + searchTerm + '%' },
-                                achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                                achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
+                                userID: { [Op.like]: '%' + searchTerm + '%' },
+                                gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
                             }
                         },
                         order: [
                             [sort, sortDirection],
-                            ['achievementName', 'ASC'],
+                            ['gameID', 'ASC'],
                         ],
                         limit: limit,
                         offset: offset,
                         attributes: [
-                            'achievementID',
+                            'userGameID',
                             'gameID',
-                            'achievementName',
-                            'achievementDescription',
-                            'achievementIcon',
-                            'gameName',
+                            'userID',
+                            'gameEnjoymentRating',
                             'createdAt',
                             'updatedAt'
                         ],
                         raw: true,
                     });
                 } else {
-                    return await db.achievement.findAll({
+                    return await db.userGame.findAll({
                         where: {
                             [Op.or]: {
-                                achievementID: { [Op.like]: '%' + searchTerm + '%'},
+                                userGameID: { [Op.like]: '%' + searchTerm + '%' },
                                 gameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameName: { [Op.like]: '%' + searchTerm + '%' },
-                                achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                                achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
+                                userID: { [Op.like]: '%' + searchTerm + '%' },
+                                gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
                             }
                         },
                         order: [
                             [sort, sortDirection],
-                            ['achievementName', 'ASC'],
+                            ['gameID', 'ASC'],
                         ],
                         limit: limit,
                         attributes: [
-                            'achievementID',
+                            'userGameID',
                             'gameID',
-                            'achievementName',
-                            'achievementDescription',
-                            'achievementIcon',
-                            'gameName',
+                            'userID',
+                            'gameEnjoymentRating',
                             'createdAt',
                             'updatedAt'
                         ],
@@ -113,27 +107,24 @@ async function getAll(searchCriteria) {
                     });
                 }
             } else {
-                return await db.achievement.findAll({
+                return await db.game.findAll({
                     where: {
                         [Op.or]: {
-                            achievementID: { [Op.like]: '%' + searchTerm + '%'},
+                            userGameID: { [Op.like]: '%' + searchTerm + '%' },
                             gameID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameName: { [Op.like]: '%' + searchTerm + '%' },
-                            achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                            achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
+                            userID: { [Op.like]: '%' + searchTerm + '%' },
+                            gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
                         }
                     },
                     order: [
                         [sort, sortDirection],
-                        ['achievementName', 'ASC'],
+                        ['gameID', 'ASC'],
                     ],
                     attributes: [
-                        'achievementID',
+                        'userGameID',
                         'gameID',
-                        'achievementName',
-                        'achievementDescription',
-                        'achievementIcon',
-                        'gameName',
+                        'userID',
+                        'gameEnjoymentRating',
                         'createdAt',
                         'updatedAt'
                     ],
@@ -145,39 +136,35 @@ async function getAll(searchCriteria) {
                 limit = searchCriteria.limit;
                 if (page != 0) {
                     offset = page * limit;
-                    return await db.achievement.findAll({
+                    return await db.userGame.findAll({
                         order: [
                             [sort, sortDirection],
-                            ['achievementName', 'ASC'],
+                            ['gameID', 'ASC'],
                         ],
                         limit: limit,
                         offset: offset,
                         attributes: [
-                            'achievementID',
+                            'userGameID',
                             'gameID',
-                            'achievementName',
-                            'achievementDescription',
-                            'achievementIcon',
-                            'gameName',
+                            'userID',
+                            'gameEnjoymentRating',
                             'createdAt',
                             'updatedAt'
                         ],
                         raw: true,
                     });
                 } else {
-                    return await db.achievement.findAll({
+                    return await db.userGame.findAll({
                         order: [
                             [sort, sortDirection],
-                            ['achievementName', 'ASC'],
+                            ['gameID', 'ASC'],
                         ],
                         limit: limit,
                         attributes: [
-                            'achievementID',
+                            'userGameID',
                             'gameID',
-                            'achievementName',
-                            'achievementDescription',
-                            'achievementIcon',
-                            'gameName',
+                            'userID',
+                            'gameEnjoymentRating',
                             'createdAt',
                             'updatedAt'
                         ],
@@ -185,18 +172,16 @@ async function getAll(searchCriteria) {
                     });
                 }
             } else {
-                return await db.achievement.findAll({
+                return await db.userGame.findAll({
                     order: [
                         [sort, sortDirection],
-                        ['achievementName', 'ASC'],
+                        ['gameID', 'ASC'],
                     ],
                     attributes: [
-                        'achievementID',
+                        'userGameID',
                         'gameID',
-                        'achievementName',
-                        'achievementDescription',
-                        'achievementIcon',
-                        'gameName',
+                        'userID',
+                        'gameEnjoymentRating',
                         'createdAt',
                         'updatedAt'
                     ],
@@ -210,14 +195,13 @@ async function getAll(searchCriteria) {
     }
 }
 
-async function create(achievement){
+async function createUserGame(userGame){
     try{
-        return await db.achievement.create({
-            achievementID: achievement.achievementID,
-            gameID: achievement.gameID,
-            achievementName: achievement.achievementName,
-            achievementDescription: achievement.achievementDescription,
-            achievementIcon: achievement.achievementIcon
+        return await db.userGame.create({
+            userGameID: userGame.userGameID,
+            gameID: userGame.gameID,
+            userID: userGame.userID,
+            gameEnjoymentRating: userGame.gameEnjoymentRating,
         });
     } catch(err){
         console.log(err)
@@ -227,10 +211,10 @@ async function create(achievement){
     }
 }
 
-async function getOne(achievementID){
+async function getOneUserGame(userGameID){
     try{
-        return await db.achievement.findOne({
-            where: {achievementID: achievementID},
+        return await db.userGame.findOne({
+            where: {userGameID: userGameID},
             raw: true
         });
     } catch(err){
@@ -238,13 +222,13 @@ async function getOne(achievementID){
     }
 }
 
-async function update(achievementID, achievement){
+async function updateUserGame(userGameID, userGame){
     try{
-        return result = await db.achievement.update(
-            achievement,
+        return result = await db.userGame.update(
+            userGame,
             {
                 where:{
-                    achievementID: achievementID
+                    userGameID: userGameID
                 }
             }
         );
@@ -256,11 +240,11 @@ async function update(achievementID, achievement){
     }
 }
 
-async function deleteAchievement(achievementID){
+async function deleteUserGame(userGameID){
     try{
-        return result = await db.achievement.destroy({
+        return result = await db.userGame.destroy({
             where:{
-                achievementID: achievementID
+                userGameID: userGameID
             }
         });
     } catch(err){
@@ -269,10 +253,10 @@ async function deleteAchievement(achievementID){
 }
 
 module.exports = {
+    getAllUserGames,
     findCount,
-    getAll,
-    getOne,
-    create,
-    update,
-    deleteAchievement
+    getOneUserGame,
+    createUserGame,
+    updateUserGame,
+    deleteUserGame
 };

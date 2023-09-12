@@ -1,7 +1,7 @@
 <mat-toolbar class="header-container mat-elevation-z8" color="primary">
     <mat-toolbar-row class="row-container">
         <div class="links-container">
-            <a class="header-item" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a>
+            <a class="header-item" style="margin-top:2.3px;" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a>
             <button class="header-item" *ngIf="roleID == 1" mat-button [matMenuTriggerFor]="users">Users</button>
             <mat-menu #users="matMenu">
                 <a mat-menu-item *ngIf="roleID == 1" routerLink="/all-users" routerLinkActive="active" ariaCurrentWhenActive="page">Users</a>

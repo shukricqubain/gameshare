@@ -24,5 +24,6 @@ db.role = require("./role.model.js")(sequelize, Sequelize);
 db.token = require("./token.model.js")(sequelize, Sequelize);
 db.game = require('./game.model.js')(sequelize, Sequelize);
 db.achievement = require('./achievement.model.js')(sequelize, Sequelize);
+db.userGame = require('./userGame.model.js')(sequelize, Sequelize);
 
 module.exports = db;

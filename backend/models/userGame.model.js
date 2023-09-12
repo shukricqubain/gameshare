@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const Achievement = sequelize.define("achievement", {
-        achievementID: {
+    const UserGame = sequelize.define("userGame", {
+        userGameID:{
             unique: true,
             autoIncrement: true,
             primaryKey: true,  
@@ -10,30 +10,21 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         gameID: {
-            foreignKey: true,
             type: Sequelize.INTEGER,
             validate:{
                 isInt: true
             }
         },
-        achievementName: {
-            type: Sequelize.STRING,
-            validate: {
-            }
-        },
-        achievementDescription: {
-            type: Sequelize.STRING,
-            validate: {
-            }
-        },
-        achievementIcon: {
-            type: Sequelize.STRING,
+        userID: {
+            type: Sequelize.INTEGER,
             validate:{
+                isInt: true
             }
         },
-        gameName: {
-            type: Sequelize.STRING,
+        gameEnjoymentRating:{
+            type: Sequelize.INTEGER,
             validate:{
+                isInt: true
             }
         },
         createdAt: {
@@ -44,11 +35,11 @@ module.exports = (sequelize, Sequelize) => {
             defaultValue: null
         }
     },{
-        tableName: 'achievement'
+        tableName: 'userGame'
     },{
         indexes:[{
             unique:true, 
-            fields: ['achievementID']}]
+            fields: ['userGameID']}]
     });
-    return Achievement;
+    return UserGame;
 };
