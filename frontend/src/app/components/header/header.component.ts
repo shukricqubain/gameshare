@@ -49,7 +49,7 @@ export class HeaderComponent {
   async viewProfile(){
     if(this.userName !== null || this.userName === ''){
       await this.userService.getUserByName(this.userName).subscribe(user => {
-        this.router.navigate([`/user-profile/${user.userID}`], { state: {user: user}});
+        this.router.navigate([`/user-profile/${user.userID}`], { state: {userID: user.userID}});
       });
     }
   }

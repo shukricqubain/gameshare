@@ -34,7 +34,7 @@ export class AllGamesComponent {
 
   displayedColumns: string[] = ['gameID', 'gameName', 'developers', 'publishers', 'genre', 'releaseDate', 'platform', 'actions'];
   dataSource = new MatTableDataSource<any>;
-  userData: Game[];
+  gameData: Game[];
   search: any;
   pageSize = 5;
   currentPage = 0;

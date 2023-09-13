@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
@@ -6,7 +6,12 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { UserService } from 'src/app/services/user.service';
 import { UsernameService } from 'src/app/services/username.service';
 import { RoleService } from 'src/app/services/roleID.service';
-
+import { UserGameService } from 'src/app/services/userGame.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { UserGame } from 'src/app/models/userGame.model';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -20,7 +25,9 @@ export class UserProfileComponent {
     private snackBar: MatSnackBar,
     private userService: UserService,
     private usernameService: UsernameService,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private userGameService: UserGameService,
+    private dateFunction: DateFunctionsService
   ) {
   }
 
@@ -40,23 +47,34 @@ export class UserProfileComponent {
   });
   showPassword: boolean = false;
   editEnabled: boolean = false;
-  enableMessage: string = `Enable the form for updation.`
+  enableMessage: string = `Enable the form for updation.`;
 
-  ngOnInit() {
+  searchCriteria = new FormGroup({
+    searchTerm: new FormControl('userID'),
+    sort: new FormControl('userGameID', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
+    direction: new FormControl('asc', [Validators.required]),
+    limit: new FormControl(5, [Validators.required]),
+    page: new FormControl(0, [Validators.required])
+  });
+
+  displayedUserGamesColumns: string[] = ['userGameID', 'gameID', 'gameEnjoymentRating','createdAt', 'updatedAt', 'actions'];
+  userGamesDataSource = new MatTableDataSource<any>;
+  userGamesData: UserGame[];
+  search: any;
+  pageSize = 5;
+  currentPage = 0;
+  resultsLength = 0;
+  isLoadingResults: boolean = false;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  async ngOnInit() {
     let data: any = this.location.getState();
-    this.user = data['user'];
-    if (this.user !== null) {
-      this.userProfileForm.controls.userID.setValue(this.user.userID ? `${this.user.userID}` : '');
-      this.userProfileForm.controls.userName.setValue(this.user.userName ? this.user.userName : '');
-      this.userProfileForm.controls.firstName.setValue(this.user.firstName ? this.user.firstName : '');
-      this.userProfileForm.controls.lastName.setValue(this.user.lastName ? this.user.lastName : '');
-      this.userProfileForm.controls.dateOfBirth.setValue(this.user.dateOfBirth ? this.user.dateOfBirth: '');
-      this.userProfileForm.controls.email.setValue(this.user.email ? this.user.email: '');
-      this.userProfileForm.controls.phoneNumber.setValue(this.user.phoneNumber ? this.user.phoneNumber: '');
-      this.userProfileForm.controls.userRole.setValue(this.user.userRole ? `${this.user.userRole}` : '');
-      this.userProfileForm.controls.userPassword.setValue(this.user.userPassword ? this.user.userPassword: '');
-      this.userProfileForm.controls.createdAt.setValue(this.user.createdAt ? this.user.createdAt: '');
-      this.userProfileForm.controls.updatedAt.setValue(this.user.updatedAt ? this.user.updatedAt: '');
+    if (data !== null) {
+      await this.loadUserDetails(data);
+      await this.loadUserGames();
       this.changeForm();
     } else {
       this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{
@@ -121,5 +139,46 @@ export class UserProfileComponent {
       this.userProfileForm.controls.userRole.disable();
       this.userProfileForm.controls.userPassword.disable();
     }
+  }
+
+  async loadUserDetails(data: any){
+    await this.userService.get(data.userID).subscribe({
+      next: this.handleGetResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
+  }
+
+  async loadUserGames(){
+    await this.userGameService.getAll(this.searchCriteria);
+
+  }
+
+  handleGetResponse(data: any){
+    this.user = data;
+    this.userProfileForm.controls.userID.setValue(data.userID ? `${data.userID}` : '');
+    this.userProfileForm.controls.userName.setValue(data.userName ? data.userName : '');
+    this.userProfileForm.controls.firstName.setValue(data.firstName ? data.firstName : '');
+    this.userProfileForm.controls.lastName.setValue(data.lastName ? data.lastName : '');
+    this.userProfileForm.controls.dateOfBirth.setValue(data.dateOfBirth ? data.dateOfBirth: '');
+    this.userProfileForm.controls.email.setValue(data.email ? data.email: '');
+    this.userProfileForm.controls.phoneNumber.setValue(data.phoneNumber ? data.phoneNumber: '');
+    this.userProfileForm.controls.userRole.setValue(data.userRole ? `${data.userRole}` : '');
+    this.userProfileForm.controls.userPassword.setValue(data.userPassword ? data.userPassword: '');
+    this.userProfileForm.controls.createdAt.setValue(data.createdAt ? data.createdAt: '');
+    this.userProfileForm.controls.updatedAt.setValue(data.updatedAt ? data.updatedAt: '');
+    this.searchCriteria.controls.searchTerm.setValue(data.userID ? `${data.userID}` : '');
+  }
+
+  editUserGame(element: any){
+    console.log('todo edit user game')
+  }
+
+  deleteUserGame(element: any){
+    console.log('todo delete user game')
+  }
+
+  public formatDate(date: any) {
+    let formattedDate = this.dateFunction.formatDate(date);
+    return formattedDate;
   }
 }

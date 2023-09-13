@@ -1,20 +1,93 @@
 <div class="child-component">
     <mat-tab-group>
-        <mat-tab label="game-collection"> Game Collection </mat-tab>
-        <mat-tab label="Achievement-collection"> Achievements </mat-tab>
-        <mat-tab label="user-details"> 
+        <mat-tab label="Game Collection">
             <div class="form-column">
-                <h1>Edit Profile</h1>
-                <mat-slide-toggle [matTooltip]="enableMessage" [(ngModel)]="editEnabled" (ngModelChange)="changeForm()">
-                </mat-slide-toggle>
+                <div class="form-row">
+                    <h1 style="text-align: center;">Game Collection</h1>
+                </div>
+                <div>
+                    <table mat-table [dataSource]="userGamesDataSource" class="table mat-elevation-z8"
+                        matSortActive="userGameID" matSortDisableClear matSortDirection="asc" matSort>
+
+                        <!-- userGameID Column -->
+                        <ng-container matColumnDef="userGameID">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> UserGameID </th>
+                            <td mat-cell *matCellDef="let element"> {{element.userGameID}} </td>
+                        </ng-container>
+
+                        <!-- gameID Column -->
+                        <ng-container matColumnDef="gameID">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> GameID </th>
+                            <td mat-cell *matCellDef="let element"> {{element.gameID}} </td>
+                        </ng-container>
+
+                        <!-- gameEnjoymentRating Column -->
+                        <ng-container matColumnDef="gameEnjoymentRating">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> GameEnjoymentRating </th>
+                            <td mat-cell *matCellDef="let element"> {{element.gameEnjoymentRating}} </td>
+                        </ng-container>
+
+                        <!-- createdAt Column -->
+                        <ng-container matColumnDef="createdAt">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
+                            <td mat-cell *matCellDef="let element"> {{element.createdAt}} </td>
+                        </ng-container>
+
+                        <!-- updatedAt Column -->
+                        <ng-container matColumnDef="updatedAt">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Updated At </th>
+                            <td mat-cell *matCellDef="let element"> {{element.updatedAt}} </td>
+                        </ng-container>
+
+                        <!-- actions Column -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef>Actions</th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" (click)="editUserGame(element)">
+                                    <mat-icon class="icon-class">
+                                        edit
+                                    </mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" (click)="deleteUserGame(element)">
+                                    <mat-icon class="icon-class">
+                                        delete
+                                    </mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedUserGamesColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedUserGamesColumns;"></tr>
+
+                        <!-- Row shown when there is no matching data. -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching the filter "</td>
+                        </tr>
+                    </table>
+                    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 100]"
+                        [showFirstLastButtons]="true" [length]="resultsLength">
+                    </mat-paginator>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Achievement-collection">
+        </mat-tab>
+        <mat-tab label="user-details">
+            <div class="form-column">
+                <div class="form-row">
+                    <h1 style="text-align: center;">Edit Profile</h1>
+                    <mat-slide-toggle style="margin-left: 1.23rem;margin-top:1.70rem;" [matTooltip]="enableMessage"
+                        [(ngModel)]="editEnabled" (ngModelChange)="changeForm()">
+                    </mat-slide-toggle>
+                </div>
                 <br>
                 <form [formGroup]="userProfileForm" (ngSubmit)="onSubmit()">
                     <div class="form-column">
                         <div class="form-row">
                             <mat-form-field MatFormFieldAppearance="outline">
                                 <label>Firstname</label>
-                                <input matInput gameName="firstName" id="firstName" type="text" formControlName="firstName"
-                                    placeholder="Enter firstname." required />
+                                <input matInput gameName="firstName" id="firstName" type="text"
+                                    formControlName="firstName" placeholder="Enter firstname." required />
                             </mat-form-field>
                             <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
                                 <label>Lastname</label>
@@ -30,7 +103,8 @@
                             </mat-form-field>
                             <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
                                 <label>Password</label>
-                                <input matInput gameName="userPassword" id="userPassword" [type]=" showPassword ? 'text' : 'password' " formControlName="userPassword"
+                                <input matInput gameName="userPassword" id="userPassword"
+                                    [type]=" showPassword ? 'text' : 'password' " formControlName="userPassword"
                                     placeholder="Enter password." required />
                             </mat-form-field>
                         </div>
@@ -42,12 +116,13 @@
                             </mat-form-field>
                             <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
                                 <label>Phone Number</label>
-                                <input matInput gameName="phoneNumber" id="phoneNumber" type="text" formControlName="phoneNumber"
-                                    placeholder="Enter phone number." required />
+                                <input matInput gameName="phoneNumber" id="phoneNumber" type="text"
+                                    formControlName="phoneNumber" placeholder="Enter phone number." required />
                             </mat-form-field>
                         </div>
                         <div class="form-row">
-                            <input [matDatepicker]="picker" placeholder="Choose a date" required formControlName="dateOfBirth" />
+                            <input [matDatepicker]="picker" placeholder="Choose a date" required
+                                formControlName="dateOfBirth" />
                             <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                             <mat-form-field MatFormFieldAppearance="outline">
@@ -59,10 +134,11 @@
                     </div>
                     <br>
                     <div class="form-row">
-                        <button mat-raised-button [disabled]="!userProfileForm.dirty || !userProfileForm.valid" type="submit">Submit</button>
+                        <button mat-raised-button [disabled]="!userProfileForm.dirty || !userProfileForm.valid"
+                            type="submit">Submit</button>
                     </div>
                 </form>
             </div>
         </mat-tab>
-    </mat-tab-group>      
+    </mat-tab-group>
 </div>
