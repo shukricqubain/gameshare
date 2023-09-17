@@ -12,6 +12,8 @@ import { UserGame } from 'src/app/models/userGame.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
+import { AddUserGameComponent } from './add-user-game/add-user-game.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-profile',
@@ -27,7 +29,8 @@ export class UserProfileComponent {
     private usernameService: UsernameService,
     private roleService: RoleService,
     private userGameService: UserGameService,
-    private dateFunction: DateFunctionsService
+    private dateFunction: DateFunctionsService,
+    private matDialog: MatDialog
   ) {
   }
 
@@ -50,7 +53,7 @@ export class UserProfileComponent {
   enableMessage: string = `Enable the form for updation.`;
 
   searchCriteria = new FormGroup({
-    searchTerm: new FormControl('userID'),
+    searchTerm: new FormControl(''),
     sort: new FormControl('userGameID', [Validators.required]),
     pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
@@ -166,7 +169,19 @@ export class UserProfileComponent {
     this.userProfileForm.controls.userPassword.setValue(data.userPassword ? data.userPassword: '');
     this.userProfileForm.controls.createdAt.setValue(data.createdAt ? data.createdAt: '');
     this.userProfileForm.controls.updatedAt.setValue(data.updatedAt ? data.updatedAt: '');
-    this.searchCriteria.controls.searchTerm.setValue(data.userID ? `${data.userID}` : '');
+    // this.searchCriteria.controls.searchTerm.setValue(data.userID ? `${data.userID}` : '');
+  }
+
+  public handleSearchResponse(data: any) {
+    if (data == null) {
+      this.userGamesDataSource.data = [];
+      this.resultsLength = 0;
+      this.ngOnInit();
+    } else {
+      this.userGamesDataSource.data = data.data;
+      this.resultsLength = data.user_count;
+      this.ngOnInit();
+    }
   }
 
   editUserGame(element: any){
@@ -180,5 +195,42 @@ export class UserProfileComponent {
   public formatDate(date: any) {
     let formattedDate = this.dateFunction.formatDate(date);
     return formattedDate;
+  }
+
+  addUserGame(){
+    const dialogRef = this.matDialog.open(AddUserGameComponent, {
+      width: '100%',
+      data: {
+        isEdit: false
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.ngOnInit();
+      } else {
+        this.ngOnInit();
+      }
+    });
+  }
+
+  public applySearch = async () => {
+    this.userGameService.getAll(this.searchCriteria.value).subscribe({
+      next: this.handleSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
+  }
+
+  public clearSearch() {
+    this.searchCriteria.controls.searchTerm.patchValue('');
+    this.searchCriteria.controls.sort.patchValue('gameID');
+    this.searchCriteria.controls.pagination.patchValue('true');
+    this.searchCriteria.controls.direction.patchValue('asc');
+    this.searchCriteria.controls.limit.patchValue(5);
+    this.searchCriteria.controls.page.patchValue(0);
+    this.userGameService.getAll(this.searchCriteria.value).subscribe({
+      next: this.handleSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
   }
 }

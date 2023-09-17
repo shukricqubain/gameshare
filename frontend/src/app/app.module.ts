@@ -22,6 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -38,6 +39,7 @@ import { AddGameComponent } from './components/add-game/add-game.component';
 import { AllGamesComponent } from './components/all-games/all-games.component';
 import { AddAchievementComponent } from './components/add-achievement/add-achievement.component';
 import { AllAchievementsComponent } from './components/all-achievements/all-achievements.component';
+import { AddUserGameComponent } from './components/user-profile/add-user-game/add-user-game.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { AllAchievementsComponent } from './components/all-achievements/all-achi
     AddGameComponent,
     AllGamesComponent,
     AddAchievementComponent,
-    AllAchievementsComponent
+    AllAchievementsComponent,
+    AddUserGameComponent
   ],
   imports: [
     BrowserModule,
@@ -82,7 +85,8 @@ import { AllAchievementsComponent } from './components/all-achievements/all-achi
     MatProgressSpinnerModule,
     MatDialogModule,
     MatMenuModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule
   ],
   exports: [
     MatButtonModule,
@@ -96,7 +100,8 @@ import { AllAchievementsComponent } from './components/all-achievements/all-achi
     MatProgressSpinnerModule,
     MatDialogModule,
     MatMenuModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule
   ],
   providers: [
     MatDatepickerModule,
