@@ -1,32 +1,38 @@
 <div class="child-component">
     <div class="add-user-game-container">
-        <ng-container *ngIf="isEdit; then editGame; else addGame"></ng-container>
-        <ng-template #addGame>
-            <h1>Add a Game</h1>
-        </ng-template>
-        <ng-template #editGame>
-            <h1>Edit a Game</h1>
-        </ng-template>
+        <div class="form-row">
+            <ng-container *ngIf="isEdit; then editGame; else addGame"></ng-container>
+            <ng-template #addGame>
+                <h1>Add a Game</h1>
+            </ng-template>
+            <ng-template #editGame>
+                <h1>Edit a Game</h1>
+            </ng-template>
+        </div>
         <form [formGroup]="addUserGameForm" (ngSubmit)="onSubmit()">
             <div class="form-column">
                 <div class="form-row">
-                    <mat-form-field MatFormFieldAppearance="outline">
+                    <mat-form-field>
                         <label>Game Name</label>
-                        <input matInput name="gameName" id="gameName" type="text" formControlName="gameName"
-                            placeholder="Enter game name." required />
+                        <mat-select placeholder="Select Game" formControlName="gameID"
+                            name="gameID" id="gameID" required>
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let gameName of allGameNames" [value]="gameName.gameID">
+                                {{gameName.gameName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="addUserGameForm.hasError('required')">Please choose a rating</mat-error>
                     </mat-form-field>
                     <mat-form-field style="margin-left:10px;">
                         <label>Game Enjoyment Rating</label>
-                        <mat-form-field>
-                            <mat-select placeholder="Select Game Enjoyment Rating" formControlName="gameEnjoymentRating"
-                                name="gameEnjoymentRating" id="gameEnjoymentRating" required>
-                                <mat-option>--</mat-option>
-                                <mat-option *ngFor="let rating of ratings" [value]="rating">
-                                    {{rating}}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="addUserGameForm.hasError('required')">Please choose a rating</mat-error>
-                        </mat-form-field>
+                        <mat-select placeholder="Select Game Enjoyment Rating" formControlName="gameEnjoymentRating"
+                            name="gameEnjoymentRating" id="gameEnjoymentRating" required>
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let rating of ratings" [value]="rating">
+                                {{rating}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="addUserGameForm.hasError('required')">Please choose a rating</mat-error>
                     </mat-form-field>
                 </div>
             </div>

@@ -502,7 +502,7 @@ async function update(userID, user) {
             userRole = '${user.userRole}',
             userPassword = '${user.userPassword}',
             createdAt = STR_TO_DATE('${user.createdAt}',"%Y-%m-%d %H:%i:%s"),
-            updatedAt = STR_TO_DATE('${user.updatedAt}',"%Y-%m-%d %H:%i:%s")
+            updatedAt = STR_TO_DATE('${user.updatedAt}',"%m-%d-%Y")
             WHERE user.userID = ${user.userID};`
         );
     } catch (err) {

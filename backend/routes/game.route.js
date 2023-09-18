@@ -56,6 +56,10 @@ router.post('/allGames', async function(req, res) {
         }
     } catch(err){
         console.log(err)
+        res.status(500).json({
+            message:"There was an error getting all games.",
+            err
+        });
     }
 });
 
@@ -94,6 +98,24 @@ router.get('/singleGameByName/:gameName', async function(req, res){
         }
     } catch(err){
         console.log(err);
+    }
+});
+
+// get all gameNames in the database
+router.get('/allGameNames', async function(req, res){
+    try{
+        let allGameNames = await gameController.findAllGameNames();
+        if(allGameNames !== undefined && allGameNames !== null){
+            res.status(200).send(allGameNames);
+        } else {
+            res.status(204).send(`No game names found in the database.`);
+        }
+    } catch(err){
+        console.log(err);
+        res.status(500).json({
+            message:"There was an error getting all game names from the database.",
+            err
+        });
     }
 });
 

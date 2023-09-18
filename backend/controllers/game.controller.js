@@ -38,6 +38,20 @@ exports.findAll = async (searchCriteria) => {
     }
 };
 
+// Get all game names
+exports.findAllGameNames = async (req) => {
+    try{
+        let allGameNames = await gameService.getAllGameNames();
+        if(allGameNames.length > 0){
+            return allGameNames;
+        } else {
+            return {message: 'No game names in table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 // Get single game by id
 exports.findOne = async (req) => {
     try{

@@ -152,8 +152,10 @@ export class UserProfileComponent {
   }
 
   async loadUserGames(){
-    await this.userGameService.getAll(this.searchCriteria);
-
+    await this.userGameService.getAll(this.searchCriteria.value).subscribe({
+      next: this.handleGetUserGames.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
   }
 
   handleGetResponse(data: any){
@@ -169,27 +171,34 @@ export class UserProfileComponent {
     this.userProfileForm.controls.userPassword.setValue(data.userPassword ? data.userPassword: '');
     this.userProfileForm.controls.createdAt.setValue(data.createdAt ? data.createdAt: '');
     this.userProfileForm.controls.updatedAt.setValue(data.updatedAt ? data.updatedAt: '');
-    // this.searchCriteria.controls.searchTerm.setValue(data.userID ? `${data.userID}` : '');
+  }
+
+  handleGetUserGames(data: any){
+    if(data == null){
+      this.userGamesDataSource.data = [];
+      this.resultsLength = 0;
+    } else {
+      this.userGamesDataSource.data = data.data;
+      this.resultsLength = data.user_count;
+    }
   }
 
   public handleSearchResponse(data: any) {
     if (data == null) {
       this.userGamesDataSource.data = [];
       this.resultsLength = 0;
-      this.ngOnInit();
     } else {
       this.userGamesDataSource.data = data.data;
       this.resultsLength = data.user_count;
-      this.ngOnInit();
     }
   }
 
   editUserGame(element: any){
-    console.log('todo edit user game')
+    
   }
 
   deleteUserGame(element: any){
-    console.log('todo delete user game')
+    
   }
 
   public formatDate(date: any) {
@@ -201,7 +210,8 @@ export class UserProfileComponent {
     const dialogRef = this.matDialog.open(AddUserGameComponent, {
       width: '100%',
       data: {
-        isEdit: false
+        isEdit: false,
+        userID: this.user.userID
       }
     });
 

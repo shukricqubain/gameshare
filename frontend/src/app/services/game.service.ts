@@ -23,6 +23,10 @@ export class GameService {
     return this.http.get(`${baseUrl}/singleGameByName/${gameName}`);
   }
 
+  getAllGameNames(): Observable<any> {
+    return this.http.get(`${baseUrl}/allGameNames`);
+  }
+
   create(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/addGame`, data);
   }

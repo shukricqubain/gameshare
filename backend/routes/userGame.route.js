@@ -5,7 +5,6 @@ const userGameController = require("../controllers/userGame.controller");
 // create a userGame
 router.post('/addUserGame', async function(req, res){
     try{
-        
         ///create new userGame
         let newUserGame = await userGameController.create(req.body);
         if(typeof newUserGame === 'string'){

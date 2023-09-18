@@ -1,6 +1,7 @@
 const db = require('../models/index');
 var Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+
 async function findCount(searchCriteria) {
     try {
         let sort = searchCriteria.sort;
@@ -271,6 +272,23 @@ async function getOneByName(gameName){
     }
 }
 
+async function getAllGameNames(){
+    try{
+        return await db.game.findAll({
+            order: [
+                ['gameName', 'ASC'],
+            ],
+            attributes: [
+                'gameID',
+                'gameName',
+            ],
+            raw: true
+        });
+    } catch(err){
+        console.log(err);
+    }
+}
+
 async function update(gameID, game){
     try{
         return result = await db.game.update(
@@ -304,6 +322,7 @@ async function deleteGame(gameID){
 module.exports = {
     getAll,
     getOneByName,
+    getAllGameNames,
     findCount,
     getOne,
     create,

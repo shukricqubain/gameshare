@@ -26,7 +26,7 @@ async function findCount(searchCriteria) {
                 raw: true,
             });
         } else {
-            games = await db.userGame.findAll({
+            userGames = await db.userGame.findAll({
                 order: [
                     [sort, sortDirection],
                     ['gameID', 'ASC'],
@@ -107,7 +107,7 @@ async function getAllUserGames(searchCriteria) {
                     });
                 }
             } else {
-                return await db.game.findAll({
+                return await db.userGame.findAll({
                     where: {
                         [Op.or]: {
                             userGameID: { [Op.like]: '%' + searchTerm + '%' },
