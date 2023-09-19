@@ -39,7 +39,8 @@ export class AddUserGameComponent {
   isEdit: boolean = false;
 
   async ngOnInit() {
-    await this.loadAllGameNames();
+    console.log(this.data);
+    this.allGameNames = this.data.allGameNames;
     if (this.data !== null && this.data != undefined && this.data.isEdit == true) {
       this.isEdit = true;
       let gameID = this.data.element.gameID;
@@ -110,12 +111,6 @@ export class AddUserGameComponent {
     }
   }
 
-  handleGetAllNamesResponse(data: any){
-    if (data !== null && data !== undefined) {
-      this.allGameNames = data;
-    }
-  }
-
   handleErrorResponse(error: any) {
     this.snackBar.open(error.message, 'dismiss', {
       duration: 3000
@@ -136,11 +131,6 @@ export class AddUserGameComponent {
     }
   }
 
-  async loadAllGameNames(){
-    await this.gameService.getAllGameNames().subscribe({
-      next: this.handleGetAllNamesResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
-  }
+  
 
 }

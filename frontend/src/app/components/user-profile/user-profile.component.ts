@@ -14,6 +14,8 @@ import { MatSort } from '@angular/material/sort';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { AddUserGameComponent } from './add-user-game/add-user-game.component';
 import { MatDialog } from '@angular/material/dialog';
+import { GameName } from 'src/app/models/gameName.model';
+import { GameService } from 'src/app/services/game.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -28,6 +30,7 @@ export class UserProfileComponent {
     private userService: UserService,
     private usernameService: UsernameService,
     private roleService: RoleService,
+    private gameService: GameService,
     private userGameService: UserGameService,
     private dateFunction: DateFunctionsService,
     private matDialog: MatDialog
@@ -69,12 +72,14 @@ export class UserProfileComponent {
   currentPage = 0;
   resultsLength = 0;
   isLoadingResults: boolean = false;
+  allGameNames: GameName[] = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   async ngOnInit() {
     let data: any = this.location.getState();
+    await this.loadAllGameNames();
     if (data !== null) {
       await this.loadUserDetails(data);
       await this.loadUserGames();
@@ -202,7 +207,7 @@ export class UserProfileComponent {
   }
 
   public formatDate(date: any) {
-    let formattedDate = this.dateFunction.formatDate(date);
+    let formattedDate = this.dateFunction.formatDateMMDDYYYY(date);
     return formattedDate;
   }
 
@@ -211,7 +216,8 @@ export class UserProfileComponent {
       width: '100%',
       data: {
         isEdit: false,
-        userID: this.user.userID
+        userID: this.user.userID,
+        allGameNames: this.allGameNames
       }
     });
 
@@ -242,5 +248,27 @@ export class UserProfileComponent {
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
+  }
+
+  async loadAllGameNames(){
+    await this.gameService.getAllGameNames().subscribe({
+      next: this.handleGetAllNamesResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
+  }
+
+  handleGetAllNamesResponse(data: any){
+    if (data !== null && data !== undefined) {
+      this.allGameNames = data;
+    }
+  }
+
+  getGameName(element: any){
+    let gameName = this.allGameNames.find(obj => obj.gameID == element);
+    if(gameName !== undefined){
+      return gameName.gameName;
+    } else {
+      return 'No Game with this ID'
+    }
   }
 }

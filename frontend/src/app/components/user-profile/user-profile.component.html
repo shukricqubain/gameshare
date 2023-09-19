@@ -30,7 +30,7 @@
                         <!-- gameID Column -->
                         <ng-container matColumnDef="gameID">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> GameID </th>
-                            <td mat-cell *matCellDef="let element"> {{element.gameID}} </td>
+                            <td mat-cell *matCellDef="let element"> {{getGameName(element.gameID)}} </td>
                         </ng-container>
 
                         <!-- gameEnjoymentRating Column -->
@@ -42,13 +42,13 @@
                         <!-- createdAt Column -->
                         <ng-container matColumnDef="createdAt">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
-                            <td mat-cell *matCellDef="let element"> {{element.createdAt}} </td>
+                            <td mat-cell *matCellDef="let element"> {{formatDate(element.createdAt)}} </td>
                         </ng-container>
 
                         <!-- updatedAt Column -->
                         <ng-container matColumnDef="updatedAt">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Updated At </th>
-                            <td mat-cell *matCellDef="let element"> {{element.updatedAt}} </td>
+                            <td mat-cell *matCellDef="let element"> {{formatDate(element.updatedAt)}} </td>
                         </ng-container>
 
                         <!-- actions Column -->

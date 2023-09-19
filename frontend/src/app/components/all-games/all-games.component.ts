@@ -124,7 +124,7 @@ export class AllGamesComponent {
   }
 
   public formatDate(date: any) {
-    let formattedDate = this.dateFunction.formatDate(date);
+    let formattedDate = this.dateFunction.formatDateMMDDYYYY(date);
     return formattedDate;
   }
 
