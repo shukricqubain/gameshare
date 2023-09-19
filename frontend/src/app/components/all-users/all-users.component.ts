@@ -6,13 +6,11 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {catchError, map, merge, Observable, of as observableOf, startWith, switchMap} from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from '../add-user/add-user.component';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import swal from 'sweetalert2'
+import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-all-users',
@@ -133,6 +131,7 @@ export class AllUsersComponent implements AfterViewInit {
   public editUser(element: any){
     const dialogRef = this.matDialog.open(AddUserComponent, {
       width: '100%',
+      disableClose: true,
       data: {
         isEdit: true,
         element
@@ -152,6 +151,7 @@ export class AllUsersComponent implements AfterViewInit {
   public addUser(){
     const dialogRef = this.matDialog.open(AddUserComponent, {
       width: '100%',
+      disableClose: true,
       data: {
         isEdit: false
       }
@@ -168,32 +168,30 @@ export class AllUsersComponent implements AfterViewInit {
   }
 
   public deleteUser(element: any){
-    swal.fire({
-      title: `Are you sure want to delete the user ${element.userName}?`,
-      text: 'You will not be able to recover this user!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, keep it'
-    }).then((result) => {
-      if (result.value) {
+    const dialogRef = this.matDialog.open(PopUpComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        element,
+        model: 'user'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.event === 'delete'){
         this.userService.delete(element.userID).subscribe({
           next: this.handleDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
-        swal.fire(
-          'Deleted!',
-          `${element.userName} has been deleted.`,
-          'success'
-        )
-      } else if (result.dismiss === swal.DismissReason.cancel) {
-        swal.fire(
-          'Cancelled',
-          `${element.userName} has not been deleted.`,
-          'error'
-        )
+        this.snackBar.open(`${element.userName} has been deleted.`, 'dismiss',{
+          duration: 3000
+        });
+      } else {
+        this.snackBar.open(`${element.userName} has not been deleted.`, 'dismiss',{
+          duration: 3000
+        });
       }
-    })
+    });
   }
 
 }

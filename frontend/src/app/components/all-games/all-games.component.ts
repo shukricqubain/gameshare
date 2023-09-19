@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddGameComponent } from '../add-game/add-game.component';
 import { Router } from '@angular/router';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
-import swal from 'sweetalert2'
+import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-all-games',
@@ -129,15 +129,16 @@ export class AllGamesComponent {
   }
 
   public editGame(element: any) {
-    const dialogRef = this.matDialog.open(AddGameComponent, {
+    const dialogRefEdit = this.matDialog.open(AddGameComponent, {
       width: '100%',
+      disableClose: true,
       data: {
         isEdit: true,
         element
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRefEdit.afterClosed().subscribe(result => {
       if (result !== undefined) {
         this.ngAfterViewInit();
       } else {
@@ -147,14 +148,15 @@ export class AllGamesComponent {
   }
 
   public addGame() {
-    const dialogRef = this.matDialog.open(AddGameComponent, {
+    const dialogRefAdd = this.matDialog.open(AddGameComponent, {
       width: '100%',
+      disableClose: true,
       data: {
         isEdit: false
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRefAdd.afterClosed().subscribe(result => {
       if (result !== undefined) {
         this.ngAfterViewInit();
       } else {
@@ -164,32 +166,28 @@ export class AllGamesComponent {
   }
 
   public deleteGame(element: any){
-    swal.fire({
-      title: `Are you sure want to delete the game ${element.gameName}?`,
-      text: 'You will not be able to recover this game!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, keep it'
-    }).then((result) => {
-      if (result.value) {
+    console.log(element)
+    const dialogRefDelete = this.matDialog.open(PopUpComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        element,
+        model: 'game'
+      }
+    });
+
+    dialogRefDelete.afterClosed().subscribe(result => {
+      console.log(result)
+      if(result === 'Yes, delete it!'){
         this.gameService.delete(element.gameID).subscribe({
           next: this.handleDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
-        swal.fire(
-          'Deleted!',
-          `${element.gameName} has been deleted.`,
-          'success'
-        )
-      } else if (result.dismiss === swal.DismissReason.cancel) {
-        swal.fire(
-          'Cancelled',
-          `${element.gameName} has not been deleted.`,
-          'error'
-        )
+        ///snackbar success ${element.gameName} has been deleted.
+      } else {
+        ///snackbar cancel ${element.gameName} has not been deleted.
       }
-    })
+    });
   }
 }
 

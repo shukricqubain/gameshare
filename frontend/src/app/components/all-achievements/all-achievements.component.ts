@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
 import { catchError, map, merge, startWith, switchMap, of as observableOf } from 'rxjs';
 import { Achievement } from 'src/app/models/achievement.model';
 import { AchievementService } from 'src/app/services/achievement.service';
-import swal from 'sweetalert2'
 import { AddAchievementComponent } from '../add-achievement/add-achievement.component';
+import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-all-achievements',
@@ -123,6 +123,7 @@ export class AllAchievementsComponent {
   public editAchievement(element: any) {
     const dialogRef = this.matDialog.open(AddAchievementComponent, {
       width: '100%',
+      disableClose: true,
       data: element
     });
 
@@ -138,6 +139,7 @@ export class AllAchievementsComponent {
   public addAchievement(){
     const dialogRef = this.matDialog.open(AddAchievementComponent, {
       width: '100%',
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -150,32 +152,27 @@ export class AllAchievementsComponent {
   }
 
   public deleteAchievement(element: any){
-    swal.fire({
-      title: `Are you sure want to delete the achievement ${element.achievementName}?`,
-      text: 'You will not be able to recover this achievement!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, keep it'
-    }).then((result) => {
-      if (result.value) {
+    const dialogRef = this.matDialog.open(PopUpComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        element,
+        model: 'game'
+      }
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+      if(result === 'Yes, delete it!'){
         this.achievementService.delete(element.achievementID).subscribe({
           next: this.handleDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
-        swal.fire(
-          'Deleted!',
-          `${element.achievementName} has been deleted.`,
-          'success'
-        )
-      } else if (result.dismiss === swal.DismissReason.cancel) {
-        swal.fire(
-          'Cancelled',
-          `${element.achievementName} has not been deleted.`,
-          'error'
-        )
+        ///snackbar success ${element.gameName} has been deleted.
+      } else {
+        ///snackbar cancel ${element.gameName} has not been deleted.
       }
-    })
+    });
   }
 
 }
