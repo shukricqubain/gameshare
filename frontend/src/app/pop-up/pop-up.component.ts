@@ -16,11 +16,7 @@ export class PopUpComponent {
   }
 
   ngAfterViewInit() {
-    console.log('in on init');
-    console.log(this.data)
     if (this.data !== null && this.data !== undefined) {
-      console.log(this.data)
-
       switch (this.data.model) {
         case ('user'):
           break;

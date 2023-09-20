@@ -199,7 +199,24 @@ export class UserProfileComponent {
   }
 
   editUserGame(element: any){
-    
+    const dialogRef = this.matDialog.open(AddUserGameComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        isEdit: true,
+        userID: this.user.userID,
+        allGameNames: this.allGameNames,
+        element: element
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.ngOnInit();
+      } else {
+        this.ngOnInit();
+      }
+    });
   }
 
   deleteUserGame(element: any){

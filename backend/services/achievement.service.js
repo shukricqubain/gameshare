@@ -217,7 +217,8 @@ async function create(achievement){
             gameID: achievement.gameID,
             achievementName: achievement.achievementName,
             achievementDescription: achievement.achievementDescription,
-            achievementIcon: achievement.achievementIcon
+            achievementIcon: achievement.achievementIcon,
+            gameName: achievement.gameName
         });
     } catch(err){
         console.log(err)

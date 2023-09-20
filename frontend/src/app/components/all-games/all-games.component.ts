@@ -166,7 +166,6 @@ export class AllGamesComponent {
   }
 
   public deleteGame(element: any){
-    console.log(element)
     const dialogRefDelete = this.matDialog.open(PopUpComponent, {
       width: '100%',
       disableClose: true,
@@ -177,15 +176,18 @@ export class AllGamesComponent {
     });
 
     dialogRefDelete.afterClosed().subscribe(result => {
-      console.log(result)
-      if(result === 'Yes, delete it!'){
+      if(result.event === 'delete'){
         this.gameService.delete(element.gameID).subscribe({
           next: this.handleDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
-        ///snackbar success ${element.gameName} has been deleted.
+        this.snackBar.open(`${element.gameName} has been deleted.`, 'dismiss',{
+          duration: 3000
+        });
       } else {
-        ///snackbar cancel ${element.gameName} has not been deleted.
+        this.snackBar.open(`${element.gameName} has not been deleted.`, 'dismiss',{
+          duration: 3000
+        });
       }
     });
   }

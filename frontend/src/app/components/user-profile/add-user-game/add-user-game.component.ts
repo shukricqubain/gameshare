@@ -39,7 +39,6 @@ export class AddUserGameComponent {
   isEdit: boolean = false;
 
   async ngOnInit() {
-    console.log(this.data);
     this.allGameNames = this.data.allGameNames;
     if (this.data !== null && this.data != undefined && this.data.isEdit == true) {
       this.isEdit = true;
@@ -71,6 +70,7 @@ export class AddUserGameComponent {
     newGame.createdAt = this.addUserGameForm.controls.createdAt.value || '';
     newGame.updatedAt = this.addUserGameForm.controls.updatedAt.value || '';
     if (this.isEdit) {
+      newGame.userGameID = this.data.element.userGameID;
       this.userGameService.update(newGame).subscribe({
         next: this.handleEditResponse.bind(this),
         error: this.handleErrorResponse.bind(this)

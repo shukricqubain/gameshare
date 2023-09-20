@@ -157,20 +157,23 @@ export class AllAchievementsComponent {
       disableClose: true,
       data: {
         element,
-        model: 'game'
+        model: 'achievement'
       }
     });
     
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
-      if(result === 'Yes, delete it!'){
+      if(result.event === 'delete'){
         this.achievementService.delete(element.achievementID).subscribe({
           next: this.handleDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
-        ///snackbar success ${element.gameName} has been deleted.
+        this.snackBar.open(`${element.achievementName} has been deleted.`, 'dismiss',{
+          duration: 3000
+        });
       } else {
-        ///snackbar cancel ${element.gameName} has not been deleted.
+        this.snackBar.open(`${element.achievementName} has not been deleted.`, 'dismiss',{
+          duration: 3000
+        });
       }
     });
   }

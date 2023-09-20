@@ -84,28 +84,28 @@ router.put('/editUserGame', async function(req, res){
             const userGameID = req.body.userGameID;
             let userGame = await userGameController.findOne(userGameID);
             if(userGame == undefined || typeof userGame === 'string'){
-                res.status(404).send(userGame);
+                return res.status(404).send(userGame);
             }
             
             ///update userGame
             let updatedUserGame = await userGameController.update(userGameID,req.body);
             if(typeof updatedUserGame === 'string'){
-                res.status(403).send(updatedUserGame);
+                return res.status(403).send(updatedUserGame);
             } else if(updatedUserGame[0] == 1){ 
-                res.status(200).json({
+                return res.status(200).json({
                     message: "The userGame was updated successfully.",
                     userGameID: updatedUserGame.userGameID
                 });
             } else {
-                res.status(503).send('UserGame was not updated successfully.');
+                return res.status(503).send('UserGame was not updated successfully.');
             }
         } else {
-            res.status(400).json({
+            return res.status(400).json({
                 message:"The userGameID is required to update a userGame."
             });
         }
     } catch(err){
-        res.status(500).json({
+        return res.status(500).json({
             message:"There was an error when trying to edit a userGame.",
             err
         });
