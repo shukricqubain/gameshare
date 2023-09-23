@@ -1,4 +1,4 @@
-import { Component, Inject, Optional } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, Optional } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -11,20 +11,47 @@ export class PopUpComponent {
 
   constructor(
     @Optional() private dialogRef?: MatDialogRef<PopUpComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data?: any
+    @Optional() @Inject(MAT_DIALOG_DATA) public data?: any,
+
   ) {
   }
 
-  ngAfterViewInit() {
+  model: string;
+  name: string;
+  allGameNames: any;
+  dataLoaded: boolean;
+
+  ngAfterContentInit() {
+    this.dataLoaded = false;
     if (this.data !== null && this.data !== undefined) {
       switch (this.data.model) {
         case ('user'):
+          this.name = this.data.element.userName;
+          this.model = this.data.model;
+          this.dataLoaded = true;
           break;
         case ('game'):
+          this.name = this.data.element.gameName;
+          this.model = this.data.model;
+          this.dataLoaded = true;
           break;
         case ('achievement'):
+          this.name = this.data.element.achievementName;
+          this.model = this.data.model;
+          this.dataLoaded = true;
           break;
         case ('userGame'):
+          this.allGameNames = this.data.allGameNames;
+          let gameID = this.data.element.gameID;
+          let game = this.allGameNames.filter((obj: { gameID: any; }) => obj.gameID == gameID);
+          if (game.length > 0) {
+            game = game[0];
+          } else {
+            ///throw error no game found
+          }
+          this.name = game.gameName;
+          this.model = this.data.model;
+          this.dataLoaded = true;
           break;
       }
     }

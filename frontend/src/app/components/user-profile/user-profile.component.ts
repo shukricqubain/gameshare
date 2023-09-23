@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
@@ -16,6 +16,7 @@ import { AddUserGameComponent } from './add-user-game/add-user-game.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GameName } from 'src/app/models/gameName.model';
 import { GameService } from 'src/app/services/game.service';
+import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -220,7 +221,51 @@ export class UserProfileComponent {
   }
 
   deleteUserGame(element: any){
+    const dialogRefDelete = this.matDialog.open(PopUpComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        element,
+        model: 'userGame',
+        allGameNames: this.allGameNames
+      }
+    });
+    let game = this.allGameNames.find(obj => obj.gameID == element.gameID);
+    let gameName = '';
+    if(game !== undefined){
+      gameName = game.gameName ? game.gameName: '';
+    } else {
+      ///throw error
+      this.snackBar.open(`No game with this ID found in the system.`, 'dismiss',{
+        duration: 3000
+      });
+      return;
+    }
     
+
+    dialogRefDelete.afterClosed().subscribe(result => {
+      if(result.event === 'delete'){
+        this.userGameService.delete(element.userGameID).subscribe({
+          next: this.handleDeleteResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
+        this.snackBar.open(`${gameName} has been deleted.`, 'dismiss',{
+          duration: 3000
+        });
+      } else {
+        this.snackBar.open(`${gameName} has not been deleted.`, 'dismiss',{
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  public handleDeleteResponse(data:any){
+    if(data == null){
+      this.ngOnInit();
+    } else {
+      this.ngOnInit();
+    }
   }
 
   public formatDate(date: any) {

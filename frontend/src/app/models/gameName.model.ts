@@ -1,4 +1,4 @@
 export class GameName {
-    gameName?: String;
+    gameName?: string;
     gameID?: Number;
 }
