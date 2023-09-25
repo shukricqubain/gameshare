@@ -58,6 +58,7 @@ export class UserProfileComponent {
 
   searchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
+    nameSearch: new FormControl('false'),
     sort: new FormControl('userGameID', [Validators.required]),
     pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
@@ -65,7 +66,7 @@ export class UserProfileComponent {
     page: new FormControl(0, [Validators.required])
   });
 
-  displayedUserGamesColumns: string[] = ['userGameID', 'gameID', 'gameEnjoymentRating','createdAt', 'updatedAt', 'actions'];
+  displayedUserGamesColumns: string[] = ['userGameID', 'gameName', 'gameEnjoymentRating','createdAt', 'updatedAt', 'actions'];
   userGamesDataSource = new MatTableDataSource<any>;
   userGamesData: UserGame[];
   search: any;
@@ -293,14 +294,51 @@ export class UserProfileComponent {
   }
 
   public applySearch = async () => {
-    this.userGameService.getAll(this.searchCriteria.value).subscribe({
-      next: this.handleSearchResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+    let term = this.searchCriteria.controls.searchTerm.value ? this.searchCriteria.controls.searchTerm.value: '';
+    ///check if user is searching for a gameName
+    if(term !== ''){
+      term = term.toLowerCase();
+      ///find game in all game names list
+      let filtered = this.allGameNames.filter((game: GameName) => {
+        return game.gameName?.toLowerCase().includes(term);
+      });
+      
+      ///prepare string of gameIDs
+      if(filtered.length > 0){
+        let gameIDString = ``;
+        if(filtered.length == 1){
+          gameIDString = `${filtered[0].gameID}`
+        } else {
+          for(let i = 0; i < filtered.length; i++){
+            if(i == filtered.length - 1){
+              gameIDString += `${filtered[i].gameID}`;
+            } else {
+              gameIDString += `${filtered[i].gameID},`;
+            } 
+          }
+        }
+        
+        this.searchCriteria.controls.searchTerm.patchValue(`${gameIDString}`);
+        this.searchCriteria.controls.nameSearch.patchValue(`true`);
+        this.userGameService.getAll(this.searchCriteria.value).subscribe({
+          next: this.handleSearchResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
+      } else {
+        ///throw error in snackbar
+      }
+    } else {
+      this.userGameService.getAll(this.searchCriteria.value).subscribe({
+        next: this.handleSearchResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
+    
   }
 
   public clearSearch() {
     this.searchCriteria.controls.searchTerm.patchValue('');
+    this.searchCriteria.controls.nameSearch.patchValue('false');
     this.searchCriteria.controls.sort.patchValue('gameID');
     this.searchCriteria.controls.pagination.patchValue('true');
     this.searchCriteria.controls.direction.patchValue('asc');
