@@ -104,6 +104,7 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Basic CRUD for Games
   - [x] Basic CRUD for Achievements
   - [x] Basic CRUD for User Collection
+  - [ ] Basic Search and pagination for User Collection
   - [ ] Basic CRUD for User Achievements
 - [ ] Board Functionality
   - [ ] Basic CRUD for Boards
