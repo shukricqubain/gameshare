@@ -15,6 +15,10 @@ export class UserGameService {
     return this.http.post(`${baseUrl}/allUserGames`, search);
   }
 
+  getAllByIDs(search: object): Observable<any> {
+    return this.http.post(`${baseUrl}/allUserGamesByIDs`, search);
+  }
+
   get(userGameID: any): Observable<Game> {
     return this.http.get(`${baseUrl}/singleUserGame/${userGameID}`);
   }

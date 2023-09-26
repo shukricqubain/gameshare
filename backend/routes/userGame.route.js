@@ -31,7 +31,6 @@ router.post('/allUserGames', async function(req, res) {
             let allUserGames;
             let userGameCount;
             if(searchCriteria.pagination){
-                console.log(searchCriteria)
                 userGameCount = await userGameController.findCount(searchCriteria);
                 if(userGameCount > 0){
                     searchCriteria.gameCount = userGameCount;
@@ -62,6 +61,46 @@ router.post('/allUserGames', async function(req, res) {
         console.log(err)
     }
 });
+
+// get all userGames by IDs
+router.post('/allUserGamesByIDs', async function(req, res) {
+    try{
+        if(req.body !== null){
+            let searchCriteria = req.body;
+            let allUserGames;
+            let userGameCount;
+            if(searchCriteria.pagination){
+                userGameCount = await userGameController.findCountByIDs(searchCriteria);
+                if(userGameCount > 0){
+                    searchCriteria.gameCount = userGameCount;
+                    allUserGames = await userGameController.findAllByIDs(searchCriteria);
+                    if(allUserGames.message !== 'No data in userGame table to fetch.'){
+                        searchCriteria.data = allUserGames;
+                        return res.status(200).json(searchCriteria);
+                    } else {
+                        return res.status(204).send({message:'No data in userGame table to fetch.'});
+                    }
+                } else {
+                    return res.status(204).send({message:'No data in userGame table to fetch.'});
+                }
+            } else {
+                allUserGames = await userGameController.findAllByIDs(searchCriteria);
+                userGameCount = allUserGames.length;
+                if(allUserGames.message !== 'No data in userGame table to fetch.'){
+                    searchCriteria.data = allUserGames;
+                    return res.status(200).json(searchCriteria);
+                } else {
+                    return res.status(204).send({message:'No data in userGame table to fetch.'});
+                }
+            }
+        } else {
+            res.status(400).send('Search criteria is required.');
+        }
+    } catch(err){
+        console.log(err)
+    }
+});
+
 
 // get a single userGame by their userGameID
 router.get('/singleUserGame/:userGameID', async function(req, res){

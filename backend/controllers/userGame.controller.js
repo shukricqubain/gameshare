@@ -24,10 +24,38 @@ exports.findCount = async (searchCriteria) => {
     }
 };
 
+// Get count of userGame by IDs
+exports.findCountByIDs = async (searchCriteria) => {
+    try{
+        let gameCount = await userGameService.findCountByIDs(searchCriteria);
+        if(gameCount > 0){
+            return gameCount;
+        } else {
+            return {message: 'No data in user game table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 // Get all userGame
 exports.findAll = async (searchCriteria) => {
     try{
         let allGames = await userGameService.getAllUserGames(searchCriteria);
+        if(allGames.length > 0){
+            return allGames;
+        } else {
+            return {message: 'No data in user game table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
+// Get all userGame by IDs
+exports.findAllByIDs = async (searchCriteria) => {
+    try{
+        let allGames = await userGameService.getAllUserGamesByIDs(searchCriteria);
         if(allGames.length > 0){
             return allGames;
         } else {

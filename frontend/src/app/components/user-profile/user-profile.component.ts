@@ -57,8 +57,8 @@ export class UserProfileComponent {
   enableMessage: string = `Enable the form for updation.`;
 
   searchCriteria = new FormGroup({
+    displayedSearch: new FormControl(''),
     searchTerm: new FormControl(''),
-    nameSearch: new FormControl('false'),
     sort: new FormControl('userGameID', [Validators.required]),
     pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
@@ -294,7 +294,7 @@ export class UserProfileComponent {
   }
 
   public applySearch = async () => {
-    let term = this.searchCriteria.controls.searchTerm.value ? this.searchCriteria.controls.searchTerm.value: '';
+    let term = this.searchCriteria.controls.displayedSearch.value ? this.searchCriteria.controls.displayedSearch.value: '';
     ///check if user is searching for a gameName
     if(term !== ''){
       term = term.toLowerCase();
@@ -319,13 +319,15 @@ export class UserProfileComponent {
         }
         
         this.searchCriteria.controls.searchTerm.patchValue(`${gameIDString}`);
-        this.searchCriteria.controls.nameSearch.patchValue(`true`);
-        this.userGameService.getAll(this.searchCriteria.value).subscribe({
+        this.userGameService.getAllByIDs(this.searchCriteria.value).subscribe({
           next: this.handleSearchResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
       } else {
         ///throw error in snackbar
+        this.snackBar.open(`The game you are searching for does not exist in the table.`, 'dismiss',{
+          duration: 3000
+        });
       }
     } else {
       this.userGameService.getAll(this.searchCriteria.value).subscribe({
@@ -337,8 +339,8 @@ export class UserProfileComponent {
   }
 
   public clearSearch() {
+    this.searchCriteria.controls.displayedSearch.patchValue('');
     this.searchCriteria.controls.searchTerm.patchValue('');
-    this.searchCriteria.controls.nameSearch.patchValue('false');
     this.searchCriteria.controls.sort.patchValue('gameID');
     this.searchCriteria.controls.pagination.patchValue('true');
     this.searchCriteria.controls.direction.patchValue('asc');
