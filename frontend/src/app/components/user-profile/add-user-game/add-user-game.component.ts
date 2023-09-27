@@ -59,12 +59,22 @@ export class AddUserGameComponent {
     let newGame: UserGame = {
       userGameID: 0,
       gameID: 0,
+      gameName: '',
       userID: 0,
       gameEnjoymentRating: 0,
       createdAt: '',
       updatedAt: ''
     }
     newGame.gameID = this.addUserGameForm.controls.gameID.value || 0;
+    let gameName = this.allGameNames.find(obj => obj.gameID == newGame.gameID);
+    if(gameName !== undefined){
+      newGame.gameName = gameName.gameName;
+    } else {
+      this.snackBar.open('Game name somehow not found!', 'dismiss', {
+        duration: 3000
+      });
+      return;
+    }
     newGame.userID = this.data.userID;
     newGame.gameEnjoymentRating = this.addUserGameForm.controls.gameEnjoymentRating.value || 0;
     newGame.createdAt = this.addUserGameForm.controls.createdAt.value || '';

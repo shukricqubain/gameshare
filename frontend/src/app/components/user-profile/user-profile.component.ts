@@ -17,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { GameName } from 'src/app/models/gameName.model';
 import { GameService } from 'src/app/services/game.service';
 import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
+import { catchError, map, merge, startWith, switchMap, of as observableOf } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -57,7 +58,6 @@ export class UserProfileComponent {
   enableMessage: string = `Enable the form for updation.`;
 
   searchCriteria = new FormGroup({
-    displayedSearch: new FormControl(''),
     searchTerm: new FormControl(''),
     sort: new FormControl('userGameID', [Validators.required]),
     pagination: new FormControl('true', [Validators.required]),
@@ -79,13 +79,33 @@ export class UserProfileComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  async ngOnInit() {
+  async ngAfterViewInit() {
     let data: any = this.location.getState();
     await this.loadAllGameNames();
     if (data !== null) {
       await this.loadUserDetails(data);
-      await this.loadUserGames();
-      this.changeForm();
+      ///if user changes the sort order reset the page back to the first page
+      this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+      merge(this.sort.sortChange, this.paginator.page, this.paginator.pageSize)
+        .pipe(
+          startWith({}),
+          switchMap(() => {
+            this.searchCriteria.controls.sort.patchValue(this.sort.active);
+            this.searchCriteria.controls.direction.patchValue(this.sort.direction);
+            this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
+            this.searchCriteria.controls.limit.patchValue(this.paginator.pageSize);
+            return this.userGameService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
+          }),
+          map(data => {
+            if (data === null) {
+              return [];
+            }
+            this.resultsLength = data.gameCount;
+            return data.data;
+          }),
+        )
+        .subscribe(data => (this.userGamesDataSource = data));
+        this.changeForm();
     } else {
       this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{
         duration: 3000
@@ -158,13 +178,6 @@ export class UserProfileComponent {
     });
   }
 
-  async loadUserGames(){
-    await this.userGameService.getAll(this.searchCriteria.value).subscribe({
-      next: this.handleGetUserGames.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
-  }
-
   handleGetResponse(data: any){
     this.user = data;
     this.userProfileForm.controls.userID.setValue(data.userID ? `${data.userID}` : '');
@@ -194,9 +207,11 @@ export class UserProfileComponent {
     if (data == null) {
       this.userGamesDataSource.data = [];
       this.resultsLength = 0;
+      this.ngAfterViewInit();
     } else {
       this.userGamesDataSource.data = data.data;
       this.resultsLength = data.user_count;
+      this.ngAfterViewInit();
     }
   }
 
@@ -214,9 +229,9 @@ export class UserProfileComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.ngOnInit();
+        this.ngAfterViewInit();
       } else {
-        this.ngOnInit();
+        this.ngAfterViewInit();
       }
     });
   }
@@ -263,9 +278,9 @@ export class UserProfileComponent {
 
   public handleDeleteResponse(data:any){
     if(data == null){
-      this.ngOnInit();
+      this.ngAfterViewInit();
     } else {
-      this.ngOnInit();
+      this.ngAfterViewInit();
     }
   }
 
@@ -286,60 +301,21 @@ export class UserProfileComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.ngOnInit();
+        this.ngAfterViewInit();
       } else {
-        this.ngOnInit();
+        this.ngAfterViewInit();
       }
     });
   }
 
   public applySearch = async () => {
-    let term = this.searchCriteria.controls.displayedSearch.value ? this.searchCriteria.controls.displayedSearch.value: '';
-    ///check if user is searching for a gameName
-    if(term !== ''){
-      term = term.toLowerCase();
-      ///find game in all game names list
-      let filtered = this.allGameNames.filter((game: GameName) => {
-        return game.gameName?.toLowerCase().includes(term);
-      });
-      
-      ///prepare string of gameIDs
-      if(filtered.length > 0){
-        let gameIDString = ``;
-        if(filtered.length == 1){
-          gameIDString = `${filtered[0].gameID}`
-        } else {
-          for(let i = 0; i < filtered.length; i++){
-            if(i == filtered.length - 1){
-              gameIDString += `${filtered[i].gameID}`;
-            } else {
-              gameIDString += `${filtered[i].gameID},`;
-            } 
-          }
-        }
-        
-        this.searchCriteria.controls.searchTerm.patchValue(`${gameIDString}`);
-        this.userGameService.getAllByIDs(this.searchCriteria.value).subscribe({
-          next: this.handleSearchResponse.bind(this),
-          error: this.handleErrorResponse.bind(this)
-        });
-      } else {
-        ///throw error in snackbar
-        this.snackBar.open(`The game you are searching for does not exist in the table.`, 'dismiss',{
-          duration: 3000
-        });
-      }
-    } else {
-      this.userGameService.getAll(this.searchCriteria.value).subscribe({
-        next: this.handleSearchResponse.bind(this),
-        error: this.handleErrorResponse.bind(this)
-      });
-    }
-    
+    this.userGameService.getAll(this.searchCriteria.value).subscribe({
+      next: this.handleSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
   }
 
   public clearSearch() {
-    this.searchCriteria.controls.displayedSearch.patchValue('');
     this.searchCriteria.controls.searchTerm.patchValue('');
     this.searchCriteria.controls.sort.patchValue('gameID');
     this.searchCriteria.controls.pagination.patchValue('true');

@@ -6,7 +6,7 @@
                     <form [formGroup]="searchCriteria" style="margin-top: 25px;" (ngSubmit)="applySearch()">
                         <mat-form-field>
                             <mat-label>Search</mat-label>
-                            <input matInput formControlName="displayedSearch" placeholder="Search Table" #input>
+                            <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
                         </mat-form-field>
                         <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applySearch()">
                             search

@@ -15,6 +15,11 @@ module.exports = (sequelize, Sequelize) => {
                 isInt: true
             }
         },
+        gameName: {
+            type: Sequelize.STRING,
+            validate: {
+            }
+        },
         userID: {
             type: Sequelize.INTEGER,
             validate:{
