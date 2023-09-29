@@ -16,12 +16,18 @@ module.exports = (sequelize, Sequelize) => {
                 isInt: true
             }
         },
+        achievementName: {
+            type: Sequelize.STRING
+        },
         gameID: {
             foreignKey: true,
             type: Sequelize.INTEGER,
             validate: {
                 isInt: true
             }
+        },
+        gameName: {
+            type: Sequelize.STRING
         },
         userID: {
             foreignKey: true,
