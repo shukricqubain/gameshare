@@ -18,6 +18,8 @@ import { GameName } from 'src/app/models/gameName.model';
 import { GameService } from 'src/app/services/game.service';
 import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 import { catchError, map, merge, startWith, switchMap, of as observableOf } from 'rxjs';
+import { UserAchievement } from 'src/app/models/userAchievement.model';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-user-profile',
@@ -75,42 +77,78 @@ export class UserProfileComponent {
   resultsLength = 0;
   isLoadingResults: boolean = false;
   allGameNames: GameName[] = [];
+  gamesLoaded: boolean = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  achievementSearchCriteria = new FormGroup({
+    achievementSearchTerm: new FormControl(''),
+    sort: new FormControl('userAchievementID', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
+    direction: new FormControl('asc', [Validators.required]),
+    limit: new FormControl(5, [Validators.required]),
+    page: new FormControl(0, [Validators.required])
+  });
+
+  displayedUserAchievementColumns: string[] = ['userAchievementID', 'achievementName', 'gameID', 'gameName', 'userID', 'ahcievementStatus', 'createdAt', 'updatedAt', 'actions'];
+  userAchievementDataSource = new MatTableDataSource<any>;
+  userAchievementData: UserAchievement[];
+  achievementPageSize = 5;
+  currentAchievementPage = 0;
+  achievementResultsLength = 0;
+
+  private currentTabIndex = 0;
+
   async ngAfterViewInit() {
-    let data: any = this.location.getState();
-    await this.loadAllGameNames();
-    if (data !== null) {
-      await this.loadUserDetails(data);
-      ///if user changes the sort order reset the page back to the first page
-      this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-      merge(this.sort.sortChange, this.paginator.page, this.paginator.pageSize)
-        .pipe(
-          startWith({}),
-          switchMap(() => {
-            this.searchCriteria.controls.sort.patchValue(this.sort.active);
-            this.searchCriteria.controls.direction.patchValue(this.sort.direction);
-            this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
-            this.searchCriteria.controls.limit.patchValue(this.paginator.pageSize);
-            return this.userGameService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
-          }),
-          map(data => {
-            if (data === null) {
-              return [];
-            }
-            this.resultsLength = data.gameCount;
-            return data.data;
-          }),
-        )
-        .subscribe(data => (this.userGamesDataSource = data));
-        this.changeForm();
-    } else {
-      this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{
-        duration: 3000
-      });
+    // console.log(`in ng after init with tab of ${this.currentTabIndex}`)
+    if(this.currentTabIndex == 0 && this.gamesLoaded == false){
+      let data: any = this.location.getState();
+      await this.loadAllGameNames();
+      if (data !== null) {
+        await this.loadUserDetails(data);
+        ///if user changes the sort order reset the page back to the first page
+        this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+        merge(this.sort.sortChange, this.paginator.page, this.paginator.pageSize)
+          .pipe(
+            startWith({}),
+            switchMap(() => {
+              this.searchCriteria.controls.sort.patchValue(this.sort.active);
+              this.searchCriteria.controls.direction.patchValue(this.sort.direction);
+              this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
+              this.searchCriteria.controls.limit.patchValue(this.paginator.pageSize);
+              return this.userGameService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
+            }),
+            map(data => {
+              if (data === null) {
+                return [];
+              }
+              this.resultsLength = data.gameCount;
+              this.gamesLoaded = true;
+              return data.data;
+            }),
+          )
+          .subscribe(data => (this.userGamesDataSource = data));
+          this.changeForm();
+      } else {
+        this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{
+          duration: 3000
+        });
+      }
+    } else if(this.currentTabIndex == 1){
+
+    } else if(this.currentTabIndex == 2){
+
     }
+    
+  }
+
+  public onSelectedIndexChange(tabIndex: number) {
+    this.currentTabIndex = tabIndex;
+  }
+
+  public onSelectedTabChange(matTabChangeEvent: MatTabChangeEvent)  {
+    this.ngAfterViewInit();
   }
 
   async onSubmit(){
@@ -207,10 +245,12 @@ export class UserProfileComponent {
     if (data == null) {
       this.userGamesDataSource.data = [];
       this.resultsLength = 0;
+      this.gamesLoaded = false;
       this.ngAfterViewInit();
     } else {
       this.userGamesDataSource.data = data.data;
       this.resultsLength = data.user_count;
+      this.gamesLoaded = false;
       this.ngAfterViewInit();
     }
   }
@@ -315,6 +355,14 @@ export class UserProfileComponent {
     });
   }
 
+  addUserAchievement(){
+    
+  }
+
+  applyAchievementSearch = async () => {
+    
+  }
+
   public clearSearch() {
     this.searchCriteria.controls.searchTerm.patchValue('');
     this.searchCriteria.controls.sort.patchValue('gameID');
@@ -348,5 +396,13 @@ export class UserProfileComponent {
     } else {
       return 'No Game with this ID'
     }
+  }
+
+  editUserAchievement(element: any){
+    console.log('edit')
+  }
+
+  deleteUserAchievement(element: any){
+    console.log('edit')
   }
 }

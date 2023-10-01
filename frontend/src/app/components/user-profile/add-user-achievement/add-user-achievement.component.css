@@ -1,0 +1,15 @@
+.form-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.add-user-achievement-container {
+    display: flex;
+    flex-direction: column;    
+}

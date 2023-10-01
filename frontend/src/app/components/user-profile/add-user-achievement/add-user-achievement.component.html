@@ -1,0 +1,36 @@
+<div class="child-component">
+    <div class="add-user-achievement-container">
+        <div class="form-row">
+            <ng-container *ngIf="isEdit; then editAchievement; else addAchievement"></ng-container>
+            <ng-template #addAchievement>
+                <h1>Add an Achievement</h1>
+            </ng-template>
+            <ng-template #editAchievement>
+                <h1>Edit an Achievement</h1>
+            </ng-template>
+        </div>
+        <form [formGroup]="addUserAchievementForm" (ngSubmit)="onSubmit()">
+            <div class="form-column">
+                <div class="form-row">
+                    <mat-form-field>
+                        <label>Achievement Name</label>
+                        <mat-select placeholder="Select Achievement" formControlName="achievementID"
+                            name="achievementID" id="achievementID" required>
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let achievementName of allAchievementNames" [value]="achievementName.achievementID">
+                                {{achievementName.achievementName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <button mat-raised-button [disabled]="!addUserAchievementForm.dirty || !addUserAchievementForm.valid"
+                    type="submit">Submit</button>
+                <button mat-raised-button type="button" style="margin-left:10px;"
+                    (click)="closeDialog()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

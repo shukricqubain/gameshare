@@ -103,10 +103,9 @@ export class AddUserGameComponent {
         });
         this.closeDialog(data)
       } else {
-        this.snackBar.open('Successfully created a new game!', 'dismiss', {
+        this.snackBar.open('Some error occurred while creating a new game!', 'dismiss', {
           duration: 3000
         });
-        this.router.navigate(['/all-games']);
       }
 
     }

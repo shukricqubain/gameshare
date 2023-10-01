@@ -40,6 +40,7 @@ import { AllGamesComponent } from './components/all-games/all-games.component';
 import { AddAchievementComponent } from './components/add-achievement/add-achievement.component';
 import { AllAchievementsComponent } from './components/all-achievements/all-achievements.component';
 import { AddUserGameComponent } from './components/user-profile/add-user-game/add-user-game.component';
+import { AddUserAchievementComponent } from './components/user-profile/add-user-achievement/add-user-achievement.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { AddUserGameComponent } from './components/user-profile/add-user-game/ad
     AllGamesComponent,
     AddAchievementComponent,
     AllAchievementsComponent,
-    AddUserGameComponent
+    AddUserGameComponent,
+    AddUserAchievementComponent
   ],
   imports: [
     BrowserModule,
