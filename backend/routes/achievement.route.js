@@ -78,6 +78,24 @@ router.get('/singleAchievement/:achievementID', async function(req, res){
     }
 });
 
+// get all achievementNames in the database
+router.get('/allAchievementNames', async function(req, res){
+    try{
+        let allAchievementNames = await achievementController.findAllAchievementNames();
+        if(allAchievementNames !== undefined && allAchievementNames !== null){
+            res.status(200).send(allAchievementNames);
+        } else {
+            res.status(204).send(`No achievement names found in the database.`);
+        }
+    } catch(err){
+        console.log(err);
+        res.status(500).json({
+            message:"There was an error getting all achievement names from the database.",
+            err
+        });
+    }
+});
+
 // edit a achievement by achievementID
 router.put('/editAchievement', async function(req, res){
     try{

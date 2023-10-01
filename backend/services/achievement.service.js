@@ -269,9 +269,27 @@ async function deleteAchievement(achievementID){
     }
 }
 
+async function getAllAchievementNames(){
+    try{
+        return await db.achievement.findAll({
+            order: [
+                ['achievementName', 'ASC'],
+            ],
+            attributes: [
+                'gameID',
+                'achievementName',
+            ],
+            raw: true
+        });
+    } catch(err){
+        console.log(err);
+    }
+}
+
 module.exports = {
     findCount,
     getAll,
+    getAllAchievementNames,
     getOne,
     create,
     update,

@@ -20,6 +20,7 @@ import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 import { catchError, map, merge, startWith, switchMap, of as observableOf } from 'rxjs';
 import { UserAchievement } from 'src/app/models/userAchievement.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { AddUserAchievementComponent } from './add-user-achievement/add-user-achievement.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -356,7 +357,22 @@ export class UserProfileComponent {
   }
 
   addUserAchievement(){
-    
+    const dialogRef = this.matDialog.open(AddUserAchievementComponent, {
+      width: '100%',
+      data: {
+        isEdit: false,
+        userID: this.user.userID,
+        allGameNames: this.allGameNames
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.ngAfterViewInit();
+      } else {
+        this.ngAfterViewInit();
+      }
+    });
   }
 
   applyAchievementSearch = async () => {

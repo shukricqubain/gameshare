@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 import { AchievementName } from 'src/app/models/achievementName.model';
 import { GameName } from 'src/app/models/gameName.model';
 import { UserAchievement } from 'src/app/models/userAchievement.model';
@@ -43,7 +44,12 @@ export class AddUserAchievementComponent {
 
   async ngOnInit() {
     this.allGameNames = this.data.allGameNames;
-    this.allAchievementNames = this.data.allAchievementNames;
+    if(this.data.allAchievementNames !== null && this.data.allAchievementNames !== undefined){
+      this.allAchievementNames = this.data.allAchievementNames;
+    } else {
+      await this.loadAchievementNames();
+    }
+
     if (this.data !== null && this.data != undefined && this.data.isEdit == true) {
       this.isEdit = true;
       let achievementID = this.data.element.achievementID;
@@ -153,6 +159,18 @@ export class AddUserAchievementComponent {
     } else {
       this.dialogRef?.close({ event: 'Cancel' });
     }
+  }
+
+  async loadAchievementNames(){
+    try{
+      this.allAchievementNames = await lastValueFrom(this.achievementService.getAllAchievementsNames().pipe());
+    } catch(err){
+      this.snackBar.open('Error loading achievement names!', 'dismiss', {
+        duration: 3000
+      });
+      console.log(err);
+    }
+    
   }
 
 }
