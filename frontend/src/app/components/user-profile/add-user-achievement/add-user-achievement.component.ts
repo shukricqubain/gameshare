@@ -39,11 +39,19 @@ export class AddUserAchievementComponent {
 
   allGameNames: GameName[] = [];
   allAchievementNames: AchievementName[] = [];
+  allDisplayedNames: AchievementName[] = [];
+  allAchievementStatuses: String[] = [
+    'Not Started',
+    'In Progress',
+    'Completed'
+  ];
 
   isEdit: boolean = false;
 
   async ngOnInit() {
     this.allGameNames = this.data.allGameNames;
+    let userID = Number(this.data.userID);
+    this.addUserAchievementForm.controls.userID.patchValue(userID);
     if(this.data.allAchievementNames !== null && this.data.allAchievementNames !== undefined){
       this.allAchievementNames = this.data.allAchievementNames;
     } else {
@@ -56,7 +64,7 @@ export class AddUserAchievementComponent {
       let achievementName = this.allAchievementNames.find(obj => obj.achievementID == achievementID)?.achievementName;
       let gameID = this.data.element.gameID;
       let gameName = this.allGameNames.find(obj => obj.gameID == gameID)?.gameName;
-      let userID = this.data.element.userID;
+      let userID = this.data.userID;
       let achievementStatus = this.data.element.achievementStatus;
       let createdAt = `${this.data.element.createdAt}`;
       let updatedAt = `${this.data.element.updatedAt}`;
@@ -164,13 +172,19 @@ export class AddUserAchievementComponent {
   async loadAchievementNames(){
     try{
       this.allAchievementNames = await lastValueFrom(this.achievementService.getAllAchievementsNames().pipe());
+      this.allDisplayedNames = this.allAchievementNames;
     } catch(err){
       this.snackBar.open('Error loading achievement names!', 'dismiss', {
         duration: 3000
       });
       console.log(err);
     }
-    
+  }
+
+  filterAchievementsByGame($event: any){
+    this.allDisplayedNames = this.allAchievementNames.filter(game => {
+      return game.gameID == $event.value;
+    });
   }
 
 }

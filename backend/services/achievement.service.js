@@ -14,6 +14,7 @@ async function findCount(searchCriteria) {
                     [Op.or]: {
                         achievementID: { [Op.like]: '%' + searchTerm + '%'},
                         gameID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameName: { [Op.like]: '%' + searchTerm + '%' },
                         achievementName: { [Op.like]: '%' + searchTerm + '%' },
                         achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
                     }
@@ -277,7 +278,8 @@ async function getAllAchievementNames(){
             ],
             attributes: [
                 'gameID',
-                'achievementName',
+                'achievementID',
+                'achievementName'
             ],
             raw: true
         });

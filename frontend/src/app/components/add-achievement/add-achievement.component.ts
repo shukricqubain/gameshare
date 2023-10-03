@@ -3,8 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
 import { Achievement } from 'src/app/models/achievement.model';
 import { Game } from 'src/app/models/game.model';
+import { GameName } from 'src/app/models/gameName.model';
 import { AchievementService } from 'src/app/services/achievement.service';
 import { GameService } from 'src/app/services/game.service';
 
@@ -26,7 +28,7 @@ export class AddAchievementComponent {
   }
 
   addAchievementForm = new FormGroup({
-    gameName: new FormControl('', [Validators.required]),
+    gameID: new FormControl(0, [Validators.required]),
     achievementName: new FormControl('', [Validators.required]),
     achievementDescription: new FormControl('', [Validators.required]),
     achievementIcon: new FormControl(''),
@@ -36,19 +38,25 @@ export class AddAchievementComponent {
 
   
   isEdit: boolean = false;
-  existingGame: Game;
   gameNotFound: boolean = false;
+  allGameNames: GameName[] = [];
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.loadAllGameNames();
     if(this.data !== null && this.data != undefined){
       this.isEdit = true;
-      let gameName = `${this.data.gameName}`;
+      let gameName= `${this.data.gameName}`;
+      let gameID = this.allGameNames.find(obj => obj.gameName === gameName);
+      if(gameID !== undefined && gameID.gameID !== undefined){
+        let idValue = Number(gameID.gameID);
+        this.addAchievementForm.controls.gameID.patchValue(idValue);
+      }
       let achievementName = `${this.data.achievementName}`;
       let achievementDescription = `${this.data.achievementDescription}`;
       let achievementIcon = `${this.data.achievementIcon}`;
       let createdAt = `${this.data.createdAt}`;
       let updatedAt = `${this.data.updatedAt}`;
-      this.addAchievementForm.controls.gameName.patchValue(gameName);
+      
       this.addAchievementForm.controls.achievementName.patchValue(achievementName);
       this.addAchievementForm.controls.achievementDescription.patchValue(achievementDescription);
       this.addAchievementForm.controls.achievementIcon.patchValue(achievementIcon);
@@ -68,7 +76,9 @@ export class AddAchievementComponent {
       createdAt: '',
       updatedAt: ''
     }
-    newAchievement.gameName = this.addAchievementForm.controls.gameName.value || '';
+    newAchievement.gameID = Number (this.addAchievementForm.controls.gameID.value) || 0;
+    let game = this.allGameNames.find(obj => obj.gameID == newAchievement.gameID);
+    newAchievement.gameName = game?.gameName;
     newAchievement.achievementName = this.addAchievementForm.controls.achievementName.value || '';
     newAchievement.achievementDescription = this.addAchievementForm.controls.achievementDescription.value || '';
     newAchievement.achievementIcon = this.addAchievementForm.controls.achievementIcon.value || '';
@@ -76,13 +86,11 @@ export class AddAchievementComponent {
     newAchievement.updatedAt = this.addAchievementForm.controls.updatedAt.value || '';
     if(this.isEdit){
       newAchievement.achievementID = this.data?.achievementID;
-      newAchievement.gameID = this.existingGame.gameID;
       this.achievementService.update(newAchievement).subscribe({
         next: this.handleEditResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
     } else {
-      newAchievement.gameID = this.existingGame.gameID;
       this.achievementService.create(newAchievement).subscribe({
         next: this.handleCreateResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
@@ -96,7 +104,7 @@ export class AddAchievementComponent {
       this.snackBar.open('Successfully created a new achievement!', 'dismiss',{
         duration: 3000
       });
-      this.router.navigate(['/all-achievements']);
+      this.closeDialog(data);
     }
   }
 
@@ -107,22 +115,6 @@ export class AddAchievementComponent {
       });
       this.closeDialog(data)
     }
-  }
-
-  handleGetResponse(data:any){
-    if(data == null && data == undefined){
-      this.snackBar.open('Please enter a game that exists within the gameshare database.', 'dismiss',{
-        duration: 3000
-      });
-      this.gameNotFound = true;
-    } else {
-      this.snackBar.open('Found the game, please enter achievement details.', 'dismiss',{
-        duration: 3000
-      });
-      this.gameNotFound = false;
-      this.existingGame = data;
-    }
-    
   }
 
   handleErrorResponse(error:any){
@@ -148,13 +140,15 @@ export class AddAchievementComponent {
     }
   }
 
-  checkGameExists(){
-    let gameName = this.addAchievementForm.controls.gameName.value ? this.addAchievementForm.controls.gameName.value: '';
-    if(gameName !== ''){
-      this.gameService!.getByName(gameName).subscribe({
-        next: this.handleGetResponse.bind(this),
-        error: this.handleErrorResponse.bind(this)
+  async loadAllGameNames(){
+    
+    try{
+      this.allGameNames = await lastValueFrom(this.gameService.getAllGameNames().pipe());
+    } catch(err){
+      this.snackBar.open('Error loading game names!', 'dismiss', {
+        duration: 3000
       });
+      console.log(err);
     }
   }
 

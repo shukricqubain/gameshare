@@ -13,11 +13,21 @@
             <div class="form-column">
                 <div class="form-row">
                     <mat-form-field>
+                        <label>Game Name</label>
+                        <mat-select placeholder="Select Game" formControlName="gameID"
+                            name="gameID" id="gameID" required (selectionChange)="filterAchievementsByGame($event)">
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let gameName of allGameNames" [value]="gameName.gameID">
+                                {{gameName.gameName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="margin-left: 15px;">
                         <label>Achievement Name</label>
                         <mat-select placeholder="Select Achievement" formControlName="achievementID"
                             name="achievementID" id="achievementID" required>
                             <mat-option>--</mat-option>
-                            <mat-option *ngFor="let achievementName of allAchievementNames" [value]="achievementName.achievementID">
+                            <mat-option *ngFor="let achievementName of allDisplayedNames" [value]="achievementName.achievementID">
                                 {{achievementName.achievementName}}
                             </mat-option>
                         </mat-select>
@@ -25,6 +35,25 @@
                 </div>
             </div>
             <br>
+            <div class="form-column">
+                <div class="form-row">
+                    <mat-form-field>
+                        <label>UserID</label>
+                        <input matInput name="userID" id="userID" formControlName="userID"
+                            placeholder="Enter user." required />
+                    </mat-form-field>
+                    <mat-form-field style="margin-left: 15px;">
+                        <label>Achievement Status</label>
+                        <mat-select placeholder="Select Achievement" formControlName="achievementID"
+                            name="achievementID" id="achievementID" required>
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let achievementStatus of allAchievementStatuses" [value]="achievementStatus">
+                                {{achievementStatus}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
             <div class="form-row">
                 <button mat-raised-button [disabled]="!addUserAchievementForm.dirty || !addUserAchievementForm.valid"
                     type="submit">Submit</button>

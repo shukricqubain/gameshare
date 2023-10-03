@@ -12,8 +12,13 @@
                 <div class="form-row">
                     <mat-form-field MatFormFieldAppearance="outline">
                         <label>Game Name</label>
-                        <input matInput name="gameName" id="gameName" type="text" formControlName="gameName"
-                            placeholder="Enter game name." required (blur)="checkGameExists()"/>
+                        <mat-select placeholder="Select Game" formControlName="gameID"
+                            name="gameID" id="gameID" required>
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let gameName of allGameNames" [value]="gameName.gameID">
+                                {{gameName.gameName}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                     <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
                         <label>Achievement Name</label>
