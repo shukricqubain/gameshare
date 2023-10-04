@@ -21,6 +21,7 @@ import { catchError, map, merge, startWith, switchMap, of as observableOf } from
 import { UserAchievement } from 'src/app/models/userAchievement.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AddUserAchievementComponent } from './add-user-achievement/add-user-achievement.component';
+import { UserAchievementService } from 'src/app/services/userAchievement.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -38,6 +39,7 @@ export class UserProfileComponent {
     private gameService: GameService,
     private userGameService: UserGameService,
     private dateFunction: DateFunctionsService,
+    private userAchievementService: UserAchievementService,
     private matDialog: MatDialog
   ) {
   }
@@ -60,7 +62,7 @@ export class UserProfileComponent {
   editEnabled: boolean = false;
   enableMessage: string = `Enable the form for updation.`;
 
-  searchCriteria = new FormGroup({
+  gameSearchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
     sort: new FormControl('userGameID', [Validators.required]),
     pagination: new FormControl('true', [Validators.required]),
@@ -75,13 +77,13 @@ export class UserProfileComponent {
   search: any;
   pageSize = 5;
   currentPage = 0;
-  resultsLength = 0;
+  gameResultsLength = 0;
   isLoadingResults: boolean = false;
   allGameNames: GameName[] = [];
   gamesLoaded: boolean = false;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('gamePaginator') gamePaginator: MatPaginator;
+  @ViewChild('gameSort') gameSort: MatSort;
 
   achievementSearchCriteria = new FormGroup({
     achievementSearchTerm: new FormControl(''),
@@ -92,54 +94,78 @@ export class UserProfileComponent {
     page: new FormControl(0, [Validators.required])
   });
 
-  displayedUserAchievementColumns: string[] = ['userAchievementID', 'achievementName', 'gameID', 'gameName', 'userID', 'ahcievementStatus', 'createdAt', 'updatedAt', 'actions'];
+  displayedUserAchievementColumns: string[] = ['userAchievementID', 'achievementName', 'gameID', 'gameName', 'userID', 'achievementStatus', 'createdAt', 'updatedAt', 'actions'];
   userAchievementDataSource = new MatTableDataSource<any>;
   userAchievementData: UserAchievement[];
   achievementPageSize = 5;
   currentAchievementPage = 0;
   achievementResultsLength = 0;
 
+  @ViewChild('achievementPaginator') achievementPaginator: MatPaginator;
+  @ViewChild('achievementSort') achievementSort: MatSort;
+
   private currentTabIndex = 0;
 
   async ngAfterViewInit() {
-    // console.log(`in ng after init with tab of ${this.currentTabIndex}`)
     if(this.currentTabIndex == 0 && this.gamesLoaded == false){
       let data: any = this.location.getState();
       await this.loadAllGameNames();
       if (data !== null) {
         await this.loadUserDetails(data);
+        this.userGamesDataSource.sort = this.gameSort;
         ///if user changes the sort order reset the page back to the first page
-        this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-        merge(this.sort.sortChange, this.paginator.page, this.paginator.pageSize)
+        this.gameSort.sortChange.subscribe(() => (this.gamePaginator.pageIndex = 0));
+        merge(this.gameSort.sortChange, this.gamePaginator.page, this.gamePaginator.pageSize)
           .pipe(
             startWith({}),
             switchMap(() => {
-              this.searchCriteria.controls.sort.patchValue(this.sort.active);
-              this.searchCriteria.controls.direction.patchValue(this.sort.direction);
-              this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
-              this.searchCriteria.controls.limit.patchValue(this.paginator.pageSize);
-              return this.userGameService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
+              this.gameSearchCriteria.controls.sort.patchValue(this.gameSort.active);
+              this.gameSearchCriteria.controls.direction.patchValue(this.gameSort.direction);
+              this.gameSearchCriteria.controls.page.patchValue(this.gamePaginator.pageIndex);
+              this.gameSearchCriteria.controls.limit.patchValue(this.gamePaginator.pageSize);
+              return this.userGameService!.getAll(this.gameSearchCriteria.value).pipe(catchError(() => observableOf(null)));
             }),
             map(data => {
               if (data === null) {
                 return [];
               }
-              this.resultsLength = data.gameCount;
+              this.gameResultsLength = data.gameCount;
               this.gamesLoaded = true;
               return data.data;
             }),
           )
           .subscribe(data => (this.userGamesDataSource = data));
-          this.changeForm();
       } else {
         this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{
           duration: 3000
         });
       }
     } else if(this.currentTabIndex == 1){
-
+      this.userAchievementDataSource.sort = this.achievementSort;
+      ///if user changes the sort order reset the page back to the first page
+      this.achievementSort.sortChange.subscribe(() => (this.achievementPaginator.pageIndex = 0));
+      merge(this.achievementSort.sortChange, this.achievementPaginator.page, this.achievementPaginator.pageSize)
+        .pipe(
+          startWith({}),
+          switchMap(() => {
+            this.achievementSearchCriteria.controls.sort.patchValue(this.achievementSort.active);
+            this.achievementSearchCriteria.controls.direction.patchValue(this.achievementSort.direction);
+            this.achievementSearchCriteria.controls.page.patchValue(this.achievementPaginator.pageIndex);
+            this.achievementSearchCriteria.controls.limit.patchValue(this.achievementPaginator.pageSize);
+            return this.userAchievementService!.getAll(this.achievementSearchCriteria.value).pipe(catchError(() => observableOf(null)));
+          }),
+          map(data => {
+            if (data === null) {
+              return [];
+            }
+            this.achievementResultsLength = data.achievementCount;
+            return data.data;
+          }),
+        )
+        .subscribe(data => (this.userAchievementDataSource = data));
+        this.changeForm();
     } else if(this.currentTabIndex == 2){
-
+      this.changeForm();
     }
     
   }
@@ -235,22 +261,22 @@ export class UserProfileComponent {
   handleGetUserGames(data: any){
     if(data == null){
       this.userGamesDataSource.data = [];
-      this.resultsLength = 0;
+      this.gameResultsLength = 0;
     } else {
       this.userGamesDataSource.data = data.data;
-      this.resultsLength = data.user_count;
+      this.gameResultsLength = data.user_count;
     }
   }
 
   public handleSearchResponse(data: any) {
     if (data == null) {
       this.userGamesDataSource.data = [];
-      this.resultsLength = 0;
+      this.gameResultsLength = 0;
       this.gamesLoaded = false;
       this.ngAfterViewInit();
     } else {
       this.userGamesDataSource.data = data.data;
-      this.resultsLength = data.user_count;
+      this.gameResultsLength = data.user_count;
       this.gamesLoaded = false;
       this.ngAfterViewInit();
     }
@@ -349,8 +375,8 @@ export class UserProfileComponent {
     });
   }
 
-  public applySearch = async () => {
-    this.userGameService.getAll(this.searchCriteria.value).subscribe({
+  public applyGameSearch = async () => {
+    this.userGameService.getAll(this.gameSearchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
@@ -379,14 +405,14 @@ export class UserProfileComponent {
     
   }
 
-  public clearSearch() {
-    this.searchCriteria.controls.searchTerm.patchValue('');
-    this.searchCriteria.controls.sort.patchValue('gameID');
-    this.searchCriteria.controls.pagination.patchValue('true');
-    this.searchCriteria.controls.direction.patchValue('asc');
-    this.searchCriteria.controls.limit.patchValue(5);
-    this.searchCriteria.controls.page.patchValue(0);
-    this.userGameService.getAll(this.searchCriteria.value).subscribe({
+  public clearGameSearch() {
+    this.gameSearchCriteria.controls.searchTerm.patchValue('');
+    this.gameSearchCriteria.controls.sort.patchValue('gameID');
+    this.gameSearchCriteria.controls.pagination.patchValue('true');
+    this.gameSearchCriteria.controls.direction.patchValue('asc');
+    this.gameSearchCriteria.controls.limit.patchValue(5);
+    this.gameSearchCriteria.controls.page.patchValue(0);
+    this.userGameService.getAll(this.gameSearchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
@@ -415,10 +441,8 @@ export class UserProfileComponent {
   }
 
   editUserAchievement(element: any){
-    console.log('edit')
   }
 
   deleteUserAchievement(element: any){
-    console.log('edit')
   }
 }

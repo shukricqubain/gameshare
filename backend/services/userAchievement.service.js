@@ -6,7 +6,7 @@ async function findCount(searchCriteria) {
     try {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
-        let searchTerm = searchCriteria.searchTerm;
+        let searchTerm = searchCriteria.achievementSearchTerm;
         let userAchievements;
         if (searchTerm !== '') {
             userAchievements = await db.userAchievement.findAll({
@@ -51,7 +51,7 @@ async function getAll(searchCriteria) {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
         let pagination = searchCriteria.pagination;
-        let searchTerm = searchCriteria.searchTerm;
+        let searchTerm = searchCriteria.achievementSearchTerm;
         let limit;
         let offset;
         let page = searchCriteria.page;

@@ -28,11 +28,9 @@ export class AddUserAchievementComponent {
 
   addUserAchievementForm = new FormGroup({
     achievementID: new FormControl(0, [Validators.required]),
-    achievementName: new FormControl('', [Validators.required]),
     gameID: new FormControl(0, [Validators.required]),
-    gameName: new FormControl('', [Validators.required]),
     userID: new FormControl(0, [Validators.required]),
-    achievementStatus: new FormControl(0, [Validators.required]),
+    achievementStatus: new FormControl('', [Validators.required]),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
   });
@@ -70,9 +68,7 @@ export class AddUserAchievementComponent {
       let updatedAt = `${this.data.element.updatedAt}`;
       if(achievementName !== null && achievementName !== undefined && gameName !== null && gameName !== undefined){
         this.addUserAchievementForm.controls.achievementID.patchValue(achievementID);
-        this.addUserAchievementForm.controls.achievementName.patchValue(achievementName);
         this.addUserAchievementForm.controls.gameID.patchValue(gameID);
-        this.addUserAchievementForm.controls.gameName.patchValue(gameName);
         this.addUserAchievementForm.controls.userID.patchValue(userID);
         this.addUserAchievementForm.controls.achievementStatus.patchValue(achievementStatus);
         this.addUserAchievementForm.controls.createdAt.patchValue(createdAt);
@@ -96,6 +92,8 @@ export class AddUserAchievementComponent {
     }
     newAchievement.gameID = this.addUserAchievementForm.controls.gameID.value || 0;
     let gameName = this.allGameNames.find(obj => obj.gameID == newAchievement.gameID);
+    newAchievement.achievementID = this.addUserAchievementForm.controls.achievementID.value || 0;
+    let achievementName = this.allAchievementNames.find(obj => obj.achievementID == newAchievement.achievementID);
     if(gameName !== undefined){
       newAchievement.gameName = gameName.gameName;
     } else {
@@ -104,8 +102,16 @@ export class AddUserAchievementComponent {
       });
       return;
     }
+    if(achievementName !== undefined){
+      newAchievement.achievementName = achievementName.achievementName;
+    } else {
+      this.snackBar.open('Achievement name somehow not found!', 'dismiss', {
+        duration: 3000
+      });
+      return;
+    }
     newAchievement.userID = this.data.userID;
-    
+    newAchievement.achievementStatus = this.addUserAchievementForm.controls.achievementStatus.value || '';
     newAchievement.createdAt = this.addUserAchievementForm.controls.createdAt.value || '';
     newAchievement.updatedAt = this.addUserAchievementForm.controls.updatedAt.value || '';
     if (this.isEdit) {

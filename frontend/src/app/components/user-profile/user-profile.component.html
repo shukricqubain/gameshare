@@ -3,15 +3,15 @@
         <mat-tab label="Game Collection">
             <div class="form-column">
                 <div class="search-form-container">
-                    <form [formGroup]="searchCriteria" style="margin-top: 25px;" (ngSubmit)="applySearch()">
+                    <form [formGroup]="gameSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyGameSearch()">
                         <mat-form-field>
                             <mat-label>Search</mat-label>
                             <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
                         </mat-form-field>
-                        <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applySearch()">
+                        <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyGameSearch()">
                             search
                         </mat-icon>
-                        <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearSearch()">
+                        <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearGameSearch()">
                             clear
                         </mat-icon>
                     </form>
@@ -19,7 +19,7 @@
                 </div>
                 <div>
                     <table mat-table [dataSource]="userGamesDataSource" class="table mat-elevation-z8"
-                        matSortActive="userGameID" matSortDisableClear matSortDirection="asc" matSort>
+                        matSortActive="userGameID" matSortDisableClear matSortDirection="asc" matSort #gameSort="matSort">
 
                         <!-- userGameID Column -->
                         <ng-container matColumnDef="userGameID">
@@ -76,8 +76,8 @@
                             <td class="mat-cell" colspan="4">No data matching the filter "</td>
                         </tr>
                     </table>
-                    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 100]"
-                        [showFirstLastButtons]="true" [length]="resultsLength">
+                    <mat-paginator #gamePaginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 100]"
+                        [showFirstLastButtons]="true" [length]="gameResultsLength">
                     </mat-paginator>
                 </div>
             </div>
@@ -101,7 +101,7 @@
             <div class="form-column">
                 <div>
                     <table mat-table [dataSource]="userAchievementDataSource" class="table mat-elevation-z8"
-                        matSortActive="userAchievementID" matSortDisableClear matSortDirection="asc" matSort>
+                        matSortActive="userAchievementID" matSortDisableClear matSortDirection="asc" matSort #achievementSort="matSort">
 
                         <!-- userAchievementID Column -->
                         <ng-container matColumnDef="userAchievementID">
@@ -140,9 +140,9 @@
                         </ng-container>
 
                         <!-- ahcievementStatus -->
-                        <ng-container matColumnDef="ahcievementStatus">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ahcievement Status </th>
-                            <td mat-cell *matCellDef="let element"> {{element.ahcievementStatus}} </td>
+                        <ng-container matColumnDef="achievementStatus">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Achievement Status </th>
+                            <td mat-cell *matCellDef="let element"> {{element.achievementStatus}} </td>
                         </ng-container>
 
                         <!-- createdAt Column -->
@@ -182,7 +182,7 @@
                             <td class="mat-cell" colspan="4">No data matching the filter "</td>
                         </tr>
                     </table>
-                    <mat-paginator [pageSize]="achievementPageSize" [pageSizeOptions]="[5, 10, 20, 100]"
+                    <mat-paginator #achievementPaginator [pageSize]="achievementPageSize" [pageSizeOptions]="[5, 10, 20, 100]"
                         [showFirstLastButtons]="true" [length]="achievementResultsLength">
                     </mat-paginator>
                 </div>
