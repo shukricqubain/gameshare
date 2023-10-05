@@ -272,12 +272,22 @@ export class UserProfileComponent {
     if (data == null) {
       this.userGamesDataSource.data = [];
       this.gameResultsLength = 0;
-      this.gamesLoaded = false;
       this.ngAfterViewInit();
     } else {
       this.userGamesDataSource.data = data.data;
-      this.gameResultsLength = data.user_count;
-      this.gamesLoaded = false;
+      this.gameResultsLength = data.gameCount;
+      this.ngAfterViewInit();
+    }
+  }
+
+  public handleAchievementSearchResponse(data: any){
+    if(data == null){
+      this.userAchievementDataSource.data = [];
+      this.achievementResultsLength = 0;
+      this.ngAfterViewInit();
+    } else {
+      this.userAchievementDataSource.data = data.data;
+      this.achievementResultsLength = data.achievementCount;
       this.ngAfterViewInit();
     }
   }
@@ -402,7 +412,10 @@ export class UserProfileComponent {
   }
 
   applyAchievementSearch = async () => {
-    
+    this.userAchievementService.getAll(this.achievementSearchCriteria.value).subscribe({
+      next: this.handleAchievementSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
   }
 
   public clearGameSearch() {
@@ -414,6 +427,19 @@ export class UserProfileComponent {
     this.gameSearchCriteria.controls.page.patchValue(0);
     this.userGameService.getAll(this.gameSearchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
+  }
+
+  public clearAchievementSearch() {
+    this.achievementSearchCriteria.controls.achievementSearchTerm.patchValue('');
+    this.achievementSearchCriteria.controls.sort.patchValue('userAchievementID');
+    this.achievementSearchCriteria.controls.pagination.patchValue('true');
+    this.achievementSearchCriteria.controls.direction.patchValue('asc');
+    this.achievementSearchCriteria.controls.limit.patchValue(5);
+    this.achievementSearchCriteria.controls.page.patchValue(0);
+    this.userAchievementService.getAll(this.achievementSearchCriteria.value).subscribe({
+      next: this.handleAchievementSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
   }
