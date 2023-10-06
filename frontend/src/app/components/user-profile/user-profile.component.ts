@@ -17,11 +17,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { GameName } from 'src/app/models/gameName.model';
 import { GameService } from 'src/app/services/game.service';
 import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
-import { catchError, map, merge, startWith, switchMap, of as observableOf } from 'rxjs';
+import { catchError, map, merge, startWith, switchMap, of as observableOf, lastValueFrom } from 'rxjs';
 import { UserAchievement } from 'src/app/models/userAchievement.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AddUserAchievementComponent } from './add-user-achievement/add-user-achievement.component';
 import { UserAchievementService } from 'src/app/services/userAchievement.service';
+import { AchievementName } from 'src/app/models/achievementName.model';
+import { AchievementService } from 'src/app/services/achievement.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -37,6 +39,7 @@ export class UserProfileComponent {
     private usernameService: UsernameService,
     private roleService: RoleService,
     private gameService: GameService,
+    private achievementService: AchievementService,
     private userGameService: UserGameService,
     private dateFunction: DateFunctionsService,
     private userAchievementService: UserAchievementService,
@@ -105,6 +108,9 @@ export class UserProfileComponent {
   @ViewChild('achievementSort') achievementSort: MatSort;
 
   private currentTabIndex = 0;
+  allAchievementNames: AchievementName[] = [];
+  gameNamesLoaded: boolean = false;
+  achievementNamesLoaded: boolean = false;
 
   async ngAfterViewInit() {
     if(this.currentTabIndex == 0 && this.gamesLoaded == false){
@@ -141,6 +147,7 @@ export class UserProfileComponent {
         });
       }
     } else if(this.currentTabIndex == 1){
+      await this.loadAchievementNames();
       this.userAchievementDataSource.sort = this.achievementSort;
       ///if user changes the sort order reset the page back to the first page
       this.achievementSort.sortChange.subscribe(() => (this.achievementPaginator.pageIndex = 0));
@@ -237,10 +244,21 @@ export class UserProfileComponent {
   }
 
   async loadUserDetails(data: any){
-    await this.userService.get(data.userID).subscribe({
-      next: this.handleGetResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+    if(data.userID == undefined){
+      let userName = localStorage.getItem('userName');
+      if(userName !== null){
+        await this.userService.getUserByName(userName).subscribe({
+          next: this.handleGetResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
+      }
+    } else {
+      await this.userService.get(data.userID).subscribe({
+        next: this.handleGetResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
+    
   }
 
   handleGetResponse(data: any){
@@ -268,7 +286,7 @@ export class UserProfileComponent {
     }
   }
 
-  public handleSearchResponse(data: any) {
+  public handleGameSearchResponse(data: any) {
     if (data == null) {
       this.userGamesDataSource.data = [];
       this.gameResultsLength = 0;
@@ -306,6 +324,7 @@ export class UserProfileComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
+        this.gamesLoaded = false;
         this.ngAfterViewInit();
       } else {
         this.ngAfterViewInit();
@@ -334,12 +353,11 @@ export class UserProfileComponent {
       });
       return;
     }
-    
-
+  
     dialogRefDelete.afterClosed().subscribe(result => {
       if(result.event === 'delete'){
         this.userGameService.delete(element.userGameID).subscribe({
-          next: this.handleDeleteResponse.bind(this),
+          next: this.handleGameDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
         this.snackBar.open(`${gameName} has been deleted.`, 'dismiss',{
@@ -353,8 +371,9 @@ export class UserProfileComponent {
     });
   }
 
-  public handleDeleteResponse(data:any){
-    if(data == null){
+  public handleGameDeleteResponse(data:any){
+    if(data !== null){
+      this.gamesLoaded = false;
       this.ngAfterViewInit();
     } else {
       this.ngAfterViewInit();
@@ -378,6 +397,7 @@ export class UserProfileComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
+        this.gamesLoaded = false;
         this.ngAfterViewInit();
       } else {
         this.ngAfterViewInit();
@@ -386,8 +406,9 @@ export class UserProfileComponent {
   }
 
   public applyGameSearch = async () => {
+    this.gamesLoaded = false;
     this.userGameService.getAll(this.gameSearchCriteria.value).subscribe({
-      next: this.handleSearchResponse.bind(this),
+      next: this.handleGameSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
   }
@@ -425,8 +446,9 @@ export class UserProfileComponent {
     this.gameSearchCriteria.controls.direction.patchValue('asc');
     this.gameSearchCriteria.controls.limit.patchValue(5);
     this.gameSearchCriteria.controls.page.patchValue(0);
+    this.gamesLoaded = false;
     this.userGameService.getAll(this.gameSearchCriteria.value).subscribe({
-      next: this.handleSearchResponse.bind(this),
+      next: this.handleGameSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
   }
@@ -445,15 +467,18 @@ export class UserProfileComponent {
   }
 
   async loadAllGameNames(){
-    await this.gameService.getAllGameNames().subscribe({
-      next: this.handleGetAllNamesResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+    if(!this.gameNamesLoaded){
+      await this.gameService.getAllGameNames().subscribe({
+        next: this.handleGetAllNamesResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
   }
 
   handleGetAllNamesResponse(data: any){
     if (data !== null && data !== undefined) {
       this.allGameNames = data;
+      this.gameNamesLoaded = false;
     }
   }
 
@@ -467,8 +492,84 @@ export class UserProfileComponent {
   }
 
   editUserAchievement(element: any){
+    const dialogRef = this.matDialog.open(AddUserAchievementComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        isEdit: true,
+        userID: this.user.userID,
+        allAchievementNames: this.allAchievementNames,
+        allGameNames: this.allGameNames,
+        element: element
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.ngAfterViewInit();
+      } else {
+        this.ngAfterViewInit();
+      }
+    });
   }
 
   deleteUserAchievement(element: any){
+    const dialogRefDelete = this.matDialog.open(PopUpComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        element,
+        model: 'userAchievement',
+        allAchievementNames: this.allAchievementNames
+      }
+    });
+    let achievement = this.allAchievementNames.find(obj => obj.achievementID == element.achievementID);
+    let achievementName = '';
+    if(achievement !== undefined){
+      achievementName = achievement.achievementName ? achievement.achievementName: '';
+    } else {
+      ///throw error
+      this.snackBar.open(`No achievement with this ID found in the system.`, 'dismiss',{
+        duration: 3000
+      });
+      return;
+    }
+  
+    dialogRefDelete.afterClosed().subscribe(result => {
+      if(result.event === 'delete'){
+        this.userAchievementService.delete(element.userAchievementID).subscribe({
+          next: this.handleAchievementDeleteResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
+        this.snackBar.open(`${achievementName} has been deleted.`, 'dismiss',{
+          duration: 3000
+        });
+      } else {
+        this.snackBar.open(`${achievementName} has not been deleted.`, 'dismiss',{
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  async loadAchievementNames(){
+    try{
+      if(!this.achievementNamesLoaded){
+        this.allAchievementNames = await lastValueFrom(this.achievementService.getAllAchievementsNames().pipe());
+      }
+    } catch(err){
+      this.snackBar.open('Error loading achievement names!', 'dismiss', {
+        duration: 3000
+      });
+      console.log(err);
+    }
+  }
+
+  public handleAchievementDeleteResponse(data:any){
+    if(data !== null){
+      this.ngAfterViewInit();
+    } else {
+      this.ngAfterViewInit();
+    }
   }
 }

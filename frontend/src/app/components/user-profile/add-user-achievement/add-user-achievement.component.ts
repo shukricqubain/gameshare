@@ -52,6 +52,7 @@ export class AddUserAchievementComponent {
     this.addUserAchievementForm.controls.userID.patchValue(userID);
     if(this.data.allAchievementNames !== null && this.data.allAchievementNames !== undefined){
       this.allAchievementNames = this.data.allAchievementNames;
+      this.allDisplayedNames = this.allAchievementNames;
     } else {
       await this.loadAchievementNames();
     }
