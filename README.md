@@ -100,12 +100,12 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Basic CRUD for tokens
   - [x] Login Workflow
   - [x] Signup Workflow
-- [ ] Game Collection Functionality
+- [x] Game Collection Functionality
   - [x] Basic CRUD for Games
   - [x] Basic CRUD for Achievements
   - [x] Basic CRUD for User Collection
   - [x] Basic Search and pagination for User Collection
-  - [ ] Basic CRUD for User Achievements
+  - [x] Basic CRUD for User Achievements
 - [ ] Board Functionality
   - [ ] Basic CRUD for Boards
 - [ ] Messaging Functionality
