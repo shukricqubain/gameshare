@@ -1,0 +1,46 @@
+<div class="child-component">
+    <div class="add-board-container">
+        <ng-container *ngIf="isEdit; then editBoard; else addBoard"></ng-container>
+        <ng-template #addBoard>
+            <h1>Add a Board</h1>
+        </ng-template>
+        <ng-template #editBoard>
+            <h1>Edit a Board</h1>
+        </ng-template>
+        <form [formGroup]="addBoardForm" (ngSubmit)="onSubmit()">
+            <div class="form-column">
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline" style="margin-right:10px;">
+                        <label>Board Name</label>
+                        <input matInput name="boardName" id="boardName" type="text" formControlName="boardName"
+                            placeholder="Enter board name." required />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <label>Game Name</label>
+                        <mat-select placeholder="Select Game" formControlName="gameName"
+                            name="gameName" id="gameName" required>
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let gameName of allGameNames" [value]="gameName.gameName">
+                                {{gameName.gameName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <ng-container *ngIf="isEdit; then dontCheckNameFound; else checkNameFound"></ng-container>
+                <ng-template #checkNameFound>
+                    <button mat-raised-button [disabled]="!addBoardForm.dirty || !addBoardForm.valid"
+                    type="submit">Submit</button>
+                </ng-template>
+                <ng-template #dontCheckNameFound>
+                    <button mat-raised-button [disabled]="!addBoardForm.dirty || !addBoardForm.valid"
+                    type="submit">Submit</button>
+                </ng-template>
+                <button mat-raised-button type="button" style="margin-left:10px;"
+                    (click)="closeDialog()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

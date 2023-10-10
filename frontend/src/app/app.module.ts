@@ -41,6 +41,8 @@ import { AddAchievementComponent } from './components/add-achievement/add-achiev
 import { AllAchievementsComponent } from './components/all-achievements/all-achievements.component';
 import { AddUserGameComponent } from './components/user-profile/add-user-game/add-user-game.component';
 import { AddUserAchievementComponent } from './components/user-profile/add-user-achievement/add-user-achievement.component';
+import { AddBoardComponent } from './components/add-board/add-board.component';
+import { AllBoardsComponent } from './components/all-boards/all-boards.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import { AddUserAchievementComponent } from './components/user-profile/add-user-
     AddAchievementComponent,
     AllAchievementsComponent,
     AddUserGameComponent,
-    AddUserAchievementComponent
+    AddUserAchievementComponent,
+    AddBoardComponent,
+    AllBoardsComponent
   ],
   imports: [
     BrowserModule,

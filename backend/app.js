@@ -31,6 +31,7 @@ const game = require('./routes/game.route');
 const achievement = require('./routes/achievement.route');
 const userGame = require('./routes/userGame.route');
 const userAchievement = require('./routes/userAchievement.route');
+const board = require('./routes/board.route');
 
 app.use("/home", home);
 app.use("/user", user);
@@ -40,6 +41,7 @@ app.use("/game", game);
 app.use("/achievement", achievement);
 app.use("/userGame", userGame);
 app.use("/userAchievement", userAchievement);
+app.use("/board", board);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

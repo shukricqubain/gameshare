@@ -68,6 +68,11 @@ export class PopUpComponent {
           this.model = this.data.model;
           this.dataLoaded = true;
           break;
+        case ('board'):
+          this.name = this.data.element.boardName;
+          this.model = this.data.model;
+          this.dataLoaded = true;
+          break;
       }
     }
 

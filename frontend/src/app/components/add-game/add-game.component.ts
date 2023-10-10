@@ -96,7 +96,6 @@ export class AddGameComponent {
         error: this.handleErrorResponse.bind(this)
       });
     }
-    
   }
 
   handleCreateResponse(data:any){

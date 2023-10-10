@@ -10,6 +10,8 @@ import { AllGamesComponent } from './components/all-games/all-games.component';
 import { AddGameComponent } from './components/add-game/add-game.component';
 import { AllAchievementsComponent } from './components/all-achievements/all-achievements.component';
 import { AddAchievementComponent } from './components/add-achievement/add-achievement.component';
+import { AllBoardsComponent } from './components/all-boards/all-boards.component';
+import { AddBoardComponent } from './components/add-board/add-board.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -22,7 +24,9 @@ const routes: Routes = [
   { path: 'all-games', component: AllGamesComponent, title: 'All Games'},
   { path: 'add-game', component: AddGameComponent, title: 'Add Game'},
   { path: 'all-achievements', component: AllAchievementsComponent, title: 'All Achievements'},
-  { path: 'add-achievement', component: AddAchievementComponent, title: 'Add Achievement'}
+  { path: 'add-achievement', component: AddAchievementComponent, title: 'Add Achievement'},
+  { path: 'all-boards', component: AllBoardsComponent, title: 'All Boards'},
+  { path: 'add-board', component: AddBoardComponent, title: 'Add Board'}
 ];
 
 @NgModule({
