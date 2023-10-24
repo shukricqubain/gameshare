@@ -81,7 +81,7 @@ exports.update = async (boardID, board) => {
 // Delete a board by their id
 exports.delete = async (boardID) => {
     try{
-        return await boardService.deleteUser(boardID);
+        return await boardService.deleteBoard(boardID);
     } catch(err){
         console.log(err);
     }

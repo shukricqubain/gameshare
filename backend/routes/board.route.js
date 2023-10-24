@@ -33,7 +33,7 @@ router.post('/allBoards', async function(req, res) {
             if(searchCriteria.pagination){
                 boardCount = await boardController.findCount(searchCriteria);
                 if(boardCount > 0){
-                    searchCriteria.gameCount = boardCount;
+                    searchCriteria.boardCount = boardCount;
                     allBoards = await boardController.findAll(searchCriteria);
                     if(allBoards.message !== 'No data in board table to fetch.'){
                         searchCriteria.data = allBoards;
@@ -67,7 +67,7 @@ router.get('/singleBoard/:boardID', async function(req, res){
     try{
         if(req.params.boardID !== undefined){
             let boardID = Number(req.params.boardID);
-            let board = await boardController.findOne(board);
+            let board = await boardController.findOne(boardID);
             if(board !== undefined && typeof board !== 'string'){
                 res.status(200).send(board);
             } else {

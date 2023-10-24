@@ -32,7 +32,7 @@ export class AllBoardsComponent {
   ngOnInit() {
   }
 
-  displayedBoardColumns: string[] = ['boardID', 'gameID', 'gameName', 'createdAt', 'updatedAt', 'actions'];
+  displayedBoardColumns: string[] = ['boardID', 'boardName', 'gameID', 'gameName', 'createdAt', 'updatedAt', 'actions'];
   boardDataSource = new MatTableDataSource<any>;
   boardData: Board[];
   search: any;
@@ -70,7 +70,7 @@ export class AllBoardsComponent {
           if (data === null) {
             return [];
           }
-          this.resultsLength = data.gameCount;
+          this.resultsLength = data.boardCount;
           return data.data;
         }),
       )
@@ -84,7 +84,7 @@ export class AllBoardsComponent {
       this.ngAfterViewInit();
     } else {
       this.boardDataSource.data = data.data;
-      this.resultsLength = data.user_count;
+      this.resultsLength = data.boardCount;
       this.ngAfterViewInit();
     }
   }
