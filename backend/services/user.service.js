@@ -4,7 +4,8 @@ const Op = Sequelize.Op;
 const moment = require('moment');
 const config = require('../config/config.js');
 const secretKey = config.secret_key;
-const outputDateFormat = 'MM-DD-YYYY';
+const mmddyyyyFormat = 'MM-DD-YYYY';
+const yyyyddmmFormat = 'YYYY-MM-DD';
 
 async function findCount(searchCriteria) {
     try {
@@ -363,14 +364,24 @@ async function create(user) {
         dateString = `${dateArray[0]}`;
         user.dateOfBirth = dateString;
         ///clean up createdAt for insertion
-        let createdAt = moment(new Date()).format(outputDateFormat);
+        let createdAt = moment(new Date()).format(yyyyddmmFormat);
         let createdString = `${createdAt}`;
         let createdArray = createdString.split('T');
         createdString = `${createdArray[0]}`;
         user.createdAt = createdString;
         return await db.sequelize.query(
             `INSERT INTO user ( userName, firstName, lastName, dateOfBirth, email, phoneNumber, userRole, userPassword, createdAt ) VALUES
-            ( '${user.userName}', AES_ENCRYPT('${user.firstName}','${secretKey}'), AES_ENCRYPT('${user.lastName}','${secretKey}'), STR_TO_DATE('${user.dateOfBirth}',"%Y-%m-%d %H:%i:%s"), AES_ENCRYPT('${user.email}','${secretKey}'), '${user.phoneNumber}', '${user.userRole}', '${user.userPassword}', STR_TO_DATE('${user.createdAt}',"%Y-%m-%d %H:%i:%s") );`
+            ( 
+                '${user.userName}', 
+                AES_ENCRYPT('${user.firstName}','${secretKey}'), 
+                AES_ENCRYPT('${user.lastName}','${secretKey}'), 
+                STR_TO_DATE('${user.dateOfBirth}',"%Y-%m-%d %H:%i:%s"), 
+                AES_ENCRYPT('${user.email}','${secretKey}'), 
+                '${user.phoneNumber}', 
+                '${user.userRole}', 
+                '${user.userPassword}', 
+                STR_TO_DATE('${user.createdAt}',"%Y-%m-%d %H:%i:%s") 
+            );`
         );
     } catch (err) {
         console.log(err)
@@ -486,7 +497,7 @@ async function update(userID, user) {
         createdString = `${createdArray[0]} ${createdArray[1]}`;
         user.createdAt = createdString.slice(0, -5);
         ///clean up updatedAt for updation
-        let updatedAt = moment(new Date()).format(outputDateFormat);
+        let updatedAt = moment(new Date()).format(mmddyyyyFormat);
         let updatedString = `${updatedAt}`;
         let updatedArray = updatedString.split('T');
         updatedString = `${updatedArray[0]}`;
@@ -503,7 +514,7 @@ async function update(userID, user) {
             userPassword = '${user.userPassword}',
             createdAt = STR_TO_DATE('${user.createdAt}',"%Y-%m-%d %H:%i:%s"),
             updatedAt = STR_TO_DATE('${user.updatedAt}',"%m-%d-%Y")
-            WHERE user.userID = ${user.userID};`
+            WHERE user.userID = ${userID};`
         );
     } catch (err) {
         console.log(err);
