@@ -12,7 +12,7 @@ router.post('/addBoard', async function(req, res){
         } else {
             newBoard = newBoard['dataValues'];
             res.status(201).json({
-                newGame: newBoard
+                newBoard: newBoard
             });
         }
     } catch(err){

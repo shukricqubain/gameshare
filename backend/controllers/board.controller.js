@@ -55,20 +55,6 @@ exports.findOne = async (req) => {
     }
 };
 
-// Get single board by boardName
-exports.findUsername = async (boardName) => {
-    try{
-        let board = await boardService.getBoarByBoardName(boardName);
-        if(board == null){
-            return 'Cannot find board with specified boardName';
-        } else {
-            return board;
-        }
-    } catch(err){
-        console.log(err);
-    }
-}
-
 // Update a board by their id
 exports.update = async (boardID, board) => {
     try{
