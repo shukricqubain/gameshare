@@ -15,6 +15,12 @@ module.exports = (sequelize, Sequelize) => {
                 isInt: true
             }
         },
+        boardName: {
+            foreignKey: true,
+            type: Sequelize.STRING,
+            validate: {
+            }
+        },
         userID: {
             foreignKey: true,
             type: Sequelize.INTEGER,

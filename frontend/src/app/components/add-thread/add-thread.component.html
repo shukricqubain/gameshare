@@ -1,0 +1,40 @@
+<div class="child-component">
+    <div class="add-thread-container">
+        <ng-container *ngIf="isEdit; then editThread; else addThread"></ng-container>
+        <ng-template #addThread>
+            <h1>Add a Thread</h1>
+        </ng-template>
+        <ng-template #editThread>
+            <h1>Edit a Thread</h1>
+        </ng-template>
+        <form [formGroup]="addThreadForm" (ngSubmit)="onSubmit()">
+            <div class="form-column">
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline" style="margin-right:10px;">
+                        <label>Thread Name</label>
+                        <input matInput name="threadName" id="threadName" type="text" formControlName="threadName"
+                            placeholder="Enter thread name." required />
+                    </mat-form-field>
+                    <mat-form-field>
+                        <label>Board Name</label>
+                        <mat-select placeholder="Select Game" formControlName="boardName"
+                            name="boardName" id="boardName" required>
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let boardName of allBoardNames" [value]="boardName.boardName">
+                                {{boardName.boardName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <button mat-raised-button [disabled]="!addThreadForm.dirty || !addThreadForm.valid"
+                type="submit">Submit</button>
+                <button mat-raised-button type="button" style="margin-left:10px;"
+                    (click)="closeDialog()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

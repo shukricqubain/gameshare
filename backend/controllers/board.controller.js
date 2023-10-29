@@ -41,6 +41,20 @@ exports.findAll = async (searchCriteria) => {
     }
 };
 
+///get all board names
+exports.findAllBoardNames = async (req) => {
+    try{
+        let allBoardNames = await boardService.getAllBoardNames();
+        if(allBoardNames.length > 0){
+            return allBoardNames;
+        } else {
+            return {message: 'No board names in table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 // Get single board by id
 exports.findOne = async (req) => {
     try{

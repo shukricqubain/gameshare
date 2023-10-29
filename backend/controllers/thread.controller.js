@@ -67,7 +67,7 @@ exports.update = async (threadID, thread) => {
 // Delete a thread by their id
 exports.delete = async (threadID) => {
     try{
-        return await threadService.deleteBoard(threadID);
+        return await threadService.deleteThread(threadID);
     } catch(err){
         console.log(err);
     }

@@ -22,6 +22,11 @@
                 <a mat-menu-item routerLink="/all-boards" routerLinkActive="active" ariaCurrentWhenActive="page">All Boards</a>
                 <a mat-menu-item routerLink="/add-board" routerLinkActive="active" ariaCurrentWhenActive="page">Add Board</a>
             </mat-menu>
+            <button class="header-item" *ngIf="roleID == 1" mat-button [matMenuTriggerFor]="threads">Threads</button>
+            <mat-menu #threads="matMenu">
+                <a mat-menu-item routerLink="/all-threads" routerLinkActive="active" ariaCurrentWhenActive="page">All Threads</a>
+                <a mat-menu-item routerLink="/add-thread" routerLinkActive="active" ariaCurrentWhenActive="page">Add Thread</a>
+            </mat-menu>
         </div>
         <br>
         <div class="user-container">

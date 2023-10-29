@@ -14,6 +14,7 @@ async function findCount(searchCriteria) {
                     [Op.or]: {
                         threadID: { [Op.like]: '%' + searchTerm + '%' }, 
                         boardID: { [Op.like]: '%' + searchTerm + '%' },
+                        boardName: { [Op.like]: '%' + searchTerm + '%' },
                         threadName: { [Op.like]: '%' + searchTerm + '%' },
                         userID: { [Op.like]: '%' + searchTerm + '%' }
                     }
@@ -60,6 +61,7 @@ async function getAll(searchCriteria) {
                             [Op.or]: {
                                 threadID: { [Op.like]: '%' + searchTerm + '%' }, 
                                 boardID: { [Op.like]: '%' + searchTerm + '%' },
+                                boardName: { [Op.like]: '%' + searchTerm + '%' },
                                 threadName: { [Op.like]: '%' + searchTerm + '%' },
                                 userID: { [Op.like]: '%' + searchTerm + '%' }
                             }
@@ -78,6 +80,7 @@ async function getAll(searchCriteria) {
                             [Op.or]: {
                                 threadID: { [Op.like]: '%' + searchTerm + '%' }, 
                                 boardID: { [Op.like]: '%' + searchTerm + '%' },
+                                boardName: { [Op.like]: '%' + searchTerm + '%' },
                                 threadName: { [Op.like]: '%' + searchTerm + '%' },
                                 userID: { [Op.like]: '%' + searchTerm + '%' }
                             }
@@ -94,11 +97,11 @@ async function getAll(searchCriteria) {
                 return await db.thread.findAll({
                     where: {
                         [Op.or]: {
+                            threadID: { [Op.like]: '%' + searchTerm + '%' }, 
                             boardID: { [Op.like]: '%' + searchTerm + '%' },
                             boardName: { [Op.like]: '%' + searchTerm + '%' },
-                            gameID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameName: { [Op.like]: '%' + searchTerm + '%' }
-                        
+                            threadName: { [Op.like]: '%' + searchTerm + '%' },
+                            userID: { [Op.like]: '%' + searchTerm + '%' }
                         }
                     },
                     order: [
@@ -153,6 +156,7 @@ async function create(thread){
         return await db.thread.create({
             threadID: thread.threadID,
             boardID: thread.boardID,
+            boardName: thread.boardName,
             userID: thread.userID,
             threadName: thread.threadName
         });

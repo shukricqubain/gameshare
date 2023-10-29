@@ -29,15 +29,8 @@
             </div>
             <br>
             <div class="form-row">
-                <ng-container *ngIf="isEdit; then dontCheckNameFound; else checkNameFound"></ng-container>
-                <ng-template #checkNameFound>
-                    <button mat-raised-button [disabled]="!addBoardForm.dirty || !addBoardForm.valid"
-                    type="submit">Submit</button>
-                </ng-template>
-                <ng-template #dontCheckNameFound>
-                    <button mat-raised-button [disabled]="!addBoardForm.dirty || !addBoardForm.valid"
-                    type="submit">Submit</button>
-                </ng-template>
+                <button mat-raised-button [disabled]="!addBoardForm.dirty || !addBoardForm.valid"
+                type="submit">Submit</button>
                 <button mat-raised-button type="button" style="margin-left:10px;"
                     (click)="closeDialog()">Cancel</button>
             </div>

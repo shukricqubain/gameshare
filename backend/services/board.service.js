@@ -151,6 +151,23 @@ async function getAll(searchCriteria) {
     }
 }
 
+async function getAllBoardNames(){
+    try{
+        return await db.board.findAll({
+            order: [
+                ['boardName', 'ASC'],
+            ],
+            attributes: [
+                'boardID',
+                'boardName',
+            ],
+            raw: true
+        });
+    } catch(err){
+        console.log(err);
+    }
+}
+
 async function create(board){
     try{
         return await db.board.create({
@@ -211,6 +228,7 @@ async function deleteBoard(boardID) {
 module.exports = {
     getAll,
     getOne,
+    getAllBoardNames,
     create,
     update,
     deleteBoard,

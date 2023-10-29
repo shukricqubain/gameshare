@@ -62,6 +62,24 @@ router.post('/allBoards', async function(req, res) {
     }
 });
 
+// get all boardNames in the database
+router.get('/allBoardNames', async function(req, res){
+    try{
+        let allBoardNames = await boardController.findAllBoardNames();
+        if(allBoardNames !== undefined && allBoardNames !== null){
+            res.status(200).send(allBoardNames);
+        } else {
+            res.status(204).send(`No board names found in the database.`);
+        }
+    } catch(err){
+        console.log(err);
+        res.status(500).json({
+            message:"There was an error getting all board names from the database.",
+            err
+        });
+    }
+});
+
 // get a single board by their boardID
 router.get('/singleBoard/:boardID', async function(req, res){
     try{

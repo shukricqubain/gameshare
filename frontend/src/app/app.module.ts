@@ -43,6 +43,8 @@ import { AddUserGameComponent } from './components/user-profile/add-user-game/ad
 import { AddUserAchievementComponent } from './components/user-profile/add-user-achievement/add-user-achievement.component';
 import { AddBoardComponent } from './components/add-board/add-board.component';
 import { AllBoardsComponent } from './components/all-boards/all-boards.component';
+import { AddThreadComponent } from './components/add-thread/add-thread.component';
+import { AllThreadsComponent } from './components/all-threads/all-threads.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,9 @@ import { AllBoardsComponent } from './components/all-boards/all-boards.component
     AddUserGameComponent,
     AddUserAchievementComponent,
     AddBoardComponent,
-    AllBoardsComponent
+    AllBoardsComponent,
+    AddThreadComponent,
+    AllThreadsComponent
   ],
   imports: [
     BrowserModule,

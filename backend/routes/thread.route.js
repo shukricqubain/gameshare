@@ -32,7 +32,7 @@ router.post('/allThreads', async function(req, res) {
             let threadCount;
             if(searchCriteria.pagination){
                 threadCount = await threadController.findCount(searchCriteria);
-                if(boardCount > 0){
+                if(threadCount > 0){
                     searchCriteria.threadCount = threadCount;
                     allThreads = await threadController.findAll(searchCriteria);
                     if(allThreads.message !== 'No data in thread table to fetch.'){

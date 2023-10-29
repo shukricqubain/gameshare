@@ -16,6 +16,10 @@ export class BoardService {
     return this.http.post(`${baseUrl}/allBoards`, search);
   }
 
+  getAllBoardNames(): Observable<any> {
+    return this.http.get(`${baseUrl}/allBoardNames`);
+  }
+
   get(boardID: any): Observable<Board> {
     return this.http.get(`${baseUrl}/singleBoard/${boardID}`);
   }
