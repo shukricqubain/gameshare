@@ -45,6 +45,8 @@ import { AddBoardComponent } from './components/add-board/add-board.component';
 import { AllBoardsComponent } from './components/all-boards/all-boards.component';
 import { AddThreadComponent } from './components/add-thread/add-thread.component';
 import { AllThreadsComponent } from './components/all-threads/all-threads.component';
+import { BoardsComponent } from './components/boards/boards.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,8 @@ import { AllThreadsComponent } from './components/all-threads/all-threads.compon
     AddBoardComponent,
     AllBoardsComponent,
     AddThreadComponent,
-    AllThreadsComponent
+    AllThreadsComponent,
+    BoardsComponent
   ],
   imports: [
     BrowserModule,
@@ -96,7 +99,8 @@ import { AllThreadsComponent } from './components/all-threads/all-threads.compon
     MatDialogModule,
     MatMenuModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatExpansionModule
   ],
   exports: [
     MatButtonModule,
