@@ -9,6 +9,7 @@ import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { MatCard } from '@angular/material/card';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -28,33 +29,28 @@ export class BoardsComponent {
     private dateFunction: DateFunctionsService
   ) { }
 
-  allBoards: Board[];
   search: any;
-  pageSize = 5;
+  pageSize = 100;
   currentPage = 0;
   resultsLength = 0;
   isLoadingResults: boolean = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  dataSource = new MatTableDataSource<Board>();
 
   async ngOnInit() {
     await this.loadAllBoards();
   }
 
-  async loadAllBoards($event?: any) {
+  async loadAllBoards() {
     this.isLoadingResults = true;
-    console.log($event)
     let searchCritera = {
-    }
-    if ($event !== undefined) {
-      this.pageSize = $event.pageSize,
-        this.currentPage = $event.pageIndex
     }
     searchCritera = {
       searchTerm: '',
       sort: 'boardID',
-      pagination: 'true',
+      pagination: 'false',
       direction: 'asc',
       limit: this.pageSize,
       page: this.currentPage
@@ -66,10 +62,11 @@ export class BoardsComponent {
   }
 
   handleSearchResponse(data: any) {
-    this.allBoards = data.data;
-    this.resultsLength = this.allBoards.length;
+    this.dataSource.data = data.data;
+    this.resultsLength = data.boardCount;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     this.isLoadingResults = false;
-    console.log(this.allBoards)
   }
 
   handleErrorResponse(error: any) {
@@ -78,5 +75,9 @@ export class BoardsComponent {
       duration: 3000
     });
     this.isLoadingResults = false;
+  }
+  
+  openBoard(board: Board){
+    console.log(board)
   }
 }

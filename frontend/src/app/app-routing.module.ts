@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { AddUserComponent } from './components/add-user/add-user.component';
-import { AllUsersComponent } from './components/all-users/all-users.component';
+import { AddUserComponent } from './components/users/add-user/add-user.component';
+import { AllUsersComponent } from './components/users/all-users/all-users.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { AllGamesComponent } from './components/all-games/all-games.component';
-import { AddGameComponent } from './components/add-game/add-game.component';
-import { AllAchievementsComponent } from './components/all-achievements/all-achievements.component';
-import { AddAchievementComponent } from './components/add-achievement/add-achievement.component';
-import { AllBoardsComponent } from './components/all-boards/all-boards.component';
-import { AddBoardComponent } from './components/add-board/add-board.component';
-import { AllThreadsComponent } from './components/all-threads/all-threads.component';
-import { AddThreadComponent } from './components/add-thread/add-thread.component';
+import { AllGamesComponent } from './components/games/all-games/all-games.component';
+import { AddGameComponent } from './components/games/add-game/add-game.component';
+import { AllAchievementsComponent } from './components/achievements/all-achievements/all-achievements.component';
+import { AddAchievementComponent } from './components/achievements/add-achievement/add-achievement.component';
+import { AllBoardsComponent } from './components/boards/all-boards/all-boards.component';
+import { AddBoardComponent } from './components/boards/add-board/add-board.component';
+import { AllThreadsComponent } from './components/threads/all-threads/all-threads.component';
+import { AddThreadComponent } from './components/threads/add-thread/add-thread.component';
 import { BoardsComponent } from './components/boards/boards.component';
 
 const routes: Routes = [

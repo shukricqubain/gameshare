@@ -1,6 +1,6 @@
 <div class="child-component">
     <div fxLayout="row" fxFlex.md="70" fxLayoutWrap class="board-container mat-elevation-z4">
-        <div fxFlex *ngFor="let board of allBoards" class="board-item">
+        <div fxFlex *ngFor="let board of dataSource.data" class="board-item">
             <mat-card>
                 <mat-card-header>
                   <mat-card-title>{{board.boardName}}</mat-card-title>
@@ -8,14 +8,9 @@
                 </mat-card-header>
                 <mat-card-actions>
                   <button mat-button>Follow</button>
-                  <button mat-button>Open</button>
+                  <button mat-button (click)="openBoard(board)">Open</button>
                 </mat-card-actions>
               </mat-card>
         </div>
- 
-       <div class="paginator mat-elevation-z4" *ngIf="isLoadingResults == false && this.resultsLength !== 0">
-         <mat-paginator #paginator [length]="resultsLength"[pageSize]="pageSize" [pageSizeOptions]="[5,10,25]" (page)="loadAllBoards($event)">
-         </mat-paginator>
-       </div>
    </div> 
 </div>

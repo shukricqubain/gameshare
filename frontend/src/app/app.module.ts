@@ -27,26 +27,27 @@ import { MatSelectModule } from '@angular/material/select';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { AddUserComponent } from './components/add-user/add-user.component';
-import { AllUsersComponent } from './components/all-users/all-users.component';
+import { AddUserComponent } from './components/users/add-user/add-user.component';
+import { AllUsersComponent } from './components/users/all-users/all-users.component';
 import { HeaderComponent } from './components/header/header.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PopUpComponent } from './pop-up/pop-up.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { AddGameComponent } from './components/add-game/add-game.component';
-import { AllGamesComponent } from './components/all-games/all-games.component';
-import { AddAchievementComponent } from './components/add-achievement/add-achievement.component';
-import { AllAchievementsComponent } from './components/all-achievements/all-achievements.component';
+import { AddGameComponent } from './components/games/add-game/add-game.component';
+import { AllGamesComponent } from './components/games/all-games/all-games.component';
+import { AddAchievementComponent } from './components/achievements/add-achievement/add-achievement.component';
+import { AllAchievementsComponent } from './components/achievements/all-achievements/all-achievements.component';
 import { AddUserGameComponent } from './components/user-profile/add-user-game/add-user-game.component';
 import { AddUserAchievementComponent } from './components/user-profile/add-user-achievement/add-user-achievement.component';
-import { AddBoardComponent } from './components/add-board/add-board.component';
-import { AllBoardsComponent } from './components/all-boards/all-boards.component';
-import { AddThreadComponent } from './components/add-thread/add-thread.component';
-import { AllThreadsComponent } from './components/all-threads/all-threads.component';
+import { AddBoardComponent } from './components/boards/add-board/add-board.component';
+import { AllBoardsComponent } from './components/boards/all-boards/all-boards.component';
+import { AddThreadComponent } from './components/threads/add-thread/add-thread.component';
+import { AllThreadsComponent } from './components/threads/all-threads/all-threads.component';
 import { BoardsComponent } from './components/boards/boards.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { BoardComponent } from './components/boards/board/board.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     AllBoardsComponent,
     AddThreadComponent,
     AllThreadsComponent,
-    BoardsComponent
+    BoardsComponent,
+    BoardComponent
   ],
   imports: [
     BrowserModule,
