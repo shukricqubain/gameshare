@@ -1,1 +1,14 @@
-<p>board works!</p>
+<div class="child-component">
+    <div fxLayout="row" fxFlex.md="70" fxLayoutWrap class="thread-container mat-elevation-z4">
+        <div fxFlex *ngFor="let thread of allThreads" class="thread-item">
+            <mat-card>
+                <mat-card-header>
+                  <mat-card-title>{{thread.threadName}}</mat-card-title>
+                  <mat-card-subtitle>Thread. Click Open to explore!</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-actions>
+                </mat-card-actions>
+              </mat-card>
+        </div>
+   </div> 
+</div>

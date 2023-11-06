@@ -15,6 +15,7 @@ import { AddBoardComponent } from './components/boards/add-board/add-board.compo
 import { AllThreadsComponent } from './components/threads/all-threads/all-threads.component';
 import { AddThreadComponent } from './components/threads/add-thread/add-thread.component';
 import { BoardsComponent } from './components/boards/boards.component';
+import { BoardComponent } from './components/boards/board/board.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -32,7 +33,8 @@ const routes: Routes = [
   { path: 'add-board', component: AddBoardComponent, title: 'Add Board'},
   { path: 'all-threads', component: AllThreadsComponent, title: 'All Threads'},
   { path: 'add-thread', component: AddThreadComponent, title: 'Add Thread'},
-  { path: 'boards', component: BoardsComponent, title: 'Boards'}
+  { path: 'boards', component: BoardsComponent, title: 'Boards'},
+  { path: 'board/:boardID', component: BoardComponent, title: 'Board'}
   
 ];
 

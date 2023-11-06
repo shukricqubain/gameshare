@@ -10,6 +10,7 @@ import { MatCard } from '@angular/material/card';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { BoardComponent } from './board/board.component';
 
 
 @Component({
@@ -78,6 +79,6 @@ export class BoardsComponent {
   }
   
   openBoard(board: Board){
-    console.log(board)
+    this.router.navigate([`/board/${board.boardID}`], {state: {board}});
   }
 }
