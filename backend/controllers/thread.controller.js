@@ -27,10 +27,38 @@ exports.findCount = async (searchCriteria) => {
     }
 };
 
+// Find count of threads for a specific boardID
+exports.findCountByBoardID = async (searchCriteria) => {
+    try{
+        let threadCount = await threadService.findCountByBoardID(searchCriteria);
+        if(threadCount > 0){
+            return threadCount;
+        } else {
+            return {message: 'No data in thread table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 // Get all Threads
 exports.findAll = async (searchCriteria) => {
     try{
         let allThreads = await threadService.getAll(searchCriteria);
+        if(allThreads.length > 0){
+            return allThreads;
+        } else {
+            return {message: 'No data in thread table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
+// Get all Threads by boardID
+exports.findAllByBoardID = async (searchCriteria) => {
+    try{
+        let allThreads = await threadService.getAllByBoardID(searchCriteria);
         if(allThreads.length > 0){
             return allThreads;
         } else {

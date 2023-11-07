@@ -11,3 +11,23 @@
 .thread-item {
     padding: 3px 3px 3px 3px;
 }
+
+.search-form-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    position: relative;
+    border-radius: 2px;
+    padding: 10px 10px 30px;
+    margin: 10px 10px 10px 10px;
+}
