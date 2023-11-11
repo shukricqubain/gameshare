@@ -12,10 +12,11 @@ import { AllAchievementsComponent } from './components/achievements/all-achievem
 import { AddAchievementComponent } from './components/achievements/add-achievement/add-achievement.component';
 import { AllBoardsComponent } from './components/boards/all-boards/all-boards.component';
 import { AddBoardComponent } from './components/boards/add-board/add-board.component';
-import { AllThreadsComponent } from './components/threads/all-threads/all-threads.component';
-import { AddThreadComponent } from './components/threads/add-thread/add-thread.component';
+import { AllThreadsComponent } from './components/boards/threads/all-threads/all-threads.component';
+import { AddThreadComponent } from './components/boards/threads/add-thread/add-thread.component';
 import { BoardsComponent } from './components/boards/boards.component';
 import { BoardComponent } from './components/boards/board/board.component';
+import { ThreadComponent } from './components/boards/threads/thread/thread.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -34,7 +35,8 @@ const routes: Routes = [
   { path: 'all-threads', component: AllThreadsComponent, title: 'All Threads'},
   { path: 'add-thread', component: AddThreadComponent, title: 'Add Thread'},
   { path: 'boards', component: BoardsComponent, title: 'Boards'},
-  { path: 'board/:boardID', component: BoardComponent, title: 'Board'}
+  { path: 'board/:boardID', component: BoardComponent, title: 'Board'},
+  { path: 'thread/:threadID', component: ThreadComponent, title: 'Thread'}
   
 ];
 

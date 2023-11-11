@@ -11,3 +11,12 @@
 .board-item {
     padding: 3px 3px 3px 3px;
 }
+
+.board-card {
+    cursor: pointer;
+}
+
+.boards-column {
+   display:flex;
+   flex-direction: column;
+}

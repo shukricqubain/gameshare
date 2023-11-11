@@ -1,5 +1,6 @@
 <div class="child-component">
   <div class="example-container">
+    <h1>{{board.boardName}}</h1>
     <div class="search-form-container">
       <form [formGroup]="boardSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyBoardSearch()">
         <mat-form-field>
@@ -19,12 +20,12 @@
     <br>
     <div fxLayout="row" fxFlex.md="70" fxLayoutWrap class="thread-container mat-elevation-z4">
       <div fxFlex *ngFor="let thread of allThreads" class="thread-item">
-        <mat-card>
+        <mat-card (click)="openThread(thread)" class="thread-card">
           <mat-card-header>
             <mat-card-title>{{thread.threadName}}</mat-card-title>
-            <mat-card-subtitle>Thread. Click Open to explore!</mat-card-subtitle>
           </mat-card-header>
           <mat-card-actions>
+            <button mat-button (click)="saveThread(thread)">Save</button>
           </mat-card-actions>
         </mat-card>
       </div>

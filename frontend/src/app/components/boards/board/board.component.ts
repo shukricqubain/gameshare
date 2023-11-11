@@ -7,6 +7,8 @@ import { lastValueFrom } from 'rxjs';
 import { ThreadService } from 'src/app/services/thread.service';
 import { Board } from 'src/app/models/board.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { AddThreadComponent } from '../threads/add-thread/add-thread.component';
 
 @Component({
   selector: 'app-board',
@@ -19,7 +21,8 @@ export class BoardComponent {
     private snackBar: MatSnackBar,
     private router: Router,
     private location: Location,
-    private threadService: ThreadService
+    private threadService: ThreadService,
+    private matDialog: MatDialog,
   ) {
   }
 
@@ -57,7 +60,7 @@ export class BoardComponent {
   }
 
   handleSearchResponse(result: any) {
-    if(result !== null){
+    if (result !== null) {
       this.allThreads = result.data;
     } else {
       this.allThreads = [];
@@ -99,6 +102,30 @@ export class BoardComponent {
   }
 
   addThread() {
+    const dialogRefAdd = this.matDialog.open(AddThreadComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        board: this.board,
+        isEdit: false
+      }
+    });
 
+    dialogRefAdd.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.clearBoardSearch();
+      } else {
+        this.clearBoardSearch();
+      }
+    });
+  }
+
+  saveThread(thread: Thread) {
+    console.log(thread)
+  }
+
+  openThread(thread: Thread) {
+    console.log(thread)
+    this.router.navigate([`/thread/${thread.threadID}`], { state: { thread } });
   }
 }

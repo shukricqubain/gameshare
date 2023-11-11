@@ -62,6 +62,12 @@ export class AddThreadComponent {
       this.addThreadForm.controls.createdAt.patchValue(createdAt);
       this.addThreadForm.controls.updatedAt.patchValue(updatedAt);
     }
+    if(this.data.board !== null && this.data.board !== undefined && this.data.isEdit == false){
+      let boardID = this.data.board.boardID;
+      let boardName = this.allBoardNames.find(obj => obj.boardID == boardID)?.boardName;
+      boardName = `${boardName}`;
+      this.addThreadForm.controls.boardName.patchValue(boardName);
+    }
   }
 
   onSubmit(){

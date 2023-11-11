@@ -49,7 +49,6 @@ async function findCountByBoardID(searchCriteria) {
         let searchTerm = searchCriteria.searchTerm;
         let threads;
         let boardID = searchCriteria.boardID;
-        console.log(searchCriteria)
         if (searchTerm !== '') {
             threads = await db.thread.findAll({
                 where: {

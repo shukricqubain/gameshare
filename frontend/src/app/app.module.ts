@@ -43,11 +43,12 @@ import { AddUserGameComponent } from './components/user-profile/add-user-game/ad
 import { AddUserAchievementComponent } from './components/user-profile/add-user-achievement/add-user-achievement.component';
 import { AddBoardComponent } from './components/boards/add-board/add-board.component';
 import { AllBoardsComponent } from './components/boards/all-boards/all-boards.component';
-import { AddThreadComponent } from './components/threads/add-thread/add-thread.component';
-import { AllThreadsComponent } from './components/threads/all-threads/all-threads.component';
+import { AddThreadComponent } from './components/boards/threads/add-thread/add-thread.component';
+import { AllThreadsComponent } from './components/boards/threads/all-threads/all-threads.component';
 import { BoardsComponent } from './components/boards/boards.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { BoardComponent } from './components/boards/board/board.component';
+import { ThreadComponent } from './components/boards/threads/thread/thread.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import { BoardComponent } from './components/boards/board/board.component';
     AddThreadComponent,
     AllThreadsComponent,
     BoardsComponent,
-    BoardComponent
+    BoardComponent,
+    ThreadComponent
   ],
   imports: [
     BrowserModule,
