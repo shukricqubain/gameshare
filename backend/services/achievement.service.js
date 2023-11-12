@@ -8,34 +8,29 @@ async function findCount(searchCriteria) {
         let sortDirection = searchCriteria.direction;
         let searchTerm = searchCriteria.searchTerm;
         let achievements;
+        let where;
         if (searchTerm !== '') {
-            achievements = await db.achievement.findAll({
-                where: {
-                    [Op.or]: {
-                        achievementID: { [Op.like]: '%' + searchTerm + '%'},
-                        gameID: { [Op.like]: '%' + searchTerm + '%' },
-                        gameName: { [Op.like]: '%' + searchTerm + '%' },
-                        achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                        achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
-                    }
-                },
-                order: [
-                    [sort, sortDirection],
-                    ['achievementName', 'ASC'],
-                ],
-                attributes: ['achievementID'],
-                raw: true,
-            });
+            where = {
+                [Op.or]: {
+                    achievementID: { [Op.like]: '%' + searchTerm + '%'},
+                    gameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameName: { [Op.like]: '%' + searchTerm + '%' },
+                    achievementName: { [Op.like]: '%' + searchTerm + '%' },
+                    achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
+                }
+            };
         } else {
-            achievements = await db.achievement.findAll({
-                order: [
-                    [sort, sortDirection],
-                    ['achievementName', 'ASC'],
-                ],
-                attributes: ['achievementID'],
-                raw: true,
-            });
+           where = '';
         }
+        achievements = await db.achievement.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['achievementName', 'ASC'],
+            ],
+            attributes: ['achievementID'],
+            raw: true,
+        });
         return achievements.length;
     } catch (err) {
         console.log(err)
@@ -50,162 +45,47 @@ async function getAll(searchCriteria) {
         let searchTerm = searchCriteria.searchTerm;
         let limit;
         let offset;
+        let where;
         let page = searchCriteria.page;
         if (searchTerm !== '') {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.achievement.findAll({
-                        where: {
-                            [Op.or]: {
-                                achievementID: { [Op.like]: '%' + searchTerm + '%'},
-                                gameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameName: { [Op.like]: '%' + searchTerm + '%' },
-                                achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                                achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['achievementName', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        attributes: [
-                            'achievementID',
-                            'gameID',
-                            'achievementName',
-                            'achievementDescription',
-                            'achievementIcon',
-                            'gameName',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                } else {
-                    return await db.achievement.findAll({
-                        where: {
-                            [Op.or]: {
-                                achievementID: { [Op.like]: '%' + searchTerm + '%'},
-                                gameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameName: { [Op.like]: '%' + searchTerm + '%' },
-                                achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                                achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['achievementName', 'ASC'],
-                        ],
-                        limit: limit,
-                        attributes: [
-                            'achievementID',
-                            'gameID',
-                            'achievementName',
-                            'achievementDescription',
-                            'achievementIcon',
-                            'gameName',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
+            where = {
+                [Op.or]: {
+                    achievementID: { [Op.like]: '%' + searchTerm + '%'},
+                    gameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameName: { [Op.like]: '%' + searchTerm + '%' },
+                    achievementName: { [Op.like]: '%' + searchTerm + '%' },
+                    achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
                 }
-            } else {
-                return await db.achievement.findAll({
-                    where: {
-                        [Op.or]: {
-                            achievementID: { [Op.like]: '%' + searchTerm + '%'},
-                            gameID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameName: { [Op.like]: '%' + searchTerm + '%' },
-                            achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                            achievementDescription: { [Op.like]: '%' + searchTerm + '%' },
-                        }
-                    },
-                    order: [
-                        [sort, sortDirection],
-                        ['achievementName', 'ASC'],
-                    ],
-                    attributes: [
-                        'achievementID',
-                        'gameID',
-                        'achievementName',
-                        'achievementDescription',
-                        'achievementIcon',
-                        'gameName',
-                        'createdAt',
-                        'updatedAt'
-                    ],
-                    raw: true,
-                });
-            }
+            };
         } else {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.achievement.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['achievementName', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        attributes: [
-                            'achievementID',
-                            'gameID',
-                            'achievementName',
-                            'achievementDescription',
-                            'achievementIcon',
-                            'gameName',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                } else {
-                    return await db.achievement.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['achievementName', 'ASC'],
-                        ],
-                        limit: limit,
-                        attributes: [
-                            'achievementID',
-                            'gameID',
-                            'achievementName',
-                            'achievementDescription',
-                            'achievementIcon',
-                            'gameName',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                }
-            } else {
-                return await db.achievement.findAll({
-                    order: [
-                        [sort, sortDirection],
-                        ['achievementName', 'ASC'],
-                    ],
-                    attributes: [
-                        'achievementID',
-                        'gameID',
-                        'achievementName',
-                        'achievementDescription',
-                        'achievementIcon',
-                        'gameName',
-                        'createdAt',
-                        'updatedAt'
-                    ],
-                    raw: true,
-                });
+            where = '';
+        }
+        if (pagination) {
+            limit = searchCriteria.limit;
+            if (page != 0) {
+                offset = page * limit;
             }
         }
-
+        return await db.achievement.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['achievementName', 'ASC'],
+            ],
+            limit: limit,
+            offset: offset,
+            attributes: [
+                'achievementID',
+                'gameID',
+                'achievementName',
+                'achievementDescription',
+                'achievementIcon',
+                'gameName',
+                'createdAt',
+                'updatedAt'
+            ],
+            raw: true,
+        });
     } catch (err) {
         console.log(err)
     }

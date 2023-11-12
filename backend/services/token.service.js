@@ -9,6 +9,7 @@ async function getAll(){
         console.log(err)
     }
 }
+
 async function create(token){
     try{
         return await db.token.create({

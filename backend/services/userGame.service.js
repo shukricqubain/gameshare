@@ -8,34 +8,29 @@ async function findCount(searchCriteria) {
         let sortDirection = searchCriteria.direction;
         let searchTerm = searchCriteria.searchTerm;
         let userGames;
+        let where;
         if (searchTerm !== '') {
-            userGames = await db.userGame.findAll({
-                where: {
-                    [Op.or]: {
-                        userGameID: { [Op.like]: '%' + searchTerm + '%' },
-                        gameID: { [Op.like]: '%' + searchTerm + '%' },
-                        gameName: { [Op.like]: '%' + searchTerm + '%' },
-                        userID: { [Op.like]: '%' + searchTerm + '%' },
-                        gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
-                    }
-                },
-                order: [
-                    [sort, sortDirection],
-                    ['gameID', 'ASC'],
-                ],
-                attributes: ['gameID'],
-                raw: true,
-            });
+            where = {
+                [Op.or]: {
+                    userGameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameName: { [Op.like]: '%' + searchTerm + '%' },
+                    userID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
+                }
+            };
         } else {
-            userGames = await db.userGame.findAll({
-                order: [
-                    [sort, sortDirection],
-                    ['gameID', 'ASC'],
-                ],
-                attributes: ['gameID'],
-                raw: true,
-            });
+            where = '';
         }
+        userGames = await db.userGame.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['gameID', 'ASC'],
+            ],
+            attributes: ['gameID'],
+            raw: true,
+        });
         if (userGames !== null && userGames !== undefined) {
             return userGames.length
         } else {
@@ -55,149 +50,45 @@ async function getAllUserGames(searchCriteria) {
         let limit;
         let offset;
         let page = searchCriteria.page;
+        let where;
         if (searchTerm !== '') {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.userGame.findAll({
-                        [Op.or]: {
-                            userGameID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameName: { [Op.like]: '%' + searchTerm + '%' },
-                            userID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['gameID', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        attributes: [
-                            'userGameID',
-                            'gameID',
-                            'gameName',
-                            'userID',
-                            'gameEnjoymentRating',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                } else {
-                    return await db.userGame.findAll({
-                        where: {
-                            [Op.or]: {
-                                userGameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameName: { [Op.like]: '%' + searchTerm + '%' },
-                                userID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['gameID', 'ASC'],
-                        ],
-                        limit: limit,
-                        attributes: [
-                            'userGameID',
-                            'gameID',
-                            'gameName',
-                            'userID',
-                            'gameEnjoymentRating',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
+            where = {
+                [Op.or]: {
+                    userGameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameName: { [Op.like]: '%' + searchTerm + '%' },
+                    userID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
                 }
-            } else {
-                return await db.userGame.findAll({
-                    where: {
-                        [Op.or]: {
-                            userGameID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameName: { [Op.like]: '%' + searchTerm + '%' },
-                            userID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
-                        }
-                    },
-                    order: [
-                        [sort, sortDirection],
-                        ['gameID', 'ASC'],
-                    ],
-                    attributes: [
-                        'userGameID',
-                        'gameID',
-                        'gameName',
-                        'userID',
-                        'gameEnjoymentRating',
-                        'createdAt',
-                        'updatedAt'
-                    ],
-                    raw: true,
-                });
-            }
+            };
         } else {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.userGame.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['gameID', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        attributes: [
-                            'userGameID',
-                            'gameID',
-                            'userID',
-                            'gameEnjoymentRating',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                } else {
-                    return await db.userGame.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['gameID', 'ASC'],
-                        ],
-                        limit: limit,
-                        attributes: [
-                            'userGameID',
-                            'gameID',
-                            'userID',
-                            'gameEnjoymentRating',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                }
-            } else {
-                return await db.userGame.findAll({
-                    order: [
-                        [sort, sortDirection],
-                        ['gameID', 'ASC'],
-                    ],
-                    attributes: [
-                        'userGameID',
-                        'gameID',
-                        'userID',
-                        'gameEnjoymentRating',
-                        'createdAt',
-                        'updatedAt'
-                    ],
-                    raw: true,
-                });
+            where = '';
+        }
+        if (pagination) {
+            limit = searchCriteria.limit;
+            if (page != 0) {
+                offset = page * limit;
             }
         }
+        return await db.userGame.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['gameID', 'ASC'],
+            ],
+            limit: limit,
+            offset: offset,
+            attributes: [
+                'userGameID',
+                'gameID',
+                'gameName',
+                'userID',
+                'gameEnjoymentRating',
+                'createdAt',
+                'updatedAt'
+            ],
+            raw: true,
+        });
     } catch (err) {
         console.log(err)
     }

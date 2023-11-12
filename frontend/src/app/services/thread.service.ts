@@ -16,10 +16,6 @@ export class ThreadService {
     return this.http.post(`${baseUrl}/allThreads`, search);
   }
 
-  getAllByBoardID(search: object): Observable<any> {
-    return this.http.post(`${baseUrl}/allThreadsByBoardID`, search);
-  }
-
   get(threadID: any): Observable<Thread> {
     return this.http.get(`${baseUrl}/singleThread/${threadID}`);
   }

@@ -10,6 +10,7 @@ async function getAll(){
         console.log(err)
     }
 }
+
 async function create(req){
     try{
         return await db.role.create({

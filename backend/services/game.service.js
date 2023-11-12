@@ -8,35 +8,31 @@ async function findCount(searchCriteria) {
         let sortDirection = searchCriteria.direction;
         let searchTerm = searchCriteria.searchTerm;
         let games;
+        let where;
         if (searchTerm !== '') {
-            games = await db.game.findAll({
-                where: {
-                    [Op.or]: {
-                        gameID: { [Op.like]: '%' + searchTerm + '%' },
-                        gameName: { [Op.like]: '%' + searchTerm + '%' },
-                        developers: { [Op.like]: '%' + searchTerm + '%' },
-                        publishers: { [Op.like]: '%' + searchTerm + '%' },
-                        genre: { [Op.like]: '%' + searchTerm + '%' },
-                        releaseDate: { [Op.like]: '%' + searchTerm + '%' }
-                    }
-                },
-                order: [
-                    [sort, sortDirection],
-                    ['gameName', 'ASC'],
-                ],
-                attributes: ['gameID'],
-                raw: true,
-            });
+            where =  {
+                [Op.or]: {
+                    gameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameName: { [Op.like]: '%' + searchTerm + '%' },
+                    developers: { [Op.like]: '%' + searchTerm + '%' },
+                    publishers: { [Op.like]: '%' + searchTerm + '%' },
+                    genre: { [Op.like]: '%' + searchTerm + '%' },
+                    releaseDate: { [Op.like]: '%' + searchTerm + '%' },
+                    platform: { [Op.like]: '%' + searchTerm + '%' }
+                }
+            };
         } else {
-            games = await db.game.findAll({
-                order: [
-                    [sort, sortDirection],
-                    ['gameName', 'ASC'],
-                ],
-                attributes: ['gameID'],
-                raw: true,
-            });
+            where = '';
         }
+        games = await db.game.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['gameName', 'ASC'],
+            ],
+            attributes: ['gameID'],
+            raw: true,
+        });
         return games.length;
     } catch (err) {
         console.log(err)
@@ -52,179 +48,50 @@ async function getAll(searchCriteria) {
         let limit;
         let offset;
         let page = searchCriteria.page;
+        let where;
         if (searchTerm !== '') {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.game.findAll({
-                        where: {
-                            [Op.or]: {
-                                gameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameName: { [Op.like]: '%' + searchTerm + '%' },
-                                developers: { [Op.like]: '%' + searchTerm + '%' },
-                                publishers: { [Op.like]: '%' + searchTerm + '%' },
-                                genre: { [Op.like]: '%' + searchTerm + '%' },
-                                releaseDate: { [Op.like]: '%' + searchTerm + '%' },
-                                platform: { [Op.like]: '%' + searchTerm + '%' }
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['gameName', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        attributes: [
-                            'gameID',
-                            'gameName',
-                            'developers',
-                            'publishers',
-                            'genre',
-                            'releaseDate',
-                            'gameCover',
-                            'platform',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                } else {
-                    return await db.game.findAll({
-                        where: {
-                            [Op.or]: {
-                                gameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameName: { [Op.like]: '%' + searchTerm + '%' },
-                                developers: { [Op.like]: '%' + searchTerm + '%' },
-                                publishers: { [Op.like]: '%' + searchTerm + '%' },
-                                genre: { [Op.like]: '%' + searchTerm + '%' },
-                                releaseDate: { [Op.like]: '%' + searchTerm + '%' },
-                                platform: { [Op.like]: '%' + searchTerm + '%' }
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['gameName', 'ASC'],
-                        ],
-                        limit: limit,
-                        attributes: [
-                            'gameID',
-                            'gameName',
-                            'developers',
-                            'publishers',
-                            'genre',
-                            'releaseDate',
-                            'gameCover',
-                            'platform',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
+            where = {
+                [Op.or]: {
+                    gameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameName: { [Op.like]: '%' + searchTerm + '%' },
+                    developers: { [Op.like]: '%' + searchTerm + '%' },
+                    publishers: { [Op.like]: '%' + searchTerm + '%' },
+                    genre: { [Op.like]: '%' + searchTerm + '%' },
+                    releaseDate: { [Op.like]: '%' + searchTerm + '%' },
+                    platform: { [Op.like]: '%' + searchTerm + '%' }
                 }
-            } else {
-                return await db.game.findAll({
-                    where: {
-                        [Op.or]: {
-                            gameID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameName: { [Op.like]: '%' + searchTerm + '%' },
-                            developers: { [Op.like]: '%' + searchTerm + '%' },
-                            publishers: { [Op.like]: '%' + searchTerm + '%' },
-                            genre: { [Op.like]: '%' + searchTerm + '%' },
-                            releaseDate: { [Op.like]: '%' + searchTerm + '%' },
-                            platform: { [Op.like]: '%' + searchTerm + '%' }
-                        }
-                    },
-                    order: [
-                        [sort, sortDirection],
-                        ['gameName', 'ASC'],
-                    ],
-                    attributes: [
-                        'gameID',
-                        'gameName',
-                        'developers',
-                        'publishers',
-                        'genre',
-                        'releaseDate',
-                        'gameCover',
-                        'platform',
-                        'createdAt',
-                        'updatedAt'
-                    ],
-                    raw: true,
-                });
-            }
+            };
         } else {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.game.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['gameName', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        attributes: [
-                            'gameID',
-                            'gameName',
-                            'developers',
-                            'publishers',
-                            'genre',
-                            'releaseDate',
-                            'gameCover',
-                            'platform',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                } else {
-                    return await db.game.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['gameName', 'ASC'],
-                        ],
-                        limit: limit,
-                        attributes: [
-                            'gameID',
-                            'gameName',
-                            'developers',
-                            'publishers',
-                            'genre',
-                            'releaseDate',
-                            'gameCover',
-                            'platform',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                }
-            } else {
-                return await db.game.findAll({
-                    order: [
-                        [sort, sortDirection],
-                        ['gameName', 'ASC'],
-                    ],
-                    attributes: [
-                        'gameID',
-                        'gameName',
-                        'developers',
-                        'publishers',
-                        'genre',
-                        'releaseDate',
-                        'gameCover',
-                        'platform',
-                        'createdAt',
-                        'updatedAt'
-                    ],
-                    raw: true,
-                });
+            where = '';
+        }
+        if (pagination) {
+            limit = searchCriteria.limit;
+            if (page != 0) {
+                offset = page * limit;
             }
         }
-
+        return await db.game.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['gameName', 'ASC'],
+            ],
+            limit: limit,
+            offset: offset,
+            attributes: [
+                'gameID',
+                'gameName',
+                'developers',
+                'publishers',
+                'genre',
+                'releaseDate',
+                'gameCover',
+                'platform',
+                'createdAt',
+                'updatedAt'
+            ],
+            raw: true,
+        });
     } catch (err) {
         console.log(err)
     }

@@ -62,45 +62,6 @@ router.post('/allThreads', async function(req, res) {
     }
 });
 
-// get all threads for a specific boardID
-router.post('/allThreadsByBoardID', async function(req, res) {
-    try{
-        if(req.body !== null){
-            let searchCriteria = req.body;
-            let allThreads;
-            let threadCount;
-            if(searchCriteria.pagination){
-                threadCount = await threadController.findCountByBoardID(searchCriteria);
-                if(threadCount > 0){
-                    searchCriteria.threadCount = threadCount;
-                    allThreads = await threadController.findAllByBoardID(searchCriteria);
-                    if(allThreads.message !== 'No data in thread table to fetch.'){
-                        searchCriteria.data = allThreads;
-                        return res.status(200).json(searchCriteria);
-                    } else {
-                        return res.status(204).send({message:'No data in thread table to fetch.'});
-                    }
-                } else {
-                    return res.status(204).send({message:'No data in thread table to fetch.'});
-                }
-            } else {
-                allThreads = await threadController.findAll(searchCriteria);
-                threadCount = allThreads.length;
-                if(allThreads.message !== 'No data in thread table to fetch.'){
-                    searchCriteria.data = allThreads;
-                    return res.status(200).json(searchCriteria);
-                } else {
-                    return res.status(204).send({message:'No data in thread table to fetch.'});
-                }
-            }
-        } else {
-            res.status(400).send('Search criteria is required.');
-        }
-    } catch(err){
-        console.log(err)
-    }
-});
-
 // get a single thread by their threadID
 router.get('/singleThread/:threadID', async function(req, res){
     try{

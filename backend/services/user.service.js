@@ -13,33 +13,28 @@ async function findCount(searchCriteria) {
         let sortDirection = searchCriteria.direction;
         let searchTerm = searchCriteria.searchTerm;
         let users;
+        let where;
         if (searchTerm !== '') {
-            users = await db.user.findAll({
-                where: {
-                    [Op.or]: {
-                        userID: { [Op.like]: '%' + searchTerm + '%' },
-                        userName: { [Op.like]: '%' + searchTerm + '%' },
-                        userRole: { [Op.like]: '%' + searchTerm + '%' },
-                        email: { [Op.like]: '%' + searchTerm + '%' }
-                    }
-                },
-                order: [
-                    [sort, sortDirection],
-                    ['userName', 'ASC'],
-                ],
-                attributes: ['userID'],
-                raw: true,
-            });
+            where = {
+                [Op.or]: {
+                    userID: { [Op.like]: '%' + searchTerm + '%' },
+                    userName: { [Op.like]: '%' + searchTerm + '%' },
+                    userRole: { [Op.like]: '%' + searchTerm + '%' },
+                    email: { [Op.like]: '%' + searchTerm + '%' }
+                }
+            };
         } else {
-            users = await db.user.findAll({
-                order: [
-                    [sort, sortDirection],
-                    ['userName', 'ASC'],
-                ],
-                attributes: ['userID'],
-                raw: true,
-            });
+            where = '';
         }
+        users = await db.user.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['userName', 'ASC'],
+            ],
+            attributes: ['userID'],
+            raw: true,
+        }); 
         return users.length;
     } catch (err) {
         console.log(err)
@@ -55,302 +50,71 @@ async function getAll(searchCriteria) {
         let limit;
         let offset;
         let page = searchCriteria.page;
+        let where;
         if (searchTerm !== '') {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.user.findAll({
-                        where: {
-                            [Op.or]: {
-                                userID: { [Op.like]: '%' + searchTerm + '%' },
-                                userName: { [Op.like]: '%' + searchTerm + '%' },
-                                userRole: { [Op.like]: '%' + searchTerm + '%' },
-                                email: { [Op.like]: '%' + searchTerm + '%' }
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['userName', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        attributes: [
-                            'userID',
-                            'userName',
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.firstName"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'firstName'],
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.lastName"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'lastName'],
-                            'dateOfBirth',
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.email"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'email'],
-                            'phoneNumber',
-                            'userRole',
-                            'userPassword',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                } else {
-                    return await db.user.findAll({
-                        where: {
-                            [Op.or]: {
-                                userID: { [Op.like]: '%' + searchTerm + '%' },
-                                userName: { [Op.like]: '%' + searchTerm + '%' },
-                                userRole: { [Op.like]: '%' + searchTerm + '%' },
-                                email: { [Op.like]: '%' + searchTerm + '%' }
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['userName', 'ASC'],
-                        ],
-                        limit: limit,
-                        attributes: [
-                            'userID',
-                            'userName',
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.firstName"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'firstName'],
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.lastName"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'lastName'],
-                            'dateOfBirth',
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.email"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'email'],
-                            'phoneNumber',
-                            'userRole',
-                            'userPassword',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
+            where =  {
+                [Op.or]: {
+                    userID: { [Op.like]: '%' + searchTerm + '%' },
+                    userName: { [Op.like]: '%' + searchTerm + '%' },
+                    userRole: { [Op.like]: '%' + searchTerm + '%' },
+                    email: { [Op.like]: '%' + searchTerm + '%' }
                 }
-            } else {
-                return await db.user.findAll({
-                    where: {
-                        [Op.or]: {
-                            userID: { [Op.like]: '%' + searchTerm + '%' },
-                            userName: { [Op.like]: '%' + searchTerm + '%' },
-                            userRole: { [Op.like]: '%' + searchTerm + '%' },
-                            email: { [Op.like]: '%' + searchTerm + '%' }
-                        }
-                    },
-                    order: [
-                        [sort, sortDirection],
-                        ['userName', 'ASC'],
-                    ],
-                    attributes: [
-                        'userID',
-                        'userName',
-                        [Sequelize.cast(
-                            Sequelize.fn(
-                                "AES_DECRYPT",
-                                Sequelize.col("user.firstName"),
-                                secretKey
-                            ),
-                            "CHAR"
-                        ),'firstName'],
-                        [Sequelize.cast(
-                            Sequelize.fn(
-                                "AES_DECRYPT",
-                                Sequelize.col("user.lastName"),
-                                secretKey
-                            ),
-                            "CHAR"
-                        ),'lastName'],
-                        'dateOfBirth',
-                        [Sequelize.cast(
-                            Sequelize.fn(
-                                "AES_DECRYPT",
-                                Sequelize.col("user.email"),
-                                secretKey
-                            ),
-                            "CHAR"
-                        ),'email'],
-                        'phoneNumber',
-                        'userRole',
-                        'userPassword',
-                        'createdAt',
-                        'updatedAt'
-                    ],
-                    raw: true,
-                });
+            };
+        } else {
+            where = '';
+        }
+        if(pagination){
+            limit = searchCriteria.limit;
+            if (page != 0) {
+                offset = page * limit;
             }
         } else {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.user.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['userName', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        attributes: [
-                            'userID',
-                            'userName',
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.firstName"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'firstName'],
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.lastName"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'lastName'],
-                            'dateOfBirth',
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.email"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'email'],
-                            'phoneNumber',
-                            'userRole',
-                            'userPassword',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                } else {
-                    return await db.user.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['userName', 'ASC'],
-                        ],
-                        limit: limit,
-                        attributes: [
-                            'userID',
-                            'userName',
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.firstName"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'firstName'],
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.lastName"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'lastName'],
-                            'dateOfBirth',
-                            [Sequelize.cast(
-                                Sequelize.fn(
-                                    "AES_DECRYPT",
-                                    Sequelize.col("user.email"),
-                                    secretKey
-                                ),
-                                "CHAR"
-                            ),'email'],
-                            'phoneNumber',
-                            'userRole',
-                            'userPassword',
-                            'createdAt',
-                            'updatedAt'
-                        ],
-                        raw: true,
-                    });
-                }
-            } else {
-                return await db.user.findAll({
-                    order: [
-                        [sort, sortDirection],
-                        ['userName', 'ASC'],
-                    ],
-                    attributes: [
-                        'userID',
-                        'userName',
-                        [Sequelize.cast(
-                            Sequelize.fn(
-                                "AES_DECRYPT",
-                                Sequelize.col("user.firstName"),
-                                secretKey,
-                            ),
-                            "CHAR"
-                        ),'firstName'],
-                        [Sequelize.cast(
-                            Sequelize.fn(
-                                "AES_DECRYPT",
-                                Sequelize.col("user.lastName"),
-                                secretKey,
-                            ),
-                            "CHAR"
-                        ),'lastName'],
-                        'dateOfBirth',
-                        [Sequelize.cast(
-                            Sequelize.fn(
-                                "AES_DECRYPT",
-                                Sequelize.col("user.email"),
-                                secretKey,
-                            ),
-                            "CHAR"
-                        ),'email'],
-                        'phoneNumber',
-                        'userRole',
-                        'userPassword',
-                        'createdAt',
-                        'updatedAt'
-                    ],
-                    raw: true,
-                });
-            }
+            limit = '';
         }
-
+        return await db.user.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['userName', 'ASC'],
+            ],
+            limit: limit,
+            offset: offset,
+            attributes: [
+                'userID',
+                'userName',
+                [Sequelize.cast(
+                    Sequelize.fn(
+                        "AES_DECRYPT",
+                        Sequelize.col("user.firstName"),
+                        secretKey
+                    ),
+                    "CHAR"
+                ),'firstName'],
+                [Sequelize.cast(
+                    Sequelize.fn(
+                        "AES_DECRYPT",
+                        Sequelize.col("user.lastName"),
+                        secretKey
+                    ),
+                    "CHAR"
+                ),'lastName'],
+                'dateOfBirth',
+                [Sequelize.cast(
+                    Sequelize.fn(
+                        "AES_DECRYPT",
+                        Sequelize.col("user.email"),
+                        secretKey
+                    ),
+                    "CHAR"
+                ),'email'],
+                'phoneNumber',
+                'userRole',
+                'userPassword',
+                'createdAt',
+                'updatedAt'
+            ],
+            raw: true,
+        });
     } catch (err) {
         console.log(err)
     }

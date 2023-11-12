@@ -9,34 +9,28 @@ async function findCount(searchCriteria) {
         let searchTerm = searchCriteria.searchTerm;
         let threadItems;
         if (searchTerm !== '') {
-            threadItems = await db.threadItem.findAll({
-                where: {
-                    [Op.or]: {
-                        threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
-                        threadID: { [Op.like]: '%' + searchTerm + '%' }, 
-                        threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
-                        userID: { [Op.like]: '%' + searchTerm + '%' },
-                        createdAt: { [Op.like]: '%' + searchTerm + '%' },
-                        updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
-                    }
-                },
-                order: [
-                    [sort, sortDirection],
-                    ['threadItemID', 'ASC'],
-                ],
-                attributes: ['threadItemID'],
-                raw: true,
-            });
+            where = {
+                [Op.or]: {
+                    threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
+                    threadID: { [Op.like]: '%' + searchTerm + '%' }, 
+                    threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
+                    userID: { [Op.like]: '%' + searchTerm + '%' },
+                    createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                    updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
+                }
+            };
         } else {
-            threadItems = await db.threadItem.findAll({
-                order: [
-                    [sort, sortDirection],
-                    ['threadItemID', 'ASC'],
-                ],
-                attributes: ['threadItemID'],
-                raw: true,
-            });
+            where = '';
         }
+        threadItems = await db.threadItem.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['threadItemID', 'ASC'],
+            ],
+            attributes: ['threadItemID'],
+            raw: true,
+        });
         return threadItems.length;
     } catch (err) {
         console.log(err)
@@ -53,103 +47,35 @@ async function getAll(searchCriteria) {
         let offset;
         let page = searchCriteria.page;
         if (searchTerm !== '') {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.threadItem.findAll({
-                        where: {
-                            [Op.or]: {
-                                threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
-                                threadID: { [Op.like]: '%' + searchTerm + '%' }, 
-                                threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
-                                userID: { [Op.like]: '%' + searchTerm + '%' },
-                                createdAt: { [Op.like]: '%' + searchTerm + '%' },
-                                updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['threadItemID', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        raw: true,
-                    });
-                } else {
-                    return await db.threadItem.findAll({
-                        where: {
-                            [Op.or]: {
-                                threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
-                                threadID: { [Op.like]: '%' + searchTerm + '%' }, 
-                                threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
-                                userID: { [Op.like]: '%' + searchTerm + '%' },
-                                createdAt: { [Op.like]: '%' + searchTerm + '%' },
-                                updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['threadItem', 'ASC'],
-                        ],
-                        limit: limit,
-                        raw: true,
-                    });
+            where = {
+                [Op.or]: {
+                    threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
+                    threadID: { [Op.like]: '%' + searchTerm + '%' }, 
+                    threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
+                    userID: { [Op.like]: '%' + searchTerm + '%' },
+                    createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                    updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
                 }
-            } else {
-                return await db.threadItem.findAll({
-                    where: {
-                        [Op.or]: {
-                            threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
-                            threadID: { [Op.like]: '%' + searchTerm + '%' }, 
-                            threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
-                            userID: { [Op.like]: '%' + searchTerm + '%' },
-                            createdAt: { [Op.like]: '%' + searchTerm + '%' },
-                            updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
-                        }
-                    },
-                    order: [
-                        [sort, sortDirection],
-                        ['threadItemID', 'ASC'],
-                    ],
-                    raw: true,
-                });
-            }
+            };
         } else {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.threadItem.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['threadItemID', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        raw: true,
-                    });
-                } else {
-                    return await db.threadItem.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['threadItemID', 'ASC'],
-                        ],
-                        limit: limit,
-                        raw: true,
-                    });
-                }
-            } else {
-                return await db.threadItem.findAll({
-                    order: [
-                        [sort, sortDirection],
-                        ['threadItem', 'ASC'],
-                    ],
-                    raw: true,
-                });
+            where = '';
+        }
+        if (pagination) {
+            limit = searchCriteria.limit;
+            if (page != 0) {
+                offset = page * limit;
             }
         }
-
+        return await db.threadItem.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['threadItemID', 'ASC'],
+            ],
+            limit: limit,
+            offset: offset,
+            raw: true,
+        });
     } catch (err) {
         console.log(err)
     }

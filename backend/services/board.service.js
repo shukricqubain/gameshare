@@ -9,33 +9,27 @@ async function findCount(searchCriteria) {
         let searchTerm = searchCriteria.searchTerm;
         let boards;
         if (searchTerm !== '') {
-            boards = await db.board.findAll({
-                where: {
-                    [Op.or]: {
-                        boardID: { [Op.like]: '%' + searchTerm + '%' },
-                        boardName: { [Op.like]: '%' + searchTerm + '%' },
-                        gameID: { [Op.like]: '%' + searchTerm + '%' },
-                        gameName: { [Op.like]: '%' + searchTerm + '%' }
-                    
-                    }
-                },
-                order: [
-                    [sort, sortDirection],
-                    ['boardName', 'ASC'],
-                ],
-                attributes: ['boardID'],
-                raw: true,
-            });
+            where =  {
+                [Op.or]: {
+                    boardID: { [Op.like]: '%' + searchTerm + '%' },
+                    boardName: { [Op.like]: '%' + searchTerm + '%' },
+                    gameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameName: { [Op.like]: '%' + searchTerm + '%' }
+                
+                }
+            };
         } else {
-            boards = await db.board.findAll({
-                order: [
-                    [sort, sortDirection],
-                    ['boardName', 'ASC'],
-                ],
-                attributes: ['boardID'],
-                raw: true,
-            });
+            where = '';
         }
+        boards = await db.board.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['boardName', 'ASC'],
+            ],
+            attributes: ['boardID'],
+            raw: true,
+        });
         return boards.length;
     } catch (err) {
         console.log(err)
@@ -51,101 +45,36 @@ async function getAll(searchCriteria) {
         let limit;
         let offset;
         let page = searchCriteria.page;
+        let where;
         if (searchTerm !== '') {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.board.findAll({
-                        where: {
-                            [Op.or]: {
-                                boardID: { [Op.like]: '%' + searchTerm + '%' },
-                                boardName: { [Op.like]: '%' + searchTerm + '%' },
-                                gameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameName: { [Op.like]: '%' + searchTerm + '%' }
-                            
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['boardName', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        raw: true,
-                    });
-                } else {
-                    return await db.board.findAll({
-                        where: {
-                            [Op.or]: {
-                                boardID: { [Op.like]: '%' + searchTerm + '%' },
-                                boardName: { [Op.like]: '%' + searchTerm + '%' },
-                                gameID: { [Op.like]: '%' + searchTerm + '%' },
-                                gameName: { [Op.like]: '%' + searchTerm + '%' }
-                            
-                            }
-                        },
-                        order: [
-                            [sort, sortDirection],
-                            ['boardName', 'ASC'],
-                        ],
-                        limit: limit,
-                        raw: true,
-                    });
+            where = {
+                [Op.or]: {
+                    boardID: { [Op.like]: '%' + searchTerm + '%' },
+                    boardName: { [Op.like]: '%' + searchTerm + '%' },
+                    gameID: { [Op.like]: '%' + searchTerm + '%' },
+                    gameName: { [Op.like]: '%' + searchTerm + '%' }
+                
                 }
-            } else {
-                return await db.board.findAll({
-                    where: {
-                        [Op.or]: {
-                            boardID: { [Op.like]: '%' + searchTerm + '%' },
-                            boardName: { [Op.like]: '%' + searchTerm + '%' },
-                            gameID: { [Op.like]: '%' + searchTerm + '%' },
-                            gameName: { [Op.like]: '%' + searchTerm + '%' }
-                        
-                        }
-                    },
-                    order: [
-                        [sort, sortDirection],
-                        ['boardName', 'ASC'],
-                    ],
-                    raw: true,
-                });
-            }
+            };
         } else {
-            if (pagination) {
-                limit = searchCriteria.limit;
-                if (page != 0) {
-                    offset = page * limit;
-                    return await db.board.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['boardName', 'ASC'],
-                        ],
-                        limit: limit,
-                        offset: offset,
-                        raw: true,
-                    });
-                } else {
-                    return await db.board.findAll({
-                        order: [
-                            [sort, sortDirection],
-                            ['boardName', 'ASC'],
-                        ],
-                        limit: limit,
-                        raw: true,
-                    });
-                }
-            } else {
-                return await db.board.findAll({
-                    order: [
-                        [sort, sortDirection],
-                        ['boardName', 'ASC'],
-                    ],
-                    raw: true,
-                });
+            where = '';
+        }
+        if (pagination) {
+            limit = searchCriteria.limit;
+            if (page != 0) {
+                offset = page * limit;
             }
         }
-
+        return await db.board.findAll({
+            where: where,
+            order: [
+                [sort, sortDirection],
+                ['boardName', 'ASC'],
+            ],
+            limit: limit,
+            offset: offset,
+            raw: true,
+        });
     } catch (err) {
         console.log(err)
     }

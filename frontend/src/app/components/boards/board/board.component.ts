@@ -33,7 +33,7 @@ export class BoardComponent {
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required]),
-    boardID: new FormControl(0, [])
+    boardID: new FormControl(0)
   });
 
   allThreads: Thread[];
@@ -47,7 +47,7 @@ export class BoardComponent {
     if (this.board !== null && this.board !== undefined && this.board.boardID !== undefined && this.board.boardID !== null) {
       this.boardSearchCriteria.controls.boardID.patchValue(this.board.boardID);
       this.loadingThreads = true;
-      this.threadService.getAllByBoardID(this.boardSearchCriteria.value).subscribe({
+      this.threadService.getAll(this.boardSearchCriteria.value).subscribe({
         next: this.handleSearchResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
@@ -75,7 +75,7 @@ export class BoardComponent {
   }
 
   applyBoardSearch() {
-    this.threadService.getAllByBoardID(this.boardSearchCriteria.value).subscribe({
+    this.threadService.getAll(this.boardSearchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
@@ -90,7 +90,7 @@ export class BoardComponent {
       this.boardSearchCriteria.controls.limit.patchValue(5);
       this.boardSearchCriteria.controls.page.patchValue(0);
       this.boardSearchCriteria.controls.boardID.patchValue(this.board.boardID);
-      this.threadService.getAllByBoardID(this.boardSearchCriteria.value).subscribe({
+      this.threadService.getAll(this.boardSearchCriteria.value).subscribe({
         next: this.handleSearchResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
