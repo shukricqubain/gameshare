@@ -6,6 +6,8 @@ import { Thread } from 'src/app/models/thread.model';
 import { Location } from '@angular/common';
 import { ThreadItem } from 'src/app/models/threadItem.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ThreadItemService } from 'src/app/services/threadItem.service';
+import { AddThreadItemComponent } from './add-thread-item/add-thread-item.component';
 
 @Component({
   selector: 'app-thread',
@@ -17,14 +19,14 @@ export class ThreadComponent {
     private snackBar: MatSnackBar,
     private router: Router,
     private location: Location,
-    //private threadItemService: ThreadItemService,
+    private threadItemService: ThreadItemService,
     private matDialog: MatDialog,
   ) {
   }
 
-  threadSearchCriteria = new FormGroup({
+  threadItemSearchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
-    sort: new FormControl('threadID', [Validators.required]),
+    sort: new FormControl('threadItemID', [Validators.required]),
     pagination: new FormControl('false', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
@@ -41,12 +43,12 @@ export class ThreadComponent {
     let data: any = this.location.getState();
     this.thread = data.thread;
     if (this.thread !== null && this.thread !== undefined && this.thread.threadID !== undefined && this.thread.threadID !== null) {
-      this.threadSearchCriteria.controls.threadID.patchValue(this.thread.threadID);
+      this.threadItemSearchCriteria.controls.threadID.patchValue(this.thread.threadID);
       this.loadingThreadItems = true;
-      // this.threadItemService.getAllByThreadID(this.threadSearchCriteria.value).subscribe({
-      //   next: this.handleSearchResponse.bind(this),
-      //   error: this.handleErrorResponse.bind(this)
-      // });
+      this.threadItemService.getAll(this.threadItemSearchCriteria.value).subscribe({
+        next: this.handleSearchResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
       this.loadingThreadItems = false;
     } else {
       this.snackBar.open(`Error loading thread.`, 'dismiss', {
@@ -71,26 +73,25 @@ export class ThreadComponent {
   }
 
   applyThreadSearch() {
-    console.log('thread search')
-    // this.threadItemService.getAllByThreadID(this.threadSearchCriteria.value).subscribe({
-    //   next: this.handleSearchResponse.bind(this),
-    //   error: this.handleErrorResponse.bind(this)
-    // });
+    this.threadItemService.getAll(this.threadItemSearchCriteria.value).subscribe({
+      next: this.handleSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
   }
 
   clearThreadSearch() {
     if (this.thread !== null && this.thread !== undefined && this.thread.threadID !== undefined && this.thread.threadID !== null) {
-      this.threadSearchCriteria.controls.searchTerm.patchValue('');
-      this.threadSearchCriteria.controls.sort.patchValue('threadID');
-      this.threadSearchCriteria.controls.pagination.patchValue('true');
-      this.threadSearchCriteria.controls.direction.patchValue('asc');
-      this.threadSearchCriteria.controls.limit.patchValue(5);
-      this.threadSearchCriteria.controls.page.patchValue(0);
-      this.threadSearchCriteria.controls.threadID.patchValue(this.thread.threadID);
-      // this.threadItemService.getAllByThreadID(this.threadSearchCriteria.value).subscribe({
-      //   next: this.handleSearchResponse.bind(this),
-      //   error: this.handleErrorResponse.bind(this)
-      // });
+      this.threadItemSearchCriteria.controls.searchTerm.patchValue('');
+      this.threadItemSearchCriteria.controls.sort.patchValue('threadID');
+      this.threadItemSearchCriteria.controls.pagination.patchValue('true');
+      this.threadItemSearchCriteria.controls.direction.patchValue('asc');
+      this.threadItemSearchCriteria.controls.limit.patchValue(5);
+      this.threadItemSearchCriteria.controls.page.patchValue(0);
+      this.threadItemSearchCriteria.controls.threadID.patchValue(this.thread.threadID);
+      this.threadItemService.getAll(this.threadItemSearchCriteria.value).subscribe({
+        next: this.handleSearchResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
     } else {
       this.snackBar.open(`Error clearing search, thread undefined.`, 'dismiss', {
         duration: 3000
@@ -99,35 +100,45 @@ export class ThreadComponent {
   }
 
   addThreadItem() {
-    console.log('post item')
-    // const dialogRefAdd = this.matDialog.open(AddThreadItemComponent, {
-    //   width: '100%',
-    //   disableClose: true,
-    //   data: {
-    //     thread: this.thread,
-    //     isEdit: false
-    //   }
-    // });
+    const dialogRefAdd = this.matDialog.open(AddThreadItemComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        thread: this.thread,
+        isEdit: false
+      }
+    });
 
-    // dialogRefAdd.afterClosed().subscribe(result => {
-    //   if (result !== undefined) {
-    //     this.clearBoardSearch();
-    //   } else {
-    //     this.clearBoardSearch();
-    //   }
-    // });
+    dialogRefAdd.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.clearThreadSearch();
+      } else {
+        this.clearThreadSearch();
+      }
+    });
+  }
+
+  editThreadItem(element: any) {
+    const dialogRefAdd = this.matDialog.open(AddThreadItemComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        thread: this.thread,
+        isEdit: true,
+        threadItem: element
+      }
+    });
+
+    dialogRefAdd.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.clearThreadSearch();
+      } else {
+        this.clearThreadSearch();
+      }
+    });
   }
 
   replyToThreadItem(threadItem: ThreadItem){
     console.log('reply')
-  }
-
-  saveThread(thread: Thread) {
-    console.log(thread)
-  }
-
-  openThread(thread: Thread) {
-    console.log(thread)
-    this.router.navigate([`/thread/${thread.threadID}`], { state: { thread } });
   }
 }

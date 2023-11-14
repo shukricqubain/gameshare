@@ -1,0 +1,29 @@
+<div class="child-component">
+    <div class="add-thread-item-container">
+        <ng-container *ngIf="isEdit; then editThreadItem; else addThreadItem"></ng-container>
+        <ng-template #addThreadItem>
+            <h1>Post to '{{thread.threadName}}'</h1>
+        </ng-template>
+        <ng-template #editThreadItem>
+            <h1>Edit your Post</h1>
+        </ng-template>
+        <form [formGroup]="addThreadItemForm" (ngSubmit)="onSubmit()">
+            <div class="form-column">
+                <div class="form-row">
+                    <mat-form-field MatFormFieldAppearance="outline" style="width: 100%; height: 200px">
+                        <label>Post</label>
+                        <input matInput name="threadMessage" id="threadMessage" type="text" formControlName="threadMessage"
+                            placeholder="Enter your post." required />
+                    </mat-form-field>
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <button mat-raised-button [disabled]="!addThreadItemForm.dirty || !addThreadItemForm.valid"
+                type="submit">Submit</button>
+                <button mat-raised-button type="button" style="margin-left:10px;"
+                    (click)="closeDialog()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

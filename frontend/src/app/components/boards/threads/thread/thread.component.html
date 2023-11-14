@@ -2,7 +2,7 @@
     <div class="example-container">
         <h1>{{thread.threadName}}</h1>
         <div class="search-form-container">
-            <form [formGroup]="threadSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyThreadSearch()">
+            <form [formGroup]="threadItemSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyThreadSearch()">
                 <mat-form-field>
                     <mat-label>Search</mat-label>
                     <input matInput formControlName="searchTerm" placeholder="Search Table" #input>

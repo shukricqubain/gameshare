@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Thread } from 'src/app/models/thread.model';
-import { lastValueFrom } from 'rxjs';
 import { ThreadService } from 'src/app/services/thread.service';
 import { Board } from 'src/app/models/board.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -121,11 +120,9 @@ export class BoardComponent {
   }
 
   saveThread(thread: Thread) {
-    console.log(thread)
   }
 
   openThread(thread: Thread) {
-    console.log(thread)
     this.router.navigate([`/thread/${thread.threadID}`], { state: { thread } });
   }
 }

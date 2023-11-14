@@ -85,7 +85,6 @@ export class AddThreadComponent {
     newThread.threadName = this.addThreadForm.controls.threadName.value || '';
     newThread.createdAt = this.addThreadForm.controls.createdAt.value || '';
     newThread.updatedAt = this.addThreadForm.controls.updatedAt.value || '';
-    console.log(newThread)
     if(this.isEdit){
       newThread.boardID = this.data.element?.boardID;
       this.threadService.update(newThread).subscribe({
