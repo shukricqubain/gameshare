@@ -23,7 +23,7 @@ export class AddThreadItemComponent {
     private userService: UserService,
     @Optional() private dialogRef?: MatDialogRef<AddThreadItemComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data?: any
-  ){
+  ) {
   }
 
   addThreadItemForm = new FormGroup({
@@ -39,11 +39,11 @@ export class AddThreadItemComponent {
   thread: Thread;
   threadItem: ThreadItem;
 
-  async ngOnInit(){
+  async ngOnInit() {
 
-    if(this.data !== undefined && this.data.thread !== undefined){
-      
-      if(this.data.isEdit !== undefined && this.data.isEdit == true){
+    if (this.data !== undefined && this.data.thread !== undefined) {
+
+      if (this.data.isEdit !== undefined && this.data.isEdit == true) {
         this.thread = this.data.thread;
         this.threadItem = this.data.threadItem;
         let threadID = `${this.thread.threadID}`;
@@ -60,9 +60,9 @@ export class AddThreadItemComponent {
         this.thread = this.data.thread;
         let threadID = `${this.thread.threadID}`;
         let localUserName = localStorage.getItem('userName');
-        if(localUserName !== undefined && localUserName !== null){
+        if (localUserName !== undefined && localUserName !== null) {
           let user = await lastValueFrom(this.userService.getUserByName(localUserName).pipe());
-          if(user !== undefined){
+          if (user !== undefined) {
             let userID = `${user.userID}`;
             this.addThreadItemForm.controls.userID.patchValue(userID);
           } else {
@@ -73,7 +73,7 @@ export class AddThreadItemComponent {
         }
         this.addThreadItemForm.controls.threadID.patchValue(threadID);
       }
-      
+
     } else {
       this.snackBar.open(`Error fetching thread data needed for posting or editing a post: thread undefined.`, 'dismiss', {
         duration: 3000
@@ -81,7 +81,7 @@ export class AddThreadItemComponent {
     }
   }
 
-  onSubmit(){
+  onSubmit() {
     console.log(this.addThreadItemForm.value)
     let threadItem: ThreadItem = {
       threadItemID: 0,
@@ -91,14 +91,14 @@ export class AddThreadItemComponent {
       createdAt: '',
       updatedAt: ''
     }
-    if(this.isEdit == true){
+    if (this.isEdit == true) {
       //todo
     } else {
-      if(this.addThreadItemForm.controls.threadID.value !== null){
+      if (this.addThreadItemForm.controls.threadID.value !== null) {
         threadItem.threadID = parseInt(this.addThreadItemForm.controls.threadID.value);
       }
       threadItem.threadMessage = this.addThreadItemForm.controls.threadMessage.value || '';
-      if(this.addThreadItemForm.controls.userID.value !== null){
+      if (this.addThreadItemForm.controls.userID.value !== null) {
         threadItem.userID = parseInt(this.addThreadItemForm.controls.userID.value);
       }
       this.threadItemService.create(threadItem).subscribe({
@@ -108,25 +108,31 @@ export class AddThreadItemComponent {
     }
   }
 
-  handleCreateResponse(data: any){
+  handleCreateResponse(data: any) {
     console.log(data)
+    if (data !== null && data !== undefined) {
+      this.snackBar.open('Successfully created a new thread item!', 'dismiss', {
+        duration: 3000
+      });
+      this.closeDialog(data);
+    }
   }
 
-  handleErrorResponse(error: any){
-    this.snackBar.open(error.message, 'dismiss',{
+  handleErrorResponse(error: any) {
+    this.snackBar.open(error.message, 'dismiss', {
       duration: 3000
     });
   }
 
-  closeDialog(data?: any){
-    if(data !== null){
-      if(this.isEdit){
-        this.dialogRef?.close({event: 'Created Thread Item', data: data});
+  closeDialog(data?: any) {
+    if (data !== null) {
+      if (this.isEdit) {
+        this.dialogRef?.close({ event: 'Created Thread Item', data: data });
       } else {
-        this.dialogRef?.close({event: 'Edited Thread Item', data: data});
+        this.dialogRef?.close({ event: 'Edited Thread Item', data: data });
       }
     } else {
-      this.dialogRef?.close({event:'Cancel'});
+      this.dialogRef?.close({ event: 'Cancel' });
     }
   }
 }

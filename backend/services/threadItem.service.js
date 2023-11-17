@@ -9,18 +9,39 @@ async function findCount(searchCriteria) {
         let searchTerm = searchCriteria.searchTerm;
         let threadItems;
         if (searchTerm !== '') {
-            where = {
-                [Op.or]: {
-                    threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
-                    threadID: { [Op.like]: '%' + searchTerm + '%' }, 
-                    threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
-                    userID: { [Op.like]: '%' + searchTerm + '%' },
-                    createdAt: { [Op.like]: '%' + searchTerm + '%' },
-                    updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
-                }
-            };
+            if(searchCriteria.threadID !== undefined && searchCriteria.threadID !== null){
+                where = {
+                    [Op.and]: {
+                        [Op.or]: {
+                            threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
+                            threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
+                            userID: { [Op.like]: '%' + searchTerm + '%' },
+                            createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                            updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
+                        },
+                        threadID: searchCriteria.threadID
+                    }
+                };
+            } else {
+                where = {
+                    [Op.or]: {
+                        threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
+                        threadID: { [Op.like]: '%' + searchTerm + '%' }, 
+                        threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
+                        userID: { [Op.like]: '%' + searchTerm + '%' },
+                        createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                        updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
+                    }
+                };
+            }
         } else {
-            where = '';
+            if(searchCriteria.threadID !== undefined && searchCriteria.threadID !== null){
+                where = {
+                    threadID: searchCriteria.threadID
+                };
+            } else {
+                where = '';
+            }
         }
         threadItems = await db.threadItem.findAll({
             where: where,
@@ -47,18 +68,41 @@ async function getAll(searchCriteria) {
         let offset;
         let page = searchCriteria.page;
         if (searchTerm !== '') {
-            where = {
-                [Op.or]: {
-                    threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
-                    threadID: { [Op.like]: '%' + searchTerm + '%' }, 
-                    threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
-                    userID: { [Op.like]: '%' + searchTerm + '%' },
-                    createdAt: { [Op.like]: '%' + searchTerm + '%' },
-                    updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
-                }
-            };
+            if(searchCriteria.threadID !== undefined && searchCriteria.threadID !== null){
+                where = {
+                    [Op.and]: {
+                        [Op.or]: {
+                            threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
+                            threadID: { [Op.like]: '%' + searchTerm + '%' }, 
+                            threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
+                            userID: { [Op.like]: '%' + searchTerm + '%' },
+                            createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                            updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
+                        },
+                        threadID: searchCriteria.threadID
+                    }
+                };
+            } else {
+                where = {
+                    [Op.or]: {
+                        threadItemID: { [Op.like]: '%' + searchTerm + '%' }, 
+                        threadID: { [Op.like]: '%' + searchTerm + '%' }, 
+                        threadMessage: { [Op.like]: '%' + searchTerm + '%' }, 
+                        userID: { [Op.like]: '%' + searchTerm + '%' },
+                        createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                        updatedAt: { [Op.like]: '%' + searchTerm + '%' }   
+                    },
+                };
+            }
+            
         } else {
-            where = '';
+            if(searchCriteria.threadID !== undefined && searchCriteria.threadID !== null){
+                where = {
+                    threadID: searchCriteria.threadID
+                };
+            } else {
+                where = '';
+            }
         }
         if (pagination) {
             limit = searchCriteria.limit;
