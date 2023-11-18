@@ -8,6 +8,9 @@ import { ThreadItem } from 'src/app/models/threadItem.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThreadItemService } from 'src/app/services/threadItem.service';
 import { AddThreadItemComponent } from './add-thread-item/add-thread-item.component';
+import { UserService } from 'src/app/services/user.service';
+import { lastValueFrom } from 'rxjs';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-thread',
@@ -21,6 +24,7 @@ export class ThreadComponent {
     private location: Location,
     private threadItemService: ThreadItemService,
     private matDialog: MatDialog,
+    private userService: UserService
   ) {
   }
 
@@ -35,21 +39,22 @@ export class ThreadComponent {
   });
 
   allThreadItems: ThreadItem[];
-  loadingThreadItems: boolean = false;
+  finishedLoadingData: boolean = false;
   thread: any;
+  userName: any;
+  user: User;
 
 
   async ngOnInit() {
     let data: any = this.location.getState();
+    await this.checkCurrentUser();
     this.thread = data.thread;
     if (this.thread !== null && this.thread !== undefined && this.thread.threadID !== undefined && this.thread.threadID !== null) {
       this.threadItemSearchCriteria.controls.threadID.patchValue(this.thread.threadID);
-      this.loadingThreadItems = true;
       this.threadItemService.getAll(this.threadItemSearchCriteria.value).subscribe({
         next: this.handleSearchResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
-      this.loadingThreadItems = false;
     } else {
       this.snackBar.open(`Error loading thread.`, 'dismiss', {
         duration: 3000
@@ -60,8 +65,10 @@ export class ThreadComponent {
   handleSearchResponse(result: any) {
     if (result !== null) {
       this.allThreadItems = result.data;
+      this.finishedLoadingData = true;
     } else {
       this.allThreadItems = [];
+      this.finishedLoadingData = true;
     }
   }
 
@@ -118,14 +125,14 @@ export class ThreadComponent {
     });
   }
 
-  editThreadItem(element: any) {
+  editThreadItem(threadItem: ThreadItem) {
     const dialogRefAdd = this.matDialog.open(AddThreadItemComponent, {
       width: '100%',
       disableClose: true,
       data: {
         thread: this.thread,
         isEdit: true,
-        threadItem: element
+        threadItem: threadItem
       }
     });
 
@@ -140,5 +147,10 @@ export class ThreadComponent {
 
   replyToThreadItem(threadItem: ThreadItem){
     console.log('reply')
+  }
+
+  async checkCurrentUser(){
+    this.userName = localStorage.getItem('userName') ? localStorage.getItem('userName'): '';
+    this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
   }
 }

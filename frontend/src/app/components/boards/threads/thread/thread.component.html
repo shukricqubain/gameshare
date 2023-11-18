@@ -1,6 +1,6 @@
 <div class="child-component">
     <div class="example-container">
-        <h1>{{thread.threadName}}</h1>
+        <h1>{{thread?.threadName}}</h1>
         <div class="search-form-container">
             <form [formGroup]="threadItemSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyThreadSearch()">
                 <mat-form-field>
@@ -22,11 +22,12 @@
             <div fxFlex *ngFor="let threadItem of allThreadItems" class="thread-item">
                 <mat-card>
                     <mat-card-header>
-                        <mat-card-title>{{threadItem.userID}}</mat-card-title>
-                        <mat-card-subtitle>{{threadItem.threadMessage}}</mat-card-subtitle>
+                        <mat-card-title>{{threadItem?.userID}}</mat-card-title>
+                        <mat-card-subtitle>{{threadItem?.threadMessage}}</mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-actions>
                         <button mat-button (click)="replyToThreadItem(threadItem)">Reply</button>
+                        <button *ngIf="this.user.userID == threadItem.userID" mat-button (click)="editThreadItem(threadItem)">Edit</button>
                     </mat-card-actions>
                 </mat-card>
             </div>

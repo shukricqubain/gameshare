@@ -27,6 +27,7 @@ export class AddThreadItemComponent {
   }
 
   addThreadItemForm = new FormGroup({
+    threadItemID: new FormControl(''),
     threadID: new FormControl('', [Validators.required]),
     threadMessage: new FormControl('', [Validators.required]),
     userID: new FormControl('', [Validators.required]),
@@ -44,13 +45,16 @@ export class AddThreadItemComponent {
     if (this.data !== undefined && this.data.thread !== undefined) {
 
       if (this.data.isEdit !== undefined && this.data.isEdit == true) {
+        this.isEdit = true;
         this.thread = this.data.thread;
         this.threadItem = this.data.threadItem;
+        let threadItemID = `${this.threadItem.threadItemID}`;
         let threadID = `${this.thread.threadID}`;
         let threadMessage = `${this.threadItem.threadMessage}`;
         let userID = `${this.threadItem.userID}`;
         let createdAt = `${this.threadItem.createdAt}`;
         let updatedAt = `${this.threadItem.updatedAt}`;
+        this.addThreadItemForm.controls.threadItemID.patchValue(threadItemID);
         this.addThreadItemForm.controls.threadID.patchValue(threadID);
         this.addThreadItemForm.controls.threadMessage.patchValue(threadMessage);
         this.addThreadItemForm.controls.userID.patchValue(userID);
@@ -82,7 +86,6 @@ export class AddThreadItemComponent {
   }
 
   onSubmit() {
-    console.log(this.addThreadItemForm.value)
     let threadItem: ThreadItem = {
       threadItemID: 0,
       threadID: 0,
@@ -92,7 +95,24 @@ export class AddThreadItemComponent {
       updatedAt: ''
     }
     if (this.isEdit == true) {
-      //todo
+      if (this.addThreadItemForm.controls.threadItemID.value !== null) {
+        threadItem.threadItemID = parseInt(this.addThreadItemForm.controls.threadItemID.value);
+      }
+      if (this.addThreadItemForm.controls.threadID.value !== null) {
+        threadItem.threadID = parseInt(this.addThreadItemForm.controls.threadID.value);
+      }
+      threadItem.threadMessage = this.addThreadItemForm.controls.threadMessage.value || '';
+      if (this.addThreadItemForm.controls.userID.value !== null) {
+        threadItem.userID = parseInt(this.addThreadItemForm.controls.userID.value);
+      }
+      if (this.addThreadItemForm.controls.createdAt.value !== null) {
+        threadItem.createdAt = this.addThreadItemForm.controls.createdAt.value;
+      }
+     
+      this.threadItemService.update(threadItem).subscribe({
+        next: this.handleUpdateResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
     } else {
       if (this.addThreadItemForm.controls.threadID.value !== null) {
         threadItem.threadID = parseInt(this.addThreadItemForm.controls.threadID.value);
@@ -112,6 +132,15 @@ export class AddThreadItemComponent {
     console.log(data)
     if (data !== null && data !== undefined) {
       this.snackBar.open('Successfully created a new thread item!', 'dismiss', {
+        duration: 3000
+      });
+      this.closeDialog(data);
+    }
+  }
+
+  handleUpdateResponse(data: any) {
+    if (data !== null && data !== undefined) {
+      this.snackBar.open('Successfully update a thread item!', 'dismiss', {
         duration: 3000
       });
       this.closeDialog(data);
