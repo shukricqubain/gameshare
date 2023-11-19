@@ -3,6 +3,7 @@ export class ThreadItem {
     threadID?: Number;
     threadMessage?: String;
     userID?: Number;
+    replyID?: Number;
     createdAt?: string;
     updatedAt?: string;
 }

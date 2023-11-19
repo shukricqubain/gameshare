@@ -31,6 +31,7 @@ export class AddThreadItemComponent {
     threadID: new FormControl('', [Validators.required]),
     threadMessage: new FormControl('', [Validators.required]),
     userID: new FormControl('', [Validators.required]),
+    replyID: new FormControl(''),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
   });
@@ -54,6 +55,11 @@ export class AddThreadItemComponent {
         let userID = `${this.threadItem.userID}`;
         let createdAt = `${this.threadItem.createdAt}`;
         let updatedAt = `${this.threadItem.updatedAt}`;
+        ///check if post is a reply
+        if(this.data.replyID !== undefined){
+          let replyID = `${this.data.replyID}`;
+          this.addThreadItemForm.controls.replyID.patchValue(replyID);
+        }
         this.addThreadItemForm.controls.threadItemID.patchValue(threadItemID);
         this.addThreadItemForm.controls.threadID.patchValue(threadID);
         this.addThreadItemForm.controls.threadMessage.patchValue(threadMessage);
@@ -64,6 +70,7 @@ export class AddThreadItemComponent {
         this.thread = this.data.thread;
         let threadID = `${this.thread.threadID}`;
         let localUserName = localStorage.getItem('userName');
+        ///grabbing userName to populate userID for threadItem
         if (localUserName !== undefined && localUserName !== null) {
           let user = await lastValueFrom(this.userService.getUserByName(localUserName).pipe());
           if (user !== undefined) {
@@ -76,6 +83,11 @@ export class AddThreadItemComponent {
           }
         }
         this.addThreadItemForm.controls.threadID.patchValue(threadID);
+        ///check if post is a reply
+        if(this.data.replyID !== undefined){
+          let replyID = `${this.data.replyID}`;
+          this.addThreadItemForm.controls.replyID.patchValue(replyID);
+        }
       }
 
     } else {
@@ -91,6 +103,7 @@ export class AddThreadItemComponent {
       threadID: 0,
       threadMessage: '',
       userID: 0,
+      replyID: 0,
       createdAt: '',
       updatedAt: ''
     }
@@ -104,6 +117,9 @@ export class AddThreadItemComponent {
       threadItem.threadMessage = this.addThreadItemForm.controls.threadMessage.value || '';
       if (this.addThreadItemForm.controls.userID.value !== null) {
         threadItem.userID = parseInt(this.addThreadItemForm.controls.userID.value);
+      }
+      if (this.addThreadItemForm.controls.replyID.value !== null) {
+        threadItem.replyID = parseInt(this.addThreadItemForm.controls.replyID.value);
       }
       if (this.addThreadItemForm.controls.createdAt.value !== null) {
         threadItem.createdAt = this.addThreadItemForm.controls.createdAt.value;
@@ -120,6 +136,9 @@ export class AddThreadItemComponent {
       threadItem.threadMessage = this.addThreadItemForm.controls.threadMessage.value || '';
       if (this.addThreadItemForm.controls.userID.value !== null) {
         threadItem.userID = parseInt(this.addThreadItemForm.controls.userID.value);
+      }
+      if (this.addThreadItemForm.controls.replyID.value !== null) {
+        threadItem.replyID = parseInt(this.addThreadItemForm.controls.replyID.value);
       }
       this.threadItemService.create(threadItem).subscribe({
         next: this.handleCreateResponse.bind(this),

@@ -28,6 +28,11 @@ module.exports = (sequelize, Sequelize) => {
                 isInt: true
             }
         },
+        replyID: {
+            type: Sequelize.INTEGER,
+            validate: {
+            }
+        },
         createdAt: {
             type: Sequelize.DATEONLY,
             defaultValue: Sequelize.NOW,
