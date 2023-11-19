@@ -116,12 +116,12 @@ Use this space to show useful examples of how a project can be used. Additional 
     - [x] Reroute to individual board on click
     - [ ] Allow user to follow board
   - [ ] Implement an interactive Board page
-    - [ ] Displaying all threads for a specific board, with searching and sorting.
+    - [x] Displaying all threads for a specific board, with searching and sorting.
     - [ ] Creation, editing, and deletion of threads.
     - [x] Reroute to individual thread on click
     - [ ] Allow user to follow thread    
   - [ ] Implement an interactive Thread page
-    - [ ] Displaying all thread items for a specific thread, with searching and sorting.
+    - [x] Displaying all thread items for a specific thread, with searching and sorting.
     - [ ] Allow user to post/reply to a thread item.
     - [ ] Allow users to report a thread.
 - [ ] Messaging Functionality
