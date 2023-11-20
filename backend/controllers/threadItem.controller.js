@@ -31,6 +31,23 @@ exports.findCount = async (searchCriteria) => {
 exports.findAll = async (searchCriteria) => {
     try{
         let allThreadItems = await threadItemService.getAll(searchCriteria);
+        ///sort thread items so replies appear properly
+        let replyPosts = allThreadItems.filter(item => {
+            return item.replyID !== null && item.replyID !== undefined;
+        })
+        for(let reply of replyPosts){
+            ///get current index of reply
+            const index = allThreadItems.map(i => i.threadItemID).indexOf(reply.threadItemID);
+            ///get future index of reply
+            const futureIndex = allThreadItems.map(i => i.threadItemID).indexOf(reply.replyID);
+            ///check if the reply is already in an ideal position
+            if(index != (futureIndex + 1)){
+                ///remove reply from list
+                allThreadItems.splice(index, 1);
+                ///move reply to new position
+                allThreadItems.splice(futureIndex + 1, 0, reply);
+            }
+        }
         if(allThreadItems.length > 0){
             return allThreadItems;
         } else {

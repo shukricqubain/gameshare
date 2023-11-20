@@ -104,22 +104,31 @@ async function getAll(searchCriteria) {
                 where = '';
             }
         }
-        if (pagination) {
+        if (pagination === 'true') {
             limit = searchCriteria.limit;
             if (page != 0) {
                 offset = page * limit;
             }
+            return await db.threadItem.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['threadItemID', 'ASC'],
+                ],
+                limit: limit,
+                offset: offset,
+                raw: true,
+            });
+        } else {
+            return await db.threadItem.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['threadItemID', 'ASC'],
+                ],
+                raw: true,
+            });
         }
-        return await db.threadItem.findAll({
-            where: where,
-            order: [
-                [sort, sortDirection],
-                ['threadItemID', 'ASC'],
-            ],
-            limit: limit,
-            offset: offset,
-            raw: true,
-        });
     } catch (err) {
         console.log(err)
     }

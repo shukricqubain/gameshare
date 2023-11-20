@@ -30,7 +30,7 @@ router.post('/allThreadItems', async function(req, res) {
             let searchCriteria = req.body;
             let allThreadItems;
             let threadItemCount;
-            if(searchCriteria.pagination){
+            if(searchCriteria.pagination === 'true'){
                 threadItemCount = await threadItemController.findCount(searchCriteria);
                 if(threadItemCount > 0){
                     searchCriteria.threadItemCount = threadItemCount;

@@ -91,7 +91,7 @@ export class ThreadComponent {
     if (this.thread !== null && this.thread !== undefined && this.thread.threadID !== undefined && this.thread.threadID !== null) {
       this.threadItemSearchCriteria.controls.searchTerm.patchValue('');
       this.threadItemSearchCriteria.controls.sort.patchValue('threadID');
-      this.threadItemSearchCriteria.controls.pagination.patchValue('true');
+      this.threadItemSearchCriteria.controls.pagination.patchValue('false');
       this.threadItemSearchCriteria.controls.direction.patchValue('asc');
       this.threadItemSearchCriteria.controls.limit.patchValue(5);
       this.threadItemSearchCriteria.controls.page.patchValue(0);
