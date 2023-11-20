@@ -64,7 +64,6 @@ export class ThreadComponent {
 
   handleSearchResponse(result: any) {
     if (result !== null) {
-      console.log(result.data)
       this.allThreadItems = result.data;
       this.finishedLoadingData = true;
     } else {
@@ -127,14 +126,26 @@ export class ThreadComponent {
   }
 
   editThreadItem(threadItem: ThreadItem) {
-    const dialogRefAdd = this.matDialog.open(AddThreadItemComponent, {
-      width: '100%',
-      disableClose: true,
-      data: {
+    let data;
+    if(threadItem.replyID !== undefined && threadItem.replyID !== null){
+      data = {
+        thread: this.thread,
+        isEdit: true,
+        threadItem: threadItem,
+        replyID: threadItem.replyID
+      }
+    } else {
+      data = {
         thread: this.thread,
         isEdit: true,
         threadItem: threadItem
       }
+    }
+    
+    const dialogRefAdd = this.matDialog.open(AddThreadItemComponent, {
+      width: '100%',
+      disableClose: true,
+      data: data
     });
 
     dialogRefAdd.afterClosed().subscribe(result => {

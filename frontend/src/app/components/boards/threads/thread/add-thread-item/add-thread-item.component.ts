@@ -124,7 +124,6 @@ export class AddThreadItemComponent {
       if (this.addThreadItemForm.controls.createdAt.value !== null) {
         threadItem.createdAt = this.addThreadItemForm.controls.createdAt.value;
       }
-     
       this.threadItemService.update(threadItem).subscribe({
         next: this.handleUpdateResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
