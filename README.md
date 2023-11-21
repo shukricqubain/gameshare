@@ -109,7 +109,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 - [ ] Board Functionality
   - [x] Basic CRUD for Boards
   - [x] Basic CRUD for Threads
-  - [ ] Basic CRUD for Thread Items
+  - [x] Basic CRUD for Thread Items
   - [ ] Implement an interactive Boards page
     - [x] Displaying all boards, with searching.
     - [x] Creation, editing, and deletion of boards.
@@ -121,9 +121,9 @@ Use this space to show useful examples of how a project can be used. Additional 
     - [x] Reroute to individual thread on click
     - [ ] Allow user to follow thread
     - [ ] Allow users to report a thread. 
-  - [ ] Implement an interactive Thread page
+  - [x] Implement an interactive Thread page
     - [x] Displaying all thread items for a specific thread.
-    - [ ] Allow users to edit or delete their own posts/thread items.
+    - [x] Allow users to edit or delete their own posts/thread items.
     - [x] Allow user to post/reply to a thread item.
 - [ ] Messaging Functionality
   - [ ] Messaging within User profiles
