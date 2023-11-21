@@ -11,6 +11,7 @@ import { AddThreadItemComponent } from './add-thread-item/add-thread-item.compon
 import { UserService } from 'src/app/services/user.service';
 import { lastValueFrom } from 'rxjs';
 import { User } from 'src/app/models/user.model';
+import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-thread',
@@ -77,6 +78,14 @@ export class ThreadComponent {
       duration: 3000
     });
     this.allThreadItems = [];
+  }
+
+  public handleDeleteResponse(data:any){
+    if(data == null){
+      this.clearThreadSearch();
+    } else {
+      this.clearThreadSearch();
+    }
   }
 
   applyThreadSearch() {
@@ -182,5 +191,32 @@ export class ThreadComponent {
   async checkCurrentUser(){
     this.userName = localStorage.getItem('userName') ? localStorage.getItem('userName'): '';
     this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+  }
+
+  public deleteThreadItem(element: any){
+    const dialogRefDelete = this.matDialog.open(PopUpComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        element,
+        model: 'threadItem'
+      }
+    });
+
+    dialogRefDelete.afterClosed().subscribe(result => {
+      if(result.event === 'delete'){
+        this.threadItemService.delete(element.threadItemID).subscribe({
+          next: this.handleDeleteResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
+        this.snackBar.open(`Post has been deleted.`, 'dismiss',{
+          duration: 3000
+        });
+      } else {
+        this.snackBar.open(`Post has not been deleted.`, 'dismiss',{
+          duration: 3000
+        });
+      }
+    });
   }
 }

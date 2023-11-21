@@ -30,6 +30,7 @@
                         <mat-card-actions>
                             <button mat-button (click)="replyToThreadItem(threadItem)">Reply</button>
                             <button *ngIf="this.user.userID == threadItem.userID" mat-button (click)="editThreadItem(threadItem)">Edit</button>
+                            <button *ngIf="this.user.userID == threadItem.userID" mat-button (click)="deleteThreadItem(threadItem)">Delete</button>
                         </mat-card-actions>
                     </mat-card>
                 </ng-template>
@@ -42,6 +43,7 @@
                         <mat-card-actions>
                             <button mat-button (click)="replyToThreadItem(threadItem)">Reply</button>
                             <button *ngIf="this.user.userID == threadItem.userID" mat-button (click)="editThreadItem(threadItem)">Edit</button>
+                            <button *ngIf="this.user.userID == threadItem.userID" mat-button (click)="deleteThreadItem(threadItem)">Delete</button>
                         </mat-card-actions>
                     </mat-card>
                 </ng-template>
