@@ -111,8 +111,8 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Basic CRUD for Threads
   - [ ] Basic CRUD for Thread Items
   - [ ] Implement an interactive Boards page
-    - [ ] Displaying all boards, with searching and sorting.
-    - [ ] Creation, editing, and deletion of boards.
+    - [x] Displaying all boards, with searching.
+    - [x] Creation, editing, and deletion of boards.
     - [x] Reroute to individual board on click
     - [ ] Allow user to follow board
   - [ ] Implement an interactive Board page
