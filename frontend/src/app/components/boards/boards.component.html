@@ -21,7 +21,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>{{board.boardName}}</mat-card-title>
-            <mat-card-subtitle class="open-board" (click)="openBoard(board)">This board discusses the game {{board.gameName}}. Click Open to
+            <mat-card-subtitle class="open-board">This board discusses the game {{board.gameName}}. Click Open to
               explore!</mat-card-subtitle>
           </mat-card-header>
           <mat-card-actions>
@@ -29,6 +29,7 @@
               <button mat-button type="button">Follow</button>
               <button mat-button (click)="editBoard(board)" type="button">Edit</button>
               <button mat-button (click)="deleteBoard(board)" type="button">Delete</button>
+              <button mat-button (click)="openBoard(board)" type="button">Open</button>
             </div>
           </mat-card-actions>
         </mat-card>

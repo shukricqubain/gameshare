@@ -8,6 +8,8 @@ import { Board } from 'src/app/models/board.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AddThreadComponent } from '../threads/add-thread/add-thread.component';
+import { User } from 'src/app/models/user.model';
+import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-board',
@@ -38,11 +40,12 @@ export class BoardComponent {
   allThreads: Thread[];
   loadingThreads: boolean = false;
   board: any;
-
+  user: User;
 
   async ngOnInit() {
     let data: any = this.location.getState();
     this.board = data.board;
+    this.user = data.user;
     if (this.board !== null && this.board !== undefined && this.board.boardID !== undefined && this.board.boardID !== null) {
       this.boardSearchCriteria.controls.boardID.patchValue(this.board.boardID);
       this.loadingThreads = true;
@@ -63,6 +66,14 @@ export class BoardComponent {
       this.allThreads = result.data;
     } else {
       this.allThreads = [];
+    }
+  }
+
+  public handleDeleteResponse(data:any){
+    if(data == null){
+      this.clearBoardSearch();
+    } else {
+      this.clearBoardSearch();
     }
   }
 
@@ -124,5 +135,52 @@ export class BoardComponent {
 
   openThread(thread: Thread) {
     this.router.navigate([`/thread/${thread.threadID}`], { state: { thread } });
+  }
+
+  editThread(thread: Thread){
+    const dialogRefAdd = this.matDialog.open(AddThreadComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        board: this.board,
+        isEdit: true,
+        element: thread
+      }
+    });
+
+    dialogRefAdd.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.clearBoardSearch();
+      } else {
+        this.clearBoardSearch();
+      }
+    });
+  }
+
+  deleteThread(thread: Thread){
+    const dialogRefDelete = this.matDialog.open(PopUpComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        element: thread,
+        model: 'thread'
+      }
+    });
+
+    dialogRefDelete.afterClosed().subscribe(result => {
+      if(result.event === 'delete'){
+        this.threadService.delete(thread.threadID).subscribe({
+          next: this.handleDeleteResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
+        this.snackBar.open(`${thread.threadName} has been deleted.`, 'dismiss',{
+          duration: 3000
+        });
+      } else {
+        this.snackBar.open(`${thread.threadName} has not been deleted.`, 'dismiss',{
+          duration: 3000
+        });
+      }
+    });
   }
 }

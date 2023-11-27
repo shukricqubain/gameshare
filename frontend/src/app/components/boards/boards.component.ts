@@ -96,7 +96,7 @@ export class BoardsComponent {
   }
   
   openBoard(board: Board){
-    this.router.navigate([`/board/${board.boardID}`], {state: {board}});
+    this.router.navigate([`/board/${board.boardID}`], {state: {board: board, user: this.user}});
   }
 
   applyBoardSearch(){

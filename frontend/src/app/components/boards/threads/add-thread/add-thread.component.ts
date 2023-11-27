@@ -72,6 +72,7 @@ export class AddThreadComponent {
 
   onSubmit(){
     let newThread: Thread = {
+      threadID: 0,
       boardID: 0,
       boardName: '',
       userID: 0,
@@ -87,6 +88,7 @@ export class AddThreadComponent {
     newThread.updatedAt = this.addThreadForm.controls.updatedAt.value || '';
     if(this.isEdit){
       newThread.boardID = this.data.element?.boardID;
+      newThread.threadID = this.data.element?.threadID;
       this.threadService.update(newThread).subscribe({
         next: this.handleEditResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
@@ -136,9 +138,15 @@ export class AddThreadComponent {
   }
 
   handleErrorResponse(error:any){
-    this.snackBar.open(error.message, 'dismiss',{
-      duration: 3000
-    });
+    if(error.error !== undefined){
+      this.snackBar.open(error.error.message, 'dismiss',{
+        duration: 3000
+      });
+    } else {
+      this.snackBar.open(error.message, 'dismiss',{
+        duration: 3000
+      });
+    }
   }
 
   closeDialog(data?:any){

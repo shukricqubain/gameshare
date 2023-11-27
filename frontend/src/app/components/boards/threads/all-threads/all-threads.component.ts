@@ -169,7 +169,7 @@ export class AllThreadsComponent {
       disableClose: true,
       data: {
         element,
-        model: 'board'
+        model: 'thread'
       }
     });
 

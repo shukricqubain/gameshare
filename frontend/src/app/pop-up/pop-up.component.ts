@@ -73,6 +73,11 @@ export class PopUpComponent {
           this.model = this.data.model;
           this.dataLoaded = true;
           break;
+        case ('thread'):
+          this.name = this.data.element.threadName;
+          this.model = this.data.model;
+          this.dataLoaded = true;
+          break;
       }
     }
 
