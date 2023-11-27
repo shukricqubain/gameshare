@@ -10,21 +10,47 @@ async function findCount(searchCriteria) {
         let userAchievements;
         let where;
         if (searchTerm !== '') {
-            where = {
-                [Op.or]: {
-                    userAchievementID: { [Op.like]: '%' + searchTerm + '%' },
-                    achievementID: { [Op.like]: '%' + searchTerm + '%' },
-                    achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                    gameID: { [Op.like]: '%' + searchTerm + '%' },
-                    gameName: { [Op.like]: '%' + searchTerm + '%' },
-                    userID: { [Op.like]: '%' + searchTerm + '%' },
-                    achievementStatus: { [Op.like]: '%' + searchTerm + '%' },
-                    createdAt: { [Op.like]: '%' + searchTerm + '%' },
-                    updatedAt: { [Op.like]: '%' + searchTerm + '%' }
-                }
-            };
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    [Op.and]: {
+                        [Op.or]: {
+                            userAchievementID: { [Op.like]: '%' + searchTerm + '%' },
+                            achievementID: { [Op.like]: '%' + searchTerm + '%' },
+                            achievementName: { [Op.like]: '%' + searchTerm + '%' },
+                            gameID: { [Op.like]: '%' + searchTerm + '%' },
+                            gameName: { [Op.like]: '%' + searchTerm + '%' },
+                            userID: { [Op.like]: '%' + searchTerm + '%' },
+                            achievementStatus: { [Op.like]: '%' + searchTerm + '%' },
+                            createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                            updatedAt: { [Op.like]: '%' + searchTerm + '%' }
+                        },
+                        userID: userID
+                    }
+                };
+            } else {
+                where = {
+                    [Op.or]: {
+                        userAchievementID: { [Op.like]: '%' + searchTerm + '%' },
+                        achievementID: { [Op.like]: '%' + searchTerm + '%' },
+                        achievementName: { [Op.like]: '%' + searchTerm + '%' },
+                        gameID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameName: { [Op.like]: '%' + searchTerm + '%' },
+                        userID: { [Op.like]: '%' + searchTerm + '%' },
+                        achievementStatus: { [Op.like]: '%' + searchTerm + '%' },
+                        createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                        updatedAt: { [Op.like]: '%' + searchTerm + '%' }
+                    }
+                };
+            }
+            
         } else {
-            where = '';
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    userID: searchCriteria.userID
+                }
+            } else {
+                where = '';
+            }
         }
         userAchievements = await db.userAchievement.findAll({
             where: where,
@@ -52,49 +78,95 @@ async function getAll(searchCriteria) {
         let page = searchCriteria.page;
         let where;
         if (searchTerm !== '') {
-            where = {
-                [Op.or]: {
-                    userAchievementID: { [Op.like]: '%' + searchTerm + '%' },
-                    achievementID: { [Op.like]: '%' + searchTerm + '%' },
-                    achievementName: { [Op.like]: '%' + searchTerm + '%' },
-                    gameID: { [Op.like]: '%' + searchTerm + '%' },
-                    gameName: { [Op.like]: '%' + searchTerm + '%' },
-                    userID: { [Op.like]: '%' + searchTerm + '%' },
-                    achievementStatus: { [Op.like]: '%' + searchTerm + '%' },
-                    createdAt: { [Op.like]: '%' + searchTerm + '%' },
-                    updatedAt: { [Op.like]: '%' + searchTerm + '%' }
-                }
-            };
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    [Op.and]: {
+                        [Op.or]: {
+                            userAchievementID: { [Op.like]: '%' + searchTerm + '%' },
+                            achievementID: { [Op.like]: '%' + searchTerm + '%' },
+                            achievementName: { [Op.like]: '%' + searchTerm + '%' },
+                            gameID: { [Op.like]: '%' + searchTerm + '%' },
+                            gameName: { [Op.like]: '%' + searchTerm + '%' },
+                            userID: { [Op.like]: '%' + searchTerm + '%' },
+                            achievementStatus: { [Op.like]: '%' + searchTerm + '%' },
+                            createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                            updatedAt: { [Op.like]: '%' + searchTerm + '%' }
+                        },
+                        userID: searchCriteria.userID
+                    }
+                };
+            } else {
+                where = {
+                    [Op.or]: {
+                        userAchievementID: { [Op.like]: '%' + searchTerm + '%' },
+                        achievementID: { [Op.like]: '%' + searchTerm + '%' },
+                        achievementName: { [Op.like]: '%' + searchTerm + '%' },
+                        gameID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameName: { [Op.like]: '%' + searchTerm + '%' },
+                        userID: { [Op.like]: '%' + searchTerm + '%' },
+                        achievementStatus: { [Op.like]: '%' + searchTerm + '%' },
+                        createdAt: { [Op.like]: '%' + searchTerm + '%' },
+                        updatedAt: { [Op.like]: '%' + searchTerm + '%' }
+                    }
+                };
+            }
         } else {
-            where = '';
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    userID: searchCriteria.userID
+                };
+            } else {
+                where = '';
+            }
+           
         }
-        if (pagination) {
+        if (pagination === 'true') {
             limit = searchCriteria.limit;
             if (page != 0) {
                 offset = page * limit;
             }
-        }
-        return await db.userAchievement.findAll({
-            where: where,
-            order: [
-                [sort, sortDirection],
-                ['achievementName', 'ASC'],
-            ],
-            limit: limit,
-            offset: offset,
-            attributes: [
-                'userAchievementID',
-                'achievementID',
-                'achievementName',
-                'gameID',
-                'gameName',
-                'userID',
-                'achievementStatus',
-                'createdAt',
-                'updatedAt'
-            ],
-            raw: true,
-        });
+            return await db.userAchievement.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['achievementName', 'ASC'],
+                ],
+                limit: limit,
+                offset: offset,
+                attributes: [
+                    'userAchievementID',
+                    'achievementID',
+                    'achievementName',
+                    'gameID',
+                    'gameName',
+                    'userID',
+                    'achievementStatus',
+                    'createdAt',
+                    'updatedAt'
+                ],
+                raw: true,
+            });
+        } else {
+            return await db.userAchievement.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['achievementName', 'ASC'],
+                ],
+                attributes: [
+                    'userAchievementID',
+                    'achievementID',
+                    'achievementName',
+                    'gameID',
+                    'gameName',
+                    'userID',
+                    'achievementStatus',
+                    'createdAt',
+                    'updatedAt'
+                ],
+                raw: true,
+            });
+        } 
     } catch (err) {
         console.log(err)
     }

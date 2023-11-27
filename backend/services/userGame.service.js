@@ -10,17 +10,38 @@ async function findCount(searchCriteria) {
         let userGames;
         let where;
         if (searchTerm !== '') {
-            where = {
-                [Op.or]: {
-                    userGameID: { [Op.like]: '%' + searchTerm + '%' },
-                    gameID: { [Op.like]: '%' + searchTerm + '%' },
-                    gameName: { [Op.like]: '%' + searchTerm + '%' },
-                    userID: { [Op.like]: '%' + searchTerm + '%' },
-                    gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
-                }
-            };
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    [Op.and]: {
+                        [Op.or]: {
+                            userGameID: { [Op.like]: '%' + searchTerm + '%' },
+                            gameID: { [Op.like]: '%' + searchTerm + '%' },
+                            gameName: { [Op.like]: '%' + searchTerm + '%' },
+                            userID: { [Op.like]: '%' + searchTerm + '%' },
+                            gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
+                        },
+                        userID: searchCriteria.userID
+                    }
+                };
+            } else {
+                where = {
+                    [Op.or]: {
+                        userGameID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameName: { [Op.like]: '%' + searchTerm + '%' },
+                        userID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
+                    }
+                };
+            }
         } else {
-            where = '';
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    userID: searchCriteria.userID
+                };
+            } else {
+                where = '';
+            }   
         }
         userGames = await db.userGame.findAll({
             where: where,
@@ -52,43 +73,82 @@ async function getAllUserGames(searchCriteria) {
         let page = searchCriteria.page;
         let where;
         if (searchTerm !== '') {
-            where = {
-                [Op.or]: {
-                    userGameID: { [Op.like]: '%' + searchTerm + '%' },
-                    gameID: { [Op.like]: '%' + searchTerm + '%' },
-                    gameName: { [Op.like]: '%' + searchTerm + '%' },
-                    userID: { [Op.like]: '%' + searchTerm + '%' },
-                    gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
-                }
-            };
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    [Op.and]:{
+                        [Op.or]: {
+                            userGameID: { [Op.like]: '%' + searchTerm + '%' },
+                            gameID: { [Op.like]: '%' + searchTerm + '%' },
+                            gameName: { [Op.like]: '%' + searchTerm + '%' },
+                            userID: { [Op.like]: '%' + searchTerm + '%' },
+                            gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
+                        },
+                        userID: searchCriteria.userID
+                    }
+                };
+            } else {
+                where = {
+                    [Op.or]: {
+                        userGameID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameName: { [Op.like]: '%' + searchTerm + '%' },
+                        userID: { [Op.like]: '%' + searchTerm + '%' },
+                        gameEnjoymentRating: { [Op.like]: '%' + searchTerm + '%'}
+                    }
+                };
+            }
         } else {
-            where = '';
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    userID: searchCriteria.userID
+                };
+            } else {
+                where = '';
+            }
         }
-        if (pagination) {
+        if (pagination === 'true') {
             limit = searchCriteria.limit;
             if (page != 0) {
                 offset = page * limit;
             }
+            return await db.userGame.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['gameID', 'ASC'],
+                ],
+                limit: limit,
+                offset: offset,
+                attributes: [
+                    'userGameID',
+                    'gameID',
+                    'gameName',
+                    'userID',
+                    'gameEnjoymentRating',
+                    'createdAt',
+                    'updatedAt'
+                ],
+                raw: true,
+            });
+        } else {
+            return await db.userGame.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['gameID', 'ASC'],
+                ],
+                attributes: [
+                    'userGameID',
+                    'gameID',
+                    'gameName',
+                    'userID',
+                    'gameEnjoymentRating',
+                    'createdAt',
+                    'updatedAt'
+                ],
+                raw: true,
+            });
         }
-        return await db.userGame.findAll({
-            where: where,
-            order: [
-                [sort, sortDirection],
-                ['gameID', 'ASC'],
-            ],
-            limit: limit,
-            offset: offset,
-            attributes: [
-                'userGameID',
-                'gameID',
-                'gameName',
-                'userID',
-                'gameEnjoymentRating',
-                'createdAt',
-                'updatedAt'
-            ],
-            raw: true,
-        });
     } catch (err) {
         console.log(err)
     }

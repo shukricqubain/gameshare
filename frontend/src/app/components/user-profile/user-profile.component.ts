@@ -71,7 +71,8 @@ export class UserProfileComponent {
     pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
-    page: new FormControl(0, [Validators.required])
+    page: new FormControl(0, [Validators.required]),
+    userID: new FormControl('')
   });
 
   displayedUserGamesColumns: string[] = ['userGameID', 'gameName', 'gameEnjoymentRating','createdAt', 'updatedAt', 'actions'];
@@ -94,7 +95,8 @@ export class UserProfileComponent {
     pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
-    page: new FormControl(0, [Validators.required])
+    page: new FormControl(0, [Validators.required]),
+    userID: new FormControl('')
   });
 
   displayedUserAchievementColumns: string[] = ['userAchievementID', 'achievementName', 'gameID', 'gameName', 'userID', 'achievementStatus', 'createdAt', 'updatedAt', 'actions'];
@@ -274,6 +276,9 @@ export class UserProfileComponent {
     this.userProfileForm.controls.userPassword.setValue(data.userPassword ? data.userPassword: '');
     this.userProfileForm.controls.createdAt.setValue(data.createdAt ? data.createdAt: '');
     this.userProfileForm.controls.updatedAt.setValue(data.updatedAt ? data.updatedAt: '');
+    //patch search forms with userID for games and achievement collections
+    this.achievementSearchCriteria.controls.userID.setValue(data.userID);
+    this.gameSearchCriteria.controls.userID.setValue(data.userID);
   }
 
   handleGetUserGames(data: any){
