@@ -117,7 +117,7 @@ Use this space to show useful examples of how a project can be used. Additional 
     - [ ] Allow user to follow board
   - [ ] Implement an interactive Board page
     - [x] Displaying all threads for a specific board, with searching and sorting.
-    - [ ] Creation, editing, and deletion of threads.
+    - [x] Creation, editing, and deletion of threads.
     - [x] Reroute to individual thread on click
     - [ ] Allow user to follow thread
     - [ ] Allow users to report a thread. 
