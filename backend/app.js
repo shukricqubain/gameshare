@@ -32,6 +32,7 @@ const achievement = require('./routes/achievement.route');
 const userGame = require('./routes/userGame.route');
 const userAchievement = require('./routes/userAchievement.route');
 const board = require('./routes/board.route');
+const userBoard = require('./routes/userBoard.route');
 const thread = require('./routes/thread.route');
 const threadItem = require('./routes/threadItem.route');
 
@@ -43,6 +44,8 @@ app.use("/game", game);
 app.use("/achievement", achievement);
 app.use("/userGame", userGame);
 app.use("/userAchievement", userAchievement);
+app.use("/userBoard", userBoard);
+// app.use("userThread", userThread);
 app.use("/board", board);
 app.use("/thread", thread);
 app.use("/threadItem", threadItem);

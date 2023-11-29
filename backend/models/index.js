@@ -26,6 +26,7 @@ db.game = require('./game.model.js')(sequelize, Sequelize);
 db.achievement = require('./achievement.model.js')(sequelize, Sequelize);
 db.userGame = require('./userGame.model.js')(sequelize, Sequelize);
 db.userAchievement = require('./userAchievement.model.js')(sequelize, Sequelize);
+db.userBoard = require('./userBoard.model.js')(sequelize, Sequelize);
 db.board = require('./board.model.js')(sequelize, Sequelize);
 db.thread = require('./thread.model.js')(sequelize, Sequelize);
 db.threadItem = require('./threadItem.model.js')(sequelize, Sequelize);
