@@ -50,6 +50,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { BoardComponent } from './components/boards/board/board.component';
 import { ThreadComponent } from './components/boards/threads/thread/thread.component';
 import { AddThreadItemComponent } from './components/boards/threads/thread/add-thread-item/add-thread-item.component';
+import { AddUserBoardComponent } from './components/user-profile/add-user-board/add-user-board.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { AddThreadItemComponent } from './components/boards/threads/thread/add-t
     BoardsComponent,
     BoardComponent,
     ThreadComponent,
-    AddThreadItemComponent
+    AddThreadItemComponent,
+    AddUserBoardComponent
   ],
   imports: [
     BrowserModule,

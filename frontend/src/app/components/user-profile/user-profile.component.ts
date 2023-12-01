@@ -24,6 +24,10 @@ import { AddUserAchievementComponent } from './add-user-achievement/add-user-ach
 import { UserAchievementService } from 'src/app/services/userAchievement.service';
 import { AchievementName } from 'src/app/models/achievementName.model';
 import { AchievementService } from 'src/app/services/achievement.service';
+import { Board } from 'src/app/models/board.model';
+import { UserBoardService } from 'src/app/services/userBoard.service';
+import { AddUserBoardComponent } from './add-user-board/add-user-board.component';
+import { BoardService } from 'src/app/services/board.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -43,6 +47,8 @@ export class UserProfileComponent {
     private userGameService: UserGameService,
     private dateFunction: DateFunctionsService,
     private userAchievementService: UserAchievementService,
+    private userBoardService: UserBoardService,
+    private boardService: BoardService,
     private matDialog: MatDialog
   ) {
   }
@@ -64,6 +70,7 @@ export class UserProfileComponent {
   showPassword: boolean = false;
   editEnabled: boolean = false;
   enableMessage: string = `Enable the form for updation.`;
+  userLoaded: boolean = false;
 
   gameSearchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
@@ -109,46 +116,98 @@ export class UserProfileComponent {
   @ViewChild('achievementPaginator') achievementPaginator: MatPaginator;
   @ViewChild('achievementSort') achievementSort: MatSort;
 
+  displayedUserBoardColumns: string[] = ['userBoardID', 'boardName', 'userID', 'gameID', 'gameName', 'createdAt', 'updatedAt', 'actions'];
+  userBoardsDataSource = new MatTableDataSource<any>;
+  boardData: Board[];
+  boardPageSize = 5;
+  currentBoardPage = 0;
+  boardResultsLength = 0;
+
+  @ViewChild(MatPaginator) boardPaginator: MatPaginator;
+  @ViewChild(MatSort) boardSort: MatSort;
+
+  boardSearchCriteria = new FormGroup({
+    boardSearchTerm: new FormControl(''),
+    sort: new FormControl('userBoardID', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
+    direction: new FormControl('asc', [Validators.required]),
+    limit: new FormControl(5, [Validators.required]),
+    page: new FormControl(0, [Validators.required]),
+    userID: new FormControl('')
+  });
+  allBoardNames: Board[] = [];
+
   private currentTabIndex = 0;
   allAchievementNames: AchievementName[] = [];
   gameNamesLoaded: boolean = false;
   achievementNamesLoaded: boolean = false;
+  boardsLoaded: boolean = false;
 
   async ngAfterViewInit() {
-    if(this.currentTabIndex == 0 && this.gamesLoaded == false){
-      let data: any = this.location.getState();
+
+    let data: any = this.location.getState();
+    if(this.userLoaded == false && data !== null){
+      await this.loadUserDetails(data);
+    } else if(data == null){
+      this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{
+        duration: 3000
+      });
+    }
+
+    if(this.currentTabIndex == 0 && this.boardsLoaded == false){
+     
+      await this.loadAllBoardNames();
+      this.userBoardsDataSource.sort = this.boardSort;
+      ///if user changes the sort order reset the page back to the first page
+      this.boardSort.sortChange.subscribe(() => (this.boardPaginator.pageIndex = 0));
+      merge(this.boardSort.sortChange, this.boardPaginator.page, this.boardPaginator.pageSize)
+        .pipe(
+          startWith({}),
+          switchMap(() => {
+            this.boardSearchCriteria.controls.sort.patchValue(this.boardSort.active);
+            this.boardSearchCriteria.controls.direction.patchValue(this.boardSort.direction);
+            this.boardSearchCriteria.controls.page.patchValue(this.boardPaginator.pageIndex);
+            this.boardSearchCriteria.controls.limit.patchValue(this.boardPaginator.pageSize);
+            return this.userBoardService!.getAll(this.boardSearchCriteria.value).pipe(catchError(() => observableOf(null)));
+          }),
+          map(data => {
+            if (data === null) {
+              return [];
+            }
+            this.boardResultsLength = data.userBoardCount;
+            this.boardsLoaded = true;
+            return data.data;
+          }),
+        )
+        .subscribe(data => (this.userBoardsDataSource = data));
+      
+    } else if(this.currentTabIndex == 1 && this.gamesLoaded == false){
+      
       await this.loadAllGameNames();
-      if (data !== null) {
-        await this.loadUserDetails(data);
-        this.userGamesDataSource.sort = this.gameSort;
-        ///if user changes the sort order reset the page back to the first page
-        this.gameSort.sortChange.subscribe(() => (this.gamePaginator.pageIndex = 0));
-        merge(this.gameSort.sortChange, this.gamePaginator.page, this.gamePaginator.pageSize)
-          .pipe(
-            startWith({}),
-            switchMap(() => {
-              this.gameSearchCriteria.controls.sort.patchValue(this.gameSort.active);
-              this.gameSearchCriteria.controls.direction.patchValue(this.gameSort.direction);
-              this.gameSearchCriteria.controls.page.patchValue(this.gamePaginator.pageIndex);
-              this.gameSearchCriteria.controls.limit.patchValue(this.gamePaginator.pageSize);
-              return this.userGameService!.getAll(this.gameSearchCriteria.value).pipe(catchError(() => observableOf(null)));
-            }),
-            map(data => {
-              if (data === null) {
-                return [];
-              }
-              this.gameResultsLength = data.gameCount;
-              this.gamesLoaded = true;
-              return data.data;
-            }),
-          )
-          .subscribe(data => (this.userGamesDataSource = data));
-      } else {
-        this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{
-          duration: 3000
-        });
-      }
-    } else if(this.currentTabIndex == 1){
+      this.userGamesDataSource.sort = this.gameSort;
+      ///if user changes the sort order reset the page back to the first page
+      this.gameSort.sortChange.subscribe(() => (this.gamePaginator.pageIndex = 0));
+      merge(this.gameSort.sortChange, this.gamePaginator.page, this.gamePaginator.pageSize)
+        .pipe(
+          startWith({}),
+          switchMap(() => {
+            this.gameSearchCriteria.controls.sort.patchValue(this.gameSort.active);
+            this.gameSearchCriteria.controls.direction.patchValue(this.gameSort.direction);
+            this.gameSearchCriteria.controls.page.patchValue(this.gamePaginator.pageIndex);
+            this.gameSearchCriteria.controls.limit.patchValue(this.gamePaginator.pageSize);
+            return this.userGameService!.getAll(this.gameSearchCriteria.value).pipe(catchError(() => observableOf(null)));
+          }),
+          map(data => {
+            if (data === null) {
+              return [];
+            }
+            this.gameResultsLength = data.gameCount;
+            this.gamesLoaded = true;
+            return data.data;
+          }),
+        )
+        .subscribe(data => (this.userGamesDataSource = data));
+    } else if(this.currentTabIndex == 2){
       await this.loadAchievementNames();
       this.userAchievementDataSource.sort = this.achievementSort;
       ///if user changes the sort order reset the page back to the first page
@@ -173,7 +232,7 @@ export class UserProfileComponent {
         )
         .subscribe(data => (this.userAchievementDataSource = data));
         this.changeForm();
-    } else if(this.currentTabIndex == 2){
+    } else if(this.currentTabIndex == 3){
       this.changeForm();
     }
     
@@ -279,6 +338,8 @@ export class UserProfileComponent {
     //patch search forms with userID for games and achievement collections
     this.achievementSearchCriteria.controls.userID.setValue(data.userID);
     this.gameSearchCriteria.controls.userID.setValue(data.userID);
+    this.boardSearchCriteria.controls.userID.patchValue(data.userID);
+    this.userLoaded = true;
   }
 
   handleGetUserGames(data: any){
@@ -402,7 +463,7 @@ export class UserProfileComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.gamesLoaded = false;
+        this.boardsLoaded = true;
         this.ngAfterViewInit();
       } else {
         this.ngAfterViewInit();
@@ -477,6 +538,25 @@ export class UserProfileComponent {
         next: this.handleGetAllNamesResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
+    }
+  }
+
+  async loadAllBoardNames(){
+    try{
+      if(!this.boardsLoaded){
+        this.allBoardNames = await lastValueFrom(this.boardService.getAllBoardNames().pipe());
+      }
+    } catch(err){
+      this.snackBar.open('Error loading board names!', 'dismiss', {
+        duration: 3000
+      });
+      console.log(err);
+    }
+  }
+
+  handleGetAllBoardsResponse(data: any){
+    if (data !== null && data !== undefined) {
+      this.allBoardNames = data;
     }
   }
 
@@ -576,5 +656,31 @@ export class UserProfileComponent {
     } else {
       this.ngAfterViewInit();
     }
+  }
+
+  applyBoardSearch(){
+  }
+
+  clearBoardSearch(){
+  }
+
+  addUserBoard(){
+    const dialogRef = this.matDialog.open(AddUserBoardComponent, {
+      width: '100%',
+      data: {
+        isEdit: false,
+        userID: this.user.userID,
+        allBoardNames: this.allBoardNames
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.boardsLoaded = false;
+        this.ngAfterViewInit();
+      } else {
+        this.ngAfterViewInit();
+      }
+    });
   }
 }

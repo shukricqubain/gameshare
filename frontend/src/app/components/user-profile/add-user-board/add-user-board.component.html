@@ -1,0 +1,34 @@
+<div class="child-component">
+    <div class="add-user-board-container">
+        <ng-container *ngIf="isEdit; then editBoard; else addBoard"></ng-container>
+        <ng-template #addBoard>
+            <h1>Follow a Board</h1>
+        </ng-template>
+        <ng-template #editBoard>
+            <h1>Edit a Board</h1>
+        </ng-template>
+        <form [formGroup]="addUserBoardForm" (ngSubmit)="onSubmit()">
+            <div class="form-column">
+                <div class="form-row">
+                    <mat-form-field>
+                        <label>Board</label>
+                        <mat-select placeholder="Select Board" formControlName="boardID"
+                            name="boardID" id="boardID" required>
+                            <mat-option>--</mat-option>
+                            <mat-option *ngFor="let board of allBoardNames" [value]="board.boardID">
+                                {{board.boardName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <button mat-raised-button [disabled]="!addUserBoardForm.dirty || !addUserBoardForm.valid"
+                type="submit">Submit</button>
+                <button mat-raised-button type="button" style="margin-left:10px;"
+                    (click)="closeDialog()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

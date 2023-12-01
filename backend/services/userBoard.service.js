@@ -6,19 +6,39 @@ async function findCount(searchCriteria) {
     try {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
-        let searchTerm = searchCriteria.searchTerm;
+        let searchTerm = searchCriteria.boardSearchTerm;
         let userBoards;
         if (searchTerm !== '') {
-            where =  {
-                [Op.or]: {
-                    userBoardID: { [Op.like]: '%' + searchTerm + '%' },
-                    boardID: { [Op.like]: '%' + searchTerm + '%' },
-                    userID: { [Op.like]: '%' + searchTerm + '%' },
-                    boardName: { [Op.like]: '%' + searchTerm + '%' },
-                }
-            };
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where =  {
+                    [Op.and]: {
+                        [Op.or]: {
+                            userBoardID: { [Op.like]: '%' + searchTerm + '%' },
+                            boardID: { [Op.like]: '%' + searchTerm + '%' },
+                            userID: { [Op.like]: '%' + searchTerm + '%' },
+                            boardName: { [Op.like]: '%' + searchTerm + '%' },
+                        }
+                    },
+                    userID: searchCriteria.userID                
+                };
+            } else {
+                where =  {
+                    [Op.or]: {
+                        userBoardID: { [Op.like]: '%' + searchTerm + '%' },
+                        boardID: { [Op.like]: '%' + searchTerm + '%' },
+                        userID: { [Op.like]: '%' + searchTerm + '%' },
+                        boardName: { [Op.like]: '%' + searchTerm + '%' },
+                    }    
+                };
+            }
         } else {
-            where = '';
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    userID: searchCriteria.userID
+                };
+            } else {
+                where = '';
+            }
         }
         userBoards = await db.userBoard.findAll({
             where: where,
@@ -40,22 +60,42 @@ async function getAll(searchCriteria) {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
         let pagination = searchCriteria.pagination;
-        let searchTerm = searchCriteria.searchTerm;
+        let searchTerm = searchCriteria.boardSearchTerm;
         let limit;
         let offset;
         let page = searchCriteria.page;
         let where;
         if (searchTerm !== '') {
-            where = {
-                [Op.or]: {
-                    userBoardID: { [Op.like]: '%' + searchTerm + '%' },
-                    boardID: { [Op.like]: '%' + searchTerm + '%' },
-                    userID: { [Op.like]: '%' + searchTerm + '%' },
-                    boardName: { [Op.like]: '%' + searchTerm + '%' },
-                }
-            };
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    [Op.and]:{
+                        [Op.or]: {
+                            userBoardID: { [Op.like]: '%' + searchTerm + '%' },
+                            boardID: { [Op.like]: '%' + searchTerm + '%' },
+                            userID: { [Op.like]: '%' + searchTerm + '%' },
+                            boardName: { [Op.like]: '%' + searchTerm + '%' },
+                        },
+                        userID: searchCriteria.userID
+                    }
+                };
+            } else {
+                where = {
+                    [Op.or]: {
+                        userBoardID: { [Op.like]: '%' + searchTerm + '%' },
+                        boardID: { [Op.like]: '%' + searchTerm + '%' },
+                        userID: { [Op.like]: '%' + searchTerm + '%' },
+                        boardName: { [Op.like]: '%' + searchTerm + '%' },
+                    }
+                };
+            }
         } else {
-            where = '';
+            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+                where = {
+                    userID: searchCriteria.userID
+                }
+            } else {
+                where = '';
+            }
         }
         if (pagination === 'true') {
             limit = searchCriteria.limit;
@@ -92,7 +132,9 @@ async function create(userBoard){
         return await db.userBoard.create({
             boardID: userBoard.boardID,
             boardName: userBoard.boardName,
-            userID: userBoard.userID
+            userID: userBoard.userID,
+            gameID: userBoard.gameID,
+            gameName: userBoard.gameName
         });
     } catch(err){
         console.log(err)

@@ -86,12 +86,12 @@ export class AddBoardComponent {
     if(data !== null){
 
       if(this.data !== null){
-        this.snackBar.open('Successfully created a new game!', 'dismiss',{
+        this.snackBar.open('Successfully created a new board!', 'dismiss',{
           duration: 3000
         });
         this.closeDialog(data)
       } else {
-        this.snackBar.open('Successfully created a new game!', 'dismiss',{
+        this.snackBar.open('Successfully created a new board!', 'dismiss',{
           duration: 3000
         });
         this.router.navigate(['/all-boards']);
