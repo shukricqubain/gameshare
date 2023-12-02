@@ -227,6 +227,7 @@ export class UserProfileComponent {
               return [];
             }
             this.achievementResultsLength = data.achievementCount;
+            //this.achievementLoaded = true;
             return data.data;
           }),
         )
@@ -554,7 +555,7 @@ export class UserProfileComponent {
     }
   }
 
-  handleGetAllBoardsResponse(data: any){
+  handleGetAllBoardNamesResponse(data: any){
     if (data !== null && data !== undefined) {
       this.allBoardNames = data;
     }
@@ -659,9 +660,42 @@ export class UserProfileComponent {
   }
 
   applyBoardSearch(){
+    this.boardsLoaded = false;
+    let trimmedSearch = this.boardSearchCriteria.controls.boardSearchTerm.value?.trim();
+    if(trimmedSearch !== undefined && trimmedSearch !== null){
+      this.boardSearchCriteria.controls.boardSearchTerm.patchValue(trimmedSearch);
+      this.userBoardService.getAll(this.boardSearchCriteria.value).subscribe({
+        next: this.handleBoardSearchResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
+    
   }
 
   clearBoardSearch(){
+    this.boardSearchCriteria.controls.boardSearchTerm.patchValue('');
+    this.boardSearchCriteria.controls.sort.patchValue('userBoardID');
+    this.boardSearchCriteria.controls.pagination.patchValue('true');
+    this.boardSearchCriteria.controls.direction.patchValue('asc');
+    this.boardSearchCriteria.controls.limit.patchValue(5);
+    this.boardSearchCriteria.controls.page.patchValue(0);
+    this.boardsLoaded = false;
+    this.userBoardService.getAll(this.boardSearchCriteria.value).subscribe({
+      next: this.handleBoardSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
+  }
+
+  handleBoardSearchResponse(data: any){
+    if(data == null){
+      this.userBoardsDataSource.data = [];
+      this.boardResultsLength = 0;
+      this.ngAfterViewInit();
+    } else {
+      this.userBoardsDataSource.data = data.data;
+      this.boardResultsLength = data.userBoardCount;
+      this.ngAfterViewInit();
+    }
   }
 
   addUserBoard(){
