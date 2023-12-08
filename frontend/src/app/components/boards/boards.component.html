@@ -26,10 +26,19 @@
           </mat-card-header>
           <mat-card-actions>
             <div class="card-actions-container">
-              <button mat-button type="button">Follow</button>
-              <button mat-button (click)="editBoard(board)" type="button">Edit</button>
-              <button mat-button (click)="deleteBoard(board)" type="button">Delete</button>
-              <button mat-button (click)="openBoard(board)" type="button">Open</button>
+              <ng-container *ngIf="board.isFollowing; then following; else notFollowing"></ng-container>
+              <ng-template #following>
+                <button mat-button (click)="unfollowBoard(board)" type="button">Unfollow</button>
+                <button mat-button (click)="editBoard(board)" type="button">Edit</button>
+                <button mat-button (click)="deleteBoard(board)" type="button">Delete</button>
+                <button mat-button (click)="openBoard(board)" type="button">Open</button>
+              </ng-template>
+              <ng-template #notFollowing>
+                <button mat-button (click)="followBoard(board)" type="button">Follow</button>
+                <button mat-button (click)="editBoard(board)" type="button">Edit</button>
+                <button mat-button (click)="deleteBoard(board)" type="button">Delete</button>
+                <button mat-button (click)="openBoard(board)" type="button">Open</button>
+              </ng-template>
             </div>
           </mat-card-actions>
         </mat-card>

@@ -5,4 +5,5 @@ export class Board {
     gameName?: string;
     createdAt?: string;
     updatedAt?: string;
+    isFollowing?: boolean;
 }

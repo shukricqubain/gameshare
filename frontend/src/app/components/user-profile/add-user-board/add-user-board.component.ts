@@ -114,19 +114,10 @@ export class AddUserBoardComponent {
 
   handleCreateResponse(data:any){
     if(data !== null){
-
-      if(this.data !== null){
-        this.snackBar.open('Successfully created a new user board!', 'dismiss',{
-          duration: 3000
-        });
-        this.closeDialog(data)
-      } else {
-        this.snackBar.open('Successfully created a new user board!', 'dismiss',{
-          duration: 3000
-        });
-        this.router.navigate(['/all-boards']);
-      }
-      
+      this.snackBar.open('Successfully created a new user board!', 'dismiss',{
+        duration: 3000
+      });
+      this.closeDialog(data)
     }
   }
 
