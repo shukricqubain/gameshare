@@ -110,24 +110,23 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Basic CRUD for Boards
   - [x] Basic CRUD for Threads
   - [x] Basic CRUD for Thread Items
-  - [ ] Implement an interactive Boards page
+  - [x] Implement an interactive Boards page
     - [x] Displaying all boards, with searching.
     - [x] Creation, editing, and deletion of boards.
-    - [x] Reroute to individual board on click
-    - [ ] Allow user to follow board
-  - [ ] Implement an interactive Board page
+    - [x] Reroute to individual board on click.
+    - [x] Allow user to follow and unfollow board.
+  - [ ] Implement an interactive Board page.
     - [x] Displaying all threads for a specific board, with searching and sorting.
     - [x] Creation, editing, and deletion of threads.
-    - [x] Reroute to individual thread on click
-    - [ ] Allow user to follow thread
-    - [ ] Allow users to report a thread. 
+    - [x] Reroute to individual thread on click.
+    - [ ] Allow user to follow thread.
   - [x] Implement an interactive Thread page
     - [x] Displaying all thread items for a specific thread.
     - [x] Allow users to edit or delete their own posts/thread items.
     - [x] Allow user to post/reply to a thread item.
 - [ ] Messaging Functionality
-  - [ ] Messaging within User profiles
-  - [ ] Messaging on Boards     
+  - [ ] Messaging within User profiles.
+  - [ ] Messaging on Boards.  
 
 
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
