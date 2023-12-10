@@ -115,11 +115,11 @@ Use this space to show useful examples of how a project can be used. Additional 
     - [x] Creation, editing, and deletion of boards.
     - [x] Reroute to individual board on click.
     - [x] Allow user to follow and unfollow board.
-  - [ ] Implement an interactive Board page.
+  - [x] Implement an interactive Board page.
     - [x] Displaying all threads for a specific board, with searching and sorting.
     - [x] Creation, editing, and deletion of threads.
     - [x] Reroute to individual thread on click.
-    - [ ] Allow user to follow thread.
+    - [x] Allow user to follow and unfollow thread.
   - [x] Implement an interactive Thread page
     - [x] Displaying all thread items for a specific thread.
     - [x] Allow users to edit or delete their own posts/thread items.
