@@ -106,7 +106,7 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Basic CRUD for User Collection
   - [x] Basic Search and pagination for User Collection
   - [x] Basic CRUD for User Achievements
-- [ ] Board Functionality
+- [x] Board Functionality
   - [x] Basic CRUD for Boards
   - [x] Basic CRUD for Threads
   - [x] Basic CRUD for Thread Items
@@ -126,7 +126,7 @@ Use this space to show useful examples of how a project can be used. Additional 
     - [x] Allow user to post/reply to a thread item.
 - [ ] Messaging Functionality
   - [ ] Messaging within User profiles.
-  - [ ] Messaging on Boards.  
+  - [x] Messaging on Boards.  
 
 
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
