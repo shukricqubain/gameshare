@@ -25,10 +25,19 @@
             <mat-card-title>{{thread.threadName}}</mat-card-title>
           </mat-card-header>
           <mat-card-actions>
-            <button mat-button (click)="saveThread(thread)">Save</button>
-            <button *ngIf="this.user.userRole == 1" mat-button (click)="editThread(thread)">Edit</button>
-            <button *ngIf="this.user.userRole == 1" mat-button (click)="deleteThread(thread)">Delete</button>
-            <button (click)="openThread(thread)" mat-button>Open</button>
+            <ng-container *ngIf="thread.isFollowing; then following; else notFollowing"></ng-container>
+            <ng-template #following>
+              <button mat-button (click)="unfollowThread(thread)">Unfollow</button>
+              <button *ngIf="this.user.userRole == 1" mat-button (click)="editThread(thread)">Edit</button>
+              <button *ngIf="this.user.userRole == 1" mat-button (click)="deleteThread(thread)">Delete</button>
+              <button (click)="openThread(thread)" mat-button>Open</button>
+            </ng-template>
+            <ng-template #notFollowing>
+              <button mat-button (click)="saveThread(thread)">Save</button>
+              <button *ngIf="this.user.userRole == 1" mat-button (click)="editThread(thread)">Edit</button>
+              <button *ngIf="this.user.userRole == 1" mat-button (click)="deleteThread(thread)">Delete</button>
+              <button (click)="openThread(thread)" mat-button>Open</button>
+            </ng-template>
           </mat-card-actions>
         </mat-card>
       </div>

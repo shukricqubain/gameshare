@@ -22,10 +22,6 @@
     padding: 3px 3px 3px 3px;
 }
 
-.open-board {
-    cursor: pointer;
-}
-
 .boards-column {
    display:flex;
    flex-direction: column;

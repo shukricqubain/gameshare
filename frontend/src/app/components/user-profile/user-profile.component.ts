@@ -28,6 +28,10 @@ import { Board } from 'src/app/models/board.model';
 import { UserBoardService } from 'src/app/services/userBoard.service';
 import { AddUserBoardComponent } from './add-user-board/add-user-board.component';
 import { BoardService } from 'src/app/services/board.service';
+import { Thread } from 'src/app/models/thread.model';
+import { ThreadService } from 'src/app/services/thread.service';
+import { UserThreadService } from 'src/app/services/userThread.service';
+import { AddUserThreadComponent } from './add-user-thread/add-user-thread.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -49,6 +53,8 @@ export class UserProfileComponent {
     private userAchievementService: UserAchievementService,
     private userBoardService: UserBoardService,
     private boardService: BoardService,
+    private threadService: ThreadService,
+    private userThreadService: UserThreadService,
     private matDialog: MatDialog
   ) {
   }
@@ -123,8 +129,8 @@ export class UserProfileComponent {
   currentBoardPage = 0;
   boardResultsLength = 0;
 
-  @ViewChild(MatPaginator) boardPaginator: MatPaginator;
-  @ViewChild(MatSort) boardSort: MatSort;
+  @ViewChild('boardPaginator') boardPaginator: MatPaginator;
+  @ViewChild('boardSort') boardSort: MatSort;
 
   boardSearchCriteria = new FormGroup({
     boardSearchTerm: new FormControl(''),
@@ -143,6 +149,29 @@ export class UserProfileComponent {
   achievementNamesLoaded: boolean = false;
   boardsLoaded: boolean = false;
 
+  displayedUserThreadColumns: string[] = ['userThreadID', 'threadID', 'threadName', 'boardName', 'userID', 'createdAt', 'updatedAt', 'actions'];
+  userThreadsDataSource = new MatTableDataSource<any>;
+  threadData: Board[];
+  threadPageSize = 5;
+  currentThreadPage = 0;
+  threadResultsLength = 0;
+
+  @ViewChild('threadPaginator') threadPaginator: MatPaginator;
+  @ViewChild('threadSort') threadSort: MatSort;
+
+  threadSearchCriteria = new FormGroup({
+    threadSearchTerm: new FormControl(''),
+    sort: new FormControl('userThreadID', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
+    direction: new FormControl('asc', [Validators.required]),
+    limit: new FormControl(5, [Validators.required]),
+    page: new FormControl(0, [Validators.required]),
+    userID: new FormControl('')
+  });
+
+  allThreadNames: Thread[] = [];
+  threadsLoaded: boolean = false;
+
   async ngAfterViewInit() {
 
     let data: any = this.location.getState();
@@ -154,7 +183,34 @@ export class UserProfileComponent {
       });
     }
 
-    if(this.currentTabIndex == 0 && this.boardsLoaded == false){
+    if(this.currentTabIndex == 0 && this.threadsLoaded == false){
+
+      await this.loadAllThreadNames();
+      this.userThreadsDataSource.sort = this.threadSort;
+      ///if user changes the sort order reset the page back to the first page
+      this.threadSort.sortChange.subscribe(() => (this.threadPaginator.pageIndex = 0));
+      merge(this.threadSort.sortChange, this.threadPaginator.page, this.threadPaginator.pageSize)
+        .pipe(
+          startWith({}),
+          switchMap(() => {
+            this.threadSearchCriteria.controls.sort.patchValue(this.threadSort.active);
+            this.threadSearchCriteria.controls.direction.patchValue(this.threadSort.direction);
+            this.threadSearchCriteria.controls.page.patchValue(this.threadPaginator.pageIndex);
+            this.threadSearchCriteria.controls.limit.patchValue(this.threadPaginator.pageSize);
+            return this.userThreadService!.getAll(this.threadSearchCriteria.value).pipe(catchError(() => observableOf(null)));
+          }),
+          map(data => {
+            if (data === null) {
+              return [];
+            }
+            this.threadResultsLength = data.userThreadCount;
+            this.threadsLoaded = true;
+            return data.data;
+          }),
+        )
+        .subscribe(data => (this.userThreadsDataSource = data));
+
+    } else if(this.currentTabIndex == 1 && this.boardsLoaded == false){
      
       await this.loadAllBoardNames();
       this.userBoardsDataSource.sort = this.boardSort;
@@ -181,7 +237,7 @@ export class UserProfileComponent {
         )
         .subscribe(data => (this.userBoardsDataSource = data));
       
-    } else if(this.currentTabIndex == 1 && this.gamesLoaded == false){
+    } else if(this.currentTabIndex == 2 && this.gamesLoaded == false){
       
       await this.loadAllGameNames();
       this.userGamesDataSource.sort = this.gameSort;
@@ -207,7 +263,7 @@ export class UserProfileComponent {
           }),
         )
         .subscribe(data => (this.userGamesDataSource = data));
-    } else if(this.currentTabIndex == 2){
+    } else if(this.currentTabIndex == 3){
       await this.loadAchievementNames();
       this.userAchievementDataSource.sort = this.achievementSort;
       ///if user changes the sort order reset the page back to the first page
@@ -233,7 +289,7 @@ export class UserProfileComponent {
         )
         .subscribe(data => (this.userAchievementDataSource = data));
         this.changeForm();
-    } else if(this.currentTabIndex == 3){
+    } else if(this.currentTabIndex == 4){
       this.changeForm();
     }
     
@@ -340,6 +396,7 @@ export class UserProfileComponent {
     this.achievementSearchCriteria.controls.userID.setValue(data.userID);
     this.gameSearchCriteria.controls.userID.setValue(data.userID);
     this.boardSearchCriteria.controls.userID.patchValue(data.userID);
+    this.threadSearchCriteria.controls.userID.patchValue(data.userID);
     this.userLoaded = true;
   }
 
@@ -555,6 +612,17 @@ export class UserProfileComponent {
     }
   }
 
+  async loadAllThreadNames(){
+    try{
+      this.allThreadNames = await lastValueFrom(this.threadService.getAllThreadNames().pipe());
+    } catch(err){
+      this.snackBar.open('Error loading board names!', 'dismiss', {
+        duration: 3000
+      });
+      console.log(err);
+    }
+  }
+
   handleGetAllBoardNamesResponse(data: any){
     if (data !== null && data !== undefined) {
       this.allBoardNames = data;
@@ -669,7 +737,6 @@ export class UserProfileComponent {
         error: this.handleErrorResponse.bind(this)
       });
     }
-    
   }
 
   clearBoardSearch(){
@@ -710,11 +777,67 @@ export class UserProfileComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.boardsLoaded = false;
         this.ngAfterViewInit();
       } else {
         this.ngAfterViewInit();
       }
     });
+  }
+
+  addUserThread(){
+    const dialogRef = this.matDialog.open(AddUserThreadComponent, {
+      width: '100%',
+      data: {
+        isEdit: false,
+        userID: this.user.userID,
+        allThreadNames: this.allThreadNames
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.ngAfterViewInit();
+      } else {
+        this.ngAfterViewInit();
+      }
+    });
+  }
+
+  applyThreadSearch(){
+    this.threadsLoaded = false;
+    let trimmedSearch = this.threadSearchCriteria.controls.threadSearchTerm.value?.trim();
+    if(trimmedSearch !== undefined && trimmedSearch !== null){
+      this.threadSearchCriteria.controls.threadSearchTerm.patchValue(trimmedSearch);
+      this.userThreadService.getAll(this.threadSearchCriteria.value).subscribe({
+        next: this.handleThreadSearchResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
+  }
+
+  clearThreadSearch(){
+    this.threadSearchCriteria.controls.threadSearchTerm.patchValue('');
+    this.threadSearchCriteria.controls.sort.patchValue('userThreadID');
+    this.threadSearchCriteria.controls.pagination.patchValue('true');
+    this.threadSearchCriteria.controls.direction.patchValue('asc');
+    this.threadSearchCriteria.controls.limit.patchValue(5);
+    this.threadSearchCriteria.controls.page.patchValue(0);
+    this.threadsLoaded = false;
+    this.userThreadService.getAll(this.threadSearchCriteria.value).subscribe({
+      next: this.handleThreadSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
+  }
+
+  handleThreadSearchResponse(data: any){
+    if(data == null){
+      this.userThreadsDataSource.data = [];
+      this.threadResultsLength = 0;
+      this.ngAfterViewInit();
+    } else {
+      this.userThreadsDataSource.data = data.data;
+      this.threadResultsLength = data.userThreadCount;
+      this.ngAfterViewInit();
+    }
   }
 }

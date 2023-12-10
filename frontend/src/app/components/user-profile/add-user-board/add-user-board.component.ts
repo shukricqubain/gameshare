@@ -78,7 +78,6 @@ export class AddUserBoardComponent {
 
       ///grab gameID and gameName based on boardID
       let board: any = await this.getSingleBoard(newUserBoard.boardID);
-      console.log(board)
       if(board != undefined && board != null && board !== `Can't find board based on boardID`){
         newUserBoard.gameID = parseInt(board.gameID);
         newUserBoard.gameName = board.gameName;
@@ -96,7 +95,6 @@ export class AddUserBoardComponent {
     newUserBoard.createdAt = this.addUserBoardForm.controls.createdAt.value || '';
     newUserBoard.updatedAt = this.addUserBoardForm.controls.updatedAt.value || '';
     newUserBoard.userID = this.data.userID || 0;
-    console.log(newUserBoard);
 
     if(this.isEdit){
       newUserBoard.userBoardID = this.data.element?.userBoardID;

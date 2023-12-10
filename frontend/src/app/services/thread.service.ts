@@ -20,6 +20,10 @@ export class ThreadService {
     return this.http.get(`${baseUrl}/singleThread/${threadID}`);
   }
 
+  getAllThreadNames(): Observable<any> {
+    return this.http.get(`${baseUrl}/allThreadNames`);
+  }
+
   create(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/addThread`, data);
   }

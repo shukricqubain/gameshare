@@ -232,7 +232,6 @@ export class BoardsComponent {
         duration: 3000
       });
     }
-    
   }
 
   handleFollowResponse(data: any){
@@ -246,6 +245,9 @@ export class BoardsComponent {
 
   handleUnfollowResponse(data: any){
     if(data == null){
+      this.snackBar.open('Successfully unfollowed a board!', 'dismiss',{
+        duration: 3000
+      });
       this.ngOnInit();
     } else {
       this.ngOnInit();

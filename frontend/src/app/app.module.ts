@@ -51,6 +51,7 @@ import { BoardComponent } from './components/boards/board/board.component';
 import { ThreadComponent } from './components/boards/threads/thread/thread.component';
 import { AddThreadItemComponent } from './components/boards/threads/thread/add-thread-item/add-thread-item.component';
 import { AddUserBoardComponent } from './components/user-profile/add-user-board/add-user-board.component';
+import { AddUserThreadComponent } from './components/user-profile/add-user-thread/add-user-thread.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { AddUserBoardComponent } from './components/user-profile/add-user-board/
     BoardComponent,
     ThreadComponent,
     AddThreadItemComponent,
-    AddUserBoardComponent
+    AddUserBoardComponent,
+    AddUserThreadComponent
   ],
   imports: [
     BrowserModule,

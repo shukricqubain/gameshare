@@ -81,6 +81,24 @@ router.get('/singleThread/:threadID', async function(req, res){
     }
 });
 
+// get all threadNames in the database
+router.get('/allThreadNames', async function(req, res){
+    try{
+        let allThreadNames = await threadController.findAllThreadNames();
+        if(allThreadNames !== undefined && allThreadNames !== null){
+            res.status(200).send(allThreadNames);
+        } else {
+            res.status(204).send(`No thread names found in the database.`);
+        }
+    } catch(err){
+        console.log(err);
+        res.status(500).json({
+            message:"There was an error getting all thread names from the database.",
+            err
+        });
+    }
+});
+
 // edit a thread by threadID
 router.put('/editThread', async function(req, res){
     try{

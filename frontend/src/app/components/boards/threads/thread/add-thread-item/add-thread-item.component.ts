@@ -147,7 +147,6 @@ export class AddThreadItemComponent {
   }
 
   handleCreateResponse(data: any) {
-    console.log(data)
     if (data !== null && data !== undefined) {
       this.snackBar.open('Successfully created a new thread item!', 'dismiss', {
         duration: 3000

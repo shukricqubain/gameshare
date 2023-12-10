@@ -10,6 +10,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddThreadComponent } from '../threads/add-thread/add-thread.component';
 import { User } from 'src/app/models/user.model';
 import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
+import { lastValueFrom } from 'rxjs';
+import { UserThread } from 'src/app/models/userThread.model';
+import { UserThreadService } from 'src/app/services/userThread.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-board',
@@ -23,6 +27,8 @@ export class BoardComponent {
     private router: Router,
     private location: Location,
     private threadService: ThreadService,
+    private userThreadService: UserThreadService,
+    private userService: UserService,
     private matDialog: MatDialog,
   ) {
   }
@@ -41,11 +47,29 @@ export class BoardComponent {
   loadingThreads: boolean = false;
   board: any;
   user: User;
+  userName: any;
+  userThreads: UserThread[];
+  userThreadsLoaded: boolean = false;
 
   async ngOnInit() {
+    await this.checkCurrentUser();
+    await this.loadBoardThreads();
+    await this.loadAllUserThreads();
+  }
+
+  async checkCurrentUser(){
     let data: any = this.location.getState();
     this.board = data.board;
-    this.user = data.user;
+    if(data.user !== undefined && data.user !== null){
+      this.user = data.user;
+    } else {
+      this.userName = localStorage.getItem('userName') ? localStorage.getItem('userName') : '';
+      this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+    }
+    
+  }
+
+  async loadBoardThreads(){
     if (this.board !== null && this.board !== undefined && this.board.boardID !== undefined && this.board.boardID !== null) {
       this.boardSearchCriteria.controls.boardID.patchValue(this.board.boardID);
       this.loadingThreads = true;
@@ -61,12 +85,18 @@ export class BoardComponent {
     }
   }
 
-  handleSearchResponse(result: any) {
+  async handleSearchResponse(result: any) {
     if (result !== null) {
       this.allThreads = result.data;
+      if(!this.userThreadsLoaded){
+        await this.loadAllUserThreads();
+      } else {
+        this.checkThreads();
+      }
     } else {
       this.allThreads = [];
     }
+    
   }
 
   public handleDeleteResponse(data:any){
@@ -131,6 +161,57 @@ export class BoardComponent {
   }
 
   saveThread(thread: Thread) {
+    let newUserThread: UserThread = {
+      userThreadID: 0,
+      threadID: thread.threadID,
+      threadName: thread.threadName,
+      boardName: thread.boardName,
+      boardID: thread.boardID,
+      userID: this.user.userID,
+      createdAt: '',
+      updatedAt: ''
+    };
+    this.userThreadService.create(newUserThread).subscribe({
+      next: this.handleFollowResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
+  }
+
+  handleFollowResponse(data: any){
+    if(data !== null){
+      this.snackBar.open('Successfully followed a thread!', 'dismiss',{
+        duration: 3000
+      });
+      this.ngOnInit();
+    }
+  }
+
+  async unfollowThread(thread: Thread){
+    if(!this.userThreadsLoaded){
+      await this.loadAllUserThreads();
+    }
+    let userThread = this.userThreads.find(obj => obj.threadID == thread.threadID);
+    if(userThread !== undefined){
+      this.userThreadService.delete(userThread?.userThreadID).subscribe({
+        next: this.handleUnfollowResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    } else {
+      this.snackBar.open('Unfollow was not successful: User Thread was undefined.', 'dismiss',{
+        duration: 3000
+      });
+    }
+  }
+
+  handleUnfollowResponse(data: any){
+    if(data == null){
+      this.snackBar.open('Successfully unfollowed a thread!', 'dismiss',{
+        duration: 3000
+      });
+      this.ngOnInit();
+    } else {
+      this.ngOnInit();
+    }
   }
 
   openThread(thread: Thread) {
@@ -182,5 +263,44 @@ export class BoardComponent {
         });
       }
     });
+  }
+
+  async loadAllUserThreads(){
+    try {
+      let userThreadSearchCriteria = {
+        threadSearchTerm: '',
+        sort: 'userThreadID',
+        pagination: 'false',
+        direction: 'asc',
+        limit: 5,
+        page: 0,
+        userID: this.user.userID
+      }
+      let result = await lastValueFrom(this.userThreadService.getAll(userThreadSearchCriteria).pipe());
+      if(result !== null && result !== undefined){
+        this.userThreads = result.data;
+        this.checkThreads();
+        this.userThreadsLoaded = true;
+      } else {
+        this.userThreads = [];
+        this.userThreadsLoaded = true;
+      }
+    } catch (err) {
+      this.snackBar.open('Error loading user threads!', 'dismiss', {
+        duration: 3000
+      });
+      console.log(err)
+    }
+  }
+
+  checkThreads(){
+    for(let thread of this.allThreads){
+      let match = this.userThreads.find(obj => obj.threadID == thread.threadID);
+      if(match !== undefined && match !== null){
+        thread.isFollowing = true;
+      } else {
+        thread.isFollowing = false;
+      }
+    }
   }
 }

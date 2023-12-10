@@ -55,6 +55,20 @@ exports.findOne = async (req) => {
     }
 };
 
+///get all thread names
+exports.findAllThreadNames = async (req) => {
+    try{
+        let allThreadNames = await threadService.getAllThreadNames();
+        if(allThreadNames.length > 0){
+            return allThreadNames;
+        } else {
+            return {message: 'No thread names in table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 // Update a thread by their id
 exports.update = async (threadID, thread) => {
     try{
