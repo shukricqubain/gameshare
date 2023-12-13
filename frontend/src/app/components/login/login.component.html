@@ -18,15 +18,22 @@
                     </mat-form-field>
                     <div
                         *ngIf="loginForm.controls.username.invalid && (loginForm.controls.username.dirty || loginForm.controls.username.touched)">
-                        <div *ngIf="loginForm.controls.username.errors?.['required']">
+                        <div *ngIf="loginForm.controls.username.errors?.['required']" style="text-align: center;">
                             Name is required.
+                        </div>
+                    </div>
+                    <div
+                        *ngIf="loginForm.controls.password.invalid && (loginForm.controls.password.dirty || loginForm.controls.password.touched)">
+                        <div *ngIf="loginForm.controls.password.errors?.['required']" style="text-align: center;">
+                            Password is required.
                         </div>
                     </div>
                 </div>
                 <div class="button-container">
                     <button class="button" mat-raised-button [disabled]="!loginForm.dirty || !loginForm.valid"
                         type="submit">Login</button>
-                    <button class="button" mat-raised-button style="margin-left: 10px;" [disabled]="!loginForm.dirty || !loginForm.valid" type="button"
+                    <button class="button" mat-raised-button style="margin-left: 10px;"
+                        [disabled]="!loginForm.dirty || !loginForm.valid" type="button"
                         (click)="onSignup()">Signup</button>
                 </div>
             </form>

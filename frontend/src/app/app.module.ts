@@ -52,6 +52,7 @@ import { ThreadComponent } from './components/boards/threads/thread/thread.compo
 import { AddThreadItemComponent } from './components/boards/threads/thread/add-thread-item/add-thread-item.component';
 import { AddUserBoardComponent } from './components/user-profile/add-user-board/add-user-board.component';
 import { AddUserThreadComponent } from './components/user-profile/add-user-thread/add-user-thread.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,9 @@ import { AddUserThreadComponent } from './components/user-profile/add-user-threa
     MatMenuModule,
     MatTabsModule,
     MatSelectModule,
-    MatExpansionModule
+    MatExpansionModule,
+    NgxMaskDirective, 
+    NgxMaskPipe
   ],
   exports: [
     MatButtonModule,
@@ -129,6 +132,7 @@ import { AddUserThreadComponent } from './components/user-profile/add-user-threa
   ],
   providers: [
     MatDatepickerModule,
+    provideNgxMask()
   ],
   bootstrap: [AppComponent]
 })
