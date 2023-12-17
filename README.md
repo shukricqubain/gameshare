@@ -1,35 +1,8 @@
-<a name="readme-top"></a>
-
 # Gameshare
-
-<!-- Table of Contents -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About the project</a>
-      <ul>
-        <li><a href="#description">Project Description</a></li>
-        <li><a href="#built-with">Built with</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
 
 <!-- About the project -->
 
-## ABOUT THE PROJECT
+## About the project
 
 ### Description
 Gameshare is a social media platform in which users can share their progress in the games they play,
@@ -42,9 +15,6 @@ contribute to discussion boards about games, and interact with friends in the pl
 * [Express][Express-url]
 * [MySQL][MySQL-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -82,41 +52,15 @@ _Below is an example of how you can instruct your audience on installing and set
    const API_KEY = 'ENTER YOUR API';
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- USAGE EXAMPLES -->
 ## Usage
 todo
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- ROADMAP -->
 ## Roadmap
-Gameshare Version 1.1
-- [ ] Revamp Game Page
-  - [ ] Add cover image to game object
-- [ ] Revamp Achievement Page
-  - [ ] Add icon image to achievement object
-- [ ] Revamp User Boards page
-  - [ ] Make user board page visually similar to boards page
-  - [ ] Add unfollow button to followed boards on user profile
-- [ ] Revamp User Threads page
-  - [ ] Make user thread page visually similar to thread page
-  - [ ] Add unfollow button to followed threads on user profile
-  - [ ] Change userID to userName for each post in a thread
-  - [ ] Fix depth logic for responses in a thread
-- [ ] User Friends Page
-  - [ ] Allow users to befriend other users when viewing their profile
-  - [ ] Allow users to view anothers profile by clicking thier userName in a thread post
-- [ ] Miscellanious 
-  - [ ] Autopopulate achievements when adding a game to a user's collection
-  - [ ] Restrict input to only allow numbers in phone number input in user creation/edit
-  - [ ] Add regex to email input in user creation/edit
-  - [ ] Add minimum date for date of birth in user creation/edit
-  - [ ] Add restrictions for user role updation in user creation/edit
 
-Gameshare Version 1.0
+### Version 1.0
 - [x] Login/Signup Functionality
   - [x] Basic CRUD for Roles
   - [x] Basic CRUD for Users
@@ -148,25 +92,41 @@ Gameshare Version 1.0
     - [x] Allow users to edit or delete their own posts/thread items
     - [x] Allow user to post/reply to a thread item
 
+### Version 1.1
+- [ ] Revamp Game Page
+  - [ ] Add cover image to game object
+- [ ] Revamp Achievement Page
+  - [ ] Add icon image to achievement object
+- [ ] Revamp User Boards page
+  - [ ] Make user board page visually similar to boards page
+  - [ ] Add unfollow button to followed boards on user profile
+- [ ] Revamp User Threads page
+  - [ ] Make user thread page visually similar to thread page
+  - [ ] Add unfollow button to followed threads on user profile
+  - [ ] Change userID to userName for each post in a thread
+  - [ ] Fix depth logic for responses in a thread
+- [ ] User Friends Page
+  - [ ] Allow users to befriend other users when viewing their profile
+  - [ ] Allow users to view anothers profile by clicking thier userName in a thread post
+- [ ] Miscellanious 
+  - [ ] Autopopulate achievements when adding a game to a user's collection
+  - [ ] Restrict input to only allow numbers in phone number input in user creation/edit
+  - [ ] Add regex to email input in user creation/edit
+  - [ ] Add minimum date for date of birth in user creation/edit
+  - [ ] Add restrictions for user role updation in user creation/edit
 
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- ACKNOWLEDGMENTS  -->
-## ACKNOWLEDGMENTS
+## Acknowledgements 
 * [Choose an Open Source License](https://choosealicense.com)
 * [Img Shields](https://shields.io)
 * [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
