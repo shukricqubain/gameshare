@@ -93,7 +93,30 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 <!-- ROADMAP -->
 ## Roadmap
+Gameshare Version 1.1
+- [ ] Revamp Game Page
+  - [ ] Add cover image to game object
+- [ ] Revamp Achievement Page
+  - [ ] Add icon image to achievement object
+- [ ] Revamp User Boards page
+  - [ ] Make user board page visually similar to boards page
+  - [ ] Add unfollow button to followed boards on user profile
+- [ ] Revamp User Threads page
+  - [ ] Make user thread page visually similar to thread page
+  - [ ] Add unfollow button to followed threads on user profile
+  - [ ] Change userID to userName for each post in a thread
+  - [ ] Fix depth logic for responses in a thread
+- [ ] User Friends Page
+  - [ ] Allow users to befriend other users when viewing their profile
+  - [ ] Allow users to view anothers profile by clicking thier userName in a thread post
+- [ ] Miscellanious 
+  - [ ] Autopopulate achievements when adding a game to a user's collection
+  - [ ] Restrict input to only allow numbers in phone number input in user creation/edit
+  - [ ] Add regex to email input in user creation/edit
+  - [ ] Add minimum date for date of birth in user creation/edit
+  - [ ] Add restrictions for user role updation in user creation/edit
 
+Gameshare Version 1.0
 - [x] Login/Signup Functionality
   - [x] Basic CRUD for Roles
   - [x] Basic CRUD for Users
@@ -111,19 +134,19 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Basic CRUD for Threads
   - [x] Basic CRUD for Thread Items
   - [x] Implement an interactive Boards page
-    - [x] Displaying all boards, with searching.
-    - [x] Creation, editing, and deletion of boards.
-    - [x] Reroute to individual board on click.
-    - [x] Allow user to follow and unfollow board.
-  - [x] Implement an interactive Board page.
-    - [x] Displaying all threads for a specific board, with searching and sorting.
-    - [x] Creation, editing, and deletion of threads.
-    - [x] Reroute to individual thread on click.
-    - [x] Allow user to follow and unfollow thread.
+    - [x] Displaying all boards, with searching
+    - [x] Creation, editing, and deletion of boards
+    - [x] Reroute to individual board on click
+    - [x] Allow user to follow and unfollow board
+  - [x] Implement an interactive Board page
+    - [x] Displaying all threads for a specific board, with searching and sorting
+    - [x] Creation, editing, and deletion of threads
+    - [x] Reroute to individual thread on click
+    - [x] Allow user to follow and unfollow thread
   - [x] Implement an interactive Thread page
-    - [x] Displaying all thread items for a specific thread.
-    - [x] Allow users to edit or delete their own posts/thread items.
-    - [x] Allow user to post/reply to a thread item.
+    - [x] Displaying all thread items for a specific thread
+    - [x] Allow users to edit or delete their own posts/thread items
+    - [x] Allow user to post/reply to a thread item
 
 
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
