@@ -93,10 +93,17 @@ Use this space to show useful examples of how a project can be used. Additional 
     - [x] Allow user to post/reply to a thread item
 
 ### Version 1.1
-- [ ] Revamp Game Page
+- [ ] Revamp Game and User Game Page
   - [ ] Add cover image to game object
-- [ ] Revamp Achievement Page
+  - [ ] Change display from table to material cards containing the image of the game.
+  - [ ] Make cards clickable and display a pop up containing information on the game along with the achievements.
+  - [ ] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
+  - [ ] Autopopulate achievements when adding a game to a user's collection
+- [ ] Revamp Achievement and User Achievement Page
   - [ ] Add icon image to achievement object
+  - [ ] Change display from table to material cards containing the icon and title along with actions.
+  - [ ] Add info icon to material card to display the details of this achievement.
+  - [ ] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
 - [ ] Revamp User Boards page
   - [ ] Make user board page visually similar to boards page
   - [ ] Add unfollow button to followed boards on user profile
@@ -108,8 +115,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 - [ ] User Friends Page
   - [ ] Allow users to befriend other users when viewing their profile
   - [ ] Allow users to view anothers profile by clicking thier userName in a thread post
-- [ ] Miscellanious 
-  - [ ] Autopopulate achievements when adding a game to a user's collection
+- [ ] Revamp User Signup and Edit
   - [ ] Restrict input to only allow numbers in phone number input in user creation/edit
   - [ ] Add regex to email input in user creation/edit
   - [ ] Add minimum date for date of birth in user creation/edit
