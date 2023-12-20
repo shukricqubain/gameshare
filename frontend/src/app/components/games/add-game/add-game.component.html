@@ -33,17 +33,20 @@
                             required />
                     </mat-form-field>
                 </div>
-                <div class="form-row">
+                <div class="file-row">
                     <input [matDatepicker]="picker" placeholder="Choose a date" required
                         formControlName="releaseDate" />
                     <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
-                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
-                        <label>Game Cover</label>
-                        <input matInput name="gameCover" id="gameCover" type="text" formControlName="gameCover"
-                            placeholder="Upload game cover." />
-                    </mat-form-field>
+                    <button type="button" mat-icon-button (click)="fileInput.click()">
+                        <mat-icon>
+                            file_upload
+                        </mat-icon>
+                    </button>
+                    <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
+                    <span class="file-name">{{fileName}}</span>
                 </div>
+                <br>
                 <div class="form-row">
                     <mat-form-field MatFormFieldAppearance="outline">
                         <label>Platform</label>

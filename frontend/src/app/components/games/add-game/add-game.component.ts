@@ -28,7 +28,7 @@ export class AddGameComponent {
     publishers: new FormControl('', [Validators.required]),
     genre: new FormControl('', [Validators.required]),
     releaseDate: new FormControl('', [Validators.required]),
-    gameCover: new FormControl(''),
+    gameCover: new FormControl('', [Validators.required]),
     platform: new FormControl('', [Validators.required]),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
@@ -37,6 +37,7 @@ export class AddGameComponent {
   isEdit: boolean = false;
   gameNotFound: boolean = false;
   existingGame: Game;
+  fileName: string;
 
   ngOnInit() {
     if(this.data !== null && this.data != undefined && this.data.isEdit == true){
@@ -174,4 +175,30 @@ export class AddGameComponent {
     
   }
 
+  async onFileSelected(event: any){
+    const file = event.target.files[0] ?? null;
+    this.fileName = file.name;
+    let reader = new FileReader();
+    reader.onloadend = function() {
+      console.log('RESULT', reader.result)
+    }
+    
+    if(file){
+      let imgCompressed = await this.compressImage(file, 50);
+      imgCompressed = 'data:image/png;base64,' + imgCompressed.split(',')[1];
+      this.addGameForm.controls.gameCover.patchValue(imgCompressed);
+      this.addGameForm.controls.gameCover.markAsDirty();
+    }
+  }
+
+  async compressImage(blobImg: any, percent: any){
+    let bitmap = await createImageBitmap(blobImg);
+    let canvas = document.createElement("canvas");
+    let ctx = canvas.getContext('2d');
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    ctx?.drawImage(bitmap, 0, 0);
+    let dataURL = canvas.toDataURL("images/png", percent / 100);
+    return dataURL;
+  }
 }

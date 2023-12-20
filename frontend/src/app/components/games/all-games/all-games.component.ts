@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { catchError, map, merge, startWith, switchMap, of as observableOf } from 'rxjs';
+import { catchError, map, merge, startWith, switchMap, of as observableOf, lastValueFrom } from 'rxjs';
 import { Game } from 'src/app/models/game.model';
 import { GameService } from 'src/app/services/game.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,7 +34,7 @@ export class AllGamesComponent {
 
   displayedColumns: string[] = ['gameID', 'gameName', 'developers', 'publishers', 'genre', 'releaseDate', 'platform', 'actions'];
   dataSource = new MatTableDataSource<any>;
-  gameData: Game[];
+  gameData: any;
   search: any;
   pageSize = 5;
   currentPage = 0;
@@ -54,27 +54,35 @@ export class AllGamesComponent {
   });
 
   async ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-    merge(this.sort.sortChange, this.paginator.page, this.paginator.pageSize)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          // this.isLoadingResults = true;
-          this.searchCriteria.controls.sort.patchValue(this.sort.active);
-          this.searchCriteria.controls.direction.patchValue(this.sort.direction);
-          this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
-          this.searchCriteria.controls.limit.patchValue(this.paginator.pageSize);
-          return this.gameService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
-        }),
-        map(data => {
-          if (data === null) {
-            return [];
-          }
-          this.resultsLength = data.gameCount;
-          return data.data;
-        }),
-      )
-      .subscribe(data => (this.dataSource = data));
+    // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    // merge(this.sort.sortChange, this.paginator.page, this.paginator.pageSize)
+    //   .pipe(
+    //     startWith({}),
+    //     switchMap(() => {
+    //       // this.isLoadingResults = true;
+    //       this.searchCriteria.controls.sort.patchValue(this.sort.active);
+    //       this.searchCriteria.controls.direction.patchValue(this.sort.direction);
+    //       this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
+    //       this.searchCriteria.controls.limit.patchValue(this.paginator.pageSize);
+    //       return this.gameService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
+    //     }),
+    //     map(data => {
+    //       if (data === null) {
+    //         return [];
+    //       }
+    //       this.resultsLength = data.gameCount;
+    //       return data.data;
+    //     }),
+    //   )
+    //   .subscribe(data => (this.dataSource = data));
+
+    this.gameData = await lastValueFrom(this.gameService.getAll({
+      searchTerm: '',
+      sort: 'gameID',
+      pagination: 'false',
+      direction: 'asc'
+    }).pipe());
+    this.gameData = this.gameData.data;
   }
 
   public handleSearchResponse(data: any) {
@@ -95,8 +103,8 @@ export class AllGamesComponent {
     });
   }
 
-  public handleDeleteResponse(data:any){
-    if(data == null){
+  public handleDeleteResponse(data: any) {
+    if (data == null) {
       this.ngAfterViewInit();
     } else {
       this.ngAfterViewInit();
@@ -165,7 +173,7 @@ export class AllGamesComponent {
     });
   }
 
-  public deleteGame(element: any){
+  public deleteGame(element: any) {
     const dialogRefDelete = this.matDialog.open(PopUpComponent, {
       width: '100%',
       disableClose: true,
@@ -176,21 +184,23 @@ export class AllGamesComponent {
     });
 
     dialogRefDelete.afterClosed().subscribe(result => {
-      if(result.event === 'delete'){
+      if (result.event === 'delete') {
         this.gameService.delete(element.gameID).subscribe({
           next: this.handleDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
-        this.snackBar.open(`${element.gameName} has been deleted.`, 'dismiss',{
+        this.snackBar.open(`${element.gameName} has been deleted.`, 'dismiss', {
           duration: 3000
         });
       } else {
-        this.snackBar.open(`${element.gameName} has not been deleted.`, 'dismiss',{
+        this.snackBar.open(`${element.gameName} has not been deleted.`, 'dismiss', {
           duration: 3000
         });
       }
     });
   }
+
+
 }
 
 

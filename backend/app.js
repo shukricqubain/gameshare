@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const bodyParser = require('body-parser');
 
 const corsOptions ={
     origin:'http://localhost:4200', 
@@ -11,9 +12,9 @@ const corsOptions ={
 app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000}));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
-
 // database model
 const db = require("./models");
 db.sequelize.sync({alter: true, force: false}).then(() => {

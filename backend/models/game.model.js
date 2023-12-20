@@ -35,7 +35,7 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         gameCover:{
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT('long'),
             validate: {
             }
         },

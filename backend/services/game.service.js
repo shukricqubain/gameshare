@@ -10,7 +10,7 @@ async function findCount(searchCriteria) {
         let games;
         let where;
         if (searchTerm !== '') {
-            where =  {
+            where = {
                 [Op.or]: {
                     gameID: { [Op.like]: '%' + searchTerm + '%' },
                     gameName: { [Op.like]: '%' + searchTerm + '%' },
@@ -64,41 +64,38 @@ async function getAll(searchCriteria) {
         } else {
             where = '';
         }
-        if (pagination) {
+        if (pagination === 'true') {
             limit = searchCriteria.limit;
             if (page != 0) {
                 offset = page * limit;
             }
+            return await db.game.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['gameName', 'ASC'],
+                ],
+                limit: limit,
+                offset: offset,
+                raw: true,
+            });
+        } else {
+            return await db.game.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['gameName', 'ASC'],
+                ],
+                raw: true,
+            });
         }
-        return await db.game.findAll({
-            where: where,
-            order: [
-                [sort, sortDirection],
-                ['gameName', 'ASC'],
-            ],
-            limit: limit,
-            offset: offset,
-            attributes: [
-                'gameID',
-                'gameName',
-                'developers',
-                'publishers',
-                'genre',
-                'releaseDate',
-                'gameCover',
-                'platform',
-                'createdAt',
-                'updatedAt'
-            ],
-            raw: true,
-        });
     } catch (err) {
         console.log(err)
     }
 }
 
-async function create(game){
-    try{
+async function create(game) {
+    try {
         return await db.game.create({
             gameID: game.gameID,
             gameName: game.gameName,
@@ -109,38 +106,38 @@ async function create(game){
             gameCover: game.gameCover,
             platform: game.platform
         });
-    } catch(err){
+    } catch (err) {
         console.log(err)
-        if(err.errors[0].type === 'unique violation'){
+        if (err.errors[0].type === 'unique violation') {
             return err.errors[0].message;
         }
     }
 }
 
-async function getOne(gameID){
-    try{
+async function getOne(gameID) {
+    try {
         return await db.game.findOne({
-            where: {gameID: gameID},
+            where: { gameID: gameID },
             raw: true
         });
-    } catch(err){
+    } catch (err) {
         console.log(err);
     }
 }
 
-async function getOneByName(gameName){
-    try{
+async function getOneByName(gameName) {
+    try {
         return await db.game.findOne({
-            where: {gameName: gameName},
+            where: { gameName: gameName },
             raw: true
         });
-    } catch(err){
+    } catch (err) {
         console.log(err);
     }
 }
 
-async function getAllGameNames(){
-    try{
+async function getAllGameNames() {
+    try {
         return await db.game.findAll({
             order: [
                 ['gameName', 'ASC'],
@@ -151,37 +148,37 @@ async function getAllGameNames(){
             ],
             raw: true
         });
-    } catch(err){
+    } catch (err) {
         console.log(err);
     }
 }
 
-async function update(gameID, game){
-    try{
+async function update(gameID, game) {
+    try {
         return result = await db.game.update(
             game,
             {
-                where:{
+                where: {
                     gameID: gameID
                 }
             }
         );
-    } catch(err){
+    } catch (err) {
         console.log(err);
-        if(err.errors[0].type === 'unique violation'){
+        if (err.errors[0].type === 'unique violation') {
             return err.errors[0].message;
         }
     }
 }
 
-async function deleteGame(gameID){
-    try{
+async function deleteGame(gameID) {
+    try {
         return result = await db.game.destroy({
-            where:{
+            where: {
                 gameID: gameID
             }
         });
-    } catch(err){
+    } catch (err) {
         console.log(err);
     }
 }
