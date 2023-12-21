@@ -1,10 +1,46 @@
-.game-container{
+.game-info-component {
+    display: flex;
+    margin: 2rem 2rem 2rem 2rem;
+    overflow-y: auto;
+}
+
+.game-container {
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
 }
 
-.achievement-container{
+.header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.info-column {
+    display: flex;
+    flex-direction: column;
+}
+
+h3 {
+    margin: 0
+}
+
+p {
+    margin: 0
+}
+
+.image-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.game-image {
+    width: 200px;
+    height: 200px;
+}
+
+.achievement-container {
+    margin-top: 1rem;
     height: 50%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }

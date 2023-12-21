@@ -1,11 +1,32 @@
-<div class="child-component">
+<div class="game-info-component">
     <div class="game-container">
-        <h1>{{game.gameName}}</h1>
-
+        <div class="header-container">
+            <div class="image-column">
+                <img src="{{game.gameCover}}" class="game-image">
+            </div>
+            <div class="info-column">
+                <h3>{{game.gameName}}</h3>
+                <p>Release in {{formatDate(game.releaseDate)}}</p>
+                <p>Developed by {{game.developers}}</p>
+                <p>Published by {{game.publishers}}</p>
+                <p>Genre {{game.genre}}</p>
+                <p>Playable on {{game.platform}}</p>
+            </div>
+        </div>
         <div class="achievement-container">
             <h2>Achievements</h2>
-            <div *ngFor="let achievement of achievements">
-                <p>{{achievement.achievementName}}: {{achievement.achievementDescription}}</p>
+            <div *ngIf="isLoadingAchievements">
+                <mat-spinner [diameter]="100"></mat-spinner>
+            </div>
+            <div *ngIf="!isLoadingAchievements">
+                <div *ngIf="achievements.length > 0">
+                    <div *ngFor="let achievement of achievements">
+                        <p>{{achievement.achievementName}}: {{achievement.achievementDescription}}</p>
+                    </div>
+                </div>
+                <div *ngIf="achievements.length == 0">
+                    <p>No achievements found for this game.</p>
+                </div>
             </div>
         </div>
     </div>

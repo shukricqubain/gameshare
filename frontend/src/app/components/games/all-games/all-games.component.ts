@@ -167,8 +167,8 @@ export class AllGamesComponent {
 
   gameInfoPopup(game: Game){
     const dialogRefAdd = this.matDialog.open(GameInfoComponent, {
-      width: '60%',
       disableClose: false,
+      height: '80vh',
       data: {
         game
       }
