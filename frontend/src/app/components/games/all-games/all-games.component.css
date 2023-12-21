@@ -5,7 +5,7 @@
     margin-left: 2rem;
 }
 
-.search-form-container{
+.search-form-container {
     display: flex;
     justify-content: space-between;
     margin-top: 0.5rem;
@@ -127,11 +127,20 @@ table {
     flex-wrap: wrap;
 }
 
-.game-item {
+.game-margin {
     padding: 3px 3px 3px 3px;
 }
 
+.game-item {
+    cursor: pointer;
+}
+
 .game-image {
-    width:300px;
-    height:300px;
+    width: 250px;
+    height: 250px;
+}
+
+.loading-container {
+    display: grid; 
+    place-items: center;
 }

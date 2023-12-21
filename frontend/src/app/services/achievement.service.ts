@@ -23,6 +23,10 @@ export class AchievementService {
     return this.http.get(`${baseUrl}/singleAchievement/${achievementID}`);
   }
 
+  getByGameID(gameID: any): Observable<any> {
+    return this.http.get(`${baseUrl}/achievementsByGameID/${gameID}`);
+  }
+
   create(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/addAchievement`, data);
   }

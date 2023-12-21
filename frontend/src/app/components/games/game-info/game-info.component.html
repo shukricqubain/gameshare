@@ -1,0 +1,12 @@
+<div class="child-component">
+    <div class="game-container">
+        <h1>{{game.gameName}}</h1>
+
+        <div class="achievement-container">
+            <h2>Achievements</h2>
+            <div *ngFor="let achievement of achievements">
+                <p>{{achievement.achievementName}}: {{achievement.achievementDescription}}</p>
+            </div>
+        </div>
+    </div>
+</div>

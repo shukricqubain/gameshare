@@ -53,6 +53,7 @@ import { AddThreadItemComponent } from './components/boards/threads/thread/add-t
 import { AddUserBoardComponent } from './components/user-profile/add-user-board/add-user-board.component';
 import { AddUserThreadComponent } from './components/user-profile/add-user-thread/add-user-thread.component';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { GameInfoComponent } from './components/games/game-info/game-info.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     ThreadComponent,
     AddThreadItemComponent,
     AddUserBoardComponent,
-    AddUserThreadComponent
+    AddUserThreadComponent,
+    GameInfoComponent
   ],
   imports: [
     BrowserModule,

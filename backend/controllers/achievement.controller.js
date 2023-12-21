@@ -66,6 +66,20 @@ exports.findOne = async (req) => {
     }
 };
 
+// Get all achievements by gameID
+exports.findByGameID = async (req) => {
+    try{
+        let achievements = await achievementService.getByGameID(req);
+        if(achievements == null){
+            return 'Cannot find achievements with specified gameID';
+        } else {
+            return achievements;
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 // Update a achievement by their id
 exports.update = async (achievementID, achievement) => {
     try{

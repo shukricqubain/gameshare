@@ -120,6 +120,17 @@ async function getOne(achievementID){
     }
 }
 
+async function getByGameID(gameID){
+    try{
+        return await db.achievement.findAll({
+            where: {gameID: gameID},
+            raw: true
+        });
+    } catch(err){
+        console.log(err);
+    }
+}
+
 async function update(achievementID, achievement){
     try{
         return result = await db.achievement.update(
@@ -173,6 +184,7 @@ module.exports = {
     getAll,
     getAllAchievementNames,
     getOne,
+    getByGameID,
     create,
     update,
     deleteAchievement

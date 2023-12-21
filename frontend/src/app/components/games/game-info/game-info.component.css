@@ -1,0 +1,10 @@
+.game-container{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.achievement-container{
+    height: 50%;
+    overflow-y: scroll;
+}

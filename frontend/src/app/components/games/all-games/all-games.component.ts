@@ -1,17 +1,15 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { catchError, map, merge, startWith, switchMap, of as observableOf, lastValueFrom } from 'rxjs';
 import { Game } from 'src/app/models/game.model';
 import { GameService } from 'src/app/services/game.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddGameComponent } from '../add-game/add-game.component';
-import { Router } from '@angular/router';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
+import { GameInfoComponent } from '../game-info/game-info.component';
 
 @Component({
   selector: 'app-all-games',
@@ -22,24 +20,17 @@ export class AllGamesComponent {
 
   constructor(
     private gameService: GameService,
-    private changeDetectorRef: ChangeDetectorRef,
     private snackBar: MatSnackBar,
     private matDialog: MatDialog,
-    private router: Router,
     private dateFunction: DateFunctionsService
   ) { }
 
-  ngOnInit() {
-  }
-
-  displayedColumns: string[] = ['gameID', 'gameName', 'developers', 'publishers', 'genre', 'releaseDate', 'platform', 'actions'];
-  dataSource = new MatTableDataSource<any>;
   gameData: any;
   search: any;
   pageSize = 5;
   currentPage = 0;
   resultsLength = 0;
-  isLoadingResults: boolean = false;
+  isLoadingResults: boolean = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -47,71 +38,52 @@ export class AllGamesComponent {
   searchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
     sort: new FormControl('gameID', [Validators.required]),
-    pagination: new FormControl('true', [Validators.required]),
+    pagination: new FormControl('false', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required])
   });
 
-  async ngAfterViewInit() {
-    // this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-    // merge(this.sort.sortChange, this.paginator.page, this.paginator.pageSize)
-    //   .pipe(
-    //     startWith({}),
-    //     switchMap(() => {
-    //       // this.isLoadingResults = true;
-    //       this.searchCriteria.controls.sort.patchValue(this.sort.active);
-    //       this.searchCriteria.controls.direction.patchValue(this.sort.direction);
-    //       this.searchCriteria.controls.page.patchValue(this.paginator.pageIndex);
-    //       this.searchCriteria.controls.limit.patchValue(this.paginator.pageSize);
-    //       return this.gameService!.getAll(this.searchCriteria.value).pipe(catchError(() => observableOf(null)));
-    //     }),
-    //     map(data => {
-    //       if (data === null) {
-    //         return [];
-    //       }
-    //       this.resultsLength = data.gameCount;
-    //       return data.data;
-    //     }),
-    //   )
-    //   .subscribe(data => (this.dataSource = data));
+  async ngOnInit() {
+    await this.loadAllGames();
+  }
 
-    this.gameData = await lastValueFrom(this.gameService.getAll({
+  async loadAllGames(){
+    this.gameService.getAll({
       searchTerm: '',
       sort: 'gameID',
       pagination: 'false',
       direction: 'asc'
-    }).pipe());
-    this.gameData = this.gameData.data;
+    }).subscribe({
+      next: this.handleSearchResponse.bind(this),
+      error: this.handleErrorResponse.bind(this)
+    });
   }
 
   public handleSearchResponse(data: any) {
     if (data == null) {
-      this.dataSource.data = [];
-      this.resultsLength = 0;
-      this.ngAfterViewInit();
+      this.gameData = [];
     } else {
-      this.dataSource.data = data.data;
-      this.resultsLength = data.user_count;
-      this.ngAfterViewInit();
+      this.gameData = data.data;
     }
+    this.isLoadingResults = false;
   }
 
   public handleErrorResponse(error: any) {
     this.snackBar.open(error.message, 'dismiss', {
       duration: 3000
     });
+    this.isLoadingResults = false;
   }
 
   public handleDeleteResponse(data: any) {
-    if (data == null) {
-      this.ngAfterViewInit();
-    } else {
-      this.ngAfterViewInit();
+    if(data !== null){
+      this.loadAllGames();
     }
   }
 
   public applySearch = async () => {
+    this.isLoadingResults = true;
     this.gameService.getAll(this.searchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
@@ -119,9 +91,10 @@ export class AllGamesComponent {
   }
 
   public clearSearch() {
+    this.isLoadingResults = true;
     this.searchCriteria.controls.searchTerm.patchValue('');
     this.searchCriteria.controls.sort.patchValue('gameID');
-    this.searchCriteria.controls.pagination.patchValue('true');
+    this.searchCriteria.controls.pagination.patchValue('false');
     this.searchCriteria.controls.direction.patchValue('asc');
     this.searchCriteria.controls.limit.patchValue(5);
     this.searchCriteria.controls.page.patchValue(0);
@@ -147,11 +120,7 @@ export class AllGamesComponent {
     });
 
     dialogRefEdit.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.ngAfterViewInit();
-      } else {
-        this.ngAfterViewInit();
-      }
+      this.loadAllGames();
     });
   }
 
@@ -165,11 +134,7 @@ export class AllGamesComponent {
     });
 
     dialogRefAdd.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.ngAfterViewInit();
-      } else {
-        this.ngAfterViewInit();
-      }
+      this.loadAllGames();
     });
   }
 
@@ -200,6 +165,18 @@ export class AllGamesComponent {
     });
   }
 
+  gameInfoPopup(game: Game){
+    const dialogRefAdd = this.matDialog.open(GameInfoComponent, {
+      width: '60%',
+      disableClose: false,
+      data: {
+        game
+      }
+    });
+
+    dialogRefAdd.afterClosed().subscribe(result => {
+    });
+  }
 
 }
 

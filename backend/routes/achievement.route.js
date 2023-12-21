@@ -78,6 +78,25 @@ router.get('/singleAchievement/:achievementID', async function(req, res){
     }
 });
 
+// get all achievements by their gameID
+router.get('/achievementsByGameID/:gameID', async function(req, res){
+    try{
+        if(req.params.gameID !== undefined){
+            let gameID = Number(req.params.gameID);
+            let achievements = await achievementController.findByGameID(gameID);
+            if(achievements !== undefined && typeof achievements !== 'string'){
+                res.status(200).send(achievements);
+            } else {
+                res.status(404).send(achievements);
+            }
+        } else {
+            res.status(400).send('Game ID is required.');
+        }
+    } catch(err){
+        console.log(err);
+    }
+});
+
 // get all achievementNames in the database
 router.get('/allAchievementNames', async function(req, res){
     try{
