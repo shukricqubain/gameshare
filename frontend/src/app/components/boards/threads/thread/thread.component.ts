@@ -11,7 +11,7 @@ import { AddThreadItemComponent } from './add-thread-item/add-thread-item.compon
 import { UserService } from 'src/app/services/user.service';
 import { lastValueFrom } from 'rxjs';
 import { User } from 'src/app/models/user.model';
-import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-thread',

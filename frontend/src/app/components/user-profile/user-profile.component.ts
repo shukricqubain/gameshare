@@ -16,7 +16,7 @@ import { AddUserGameComponent } from './add-user-game/add-user-game.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GameName } from 'src/app/models/gameName.model';
 import { GameService } from 'src/app/services/game.service';
-import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
 import { catchError, map, merge, startWith, switchMap, of as observableOf, lastValueFrom } from 'rxjs';
 import { UserAchievement } from 'src/app/models/userAchievement.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';

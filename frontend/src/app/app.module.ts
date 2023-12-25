@@ -33,7 +33,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { PopUpComponent } from './pop-up/pop-up.component';
+import { PopUpComponent } from './components/pop-up/pop-up.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AddGameComponent } from './components/games/add-game/add-game.component';
 import { AllGamesComponent } from './components/games/all-games/all-games.component';
@@ -54,6 +54,7 @@ import { AddUserBoardComponent } from './components/user-profile/add-user-board/
 import { AddUserThreadComponent } from './components/user-profile/add-user-thread/add-user-thread.component';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { GameInfoComponent } from './components/games/game-info/game-info.component';
+import { FilterFormPopUpComponent } from './components/filter-form-pop-up/filter-form-pop-up.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { GameInfoComponent } from './components/games/game-info/game-info.compon
     AddThreadItemComponent,
     AddUserBoardComponent,
     AddUserThreadComponent,
-    GameInfoComponent
+    GameInfoComponent,
+    FilterFormPopUpComponent
   ],
   imports: [
     BrowserModule,

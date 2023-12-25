@@ -10,7 +10,7 @@ import { catchError, map, merge, startWith, switchMap, of as observableOf } from
 import { Achievement } from 'src/app/models/achievement.model';
 import { AchievementService } from 'src/app/services/achievement.service';
 import { AddAchievementComponent } from '../add-achievement/add-achievement.component';
-import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-all-achievements',

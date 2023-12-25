@@ -6,11 +6,14 @@
                     <mat-label>Search</mat-label>
                     <input matInput formControlName="searchTerm" placeholder="Search Games" #input>
                 </mat-form-field>
-                <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applySearch()">
+                <mat-icon class="search-icon" matTooltip="Apply Search" style="color:green;" (click)="applySearch()">
                     search
                 </mat-icon>
-                <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearSearch()">
+                <mat-icon class="search-icon" matTooltip="Clear Search Filters" color="warn" (click)="clearSearch()">
                     clear
+                </mat-icon>
+                <mat-icon class="search-icon" matTooltip="Click for a more detailed search." (click)="filterForm()">
+                    filter_list
                 </mat-icon>
             </form>
             <button mat-raised-button style="cursor: pointer; margin-top:35px; margin-left: 10px;" color="primary"
@@ -22,10 +25,21 @@
         </div>
         <div *ngIf="!isLoadingResults" class="game-container">
             <div fxFlex *ngFor="let game of gameData" class="game-margin">
-                <mat-card class="game-item" (click)="gameInfoPopup(game)">
+                <mat-card class="game-item">
                     <mat-card-content>
                         <img src="{{game.gameCover}}" class="game-image">
                     </mat-card-content>
+                    <mat-card-actions class="actions-style">
+                        <mat-icon class="icon-style" matTooltip="Click to read information about a game." color="primary" (click)="gameInfoPopup(game)">
+                            info
+                        </mat-icon>
+                        <mat-icon class="icon-style" matTooltip="Click to edit a game." style="color: green;" (click)="editGame(game)">
+                            edit
+                        </mat-icon>
+                        <mat-icon class="icon-style" matTooltip="Click to delete a game." color="warn" (click)="deleteGame(game)">
+                            delete
+                        </mat-icon>
+                    </mat-card-actions>
                 </mat-card>
             </div>
         </div>

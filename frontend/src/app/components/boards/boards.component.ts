@@ -15,7 +15,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddBoardComponent } from './add-board/add-board.component';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
-import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
 import { UserBoardService } from 'src/app/services/userBoard.service';
 import { UserBoard } from 'src/app/models/userBoard.model';
 

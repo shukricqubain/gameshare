@@ -8,8 +8,9 @@ import { GameService } from 'src/app/services/game.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddGameComponent } from '../add-game/add-game.component';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
-import { PopUpComponent } from 'src/app/pop-up/pop-up.component';
+import { PopUpComponent } from '../../pop-up/pop-up.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
+import { FilterFormPopUpComponent } from '../../filter-form-pop-up/filter-form-pop-up.component';
 
 @Component({
   selector: 'app-all-games',
@@ -48,7 +49,7 @@ export class AllGamesComponent {
     await this.loadAllGames();
   }
 
-  async loadAllGames(){
+  async loadAllGames() {
     this.gameService.getAll({
       searchTerm: '',
       sort: 'gameID',
@@ -77,7 +78,7 @@ export class AllGamesComponent {
   }
 
   public handleDeleteResponse(data: any) {
-    if(data !== null){
+    if (data !== null) {
       this.loadAllGames();
     }
   }
@@ -165,7 +166,7 @@ export class AllGamesComponent {
     });
   }
 
-  gameInfoPopup(game: Game){
+  gameInfoPopup(game: Game) {
     const dialogRefAdd = this.matDialog.open(GameInfoComponent, {
       disableClose: false,
       height: '80vh',
@@ -178,6 +179,29 @@ export class AllGamesComponent {
     });
   }
 
+  filterForm() {
+    const dialogRefAdd = this.matDialog.open(FilterFormPopUpComponent, {
+      disableClose: false,
+      height: '80vh',
+      data: {
+        model: 'Game',
+        form: this.searchCriteria.value
+      }
+    });
+
+    dialogRefAdd.afterClosed().subscribe(result => {
+      
+      ///if form was submitted we check if the search criteria are different and apply a search
+      if (result != undefined && result.event != undefined && result.event != null && result.event === 'Filter Adjusted') {
+        let currentSearch = JSON.stringify(this.searchCriteria.value);
+        let newSearch = JSON.stringify(result.data.value);
+        if(currentSearch !== newSearch){
+          this.searchCriteria = result.data;
+          this.applySearch();
+        }
+      }
+    });
+  }
 }
 
 

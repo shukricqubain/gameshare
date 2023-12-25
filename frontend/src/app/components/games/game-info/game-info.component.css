@@ -13,10 +13,10 @@
 .header-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
 }
 
 .info-column {
+    margin-left: 10px;
     display: flex;
     flex-direction: column;
 }
@@ -40,7 +40,7 @@ p {
 }
 
 .achievement-container {
-    margin-top: 1rem;
+    margin-top: 10px;
     height: 50%;
     overflow-y: auto;
 }

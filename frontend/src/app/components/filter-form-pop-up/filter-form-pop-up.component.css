@@ -1,0 +1,26 @@
+.filter-form-container {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 2rem 2rem 2rem;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-style {
+    cursor: pointer;
+}
+
+.clear-style {
+    cursor: pointer;
+    margin-right: 40px;
+    margin-top: 20px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

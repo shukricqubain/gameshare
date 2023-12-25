@@ -41,6 +41,7 @@ export class AddGameComponent {
 
   ngOnInit() {
     if(this.data !== null && this.data != undefined && this.data.isEdit == true){
+      console.log(this.data)
       this.isEdit = true;
       let gameName = `${this.data.element.gameName}`;
       let developers = `${this.data.element.developers}`;
@@ -180,7 +181,7 @@ export class AddGameComponent {
     this.fileName = file.name;
     let reader = new FileReader();
     reader.onloadend = function() {
-      console.log('RESULT', reader.result)
+      //console.log('RESULT', reader.result)
     }
     
     if(file){

@@ -144,3 +144,14 @@ table {
     display: grid; 
     place-items: center;
 }
+
+.search-icon{
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.actions-style{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

@@ -1,0 +1,47 @@
+<div class="filter-form-container">
+    <h1>Adjust filter for {{this.modelType}}</h1>
+    <div [ngSwitch]="this.modelType">
+        <div *ngSwitchCase="'Game'">
+            <form [formGroup]="filterForm" class="form-container">
+                <div class="form-row">
+                    <mat-form-field>
+                        <mat-label>Search</mat-label>
+                        <input matInput formControlName="searchTerm" placeholder="Enter search term." #input>
+                    </mat-form-field>
+                    <mat-icon class="search-icon" matTooltip="Clear Search Term" color="warn" class="clear-style" (click)="clearSearch()">
+                        clear
+                    </mat-icon>
+                </div>
+                <mat-form-field MatFormFieldAppearance="outline">
+                    <label>Sort By</label>
+                    <mat-select placeholder="Choose field to sort by." formControlName="sort" name="sort" id="sort" required>
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let item of sortItems" [value]="item.sql">
+                            {{item.display}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field MatFormFieldAppearance="outline">
+                    <label>Sort Direction</label>
+                    <mat-select placeholder="Choose direction to sort by." formControlName="direction" name="direction" id="direction" required>
+                        <mat-option>--</mat-option>
+                        <mat-option value="asc">Ascending</mat-option>
+                        <mat-option value="desc">Descending</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
+        </div>
+        <div *ngSwitchCase="'Achievement'">Two</div>
+        <div *ngSwitchCase="'Board'">Three</div>
+        <div *ngSwitchCase="'User'">Four</div>
+        <div *ngSwitchCase="'Thread'">Five</div>
+    </div>
+    <div style="display:flex; justify-content: center;">
+        <button mat-raised-button style="color:green;" (click)="closeDialog('confirm')">
+            Confirm
+        </button>
+        <button mat-raised-button color="warn" style="margin-left:10px" (click)="closeDialog()">
+            Cancel
+        </button>
+    </div>
+</div>
