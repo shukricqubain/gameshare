@@ -96,8 +96,8 @@ Use this space to show useful examples of how a project can be used. Additional 
 - [ ] Revamp Game and User Game Page
   - [x] Add cover image to game object
   - [x] Change display from table to material cards containing the image of the game.
-  - [ ] Make cards clickable and display a pop up containing information on the game along with the achievements.
-  - [ ] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
+  - [x] Make cards clickable and display a pop up containing information on the game along with the achievements.
+  - [x] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
   - [ ] Autopopulate achievements when adding a game to a user's collection
 - [ ] Revamp Achievement and User Achievement Page
   - [ ] Add icon image to achievement object
