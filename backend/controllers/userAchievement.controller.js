@@ -38,6 +38,34 @@ exports.findAll = async (req, res) => {
     }
 };
 
+// Get all userAchievements by userID
+exports.findAllByUserID = async (req, res) => {
+    try{
+        let alluserAchievements = await userAchievementService.getAllByUserID(req);
+        if(alluserAchievements.length > 0){
+            return alluserAchievements;
+        } else {
+            return {message: 'No data in user achievement table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+}
+
+// Get all userAchievements by gameID
+exports.findAllAchievementsByGameID = async (req, res) => {
+    try{
+        let alluserAchievements = await userAchievementService.getAllByGameID(req);
+        if(alluserAchievements.length > 0){
+            return alluserAchievements;
+        } else {
+            return {message: 'No data in user achievement table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+}
+
 // Get single userAchievement by id
 exports.findOne = async (req) => {
     try{

@@ -121,9 +121,16 @@ export class AddUserGameComponent {
   }
 
   handleErrorResponse(error: any) {
-    this.snackBar.open(error.message, 'dismiss', {
-      duration: 3000
-    });
+    if(error.error != undefined && typeof error.error === 'string'){
+      this.snackBar.open(error.error, 'dismiss', {
+        duration: 3000
+      });
+    } else {
+      this.snackBar.open(error, 'dismiss', {
+        duration: 3000
+      });
+    }
+    
   }
 
   editGame() {

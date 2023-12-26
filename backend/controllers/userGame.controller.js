@@ -52,14 +52,14 @@ exports.findAll = async (searchCriteria) => {
     }
 };
 
-// Get all userGame by IDs
-exports.findAllByIDs = async (searchCriteria) => {
+// Get userGame by userID and gameID
+exports.findOneByUserIDAndGameID = async (req) => {
     try{
-        let allGames = await userGameService.getAllUserGamesByIDs(searchCriteria);
-        if(allGames.length > 0){
-            return allGames;
+        let userGame = await userGameService.findOneByUserIDAndGameID(req);
+        if(userGame !== null){
+            return userGame;
         } else {
-            return {message: 'No data in user game table to fetch.'};
+            return 'Cannot find game with specified userID and GameID';
         }
     } catch(err){
         console.log(err);

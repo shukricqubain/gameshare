@@ -24,7 +24,7 @@ async function findCount(searchCriteria) {
                             createdAt: { [Op.like]: '%' + searchTerm + '%' },
                             updatedAt: { [Op.like]: '%' + searchTerm + '%' }
                         },
-                        userID: userID
+                        userID: searchCriteria.userID
                     }
                 };
             } else {
@@ -201,6 +201,33 @@ async function getOne(userAchievementID) {
     }
 }
 
+async function getAllByUserID(userID) {
+    try {
+        return await db.userAchievement.findAll({
+            where: { userID: userID },
+            raw: true
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function getAllByGameID(body) {
+    try {
+        let userID = body.userID;
+        let gameID = body.gameID;
+        return await db.userAchievement.findAll({
+            where: { 
+                userID: userID,
+                gameID: gameID
+            },
+            raw: true
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 async function update(userAchievementID, userAchievement) {
     try {
         return result = await db.userAchievement.update(
@@ -235,6 +262,8 @@ module.exports = {
     findCount,
     getAll,
     getOne,
+    getAllByUserID,
+    getAllByGameID,
     create,
     update,
     deleteAchievement

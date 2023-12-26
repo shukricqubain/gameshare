@@ -78,6 +78,25 @@ router.get('/singleUserAchievement/:userAchievementID', async function(req, res)
     }
 });
 
+// get all userAchievements by userID
+router.get('/userAchievementsByUserID/:userID', async function(req, res){
+    try{
+        if(req.params.userID !== undefined){
+            let userID = Number(req.params.userID);
+            let userAchievements = await userAchievementController.findAllByUserID(userID);
+            if(userAchievements !== undefined && typeof userAchievements !== 'string'){
+                res.status(200).send(userAchievements);
+            } else {
+                res.status(404).send(userAchievements);
+            }
+        } else {
+            res.status(400).send('UserAchievement ID is required.');
+        }
+    } catch(err){
+        console.log(err);
+    }
+});
+
 // edit a userAchievement by userAchievementID
 router.put('/editUserAchievement', async function(req, res){
     try{

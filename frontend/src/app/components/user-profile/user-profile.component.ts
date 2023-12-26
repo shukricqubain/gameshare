@@ -521,7 +521,7 @@ export class UserProfileComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        this.boardsLoaded = true;
+        this.gamesLoaded = false;
         this.ngAfterViewInit();
       } else {
         this.ngAfterViewInit();
@@ -592,7 +592,7 @@ export class UserProfileComponent {
 
   async loadAllGameNames(){
     if(!this.gameNamesLoaded){
-      await this.gameService.getAllGameNames().subscribe({
+      this.gameService.getAllGameNames().subscribe({
         next: this.handleGetAllNamesResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });

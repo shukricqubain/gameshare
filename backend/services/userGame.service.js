@@ -182,6 +182,22 @@ async function getOneUserGame(userGameID) {
     }
 }
 
+async function findOneByUserIDAndGameID(body) {
+    try {
+        let userID = body.userID;
+        let gameID = body.gameID;
+        return await db.userGame.findOne({
+            where: { 
+                userID: userID,
+                gameID: gameID
+             },
+            raw: true
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 async function updateUserGame(userGameID, userGame) {
     try {
         return result = await db.userGame.update(
@@ -216,6 +232,7 @@ module.exports = {
     getAllUserGames,
     findCount,
     getOneUserGame,
+    findOneByUserIDAndGameID,
     createUserGame,
     updateUserGame,
     deleteUserGame
