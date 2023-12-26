@@ -98,7 +98,9 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Change display from table to material cards containing the image of the game.
   - [x] Make cards clickable and display a pop up containing information on the game along with the achievements.
   - [x] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
-  - [ ] Autopopulate achievements when adding a game to a user's collection
+  - [x] Autopopulate achievements when adding a game to a user's collection.
+  - [ ] Autoremove achievements when removing a game from a user's collection.
+  - [ ] Update User Game Page to match Game page design wise.
 - [ ] Revamp Achievement and User Achievement Page
   - [ ] Add icon image to achievement object
   - [ ] Change display from table to material cards containing the icon and title along with actions.
