@@ -205,15 +205,54 @@ router.put('/editUserGame', async function (req, res) {
 router.delete('/deleteUserGame/:userGameID', async function (req, res) {
     try {
         if (req.params.userGameID !== undefined) {
+
             let userGameID = Number(req.params.userGameID);
+
+            ///check userGame exists
+            let userGame;
+            try {
+                userGame = await userGameController.findOne(userGameID);
+            } catch(err){
+                res.status(400).send('No UserGame was found to be deleted.');
+            }
+
+            ///delete userGame from user collection
             let result = await userGameController.delete(userGameID);
-            if (result == 1) {
-                res.status(200).json({
-                    message: `UserGame with ID: ${userGameID} has been deleted successfully.`
+
+            ///get achievements for this game
+            let achievements = await achievementController.findByGameID(userGame.gameID);
+
+            ///check there are userAchievements for this game
+            let userAchievements = await userAchievementController.findAllAchievementsByGameID(userGame);
+
+            ///delete userAchievements for the userGame
+            let achievementResults;
+            if(userAchievements != undefined && userAchievements.length > 0){
+                try {
+                    achievementResults = await userAchievementController.bulkDelete(userGame.userID, userGame.gameID);
+                    if (result == 1) {
+                        res.status(200).json({
+                            message: `UserGame with ID: ${userGameID} has been deleted successfully.
+                            ${achievementResults} of ${userAchievements} user achievements has been deleted successfully.`
+                        }
+                        );
+                    } else {
+                        res.status(503).send('UserGame was not deleted successfully.');
+                    }
+                } catch(err){
+                    console.error('Error bulk deleting userAchievements.');
                 }
-                );
+            ///case where there are no achievements
             } else {
-                res.status(503).send('UserGame was not deleted successfully.');
+
+                if (result == 1) {
+                    res.status(200).json({
+                        message: `UserGame with ID: ${userGameID} has been deleted successfully.`
+                    }
+                    );
+                } else {
+                    res.status(503).send('UserGame was not deleted successfully.');
+                }
             }
         } else {
             res.status(400).send('UserGameID is required.');

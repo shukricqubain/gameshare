@@ -97,3 +97,12 @@ exports.delete = async (userAchievementID) => {
         console.log(err);
     }
 };
+
+// Bulk delete userAchievements by userID and gameID
+exports.bulkDelete = async (userID, gameID) => {
+    try{
+        return await userAchievementService.bulkDelete(userID,gameID);
+    } catch(err){
+        console.error(err);
+    }
+}

@@ -254,7 +254,20 @@ async function deleteAchievement(userAchievementID) {
             }
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
+    }
+}
+
+async function bulkDelete(userID, gameID) {
+    try {
+        return result = await db.userAchievement.destroy({
+            where: {
+                userID: userID,
+                gameID: gameID
+            }
+        });
+    } catch (err) {
+        console.error(err);
     }
 }
 
@@ -266,5 +279,6 @@ module.exports = {
     getAllByGameID,
     create,
     update,
-    deleteAchievement
+    deleteAchievement,
+    bulkDelete
 };

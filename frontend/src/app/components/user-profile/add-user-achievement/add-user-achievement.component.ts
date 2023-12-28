@@ -75,8 +75,6 @@ export class AddUserAchievementComponent {
         this.addUserAchievementForm.controls.createdAt.patchValue(createdAt);
         this.addUserAchievementForm.controls.updatedAt.patchValue(updatedAt);
       }
-      
-
     }
   }
 

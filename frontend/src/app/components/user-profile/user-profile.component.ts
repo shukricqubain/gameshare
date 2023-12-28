@@ -264,6 +264,7 @@ export class UserProfileComponent {
         )
         .subscribe(data => (this.userGamesDataSource = data));
     } else if(this.currentTabIndex == 3){
+      await this.loadAllGameNames();
       await this.loadAchievementNames();
       this.userAchievementDataSource.sort = this.achievementSort;
       ///if user changes the sort order reset the page back to the first page
