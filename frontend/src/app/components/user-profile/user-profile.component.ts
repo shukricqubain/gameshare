@@ -32,6 +32,8 @@ import { Thread } from 'src/app/models/thread.model';
 import { ThreadService } from 'src/app/services/thread.service';
 import { UserThreadService } from 'src/app/services/userThread.service';
 import { AddUserThreadComponent } from './add-user-thread/add-user-thread.component';
+import { Game } from 'src/app/models/game.model';
+import { GameInfoComponent } from '../games/game-info/game-info.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -78,29 +80,20 @@ export class UserProfileComponent {
   enableMessage: string = `Enable the form for updation.`;
   userLoaded: boolean = false;
 
-  gameSearchCriteria = new FormGroup({
+  userGameSearchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
     sort: new FormControl('userGameID', [Validators.required]),
-    pagination: new FormControl('true', [Validators.required]),
+    pagination: new FormControl('false', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required]),
     userID: new FormControl('')
   });
-
-  displayedUserGamesColumns: string[] = ['userGameID', 'gameName', 'gameEnjoymentRating','createdAt', 'updatedAt', 'actions'];
-  userGamesDataSource = new MatTableDataSource<any>;
-  userGamesData: UserGame[];
-  search: any;
-  pageSize = 5;
-  currentPage = 0;
-  gameResultsLength = 0;
-  isLoadingResults: boolean = false;
   allGameNames: GameName[] = [];
+  userGames: any[] = [];
+  allGames: any[] = [];
   gamesLoaded: boolean = false;
-
-  @ViewChild('gamePaginator') gamePaginator: MatPaginator;
-  @ViewChild('gameSort') gameSort: MatSort;
+  userGamesLoaded: boolean = false;
 
   achievementSearchCriteria = new FormGroup({
     achievementSearchTerm: new FormControl(''),
@@ -175,15 +168,15 @@ export class UserProfileComponent {
   async ngAfterViewInit() {
 
     let data: any = this.location.getState();
-    if(this.userLoaded == false && data !== null){
+    if (this.userLoaded == false && data !== null) {
       await this.loadUserDetails(data);
-    } else if(data == null){
-      this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss',{
+    } else if (data == null) {
+      this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss', {
         duration: 3000
       });
     }
 
-    if(this.currentTabIndex == 0 && this.threadsLoaded == false){
+    if (this.currentTabIndex == 0 && this.threadsLoaded == false) {
 
       await this.loadAllThreadNames();
       this.userThreadsDataSource.sort = this.threadSort;
@@ -210,8 +203,8 @@ export class UserProfileComponent {
         )
         .subscribe(data => (this.userThreadsDataSource = data));
 
-    } else if(this.currentTabIndex == 1 && this.boardsLoaded == false){
-     
+    } else if (this.currentTabIndex == 1 && this.boardsLoaded == false) {
+
       await this.loadAllBoardNames();
       this.userBoardsDataSource.sort = this.boardSort;
       ///if user changes the sort order reset the page back to the first page
@@ -236,34 +229,12 @@ export class UserProfileComponent {
           }),
         )
         .subscribe(data => (this.userBoardsDataSource = data));
-      
-    } else if(this.currentTabIndex == 2 && this.gamesLoaded == false){
-      
+
+    } else if (this.currentTabIndex == 2) {
+      await this.loadAllGames();
       await this.loadAllGameNames();
-      this.userGamesDataSource.sort = this.gameSort;
-      ///if user changes the sort order reset the page back to the first page
-      this.gameSort.sortChange.subscribe(() => (this.gamePaginator.pageIndex = 0));
-      merge(this.gameSort.sortChange, this.gamePaginator.page, this.gamePaginator.pageSize)
-        .pipe(
-          startWith({}),
-          switchMap(() => {
-            this.gameSearchCriteria.controls.sort.patchValue(this.gameSort.active);
-            this.gameSearchCriteria.controls.direction.patchValue(this.gameSort.direction);
-            this.gameSearchCriteria.controls.page.patchValue(this.gamePaginator.pageIndex);
-            this.gameSearchCriteria.controls.limit.patchValue(this.gamePaginator.pageSize);
-            return this.userGameService!.getAll(this.gameSearchCriteria.value).pipe(catchError(() => observableOf(null)));
-          }),
-          map(data => {
-            if (data === null) {
-              return [];
-            }
-            this.gameResultsLength = data.gameCount;
-            this.gamesLoaded = true;
-            return data.data;
-          }),
-        )
-        .subscribe(data => (this.userGamesDataSource = data));
-    } else if(this.currentTabIndex == 3){
+      await this.loadAllUserGames();
+    } else if (this.currentTabIndex == 3) {
       await this.loadAllGameNames();
       await this.loadAchievementNames();
       this.userAchievementDataSource.sort = this.achievementSort;
@@ -289,30 +260,30 @@ export class UserProfileComponent {
           }),
         )
         .subscribe(data => (this.userAchievementDataSource = data));
-        this.changeForm();
-    } else if(this.currentTabIndex == 4){
+      this.changeForm();
+    } else if (this.currentTabIndex == 4) {
       this.changeForm();
     }
-    
+
   }
 
   public onSelectedIndexChange(tabIndex: number) {
     this.currentTabIndex = tabIndex;
   }
 
-  public onSelectedTabChange(matTabChangeEvent: MatTabChangeEvent)  {
+  public onSelectedTabChange(matTabChangeEvent: MatTabChangeEvent) {
     this.ngAfterViewInit();
   }
 
-  async onSubmit(){
+  async onSubmit() {
     let initial_username = this.user.userName;
     let updated_username = this.userProfileForm.controls.userName.value;
     let initial_role = localStorage.getItem('roleID');
     let updated_role = this.userProfileForm.controls.userRole.value;
-    if(initial_username !== null && updated_username !== null && initial_username !== updated_username){
+    if (initial_username !== null && updated_username !== null && initial_username !== updated_username) {
       this.usernameService.setUsernameObs(updated_username);
     }
-    if(initial_role !== null && updated_role !== null && initial_role !== updated_role){
+    if (initial_role !== null && updated_role !== null && initial_role !== updated_role) {
       this.roleService.setRoleObs(updated_role);
       localStorage.setItem('roleID', updated_role);
     }
@@ -322,22 +293,22 @@ export class UserProfileComponent {
     });
   }
 
-  handleUpdateResponse(data:any){
-    this.snackBar.open(data.message, 'dismiss',{
+  handleUpdateResponse(data: any) {
+    this.snackBar.open(data.message, 'dismiss', {
       duration: 2000
     });
     this.editEnabled = false;
     this.changeForm();
   }
 
-  handleErrorResponse(data:any){
-    this.snackBar.open(data.message, 'dismiss',{
+  handleErrorResponse(data: any) {
+    this.snackBar.open(data.message, 'dismiss', {
       duration: 2000
     });
   }
 
-  changeForm(){
-    if(this.editEnabled){
+  changeForm() {
+    if (this.editEnabled) {
       this.enableMessage = `Disable the form for updation.`;
       this.userProfileForm.controls.userID.enable();
       this.userProfileForm.controls.userName.enable();
@@ -362,10 +333,10 @@ export class UserProfileComponent {
     }
   }
 
-  async loadUserDetails(data: any){
-    if(data.userID == undefined){
+  async loadUserDetails(data: any) {
+    if (data.userID == undefined) {
       let userName = localStorage.getItem('userName');
-      if(userName !== null){
+      if (userName !== null) {
         await this.userService.getUserByName(userName).subscribe({
           next: this.handleGetResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
@@ -377,54 +348,31 @@ export class UserProfileComponent {
         error: this.handleErrorResponse.bind(this)
       });
     }
-    
   }
 
-  handleGetResponse(data: any){
+  handleGetResponse(data: any) {
     this.user = data;
     this.userProfileForm.controls.userID.setValue(data.userID ? `${data.userID}` : '');
     this.userProfileForm.controls.userName.setValue(data.userName ? data.userName : '');
     this.userProfileForm.controls.firstName.setValue(data.firstName ? data.firstName : '');
     this.userProfileForm.controls.lastName.setValue(data.lastName ? data.lastName : '');
-    this.userProfileForm.controls.dateOfBirth.setValue(data.dateOfBirth ? data.dateOfBirth: '');
-    this.userProfileForm.controls.email.setValue(data.email ? data.email: '');
-    this.userProfileForm.controls.phoneNumber.setValue(data.phoneNumber ? data.phoneNumber: '');
+    this.userProfileForm.controls.dateOfBirth.setValue(data.dateOfBirth ? data.dateOfBirth : '');
+    this.userProfileForm.controls.email.setValue(data.email ? data.email : '');
+    this.userProfileForm.controls.phoneNumber.setValue(data.phoneNumber ? data.phoneNumber : '');
     this.userProfileForm.controls.userRole.setValue(data.userRole ? `${data.userRole}` : '');
-    this.userProfileForm.controls.userPassword.setValue(data.userPassword ? data.userPassword: '');
-    this.userProfileForm.controls.createdAt.setValue(data.createdAt ? data.createdAt: '');
-    this.userProfileForm.controls.updatedAt.setValue(data.updatedAt ? data.updatedAt: '');
+    this.userProfileForm.controls.userPassword.setValue(data.userPassword ? data.userPassword : '');
+    this.userProfileForm.controls.createdAt.setValue(data.createdAt ? data.createdAt : '');
+    this.userProfileForm.controls.updatedAt.setValue(data.updatedAt ? data.updatedAt : '');
     //patch search forms with userID for games and achievement collections
     this.achievementSearchCriteria.controls.userID.setValue(data.userID);
-    this.gameSearchCriteria.controls.userID.setValue(data.userID);
+    this.userGameSearchCriteria.controls.userID.setValue(data.userID);
     this.boardSearchCriteria.controls.userID.patchValue(data.userID);
     this.threadSearchCriteria.controls.userID.patchValue(data.userID);
     this.userLoaded = true;
   }
 
-  handleGetUserGames(data: any){
-    if(data == null){
-      this.userGamesDataSource.data = [];
-      this.gameResultsLength = 0;
-    } else {
-      this.userGamesDataSource.data = data.data;
-      this.gameResultsLength = data.user_count;
-    }
-  }
-
-  public handleGameSearchResponse(data: any) {
+  public handleAchievementSearchResponse(data: any) {
     if (data == null) {
-      this.userGamesDataSource.data = [];
-      this.gameResultsLength = 0;
-      this.ngAfterViewInit();
-    } else {
-      this.userGamesDataSource.data = data.data;
-      this.gameResultsLength = data.gameCount;
-      this.ngAfterViewInit();
-    }
-  }
-
-  public handleAchievementSearchResponse(data: any){
-    if(data == null){
       this.userAchievementDataSource.data = [];
       this.achievementResultsLength = 0;
       this.ngAfterViewInit();
@@ -435,7 +383,7 @@ export class UserProfileComponent {
     }
   }
 
-  editUserGame(element: any){
+  editUserGame(element: any) {
     const dialogRef = this.matDialog.open(AddUserGameComponent, {
       width: '100%',
       disableClose: true,
@@ -447,17 +395,15 @@ export class UserProfileComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if (result !== undefined) {
-        this.gamesLoaded = false;
-        this.ngAfterViewInit();
-      } else {
-        this.ngAfterViewInit();
+        this.userGamesLoaded = false;
+        await this.loadAllUserGames();
       }
     });
   }
 
-  deleteUserGame(element: any){
+  deleteUserGame(element: any) {
     const dialogRefDelete = this.matDialog.open(PopUpComponent, {
       width: '100%',
       disableClose: true,
@@ -469,39 +415,37 @@ export class UserProfileComponent {
     });
     let game = this.allGameNames.find(obj => obj.gameID == element.gameID);
     let gameName = '';
-    if(game !== undefined){
-      gameName = game.gameName ? game.gameName: '';
+    if (game !== undefined) {
+      gameName = game.gameName ? game.gameName : '';
     } else {
       ///throw error
-      this.snackBar.open(`No game with this ID found in the system.`, 'dismiss',{
+      this.snackBar.open(`No game with this ID found in the system.`, 'dismiss', {
         duration: 3000
       });
       return;
     }
-  
+
     dialogRefDelete.afterClosed().subscribe(result => {
-      if(result.event === 'delete'){
+      if (result.event === 'delete') {
         this.userGameService.delete(element.userGameID).subscribe({
           next: this.handleGameDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
-        this.snackBar.open(`${gameName} has been deleted.`, 'dismiss',{
+        this.snackBar.open(`${gameName} has been deleted.`, 'dismiss', {
           duration: 3000
         });
       } else {
-        this.snackBar.open(`${gameName} has not been deleted.`, 'dismiss',{
+        this.snackBar.open(`${gameName} has not been deleted.`, 'dismiss', {
           duration: 3000
         });
       }
     });
   }
 
-  public handleGameDeleteResponse(data:any){
-    if(data !== null){
-      this.gamesLoaded = false;
-      this.ngAfterViewInit();
-    } else {
-      this.ngAfterViewInit();
+  public async handleGameDeleteResponse(data: any) {
+    if (data !== null) {
+      this.userGamesLoaded = false;
+      await this.loadAllUserGames();
     }
   }
 
@@ -510,7 +454,7 @@ export class UserProfileComponent {
     return formattedDate;
   }
 
-  addUserGame(){
+  addUserGame() {
     const dialogRef = this.matDialog.open(AddUserGameComponent, {
       width: '100%',
       data: {
@@ -520,25 +464,20 @@ export class UserProfileComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if (result !== undefined) {
-        this.gamesLoaded = false;
-        this.ngAfterViewInit();
-      } else {
-        this.ngAfterViewInit();
+        this.userGamesLoaded = false;
+        await this.loadAllUserGames();
       }
     });
   }
 
-  public applyGameSearch = async () => {
-    this.gamesLoaded = false;
-    this.userGameService.getAll(this.gameSearchCriteria.value).subscribe({
-      next: this.handleGameSearchResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+  async applyUserGameSearch() {
+    this.userGamesLoaded = false;
+    await this.loadAllUserGames();
   }
 
-  addUserAchievement(){
+  addUserAchievement() {
     const dialogRef = this.matDialog.open(AddUserAchievementComponent, {
       width: '100%',
       data: {
@@ -564,18 +503,15 @@ export class UserProfileComponent {
     });
   }
 
-  public clearGameSearch() {
-    this.gameSearchCriteria.controls.searchTerm.patchValue('');
-    this.gameSearchCriteria.controls.sort.patchValue('gameID');
-    this.gameSearchCriteria.controls.pagination.patchValue('true');
-    this.gameSearchCriteria.controls.direction.patchValue('asc');
-    this.gameSearchCriteria.controls.limit.patchValue(5);
-    this.gameSearchCriteria.controls.page.patchValue(0);
-    this.gamesLoaded = false;
-    this.userGameService.getAll(this.gameSearchCriteria.value).subscribe({
-      next: this.handleGameSearchResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+  async clearGameSearch() {
+    this.userGameSearchCriteria.controls.searchTerm.patchValue('');
+    this.userGameSearchCriteria.controls.sort.patchValue('gameID');
+    this.userGameSearchCriteria.controls.pagination.patchValue('false');
+    this.userGameSearchCriteria.controls.direction.patchValue('asc');
+    this.userGameSearchCriteria.controls.limit.patchValue(5);
+    this.userGameSearchCriteria.controls.page.patchValue(0);
+    this.userGamesLoaded = false;
+    await this.loadAllUserGames();
   }
 
   public clearAchievementSearch() {
@@ -591,8 +527,8 @@ export class UserProfileComponent {
     });
   }
 
-  async loadAllGameNames(){
-    if(!this.gameNamesLoaded){
+  async loadAllGameNames() {
+    if (!this.gameNamesLoaded) {
       this.gameService.getAllGameNames().subscribe({
         next: this.handleGetAllNamesResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
@@ -600,12 +536,59 @@ export class UserProfileComponent {
     }
   }
 
-  async loadAllBoardNames(){
-    try{
-      if(!this.boardsLoaded){
-        this.allBoardNames = await lastValueFrom(this.boardService.getAllBoardNames().pipe());
+  async loadAllGames() {
+    try {
+      if (!this.gamesLoaded) {
+        let result = await lastValueFrom(this.gameService.getAll({
+          searchTerm: '',
+          sort: 'gameID',
+          pagination: 'false',
+          direction: 'asc'
+        }).pipe());
+        if(result != undefined){
+          this.allGames = result.data;
+          this.gamesLoaded = true;
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      this.allGames = [];
+      this.snackBar.open('Error loading all games.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
+
+  async loadAllUserGames() {
+    try {
+      if (!this.userGamesLoaded) {
+        let result = await lastValueFrom(this.userGameService.getAll(this.userGameSearchCriteria.value).pipe());
+        if(result != null && result != undefined){
+          this.userGames = result.data;
+          for (let userGame of this.userGames) {
+            let game = this.allGames.find(obj => obj.gameID == userGame.gameID);
+            if (game != null && game != undefined) {
+              userGame.game = game;
+            }
+          }
+          this.userGamesLoaded = true;
+        }
       }
     } catch(err){
+      console.error(err);
+      this.userGames = [];
+      this.snackBar.open('Error loading user games.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
+
+  async loadAllBoardNames() {
+    try {
+      if (!this.boardsLoaded) {
+        this.allBoardNames = await lastValueFrom(this.boardService.getAllBoardNames().pipe());
+      }
+    } catch (err) {
       this.snackBar.open('Error loading board names!', 'dismiss', {
         duration: 3000
       });
@@ -613,10 +596,10 @@ export class UserProfileComponent {
     }
   }
 
-  async loadAllThreadNames(){
-    try{
+  async loadAllThreadNames() {
+    try {
       this.allThreadNames = await lastValueFrom(this.threadService.getAllThreadNames().pipe());
-    } catch(err){
+    } catch (err) {
       this.snackBar.open('Error loading board names!', 'dismiss', {
         duration: 3000
       });
@@ -624,29 +607,38 @@ export class UserProfileComponent {
     }
   }
 
-  handleGetAllBoardNamesResponse(data: any){
+  handleGetAllBoardNamesResponse(data: any) {
     if (data !== null && data !== undefined) {
       this.allBoardNames = data;
     }
   }
 
-  handleGetAllNamesResponse(data: any){
+  handleGetAllNamesResponse(data: any) {
     if (data !== null && data !== undefined) {
       this.allGameNames = data;
       this.gameNamesLoaded = false;
     }
   }
 
-  getGameName(element: any){
+  handleGetAllGamesResponse(data: any) {
+    if (data !== null && data !== undefined) {
+      this.allGames = data.data;
+    } else {
+      this.allGames = [];
+    }
+    this.gamesLoaded = true;
+  }
+
+  getGameName(element: any) {
     let gameName = this.allGameNames.find(obj => obj.gameID == element);
-    if(gameName !== undefined){
+    if (gameName !== undefined) {
       return gameName.gameName;
     } else {
       return 'No Game with this ID'
     }
   }
 
-  editUserAchievement(element: any){
+  editUserAchievement(element: any) {
     const dialogRef = this.matDialog.open(AddUserAchievementComponent, {
       width: '100%',
       disableClose: true,
@@ -668,7 +660,7 @@ export class UserProfileComponent {
     });
   }
 
-  deleteUserAchievement(element: any){
+  deleteUserAchievement(element: any) {
     const dialogRefDelete = this.matDialog.open(PopUpComponent, {
       width: '100%',
       disableClose: true,
@@ -680,39 +672,39 @@ export class UserProfileComponent {
     });
     let achievement = this.allAchievementNames.find(obj => obj.achievementID == element.achievementID);
     let achievementName = '';
-    if(achievement !== undefined){
-      achievementName = achievement.achievementName ? achievement.achievementName: '';
+    if (achievement !== undefined) {
+      achievementName = achievement.achievementName ? achievement.achievementName : '';
     } else {
       ///throw error
-      this.snackBar.open(`No achievement with this ID found in the system.`, 'dismiss',{
+      this.snackBar.open(`No achievement with this ID found in the system.`, 'dismiss', {
         duration: 3000
       });
       return;
     }
-  
+
     dialogRefDelete.afterClosed().subscribe(result => {
-      if(result.event === 'delete'){
+      if (result.event === 'delete') {
         this.userAchievementService.delete(element.userAchievementID).subscribe({
           next: this.handleAchievementDeleteResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
-        this.snackBar.open(`${achievementName} has been deleted.`, 'dismiss',{
+        this.snackBar.open(`${achievementName} has been deleted.`, 'dismiss', {
           duration: 3000
         });
       } else {
-        this.snackBar.open(`${achievementName} has not been deleted.`, 'dismiss',{
+        this.snackBar.open(`${achievementName} has not been deleted.`, 'dismiss', {
           duration: 3000
         });
       }
     });
   }
 
-  async loadAchievementNames(){
-    try{
-      if(!this.achievementNamesLoaded){
+  async loadAchievementNames() {
+    try {
+      if (!this.achievementNamesLoaded) {
         this.allAchievementNames = await lastValueFrom(this.achievementService.getAllAchievementsNames().pipe());
       }
-    } catch(err){
+    } catch (err) {
       this.snackBar.open('Error loading achievement names!', 'dismiss', {
         duration: 3000
       });
@@ -720,18 +712,18 @@ export class UserProfileComponent {
     }
   }
 
-  public handleAchievementDeleteResponse(data:any){
-    if(data !== null){
+  public handleAchievementDeleteResponse(data: any) {
+    if (data !== null) {
       this.ngAfterViewInit();
     } else {
       this.ngAfterViewInit();
     }
   }
 
-  applyBoardSearch(){
+  applyBoardSearch() {
     this.boardsLoaded = false;
     let trimmedSearch = this.boardSearchCriteria.controls.boardSearchTerm.value?.trim();
-    if(trimmedSearch !== undefined && trimmedSearch !== null){
+    if (trimmedSearch !== undefined && trimmedSearch !== null) {
       this.boardSearchCriteria.controls.boardSearchTerm.patchValue(trimmedSearch);
       this.userBoardService.getAll(this.boardSearchCriteria.value).subscribe({
         next: this.handleBoardSearchResponse.bind(this),
@@ -740,7 +732,7 @@ export class UserProfileComponent {
     }
   }
 
-  clearBoardSearch(){
+  clearBoardSearch() {
     this.boardSearchCriteria.controls.boardSearchTerm.patchValue('');
     this.boardSearchCriteria.controls.sort.patchValue('userBoardID');
     this.boardSearchCriteria.controls.pagination.patchValue('true');
@@ -754,8 +746,8 @@ export class UserProfileComponent {
     });
   }
 
-  handleBoardSearchResponse(data: any){
-    if(data == null){
+  handleBoardSearchResponse(data: any) {
+    if (data == null) {
       this.userBoardsDataSource.data = [];
       this.boardResultsLength = 0;
       this.ngAfterViewInit();
@@ -766,7 +758,7 @@ export class UserProfileComponent {
     }
   }
 
-  addUserBoard(){
+  addUserBoard() {
     const dialogRef = this.matDialog.open(AddUserBoardComponent, {
       width: '100%',
       data: {
@@ -785,7 +777,7 @@ export class UserProfileComponent {
     });
   }
 
-  addUserThread(){
+  addUserThread() {
     const dialogRef = this.matDialog.open(AddUserThreadComponent, {
       width: '100%',
       data: {
@@ -804,10 +796,10 @@ export class UserProfileComponent {
     });
   }
 
-  applyThreadSearch(){
+  applyThreadSearch() {
     this.threadsLoaded = false;
     let trimmedSearch = this.threadSearchCriteria.controls.threadSearchTerm.value?.trim();
-    if(trimmedSearch !== undefined && trimmedSearch !== null){
+    if (trimmedSearch !== undefined && trimmedSearch !== null) {
       this.threadSearchCriteria.controls.threadSearchTerm.patchValue(trimmedSearch);
       this.userThreadService.getAll(this.threadSearchCriteria.value).subscribe({
         next: this.handleThreadSearchResponse.bind(this),
@@ -816,7 +808,7 @@ export class UserProfileComponent {
     }
   }
 
-  clearThreadSearch(){
+  clearThreadSearch() {
     this.threadSearchCriteria.controls.threadSearchTerm.patchValue('');
     this.threadSearchCriteria.controls.sort.patchValue('userThreadID');
     this.threadSearchCriteria.controls.pagination.patchValue('true');
@@ -830,8 +822,8 @@ export class UserProfileComponent {
     });
   }
 
-  handleThreadSearchResponse(data: any){
-    if(data == null){
+  handleThreadSearchResponse(data: any) {
+    if (data == null) {
       this.userThreadsDataSource.data = [];
       this.threadResultsLength = 0;
       this.ngAfterViewInit();
@@ -840,5 +832,18 @@ export class UserProfileComponent {
       this.threadResultsLength = data.userThreadCount;
       this.ngAfterViewInit();
     }
+  }
+
+  gameInfoPopup(game: Game) {
+    const dialogRefAdd = this.matDialog.open(GameInfoComponent, {
+      disableClose: false,
+      height: '80vh',
+      data: {
+        game
+      }
+    });
+
+    dialogRefAdd.afterClosed().subscribe(result => {
+    });
   }
 }
