@@ -32,7 +32,7 @@ router.get('/allTokens', async function(req, res) {
         if(all_tokens.message !== 'No data in token table to fetch.'){
             res.status(200).send(all_tokens);
         } else {
-            res.status(204).send(all_tokens);
+            res.status(200).send(all_tokens);
         }
     } catch(err){
         console.log(err)

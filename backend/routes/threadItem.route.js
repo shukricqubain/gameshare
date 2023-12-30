@@ -39,10 +39,10 @@ router.post('/allThreadItems', async function(req, res) {
                         searchCriteria.data = allThreadItems;
                         return res.status(200).json(searchCriteria);
                     } else {
-                        return res.status(204).send({message:'No data in threadItem table to fetch.'});
+                        return res.status(200).send({message:'No data in threadItem table to fetch.'});
                     }
                 } else {
-                    return res.status(204).send({message:'No data in threadItem table to fetch.'});
+                    return res.status(200).send({message:'No data in threadItem table to fetch.'});
                 }
             } else {
                 allThreadItems = await threadItemController.findAll(searchCriteria);
@@ -51,7 +51,7 @@ router.post('/allThreadItems', async function(req, res) {
                     searchCriteria.data = allThreadItems;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in threadItem table to fetch.'});
+                    return res.status(200).send({message:'No data in threadItem table to fetch.'});
                 }
             }
         } else {

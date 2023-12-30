@@ -45,7 +45,7 @@ exports.findAll = async (searchCriteria) => {
         if(allGames.length > 0){
             return allGames;
         } else {
-            return {message: 'No data in user game table to fetch.'};
+            return {message: 'No data in userGame table to fetch.'};
         }
     } catch(err){
         console.log(err);

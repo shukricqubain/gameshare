@@ -31,7 +31,7 @@ router.post('/allAchievements', async function(req, res) {
             let searchCriteria = req.body;
             let allAchievements;
             let achievementCount;
-            if(searchCriteria.pagination){
+            if(searchCriteria.pagination === 'true'){
                 achievementCount = await achievementController.findCount(searchCriteria);
                 searchCriteria.achievementCount = achievementCount;
                 allAchievements = await achievementController.findAll(searchCriteria);
@@ -39,7 +39,7 @@ router.post('/allAchievements', async function(req, res) {
                     searchCriteria.data = allAchievements;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in achievement table to fetch.'});
+                    return res.status(200).json({message:'No data in achievement table to fetch.'});
                 }
             } else {
                 allAchievements = await achievementController.findAll(searchCriteria);
@@ -48,7 +48,7 @@ router.post('/allAchievements', async function(req, res) {
                     searchCriteria.data = allAchievements;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in achievement table to fetch.'});
+                    return res.status(200).json({message:'No data in achievement table to fetch.'});
                 }
             }
         } else {
@@ -104,7 +104,7 @@ router.get('/allAchievementNames', async function(req, res){
         if(allAchievementNames !== undefined && allAchievementNames !== null){
             res.status(200).send(allAchievementNames);
         } else {
-            res.status(204).send(`No achievement names found in the database.`);
+            res.status(200).send(`No achievement names found in the database.`);
         }
     } catch(err){
         console.log(err);

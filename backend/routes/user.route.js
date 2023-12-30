@@ -202,7 +202,7 @@ router.post('/allUsers', async function(req, res) {
             let searchCriteria = req.body;
             let all_users;
             let user_count;
-            if(searchCriteria.pagination){
+            if(searchCriteria.pagination === 'true'){
                 user_count = await userController.findCount(searchCriteria);
                 searchCriteria.user_count = user_count;
                 all_users = await userController.findAll(searchCriteria);
@@ -210,7 +210,7 @@ router.post('/allUsers', async function(req, res) {
                     searchCriteria.data = all_users;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in user table to fetch.'});
+                    return res.status(200).send({message:'No data in user table to fetch.'});
                 }
             } else {
                 all_users = await userController.findAll(searchCriteria);
@@ -219,7 +219,7 @@ router.post('/allUsers', async function(req, res) {
                     searchCriteria.data = all_users;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in user table to fetch.'});
+                    return res.status(200).send({message:'No data in user table to fetch.'});
                 }
             }
         } else {

@@ -30,7 +30,7 @@ router.post('/allBoards', async function(req, res) {
             let searchCriteria = req.body;
             let allBoards;
             let boardCount;
-            if(searchCriteria.pagination){
+            if(searchCriteria.pagination === 'true'){
                 boardCount = await boardController.findCount(searchCriteria);
                 if(boardCount > 0){
                     searchCriteria.boardCount = boardCount;
@@ -39,10 +39,10 @@ router.post('/allBoards', async function(req, res) {
                         searchCriteria.data = allBoards;
                         return res.status(200).json(searchCriteria);
                     } else {
-                        return res.status(204).send({message:'No data in board table to fetch.'});
+                        return res.status(200).send({message:'No data in board table to fetch.'});
                     }
                 } else {
-                    return res.status(204).send({message:'No data in board table to fetch.'});
+                    return res.status(200).send({message:'No data in board table to fetch.'});
                 }
             } else {
                 allBoards = await boardController.findAll(searchCriteria);
@@ -51,7 +51,7 @@ router.post('/allBoards', async function(req, res) {
                     searchCriteria.data = allBoards;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in board table to fetch.'});
+                    return res.status(200).send({message:'No data in board table to fetch.'});
                 }
             }
         } else {
@@ -69,7 +69,7 @@ router.get('/allBoardNames', async function(req, res){
         if(allBoardNames !== undefined && allBoardNames !== null){
             res.status(200).send(allBoardNames);
         } else {
-            res.status(204).send(`No board names found in the database.`);
+            res.status(200).send(`No board names found in the database.`);
         }
     } catch(err){
         console.log(err);

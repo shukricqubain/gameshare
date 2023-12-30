@@ -12,7 +12,7 @@ router.get('/allRoles', async function(req, res) {
         if(all_roles.message !== 'No data in roles table to fetch.'){
             res.status(200).send(all_roles)
         } else {
-            res.status(204).send(all_roles);
+            res.status(200).send(all_roles);
         }
     } catch(err){
         console.log(err)

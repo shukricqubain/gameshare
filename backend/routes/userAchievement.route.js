@@ -31,7 +31,7 @@ router.post('/allUserAchievements', async function(req, res) {
             let searchCriteria = req.body;
             let allUserAchievements;
             let userAchievementCount;
-            if(searchCriteria.pagination){
+            if(searchCriteria.pagination === 'true'){
                 userAchievementCount = await userAchievementController.findCount(searchCriteria);
                 searchCriteria.achievementCount = userAchievementCount;
                 allUserAchievements = await userAchievementController.findAll(searchCriteria);
@@ -39,7 +39,7 @@ router.post('/allUserAchievements', async function(req, res) {
                     searchCriteria.data = allUserAchievements;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in user achievement table to fetch.'});
+                    return res.status(200).send({message:'No data in user achievement table to fetch.'});
                 }
             } else {
                 allUserAchievements = await userAchievementController.findAll(searchCriteria);
@@ -48,7 +48,7 @@ router.post('/allUserAchievements', async function(req, res) {
                     searchCriteria.data = allUserAchievements;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in user achievement table to fetch.'});
+                    return res.status(200).send({message:'No data in user achievement table to fetch.'});
                 }
             }
         } else {

@@ -31,7 +31,7 @@ router.post('/allGames', async function(req, res) {
             let searchCriteria = req.body;
             let allGames;
             let gameCount;
-            if(searchCriteria.pagination){
+            if(searchCriteria.pagination === 'true'){
                 gameCount = await gameController.findCount(searchCriteria);
                 searchCriteria.gameCount = gameCount;
                 allGames = await gameController.findAll(searchCriteria);
@@ -39,7 +39,7 @@ router.post('/allGames', async function(req, res) {
                     searchCriteria.data = allGames;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in game table to fetch.'});
+                    return res.status(200).send({message:'No data in game table to fetch.'});
                 }
             } else {
                 allGames = await gameController.findAll(searchCriteria);
@@ -48,7 +48,7 @@ router.post('/allGames', async function(req, res) {
                     searchCriteria.data = allGames;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in game table to fetch.'});
+                    return res.status(200).send({message:'No data in game table to fetch.'});
                 }
             }
         } else {
@@ -91,7 +91,7 @@ router.get('/singleGameByName/:gameName', async function(req, res){
             if(game !== undefined && typeof game !== 'string'){
                 res.status(200).send(game);
             } else {
-                res.status(204).send(game);
+                res.status(200).send(game);
             }
         } else {
             res.status(400).send('Game Name is required.');
@@ -108,7 +108,7 @@ router.get('/allGameNames', async function(req, res){
         if(allGameNames !== undefined && allGameNames !== null){
             res.status(200).send(allGameNames);
         } else {
-            res.status(204).send(`No game names found in the database.`);
+            res.status(200).send(`No game names found in the database.`);
         }
     } catch(err){
         console.log(err);

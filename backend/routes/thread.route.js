@@ -30,7 +30,7 @@ router.post('/allThreads', async function(req, res) {
             let searchCriteria = req.body;
             let allThreads;
             let threadCount;
-            if(searchCriteria.pagination){
+            if(searchCriteria.pagination === 'true'){
                 threadCount = await threadController.findCount(searchCriteria);
                 if(threadCount > 0){
                     searchCriteria.threadCount = threadCount;
@@ -39,10 +39,10 @@ router.post('/allThreads', async function(req, res) {
                         searchCriteria.data = allThreads;
                         return res.status(200).json(searchCriteria);
                     } else {
-                        return res.status(204).send({message:'No data in thread table to fetch.'});
+                        return res.status(200).send({message:'No data in thread table to fetch.'});
                     }
                 } else {
-                    return res.status(204).send({message:'No data in thread table to fetch.'});
+                    return res.status(200).send({message:'No data in thread table to fetch.'});
                 }
             } else {
                 allThreads = await threadController.findAll(searchCriteria);
@@ -51,7 +51,7 @@ router.post('/allThreads', async function(req, res) {
                     searchCriteria.data = allThreads;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in thread table to fetch.'});
+                    return res.status(200).send({message:'No data in thread table to fetch.'});
                 }
             }
         } else {
@@ -88,7 +88,7 @@ router.get('/allThreadNames', async function(req, res){
         if(allThreadNames !== undefined && allThreadNames !== null){
             res.status(200).send(allThreadNames);
         } else {
-            res.status(204).send(`No thread names found in the database.`);
+            res.status(200).send(`No thread names found in the database.`);
         }
     } catch(err){
         console.log(err);

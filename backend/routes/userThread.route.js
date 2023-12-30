@@ -39,10 +39,10 @@ router.post('/allUserThreads', async function(req, res) {
                         searchCriteria.data = allUserThreads;
                         return res.status(200).json(searchCriteria);
                     } else {
-                        return res.status(204).send({message:'No data in userThread table to fetch.'});
+                        return res.status(200).send({message:'No data in userThread table to fetch.'});
                     }
                 } else {
-                    return res.status(204).send({message:'No data in userThread table to fetch.'});
+                    return res.status(200).send({message:'No data in userThread table to fetch.'});
                 }
             } else {
                 allUserThreads = await userThreadController.findAll(searchCriteria);
@@ -51,7 +51,7 @@ router.post('/allUserThreads', async function(req, res) {
                     searchCriteria.data = allUserThreads;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in userThread table to fetch.'});
+                    return res.status(200).send({message:'No data in userThread table to fetch.'});
                 }
             }
         } else {

@@ -30,7 +30,7 @@ router.post('/allUserBoards', async function(req, res) {
             let searchCriteria = req.body;
             let allUserBoards;
             let userBoardCount;
-            if(searchCriteria.pagination){
+            if(searchCriteria.pagination === 'true'){
                 userBoardCount = await userBoardController.findCount(searchCriteria);
                 if(userBoardCount > 0){
                     searchCriteria.userBoardCount = userBoardCount;
@@ -39,10 +39,10 @@ router.post('/allUserBoards', async function(req, res) {
                         searchCriteria.data = allUserBoards;
                         return res.status(200).json(searchCriteria);
                     } else {
-                        return res.status(204).send({message:'No data in userBoard table to fetch.'});
+                        return res.status(200).send({message:'No data in userBoard table to fetch.'});
                     }
                 } else {
-                    return res.status(204).send({message:'No data in userBoard table to fetch.'});
+                    return res.status(200).send({message:'No data in userBoard table to fetch.'});
                 }
             } else {
                 allUserBoards = await userBoardController.findAll(searchCriteria);
@@ -51,7 +51,7 @@ router.post('/allUserBoards', async function(req, res) {
                     searchCriteria.data = allUserBoards;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    return res.status(204).send({message:'No data in userBoard table to fetch.'});
+                    return res.status(200).send({message:'No data in userBoard table to fetch.'});
                 }
             }
         } else {

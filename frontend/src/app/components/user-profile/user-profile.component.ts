@@ -564,11 +564,15 @@ export class UserProfileComponent {
       if (!this.userGamesLoaded) {
         let result = await lastValueFrom(this.userGameService.getAll(this.userGameSearchCriteria.value).pipe());
         if(result != null && result != undefined){
-          this.userGames = result.data;
-          for (let userGame of this.userGames) {
-            let game = this.allGames.find(obj => obj.gameID == userGame.gameID);
-            if (game != null && game != undefined) {
-              userGame.game = game;
+          if(result != undefined && result === 'No data in userGame table to fetch.'){
+            this.userGames = [];
+          } else {
+            this.userGames = result.data;
+            for (let userGame of this.userGames) {
+              let game = this.allGames.find(obj => obj.gameID == userGame.gameID);
+              if (game != null && game != undefined) {
+                userGame.game = game;
+              }
             }
           }
           this.userGamesLoaded = true;
