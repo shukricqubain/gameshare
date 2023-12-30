@@ -164,6 +164,8 @@ export class UserProfileComponent {
 
   allThreadNames: Thread[] = [];
   threadsLoaded: boolean = false;
+  minDate: Date;
+  emailValidation = '^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$';
 
   async ngAfterViewInit() {
 
@@ -175,6 +177,13 @@ export class UserProfileComponent {
         duration: 3000
       });
     }
+
+    ///setup minimum date of birth for user to be 13
+    let currentDate = new Date();
+    let year = currentDate.getFullYear() - 13;
+    let month = currentDate.getMonth() + 1;
+    let day = currentDate.getDate();
+    this.minDate = new Date(`${year}-${month}-${day}`);
 
     if (this.currentTabIndex == 0 && this.threadsLoaded == false) {
 
@@ -352,6 +361,7 @@ export class UserProfileComponent {
 
   handleGetResponse(data: any) {
     this.user = data;
+    console.log(this.user)
     this.userProfileForm.controls.userID.setValue(data.userID ? `${data.userID}` : '');
     this.userProfileForm.controls.userName.setValue(data.userName ? data.userName : '');
     this.userProfileForm.controls.firstName.setValue(data.firstName ? data.firstName : '');

@@ -31,7 +31,7 @@
                     <mat-form-field MatFormFieldAppearance="outline">
                         <label>Email</label>
                         <input matInput gameName="email" id="email" type="text" formControlName="email"
-                            placeholder="Enter email." required />
+                            placeholder="Enter email." [pattern]="emailValidation" required />
                     </mat-form-field>
                     <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
                         <label>Phone Number</label>
@@ -40,14 +40,9 @@
                     </mat-form-field>
                 </div>
                 <div class="form-row">
-                    <input [matDatepicker]="picker" placeholder="Choose a date" required formControlName="dateOfBirth" />
+                    <input [matDatepicker]="picker" placeholder="Choose a date" [max]="minDate" required formControlName="dateOfBirth" />
                     <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
-                    <mat-form-field MatFormFieldAppearance="outline">
-                        <label>User Role</label>
-                        <input matInput gameName="userRole" id="userRole" type="text" formControlName="userRole"
-                            placeholder="Enter user role." required />
-                    </mat-form-field>
                 </div>
             </div>
             <br>

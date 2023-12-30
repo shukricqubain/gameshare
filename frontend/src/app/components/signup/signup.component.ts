@@ -24,10 +24,12 @@ export class SignupComponent {
     dateOfBirth: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
     phoneNumber: new FormControl('', [Validators.required]),
-    userRole: new FormControl('', [Validators.required]),
+    userRole: new FormControl(''),
     password: new FormControl('', [Validators.required]),
   });
   showPassword: boolean = false;
+  minDate: Date;
+  emailValidation = '^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$';
 
   constructor(
     private userService: UserService,
@@ -43,6 +45,12 @@ export class SignupComponent {
     let data: any = this.location.getState();
     this.signupForm.controls.userName.patchValue(data.userPass.userName);
     this.signupForm.controls.password.patchValue(data.userPass.password);
+    ///setup minimum date of birth for user to be 13
+    let currentDate = new Date();
+    let year = currentDate.getFullYear() - 13;
+    let month = currentDate.getMonth() + 1;
+    let day = currentDate.getDate();
+    this.minDate = new Date(`${year}-${month}-${day}`);
   }
 
   onSubmit(){

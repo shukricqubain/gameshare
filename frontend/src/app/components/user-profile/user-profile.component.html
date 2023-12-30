@@ -388,23 +388,23 @@
                             <mat-form-field MatFormFieldAppearance="outline">
                                 <label>Email</label>
                                 <input matInput gameName="email" id="email" type="text" formControlName="email"
-                                    placeholder="Enter email." required />
+                                    placeholder="Enter email." required [pattern]="emailValidation" />
                             </mat-form-field>
                             <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
                                 <label>Phone Number</label>
-                                <input matInput gameName="phoneNumber" id="phoneNumber" type="text"
+                                <input matInput gameName="phoneNumber" id="phoneNumber" type="text" mask="(000)-000-0000"
                                     formControlName="phoneNumber" placeholder="Enter phone number." required />
                             </mat-form-field>
                         </div>
                         <div class="form-row">
-                            <input [matDatepicker]="picker" placeholder="Choose a date" required
+                            <input [matDatepicker]="picker" placeholder="Choose a date" [max]="minDate" required
                                 formControlName="dateOfBirth" />
                             <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                             <mat-form-field MatFormFieldAppearance="outline">
                                 <label>User Role</label>
                                 <input matInput gameName="userRole" id="userRole" type="text" formControlName="userRole"
-                                    placeholder="Enter user role." required />
+                                    placeholder="Enter user role." required/>
                             </mat-form-field>
                         </div>
                     </div>
