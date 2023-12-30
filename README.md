@@ -118,9 +118,9 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [ ] Allow users to befriend other users when viewing their profile
   - [ ] Allow users to view anothers profile by clicking thier userName in a thread post
 - [ ] Revamp User Signup and Edit
-  - [ ] Restrict input to only allow numbers in phone number input in user creation/edit
-  - [ ] Add regex to email input in user creation/edit
-  - [ ] Add minimum date for date of birth in user creation/edit
+  - [x] Restrict input to only allow numbers in phone number input in user creation/edit
+  - [x] Add regex to email input in user creation/edit
+  - [x] Add minimum date for date of birth in user creation/edit
   - [ ] Add restrictions for user role updation in user creation/edit
 
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
