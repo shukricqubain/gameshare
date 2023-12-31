@@ -105,7 +105,7 @@ export class LoginComponent {
         duration: 3000
       });
     } else {
-      this.snackBar.open(error.message, 'dismiss', {
+      this.snackBar.open(error.error.message, 'dismiss', {
         duration: 3000
       });
     }
