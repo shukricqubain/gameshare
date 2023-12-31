@@ -70,7 +70,7 @@ export class UserProfileComponent {
     dateOfBirth: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
     phoneNumber: new FormControl('', [Validators.required]),
-    userRole: new FormControl('', [Validators.required]),
+    userRole: new FormControl(''),
     userPassword: new FormControl('', [Validators.required]),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
@@ -111,6 +111,7 @@ export class UserProfileComponent {
   achievementPageSize = 5;
   currentAchievementPage = 0;
   achievementResultsLength = 0;
+  achievementsLoaded: boolean = false;
 
   @ViewChild('achievementPaginator') achievementPaginator: MatPaginator;
   @ViewChild('achievementSort') achievementSort: MatSort;
@@ -243,7 +244,7 @@ export class UserProfileComponent {
       await this.loadAllGames();
       await this.loadAllGameNames();
       await this.loadAllUserGames();
-    } else if (this.currentTabIndex == 3) {
+    } else if (this.currentTabIndex == 3 && this.achievementsLoaded == false) {
       await this.loadAllGameNames();
       await this.loadAchievementNames();
       this.userAchievementDataSource.sort = this.achievementSort;
@@ -264,7 +265,7 @@ export class UserProfileComponent {
               return [];
             }
             this.achievementResultsLength = data.achievementCount;
-            //this.achievementLoaded = true;
+            this.achievementsLoaded = true;
             return data.data;
           }),
         )
@@ -361,7 +362,6 @@ export class UserProfileComponent {
 
   handleGetResponse(data: any) {
     this.user = data;
-    console.log(this.user)
     this.userProfileForm.controls.userID.setValue(data.userID ? `${data.userID}` : '');
     this.userProfileForm.controls.userName.setValue(data.userName ? data.userName : '');
     this.userProfileForm.controls.firstName.setValue(data.firstName ? data.firstName : '');
@@ -382,7 +382,7 @@ export class UserProfileComponent {
   }
 
   public handleAchievementSearchResponse(data: any) {
-    if (data == null) {
+    if (data == null || data.message === 'No data in user achievement table to fetch.') {
       this.userAchievementDataSource.data = [];
       this.achievementResultsLength = 0;
       this.ngAfterViewInit();
@@ -507,6 +507,7 @@ export class UserProfileComponent {
   }
 
   applyAchievementSearch = async () => {
+    this.achievementsLoaded = false;
     this.userAchievementService.getAll(this.achievementSearchCriteria.value).subscribe({
       next: this.handleAchievementSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
@@ -531,6 +532,7 @@ export class UserProfileComponent {
     this.achievementSearchCriteria.controls.direction.patchValue('asc');
     this.achievementSearchCriteria.controls.limit.patchValue(5);
     this.achievementSearchCriteria.controls.page.patchValue(0);
+    this.achievementsLoaded = false;
     this.userAchievementService.getAll(this.achievementSearchCriteria.value).subscribe({
       next: this.handleAchievementSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
@@ -761,8 +763,7 @@ export class UserProfileComponent {
   }
 
   handleBoardSearchResponse(data: any) {
-    if (data == null) {
-      this.userBoardsDataSource.data = [];
+    if (data == null || data.message === 'No data in userBoard table to fetch.') {
       this.boardResultsLength = 0;
       this.ngAfterViewInit();
     } else {
@@ -837,7 +838,8 @@ export class UserProfileComponent {
   }
 
   handleThreadSearchResponse(data: any) {
-    if (data == null) {
+    console.log(data)
+    if (data == null || data.message === 'No data in userThread table to fetch.') {
       this.userThreadsDataSource.data = [];
       this.threadResultsLength = 0;
       this.ngAfterViewInit();

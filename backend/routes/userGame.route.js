@@ -131,13 +131,11 @@ router.post('/allUserGames', async function (req, res) {
                 }
             } else {
                 allUserGames = await userGameController.findAll(searchCriteria);
-                console.log(allUserGames)
                 userGameCount = allUserGames.length;
                 if (allUserGames.message !== 'No data in userGame table to fetch.') {
                     searchCriteria.data = allUserGames;
                     return res.status(200).json(searchCriteria);
                 } else {
-                    console.log('no data')
                     return res.status(200).json('No data in userGame table to fetch.');
                 }
             }
