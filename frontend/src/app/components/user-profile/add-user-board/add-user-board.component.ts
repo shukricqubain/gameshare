@@ -144,8 +144,10 @@ export class AddUserBoardComponent {
   }
 
   closeDialog(data?:any){
-    if(data !== null){
+    if(data !== null && this.isEdit){
       this.dialogRef?.close({event: 'Edited Board', data: data});
+    } else if(data !== null && !this.isEdit){
+      this.dialogRef?.close({event: 'Created Board', data: data});
     } else {
       this.dialogRef?.close({event:'Cancel'});
     }

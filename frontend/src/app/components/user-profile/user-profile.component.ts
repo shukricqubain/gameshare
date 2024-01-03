@@ -34,6 +34,7 @@ import { UserThreadService } from 'src/app/services/userThread.service';
 import { AddUserThreadComponent } from './add-user-thread/add-user-thread.component';
 import { Game } from 'src/app/models/game.model';
 import { GameInfoComponent } from '../games/game-info/game-info.component';
+import { UserBoard } from 'src/app/models/userBoard.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -118,7 +119,7 @@ export class UserProfileComponent {
 
   displayedUserBoardColumns: string[] = ['userBoardID', 'boardName', 'userID', 'gameID', 'gameName', 'createdAt', 'updatedAt', 'actions'];
   userBoardsDataSource = new MatTableDataSource<any>;
-  boardData: Board[];
+  userBoards: Board[];
   boardPageSize = 5;
   currentBoardPage = 0;
   boardResultsLength = 0;
@@ -129,7 +130,7 @@ export class UserProfileComponent {
   boardSearchCriteria = new FormGroup({
     boardSearchTerm: new FormControl(''),
     sort: new FormControl('userBoardID', [Validators.required]),
-    pagination: new FormControl('true', [Validators.required]),
+    pagination: new FormControl('false', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required]),
@@ -141,7 +142,7 @@ export class UserProfileComponent {
   allAchievementNames: AchievementName[] = [];
   gameNamesLoaded: boolean = false;
   achievementNamesLoaded: boolean = false;
-  boardsLoaded: boolean = false;
+  userBoardsLoaded: boolean = false;
 
   displayedUserThreadColumns: string[] = ['userThreadID', 'threadID', 'threadName', 'boardName', 'userID', 'createdAt', 'updatedAt', 'actions'];
   userThreadsDataSource = new MatTableDataSource<any>;
@@ -213,32 +214,10 @@ export class UserProfileComponent {
         )
         .subscribe(data => (this.userThreadsDataSource = data));
 
-    } else if (this.currentTabIndex == 1 && this.boardsLoaded == false) {
+    } else if (this.currentTabIndex == 1 && this.userBoardsLoaded == false) {
 
       await this.loadAllBoardNames();
-      this.userBoardsDataSource.sort = this.boardSort;
-      ///if user changes the sort order reset the page back to the first page
-      this.boardSort.sortChange.subscribe(() => (this.boardPaginator.pageIndex = 0));
-      merge(this.boardSort.sortChange, this.boardPaginator.page, this.boardPaginator.pageSize)
-        .pipe(
-          startWith({}),
-          switchMap(() => {
-            this.boardSearchCriteria.controls.sort.patchValue(this.boardSort.active);
-            this.boardSearchCriteria.controls.direction.patchValue(this.boardSort.direction);
-            this.boardSearchCriteria.controls.page.patchValue(this.boardPaginator.pageIndex);
-            this.boardSearchCriteria.controls.limit.patchValue(this.boardPaginator.pageSize);
-            return this.userBoardService!.getAll(this.boardSearchCriteria.value).pipe(catchError(() => observableOf(null)));
-          }),
-          map(data => {
-            if (data === null) {
-              return [];
-            }
-            this.boardResultsLength = data.userBoardCount;
-            this.boardsLoaded = true;
-            return data.data;
-          }),
-        )
-        .subscribe(data => (this.userBoardsDataSource = data));
+      await this.loadUserBoards();
 
     } else if (this.currentTabIndex == 2) {
       await this.loadAllGames();
@@ -601,7 +580,7 @@ export class UserProfileComponent {
 
   async loadAllBoardNames() {
     try {
-      if (!this.boardsLoaded) {
+      if (!this.userBoardsLoaded) {
         this.allBoardNames = await lastValueFrom(this.boardService.getAllBoardNames().pipe());
       }
     } catch (err) {
@@ -737,7 +716,7 @@ export class UserProfileComponent {
   }
 
   applyBoardSearch() {
-    this.boardsLoaded = false;
+    this.userBoardsLoaded = false;
     let trimmedSearch = this.boardSearchCriteria.controls.boardSearchTerm.value?.trim();
     if (trimmedSearch !== undefined && trimmedSearch !== null) {
       this.boardSearchCriteria.controls.boardSearchTerm.patchValue(trimmedSearch);
@@ -755,7 +734,7 @@ export class UserProfileComponent {
     this.boardSearchCriteria.controls.direction.patchValue('asc');
     this.boardSearchCriteria.controls.limit.patchValue(5);
     this.boardSearchCriteria.controls.page.patchValue(0);
-    this.boardsLoaded = false;
+    this.userBoardsLoaded = false;
     this.userBoardService.getAll(this.boardSearchCriteria.value).subscribe({
       next: this.handleBoardSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
@@ -783,11 +762,10 @@ export class UserProfileComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if (result !== undefined) {
-        this.ngAfterViewInit();
-      } else {
-        this.ngAfterViewInit();
+        this.userBoardsLoaded = false;
+        await this.loadUserBoards();
       }
     });
   }
@@ -838,7 +816,6 @@ export class UserProfileComponent {
   }
 
   handleThreadSearchResponse(data: any) {
-    console.log(data)
     if (data == null || data.message === 'No data in userThread table to fetch.') {
       this.userThreadsDataSource.data = [];
       this.threadResultsLength = 0;
@@ -861,5 +838,56 @@ export class UserProfileComponent {
 
     dialogRefAdd.afterClosed().subscribe(result => {
     });
+  }
+
+  async loadUserBoards(){
+    try {
+      console.log(this.userBoardsLoaded)
+      if (!this.userBoardsLoaded) {
+        let result = await lastValueFrom(this.userBoardService.getAll(this.boardSearchCriteria.value).pipe());
+        console.log(result)
+        if(result != null && result != undefined){
+          if(result != undefined && result === 'No data in userBoard table to fetch.'){
+            this.userBoards = [];
+          } else {
+            this.userBoards = result.data;
+          }
+          this.userBoardsLoaded = true;
+        }
+      }
+    } catch(err){
+      console.error(err);
+      this.userGames = [];
+      this.snackBar.open('Error loading user boards.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
+
+  openBoard(board: Board){
+    console.log(board)
+  }
+
+  async unfollowBoard(userBoard: UserBoard){
+    if(userBoard !== undefined){
+      this.userBoardService.delete(userBoard?.userBoardID).subscribe({
+        next: this.handleUnfollowResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    } else {
+      this.snackBar.open('Unfollow was not successful: User Board was undefined.', 'dismiss',{
+        duration: 3000
+      });
+    }
+  }
+
+  async handleUnfollowResponse(data: any){
+    if(data == null){
+      this.userBoardsLoaded = false;
+      await this.loadUserBoards();
+      this.snackBar.open('Successfully unfollowed a board!', 'dismiss',{
+        duration: 3000
+      });
+    }
   }
 }

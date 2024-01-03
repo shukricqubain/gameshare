@@ -41,7 +41,6 @@ export class AddGameComponent {
 
   ngOnInit() {
     if(this.data !== null && this.data != undefined && this.data.isEdit == true){
-      console.log(this.data)
       this.isEdit = true;
       let gameName = `${this.data.element.gameName}`;
       let developers = `${this.data.element.developers}`;

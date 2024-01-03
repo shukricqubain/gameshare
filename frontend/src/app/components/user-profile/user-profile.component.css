@@ -27,6 +27,11 @@
     margin-left: 0.5rem;
 }
 
+.board-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .game-container {
     display: flex;
     flex-direction: row;
