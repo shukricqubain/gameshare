@@ -35,6 +35,7 @@ import { AddUserThreadComponent } from './add-user-thread/add-user-thread.compon
 import { Game } from 'src/app/models/game.model';
 import { GameInfoComponent } from '../games/game-info/game-info.component';
 import { UserBoard } from 'src/app/models/userBoard.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-profile',
@@ -58,7 +59,8 @@ export class UserProfileComponent {
     private boardService: BoardService,
     private threadService: ThreadService,
     private userThreadService: UserThreadService,
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private router: Router,
   ) {
   }
 
@@ -842,10 +844,8 @@ export class UserProfileComponent {
 
   async loadUserBoards(){
     try {
-      console.log(this.userBoardsLoaded)
       if (!this.userBoardsLoaded) {
         let result = await lastValueFrom(this.userBoardService.getAll(this.boardSearchCriteria.value).pipe());
-        console.log(result)
         if(result != null && result != undefined){
           if(result != undefined && result === 'No data in userBoard table to fetch.'){
             this.userBoards = [];
@@ -865,7 +865,7 @@ export class UserProfileComponent {
   }
 
   openBoard(board: Board){
-    console.log(board)
+    this.router.navigate([`/board/${board.boardID}`], { state: { board: board, user: this.user } });
   }
 
   async unfollowBoard(userBoard: UserBoard){
@@ -873,6 +873,9 @@ export class UserProfileComponent {
       this.userBoardService.delete(userBoard?.userBoardID).subscribe({
         next: this.handleUnfollowResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
+      });
+      this.snackBar.open('Successfully unfollowed a board!', 'dismiss',{
+        duration: 3000
       });
     } else {
       this.snackBar.open('Unfollow was not successful: User Board was undefined.', 'dismiss',{
@@ -882,12 +885,9 @@ export class UserProfileComponent {
   }
 
   async handleUnfollowResponse(data: any){
-    if(data == null){
+    if(data !== null){
       this.userBoardsLoaded = false;
       await this.loadUserBoards();
-      this.snackBar.open('Successfully unfollowed a board!', 'dismiss',{
-        duration: 3000
-      });
     }
   }
 }

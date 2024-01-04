@@ -32,6 +32,10 @@
     flex-direction: column;
 }
 
+.board-item {
+    padding: 3px 3px 3px 3px;
+}
+
 .game-container {
     display: flex;
     flex-direction: row;

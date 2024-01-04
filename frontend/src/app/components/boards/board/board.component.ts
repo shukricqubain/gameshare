@@ -277,7 +277,7 @@ export class BoardComponent {
         userID: this.user.userID
       }
       let result = await lastValueFrom(this.userThreadService.getAll(userThreadSearchCriteria).pipe());
-      if(result !== null && result !== undefined){
+      if(result != null && result != undefined && result.message == undefined){
         this.userThreads = result.data;
         this.checkThreads();
         this.userThreadsLoaded = true;
