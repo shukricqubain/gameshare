@@ -36,6 +36,7 @@ import { Game } from 'src/app/models/game.model';
 import { GameInfoComponent } from '../games/game-info/game-info.component';
 import { UserBoard } from 'src/app/models/userBoard.model';
 import { Router } from '@angular/router';
+import { UserThread } from 'src/app/models/userThread.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -147,19 +148,16 @@ export class UserProfileComponent {
   userBoardsLoaded: boolean = false;
 
   displayedUserThreadColumns: string[] = ['userThreadID', 'threadID', 'threadName', 'boardName', 'userID', 'createdAt', 'updatedAt', 'actions'];
-  userThreadsDataSource = new MatTableDataSource<any>;
-  threadData: Board[];
+  userThreadsLoaded: boolean = false;
+  userThreads: Thread[] = [];
   threadPageSize = 5;
   currentThreadPage = 0;
   threadResultsLength = 0;
 
-  @ViewChild('threadPaginator') threadPaginator: MatPaginator;
-  @ViewChild('threadSort') threadSort: MatSort;
-
   threadSearchCriteria = new FormGroup({
     threadSearchTerm: new FormControl(''),
     sort: new FormControl('userThreadID', [Validators.required]),
-    pagination: new FormControl('true', [Validators.required]),
+    pagination: new FormControl('false', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required]),
@@ -167,7 +165,6 @@ export class UserProfileComponent {
   });
 
   allThreadNames: Thread[] = [];
-  threadsLoaded: boolean = false;
   minDate: Date;
   emailValidation = '^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$';
 
@@ -189,32 +186,10 @@ export class UserProfileComponent {
     let day = currentDate.getDate();
     this.minDate = new Date(`${year}-${month}-${day}`);
 
-    if (this.currentTabIndex == 0 && this.threadsLoaded == false) {
+    if (this.currentTabIndex == 0 && this.userThreadsLoaded == false) {
 
       await this.loadAllThreadNames();
-      this.userThreadsDataSource.sort = this.threadSort;
-      ///if user changes the sort order reset the page back to the first page
-      this.threadSort.sortChange.subscribe(() => (this.threadPaginator.pageIndex = 0));
-      merge(this.threadSort.sortChange, this.threadPaginator.page, this.threadPaginator.pageSize)
-        .pipe(
-          startWith({}),
-          switchMap(() => {
-            this.threadSearchCriteria.controls.sort.patchValue(this.threadSort.active);
-            this.threadSearchCriteria.controls.direction.patchValue(this.threadSort.direction);
-            this.threadSearchCriteria.controls.page.patchValue(this.threadPaginator.pageIndex);
-            this.threadSearchCriteria.controls.limit.patchValue(this.threadPaginator.pageSize);
-            return this.userThreadService!.getAll(this.threadSearchCriteria.value).pipe(catchError(() => observableOf(null)));
-          }),
-          map(data => {
-            if (data === null) {
-              return [];
-            }
-            this.threadResultsLength = data.userThreadCount;
-            this.threadsLoaded = true;
-            return data.data;
-          }),
-        )
-        .subscribe(data => (this.userThreadsDataSource = data));
+      await this.loadUserThreads();
 
     } else if (this.currentTabIndex == 1 && this.userBoardsLoaded == false) {
 
@@ -732,7 +707,7 @@ export class UserProfileComponent {
   clearBoardSearch() {
     this.boardSearchCriteria.controls.boardSearchTerm.patchValue('');
     this.boardSearchCriteria.controls.sort.patchValue('userBoardID');
-    this.boardSearchCriteria.controls.pagination.patchValue('true');
+    this.boardSearchCriteria.controls.pagination.patchValue('false');
     this.boardSearchCriteria.controls.direction.patchValue('asc');
     this.boardSearchCriteria.controls.limit.patchValue(5);
     this.boardSearchCriteria.controls.page.patchValue(0);
@@ -745,13 +720,11 @@ export class UserProfileComponent {
 
   handleBoardSearchResponse(data: any) {
     if (data == null || data.message === 'No data in userBoard table to fetch.') {
-      this.boardResultsLength = 0;
-      this.ngAfterViewInit();
+      this.userBoards = [];
     } else {
-      this.userBoardsDataSource.data = data.data;
-      this.boardResultsLength = data.userBoardCount;
-      this.ngAfterViewInit();
+      this.userBoards = data.data;
     }
+    this.userBoardsLoaded = true;
   }
 
   addUserBoard() {
@@ -782,17 +755,16 @@ export class UserProfileComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if (result !== undefined) {
-        this.ngAfterViewInit();
-      } else {
-        this.ngAfterViewInit();
+        this.userThreadsLoaded = false;
+        await this.loadUserThreads();
       }
     });
   }
 
   applyThreadSearch() {
-    this.threadsLoaded = false;
+    this.userThreadsLoaded = false;
     let trimmedSearch = this.threadSearchCriteria.controls.threadSearchTerm.value?.trim();
     if (trimmedSearch !== undefined && trimmedSearch !== null) {
       this.threadSearchCriteria.controls.threadSearchTerm.patchValue(trimmedSearch);
@@ -806,11 +778,11 @@ export class UserProfileComponent {
   clearThreadSearch() {
     this.threadSearchCriteria.controls.threadSearchTerm.patchValue('');
     this.threadSearchCriteria.controls.sort.patchValue('userThreadID');
-    this.threadSearchCriteria.controls.pagination.patchValue('true');
+    this.threadSearchCriteria.controls.pagination.patchValue('false');
     this.threadSearchCriteria.controls.direction.patchValue('asc');
     this.threadSearchCriteria.controls.limit.patchValue(5);
     this.threadSearchCriteria.controls.page.patchValue(0);
-    this.threadsLoaded = false;
+    this.userThreadsLoaded = false;
     this.userThreadService.getAll(this.threadSearchCriteria.value).subscribe({
       next: this.handleThreadSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
@@ -819,14 +791,11 @@ export class UserProfileComponent {
 
   handleThreadSearchResponse(data: any) {
     if (data == null || data.message === 'No data in userThread table to fetch.') {
-      this.userThreadsDataSource.data = [];
-      this.threadResultsLength = 0;
-      this.ngAfterViewInit();
+      this.userThreads = [];
     } else {
-      this.userThreadsDataSource.data = data.data;
-      this.threadResultsLength = data.userThreadCount;
-      this.ngAfterViewInit();
+      this.userThreads = data.data;
     }
+    this.userThreadsLoaded = true;
   }
 
   gameInfoPopup(game: Game) {
@@ -890,4 +859,53 @@ export class UserProfileComponent {
       await this.loadUserBoards();
     }
   }
+
+  async loadUserThreads(){
+    try {
+      if (!this.userThreadsLoaded) {
+        let result = await lastValueFrom(this.userThreadService.getAll(this.threadSearchCriteria.value).pipe());
+        if(result != null && result != undefined){
+          if(result != undefined && result === 'No data in userThread table to fetch.'){
+            this.userThreads = [];
+          } else {
+            this.userThreads = result.data;
+          }
+          this.userThreadsLoaded = true;
+        }
+      }
+    } catch(err){
+      console.error(err);
+      this.userGames = [];
+      this.snackBar.open('Error loading user threads.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
+
+  openThread(thread: Thread) {
+    this.router.navigate([`/thread/${thread.threadID}`], { state: { thread } });
+  }
+
+  async unfollowThread(userThread: UserThread){
+    if(userThread !== undefined){
+      this.userThreadService.delete(userThread?.userThreadID).subscribe({
+        next: this.handleUnfollowThreadResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+      this.snackBar.open('Successfully unfollowed a thread!', 'dismiss',{
+        duration: 3000
+      });
+    } else {
+      this.snackBar.open('Unfollow was not successful: User Thread was undefined.', 'dismiss',{
+        duration: 3000
+      });
+    }
+  }
+
+  async handleUnfollowThreadResponse(data: any){
+    if(data !== null){
+      this.userThreadsLoaded = false;
+      await this.loadUserThreads();
+    }
+  }  
 }

@@ -17,86 +17,23 @@
                     </form>
                     <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUserThread()">Follow Thread</button>
                 </div>
-                <div>
-                    <table mat-table [dataSource]="userThreadsDataSource" class="table mat-elevation-z8"
-                        matSortActive="userThreadID" matSortDisableClear matSortDirection="asc" matSort #threadSort="matSort">
-
-                        <!-- userThreadID Column -->
-                        <ng-container matColumnDef="userThreadID">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> userThreadID </th>
-                            <td mat-cell *matCellDef="let element"> {{element.userThreadID}} </td>
-                        </ng-container>
-
-                        <!-- threadID Column -->
-                        <ng-container matColumnDef="threadID">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> ThreadID </th>
-                            <td mat-cell *matCellDef="let element"> {{element.threadID}} </td>
-                        </ng-container>
-
-                        <!-- threadName Column -->
-                        <ng-container matColumnDef="threadName">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Thread Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.threadName}} </td>
-                        </ng-container>
-
-                        <!-- userID Column -->
-                        <ng-container matColumnDef="userID">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> UserID </th>
-                            <td mat-cell *matCellDef="let element"> {{element.userID}} </td>
-                        </ng-container>
-
-                        <!-- boardID Column -->
-                        <ng-container matColumnDef="boardID">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> BoardID </th>
-                            <td mat-cell *matCellDef="let element"> {{element.boardID}} </td>
-                        </ng-container>
-
-                        <!-- boardName Column -->
-                        <ng-container matColumnDef="boardName">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Board Name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.boardName}} </td>
-                        </ng-container>
-
-                        <!-- createdAt Column -->
-                        <ng-container matColumnDef="createdAt">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
-                            <td mat-cell *matCellDef="let element"> {{formatDate(element.createdAt)}} </td>
-                        </ng-container>
-
-                        <!-- updatedAt Column -->
-                        <ng-container matColumnDef="updatedAt">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Updated At </th>
-                            <td mat-cell *matCellDef="let element"> {{formatDate(element.updatedAt)}} </td>
-                        </ng-container>
-
-                        <!-- actions Column -->
-                        <ng-container matColumnDef="actions">
-                            <th mat-header-cell *matHeaderCellDef>Actions</th>
-                            <td mat-cell *matCellDef="let element">
-                                <!-- <button mat-icon-button color="primary" (click)="editUserThread(element)">
-                                    <mat-icon class="icon-class">
-                                        edit
-                                    </mat-icon>
-                                </button>
-                                <button mat-icon-button color="warn" (click)="deleteUserThread(element)">
-                                    <mat-icon class="icon-class">
-                                        delete
-                                    </mat-icon>
-                                </button> -->
-                            </td>
-                        </ng-container>
-
-                        <tr mat-header-row *matHeaderRowDef="displayedUserThreadColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedUserThreadColumns;"></tr>
-
-                        <!-- Row shown when there is no matching data. -->
-                        <tr class="mat-row" *matNoDataRow>
-                            <td class="mat-cell" colspan="4">No data matching the filter "</td>
-                        </tr>
-                    </table>
-                    <mat-paginator #threadPaginator [pageSize]="threadPageSize" [pageSizeOptions]="[5, 10, 20, 100]"
-                        [showFirstLastButtons]="true" [length]="threadResultsLength">
-                    </mat-paginator>
+                <div *ngIf="!userThreadsLoaded" class="loading-container">
+                    <mat-spinner [diameter]="100"></mat-spinner>
+                </div>
+                <div *ngIf="userThreadsLoaded" class="thread-container">
+                    <div fxFlex *ngFor="let thread of userThreads" class="thread-item">
+                        <mat-card>
+                          <mat-card-header>
+                            <mat-card-title>{{thread.threadName}}</mat-card-title>
+                          </mat-card-header>
+                          <mat-card-actions>
+                            <div class="card-actions-container">
+                                <button mat-button (click)="unfollowThread(thread)">Unfollow</button>
+                                <button (click)="openThread(thread)" mat-button>Open</button>
+                            </div>
+                          </mat-card-actions>
+                        </mat-card>
+                      </div>
                 </div>
             </div>
         </mat-tab>

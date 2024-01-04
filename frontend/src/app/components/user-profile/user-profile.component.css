@@ -36,6 +36,15 @@
     padding: 3px 3px 3px 3px;
 }
 
+.thread-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.thread-item {
+    padding: 3px 3px 3px 3px;
+}
+
 .game-container {
     display: flex;
     flex-direction: row;
