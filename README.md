@@ -110,8 +110,8 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Make user board page visually similar to boards page
   - [x] Add unfollow button to followed boards on user profile
 - [ ] Revamp User Threads page
-  - [ ] Make user thread page visually similar to thread page
-  - [ ] Add unfollow button to followed threads on user profile
+  - [x] Make user thread page visually similar to thread page
+  - [x] Add unfollow button to followed threads on user profile
   - [ ] Change userID to userName for each post in a thread
   - [ ] Fix depth logic for responses in a thread
 - [ ] User Friends Page
