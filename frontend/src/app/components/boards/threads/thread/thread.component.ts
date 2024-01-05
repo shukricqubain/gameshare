@@ -44,11 +44,14 @@ export class ThreadComponent {
   thread: any;
   userName: any;
   user: User;
+  allUserNames: User[];
+  allUserNamesLoaded: boolean = false;
 
 
   async ngOnInit() {
     let data: any = this.location.getState();
     await this.checkCurrentUser();
+    await this.loadAllUsers();
     this.thread = data.thread;
     if (this.thread !== null && this.thread !== undefined && this.thread.threadID !== undefined && this.thread.threadID !== null) {
       this.threadItemSearchCriteria.controls.threadID.patchValue(this.thread.threadID);
@@ -218,5 +221,36 @@ export class ThreadComponent {
         });
       }
     });
+  }
+
+  async loadAllUsers(){
+    if(!this.allUserNamesLoaded){
+      try{
+        let result = await lastValueFrom(this.userService.getAllUserNames().pipe());
+        if(result != null && result != undefined){
+          this.allUserNames = result;
+        }
+        this.allUserNamesLoaded = true;
+      }catch(err){
+        console.error(err);
+        this.snackBar.open(`Error loading all users.`, 'dismiss',{
+          duration: 3000
+        });
+        throw err;
+      }
+    }
+  }
+
+  getUserNameByUserID(userID: any){
+    if(userID != undefined){
+      let userName = this.allUserNames.find(obj => obj.userID == userID);
+      if(userName != undefined){
+        return userName.userName;
+      } else {
+        return 'userName not found';
+      }
+    } else {
+      return 'userName not found';
+    }
   }
 }

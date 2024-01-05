@@ -9,7 +9,8 @@ exports.create = async (req, res) => {
         let result = await userService.create(req);
         return result;
     } catch(err){
-        console.log(err)
+        console.error(err);
+        throw err;
     }
 };
 
@@ -23,7 +24,8 @@ exports.findCount = async (searchCriteria) => {
             return {message: 'No data in user table to fetch.'};
         }
     } catch(err){
-        console.log(err);
+        console.error(err);
+        throw err;
     }
 };
 
@@ -37,7 +39,8 @@ exports.findAll = async (searchCriteria) => {
             return {message: 'No data in user table to fetch.'};
         }
     } catch(err){
-        console.log(err);
+        console.error(err);
+        throw err;
     }
 };
 
@@ -51,7 +54,8 @@ exports.findOne = async (req) => {
             return user;
         }
     } catch(err){
-        console.log(err);
+        console.error(err);
+        throw err;
     }
 };
 
@@ -65,7 +69,8 @@ exports.findUsername = async (username) => {
             return user;
         }
     } catch(err){
-        console.log(err);
+        console.error(err);
+        throw err;
     }
 }
 
@@ -74,7 +79,8 @@ exports.update = async (userID, user) => {
     try{
         return await userService.update(userID, user);
     } catch(err){
-        console.log(err);
+        console.error(err);
+        throw err;
     }
 };
 
@@ -83,6 +89,17 @@ exports.delete = async (userID) => {
     try{
         return await userService.deleteUser(userID);
     } catch(err){
-        console.log(err);
+        console.error(err);
+        throw err;
     }
 };
+
+//Get all userNames and userIDs
+exports.getAllUserNames = async () => {
+    try {
+        return await userService.getAllUserNames();
+    } catch(err){
+        console.error(err);
+        throw err;
+    }
+}

@@ -24,7 +24,7 @@
                 <ng-template #reply>
                     <mat-card style="margin-left: 1rem;">
                         <mat-card-header>
-                            <mat-card-title>{{threadItem?.userID}}</mat-card-title>
+                            <mat-card-title>{{getUserNameByUserID(threadItem.userID)}}</mat-card-title>
                             <mat-card-subtitle>{{threadItem?.threadMessage}}</mat-card-subtitle>
                         </mat-card-header>
                         <mat-card-actions>
@@ -37,7 +37,7 @@
                 <ng-template #nonReply>
                     <mat-card>
                         <mat-card-header>
-                            <mat-card-title>{{threadItem?.userID}}</mat-card-title>
+                            <mat-card-title>{{getUserNameByUserID(threadItem.userID)}}</mat-card-title>
                             <mat-card-subtitle>{{threadItem?.threadMessage}}</mat-card-subtitle>
                         </mat-card-header>
                         <mat-card-actions>

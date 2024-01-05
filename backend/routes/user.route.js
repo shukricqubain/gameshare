@@ -186,7 +186,7 @@ router.post('/checkUserIsLoggedIn', async function (req, res) {
             });
         }
     } catch (err) {
-        console.log(err)
+        console.error(err);
         return res.status(500).json({
             message: "There was an error when trying to login a user.",
             err
@@ -226,7 +226,11 @@ router.post('/allUsers', async function (req, res) {
             res.status(400).send('Search criteria is required.');
         }
     } catch (err) {
-        console.log(err)
+        console.error(err);
+        return res.status(500).json({
+            message: "There was an error when trying to get all users.",
+            err
+        });
     }
 });
 
@@ -246,7 +250,11 @@ router.get('/singleUser/:userID', async function (req, res) {
             res.status(400).send('User ID is required.');
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
+        return res.status(500).json({
+            message: "There was an error when trying to get a single user.",
+            err
+        });
     }
 });
 
@@ -265,7 +273,11 @@ router.get('/singleUserByName/:userName', async function (req, res) {
             res.status(400).send('Username is required.');
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
+        return res.status(500).json({
+            message: "There was an error when trying to get a signle user by userName.",
+            err
+        });
     }
 });
 
@@ -284,7 +296,7 @@ router.get('/checkUserExists/:userName', async function (req, res) {
             return res.status(400).send({ message: 'Username is required.' });
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return res.status(500).json({
             message: "There was an error when trying check a user exists.",
             err
@@ -375,6 +387,23 @@ router.delete('/deleteUser/:userID', async function (req, res) {
     } catch (err) {
         res.status(500).json({
             message: "There was an error when trying to delete a user.",
+            err
+        });
+    }
+});
+
+///route for retrieving all userNames and userIDs
+router.get('/getAllUserNames', async function(req, res){
+    try{
+        let allUserNames = await userController.getAllUserNames();
+        if (allUserNames.length != undefined && allUserNames.length > 0) {
+            return res.status(200).json(allUserNames);
+        } else {
+            return res.status(200).send({ message: 'No data in user table to fetch.' });
+        }
+    } catch(err){
+        res.status(500).json({
+            message: "There was an error when trying to get all userNames.",
             err
         });
     }
