@@ -69,10 +69,34 @@ export class ThreadComponent {
   handleSearchResponse(result: any) {
     if (result !== null) {
       this.allThreadItems = result.data;
+      this.checkReplyDepth();
       this.finishedLoadingData = true;
     } else {
       this.allThreadItems = [];
       this.finishedLoadingData = true;
+    }
+  }
+
+  checkReplyDepth(){
+    ///go through each post in thread
+    for(let item of this.allThreadItems){
+      let currentItem: any = item;
+      ///if no replyID depth is 0
+      if(item.replyID == null){
+        currentItem.depth = 0;
+      } else {
+        ///if replyID, increment depth
+        ///and go through the list until there are no more replies
+        ///while incrementing the depth along the way 
+        currentItem.depth = 0;
+        let check: any = item;
+        while(check != undefined && check.replyID !== null){
+          let replyID = check.replyID;
+          currentItem.depth += 1;
+          check = this.allThreadItems.find(obj => obj.threadItemID == replyID);
+        }
+        currentItem.depthStyle = `${currentItem.depth}rem`;
+      }
     }
   }
 

@@ -4,6 +4,8 @@ export class ThreadItem {
     threadMessage?: String;
     userID?: Number;
     replyID?: Number;
+    depth?: number;
+    depthStyle?: string;
     createdAt?: string;
     updatedAt?: string;
 }
