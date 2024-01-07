@@ -31,7 +31,7 @@ export class AllGamesComponent {
   pageSize = 5;
   currentPage = 0;
   resultsLength = 0;
-  isLoadingResults: boolean = true;
+  isLoadingGames: boolean = true;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -67,14 +67,14 @@ export class AllGamesComponent {
     } else {
       this.gameData = data.data;
     }
-    this.isLoadingResults = false;
+    this.isLoadingGames = false;
   }
 
   public handleErrorResponse(error: any) {
     this.snackBar.open(error.message, 'dismiss', {
       duration: 3000
     });
-    this.isLoadingResults = false;
+    this.isLoadingGames = false;
   }
 
   public handleDeleteResponse(data: any) {
@@ -84,7 +84,7 @@ export class AllGamesComponent {
   }
 
   public applySearch = async () => {
-    this.isLoadingResults = true;
+    this.isLoadingGames = true;
     this.gameService.getAll(this.searchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
@@ -92,7 +92,7 @@ export class AllGamesComponent {
   }
 
   public clearSearch() {
-    this.isLoadingResults = true;
+    this.isLoadingGames = true;
     this.searchCriteria.controls.searchTerm.patchValue('');
     this.searchCriteria.controls.sort.patchValue('gameID');
     this.searchCriteria.controls.pagination.patchValue('false');
@@ -120,8 +120,8 @@ export class AllGamesComponent {
       }
     });
 
-    dialogRefEdit.afterClosed().subscribe(result => {
-      this.loadAllGames();
+    dialogRefEdit.afterClosed().subscribe(async result => {
+      await this.loadAllGames();
     });
   }
 
@@ -134,8 +134,8 @@ export class AllGamesComponent {
       }
     });
 
-    dialogRefAdd.afterClosed().subscribe(result => {
-      this.loadAllGames();
+    dialogRefAdd.afterClosed().subscribe(async result => {
+      await this.loadAllGames();
     });
   }
 

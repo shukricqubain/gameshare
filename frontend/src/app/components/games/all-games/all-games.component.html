@@ -20,10 +20,10 @@
                 type="button" (click)="addGame()">Add Game</button>
         </div>
         <br>
-        <div *ngIf="isLoadingResults" class="loading-container">
+        <div *ngIf="isLoadingGames" class="loading-container">
             <mat-spinner [diameter]="100"></mat-spinner>
         </div>
-        <div *ngIf="!isLoadingResults" class="game-container">
+        <div *ngIf="!isLoadingGames" class="game-container">
             <div fxFlex *ngFor="let game of gameData" class="game-margin">
                 <mat-card class="game-item">
                     <mat-card-content>

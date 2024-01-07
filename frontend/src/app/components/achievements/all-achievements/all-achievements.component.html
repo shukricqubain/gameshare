@@ -14,69 +14,23 @@
                         clear
                     </mat-icon>
                 </form>
-                <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addAchievement()">Add Achievement</button>
+                <button mat-raised-button style="cursor: pointer; margin-top:35px;margin-left: 10px;" color="primary" type="button" (click)="addAchievement()">Add Achievement</button>
             </div>
-            <table mat-table [dataSource]="dataSource" class="table mat-elevation-z8" matSortActive="achievementID"
-                matSortDisableClear matSortDirection="asc" matSort>
-
-                <!-- achievementID Column -->
-                <ng-container matColumnDef="achievementID">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> AchievementID </th>
-                    <td mat-cell *matCellDef="let element"> {{element.achievementID}} </td>
-                </ng-container>
-
-                <!-- gameName Column -->
-                <ng-container matColumnDef="gameName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> GameName </th>
-                    <td mat-cell *matCellDef="let element"> {{element.gameName}} </td>
-                </ng-container>
-
-                <!-- achievementName Column -->
-                <ng-container matColumnDef="achievementName">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Achievement Name </th>
-                    <td mat-cell *matCellDef="let element"> {{element.achievementName}} </td>
-                </ng-container>
-
-                <!-- achievementDescription Column -->
-                <ng-container matColumnDef="achievementDescription">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
-                    <td mat-cell *matCellDef="let element"> {{element.achievementDescription}} </td>
-                </ng-container>
-
-                <!-- achievementIcon Column -->
-                <ng-container matColumnDef="achievementIcon">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Icon </th>
-                    <td mat-cell *matCellDef="let element"> {{element.achievementIcon}} </td>
-                </ng-container>
-
-                <!-- actions Column -->
-                <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef>Actions</th>
-                <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button color="primary" (click)="editAchievement(element)">
-                    <mat-icon class="icon-class">
-                        edit
-                    </mat-icon>
-                    </button>
-                    <button mat-icon-button color="warn" (click)="deleteAchievement(element)">
-                        <mat-icon class="icon-class">
-                          delete
-                        </mat-icon>
-                      </button>
-                </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-                <!-- Row shown when there is no matching data. -->
-                <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
-                </tr>
-            </table>
-            <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 100]" [showFirstLastButtons]="true"
-                [length]="resultsLength">
-            </mat-paginator>
+        </div>
+        <div *ngIf="isLoadingAchievements" class="loading-container">
+            <mat-spinner [diameter]="100"></mat-spinner>
+        </div>
+        <div *ngIf="!isLoadingAchievements" class="achievement-container">
+            <div fxFlex *ngFor="let achievement of achievementData" class="achievement-margin">
+                <mat-card class="achievement-item">
+                    <mat-card-title>{{achievement.achievementName}}</mat-card-title>
+                    <mat-card-content>
+                        <img src="{{achievement.achievementIcon}}" class="achievement-image">
+                    </mat-card-content>
+                    <mat-card-actions class="actions-style">
+                    </mat-card-actions>
+                </mat-card>
+            </div>
         </div>
     </div>
 </div>

@@ -40,6 +40,7 @@ export class AddAchievementComponent {
   isEdit: boolean = false;
   gameNotFound: boolean = false;
   allGameNames: GameName[] = [];
+  fileName: string;
 
   async ngOnInit() {
     await this.loadAllGameNames();
@@ -150,6 +151,33 @@ export class AddAchievementComponent {
       });
       console.log(err);
     }
+  }
+
+  async onFileSelected(event: any){
+    const file = event.target.files[0] ?? null;
+    this.fileName = file.name;
+    let reader = new FileReader();
+    reader.onloadend = function() {
+      //console.log('RESULT', reader.result)
+    }
+    
+    if(file){
+      let imgCompressed = await this.compressImage(file, 50);
+      imgCompressed = 'data:image/png;base64,' + imgCompressed.split(',')[1];
+      this.addAchievementForm.controls.achievementIcon.patchValue(imgCompressed);
+      this.addAchievementForm.controls.achievementIcon.markAsDirty();
+    }
+  }
+
+  async compressImage(blobImg: any, percent: any){
+    let bitmap = await createImageBitmap(blobImg);
+    let canvas = document.createElement("canvas");
+    let ctx = canvas.getContext('2d');
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    ctx?.drawImage(bitmap, 0, 0);
+    let dataURL = canvas.toDataURL("images/png", percent / 100);
+    return dataURL;
   }
 
 }

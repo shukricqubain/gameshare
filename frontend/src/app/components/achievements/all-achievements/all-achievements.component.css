@@ -106,3 +106,25 @@ table {
     -webkit-hyphens: auto;
     hyphens: auto;
 }
+
+.achievement-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.achievement-margin {
+    padding: 3px 3px 3px 3px;
+}
+
+.achievement-item {
+    cursor: pointer;
+}
+
+.achievement-image {
+}
+
+.loading-container {
+    display: grid; 
+    place-items: center;
+}

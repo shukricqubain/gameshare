@@ -27,7 +27,7 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         achievementIcon: {
-            type: Sequelize.STRING,
+            type: Sequelize.TEXT('long'),
             validate:{
             }
         },

@@ -60,32 +60,51 @@ async function getAll(searchCriteria) {
         } else {
             where = '';
         }
-        if (pagination) {
+        if (pagination === 'true') {
             limit = searchCriteria.limit;
             if (page != 0) {
                 offset = page * limit;
             }
+            return await db.achievement.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['achievementName', 'ASC'],
+                ],
+                limit: limit,
+                offset: offset,
+                attributes: [
+                    'achievementID',
+                    'gameID',
+                    'achievementName',
+                    'achievementDescription',
+                    'achievementIcon',
+                    'gameName',
+                    'createdAt',
+                    'updatedAt'
+                ],
+                raw: true,
+            });
+        } else {
+            return await db.achievement.findAll({
+                where: where,
+                order: [
+                    [sort, sortDirection],
+                    ['achievementName', 'ASC'],
+                ],
+                attributes: [
+                    'achievementID',
+                    'gameID',
+                    'achievementName',
+                    'achievementDescription',
+                    'achievementIcon',
+                    'gameName',
+                    'createdAt',
+                    'updatedAt'
+                ],
+                raw: true,
+            });
         }
-        return await db.achievement.findAll({
-            where: where,
-            order: [
-                [sort, sortDirection],
-                ['achievementName', 'ASC'],
-            ],
-            limit: limit,
-            offset: offset,
-            attributes: [
-                'achievementID',
-                'gameID',
-                'achievementName',
-                'achievementDescription',
-                'achievementIcon',
-                'gameName',
-                'createdAt',
-                'updatedAt'
-            ],
-            raw: true,
-        });
     } catch (err) {
         console.log(err)
     }

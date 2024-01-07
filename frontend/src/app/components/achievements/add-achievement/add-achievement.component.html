@@ -34,11 +34,13 @@
                     </mat-form-field>
                 </div>
                 <div class="form-row">
-                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
-                        <label>Achievement Icon</label>
-                        <input matInput name="achievementIcon" id="achievementIcon" formControlName="achievementIcon"
-                            placeholder="Enter achievement icon." />
-                    </mat-form-field>
+                    <button type="button" mat-icon-button (click)="fileInput.click()">
+                        <mat-icon>
+                            file_upload
+                        </mat-icon>
+                    </button>
+                    <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
+                    <span class="file-name">{{fileName}}</span>
                 </div>
             </div>
             <br>
