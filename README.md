@@ -104,7 +104,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 - [ ] Revamp Achievement and User Achievement Page
   - [ ] Add icon image to achievement object
   - [ ] Change display from table to material cards containing the icon and title along with actions.
-  - [ ] Add info icon to material card to display the details of this achievement.
+  - [x] Add info icon to material card to display the details of this achievement.
   - [ ] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
 - [x] Revamp User Boards page
   - [x] Make user board page visually similar to boards page
