@@ -121,7 +121,16 @@ table {
     cursor: pointer;
 }
 
-.achievement-image {
+.achievement-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.actions-style{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .loading-container {

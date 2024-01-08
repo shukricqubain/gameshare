@@ -1,6 +1,6 @@
 <div class="child-component">
     <div>
-        <div class="example-container mat-elevation-z8">
+        <div class="example-container">
             <div class="search-form-container">
                 <form [formGroup]="searchCriteria" (ngSubmit)="applySearch()">
                     <mat-form-field style="margin-top: 25px;">
@@ -14,23 +14,36 @@
                         clear
                     </mat-icon>
                 </form>
-                <button mat-raised-button style="cursor: pointer; margin-top:35px;margin-left: 10px;" color="primary" type="button" (click)="addAchievement()">Add Achievement</button>
+                <button mat-raised-button style="cursor: pointer; margin-top:35px;margin-left: 10px;" color="primary"
+                    type="button" (click)="addAchievement()">Add Achievement</button>
             </div>
         </div>
-        <div *ngIf="isLoadingAchievements" class="loading-container">
-            <mat-spinner [diameter]="100"></mat-spinner>
-        </div>
-        <div *ngIf="!isLoadingAchievements" class="achievement-container">
-            <div fxFlex *ngFor="let achievement of achievementData" class="achievement-margin">
-                <mat-card class="achievement-item">
-                    <mat-card-title>{{achievement.achievementName}}</mat-card-title>
-                    <mat-card-content>
-                        <img src="{{achievement.achievementIcon}}" class="achievement-image">
-                    </mat-card-content>
-                    <mat-card-actions class="actions-style">
-                    </mat-card-actions>
-                </mat-card>
+        <div class="achievement-container">
+            <div *ngIf="isLoadingAchievements" class="loading-container">
+                <mat-spinner [diameter]="100"></mat-spinner>
+            </div>
+            <div *ngIf="!isLoadingAchievements" class="achievement-container">
+                <div fxFlex *ngFor="let achievement of achievementData" class="achievement-margin">
+                    <mat-card class="achievement-item">
+                        <mat-card-content class="achievement-content">
+                            <img src="{{achievement.achievementIcon}}">
+                            <div style="margin-left: 15px;">
+                                <mat-card-title>{{achievement.achievementName}}</mat-card-title>
+                                <mat-card-subtitle>{{achievement.achievementDescription}}</mat-card-subtitle>
+                            </div>
+                        </mat-card-content>
+                        <mat-card-actions class="actions-style">
+                            <mat-icon class="icon-style" matTooltip="Click to edit a game." style="color: green;"
+                                (click)="editAchievement(achievement)">
+                                edit
+                            </mat-icon>
+                            <mat-icon class="icon-style" matTooltip="Click to delete a game." color="warn"
+                                (click)="deleteAchievement(achievement)">
+                                delete
+                            </mat-icon>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
             </div>
         </div>
     </div>
-</div>

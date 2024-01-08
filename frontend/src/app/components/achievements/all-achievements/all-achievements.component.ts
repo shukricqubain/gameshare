@@ -39,19 +39,13 @@ export class AllAchievementsComponent {
   }
 
   async loadAllAchievements() {
-    this.achievementService.getAll({
-      searchTerm: '',
-      sort: 'achievementID',
-      pagination: 'false',
-      direction: 'asc'
-    }).subscribe({
+    this.achievementService.getAll(this.searchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
   }
 
   public handleSearchResponse(data: any) {
-    console.log(data)
     if (data == null) {
       this.achievementData = [];
     } else {
