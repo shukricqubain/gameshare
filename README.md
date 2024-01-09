@@ -106,7 +106,7 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Change display from table to material cards containing the icon and title along with actions.
   - [ ] Update User Achievement Page to match Achievement page design wise.
   - [x] Add info icon to material card to display the details of this achievement.
-  - [ ] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
+  - [x] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
 - [x] Revamp User Boards page
   - [x] Make user board page visually similar to boards page
   - [x] Add unfollow button to followed boards on user profile
