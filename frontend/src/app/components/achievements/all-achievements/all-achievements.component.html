@@ -13,6 +13,9 @@
                     <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearSearch()">
                         clear
                     </mat-icon>
+                    <mat-icon class="search-icon" matTooltip="Click for a more detailed search." (click)="filterForm()">
+                        filter_list
+                    </mat-icon>
                 </form>
                 <button mat-raised-button style="cursor: pointer; margin-top:35px;margin-left: 10px;" color="primary"
                     type="button" (click)="addAchievement()">Add Achievement</button>
@@ -33,11 +36,11 @@
                             </div>
                         </mat-card-content>
                         <mat-card-actions class="actions-style">
-                            <mat-icon class="icon-style" matTooltip="Click to edit a game." style="color: green;"
+                            <mat-icon class="icon-style" matTooltip="Click to edit an achievement." style="color: green;"
                                 (click)="editAchievement(achievement)">
                                 edit
                             </mat-icon>
-                            <mat-icon class="icon-style" matTooltip="Click to delete a game." color="warn"
+                            <mat-icon class="icon-style" matTooltip="Click to delete an achievement." color="warn"
                                 (click)="deleteAchievement(achievement)">
                                 delete
                             </mat-icon>

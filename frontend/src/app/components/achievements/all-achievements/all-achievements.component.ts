@@ -7,6 +7,7 @@ import { Achievement } from 'src/app/models/achievement.model';
 import { AchievementService } from 'src/app/services/achievement.service';
 import { AddAchievementComponent } from '../add-achievement/add-achievement.component';
 import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
+import { FilterFormPopUpComponent } from '../../filter-form-pop-up/filter-form-pop-up.component';
 
 @Component({
   selector: 'app-all-achievements',
@@ -28,17 +29,17 @@ export class AllAchievementsComponent {
   searchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
     sort: new FormControl('achievementID', [Validators.required]),
-    pagination: new FormControl('false', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required])
   });
 
   async ngOnInit(){
-    await this.loadAllAchievements();
+    await this.loadAchievements();
   }
 
-  async loadAllAchievements() {
+  async loadAchievements() {
     this.achievementService.getAll(this.searchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
@@ -62,7 +63,7 @@ export class AllAchievementsComponent {
 
   public async handleDeleteResponse(data:any){
     if(data != null){
-      await this.loadAllAchievements();
+      await this.loadAchievements();
     }
   }
 
@@ -94,7 +95,7 @@ export class AllAchievementsComponent {
     });
 
     dialogRef.afterClosed().subscribe(async result => {
-      await this.loadAllAchievements();
+      await this.loadAchievements();
     });
   }
 
@@ -105,7 +106,7 @@ export class AllAchievementsComponent {
     });
 
     dialogRef.afterClosed().subscribe(async result => {
-      await this.loadAllAchievements();
+      await this.loadAchievements();
     });
   }
 
@@ -136,4 +137,26 @@ export class AllAchievementsComponent {
     });
   }
 
+  filterForm(){
+    const dialogRefAdd = this.matDialog.open(FilterFormPopUpComponent, {
+      disableClose: false,
+      data: {
+        model: 'Achievement',
+        form: this.searchCriteria.value
+      }
+    });
+
+    dialogRefAdd.afterClosed().subscribe(result => {
+      
+      ///if form was submitted we check if the search criteria are different and apply a search
+      if (result != undefined && result.event != undefined && result.event != null && result.event === 'Filter Adjusted') {
+        let currentSearch = JSON.stringify(this.searchCriteria.value);
+        let newSearch = JSON.stringify(result.data.value);
+        if(currentSearch !== newSearch){
+          this.searchCriteria = result.data;
+          this.applySearch();
+        }
+      }
+    });
+  }
 }

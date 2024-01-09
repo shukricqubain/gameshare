@@ -137,3 +137,8 @@ table {
     display: grid; 
     place-items: center;
 }
+
+.search-icon{
+    margin-left: 10px;
+    cursor: pointer;
+}

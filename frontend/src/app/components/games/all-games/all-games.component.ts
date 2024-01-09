@@ -39,22 +39,24 @@ export class AllGamesComponent {
   searchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
     sort: new FormControl('gameID', [Validators.required]),
-    pagination: new FormControl('false', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required])
   });
 
   async ngOnInit() {
-    await this.loadAllGames();
+    await this.loadGames();
   }
 
-  async loadAllGames() {
+  async loadGames() {
     this.gameService.getAll({
       searchTerm: '',
       sort: 'gameID',
-      pagination: 'false',
-      direction: 'asc'
+      pagination: 'true',
+      direction: 'asc',
+      limit: 5,
+      page: 0
     }).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
@@ -79,7 +81,7 @@ export class AllGamesComponent {
 
   public handleDeleteResponse(data: any) {
     if (data !== null) {
-      this.loadAllGames();
+      this.loadGames();
     }
   }
 
@@ -121,7 +123,7 @@ export class AllGamesComponent {
     });
 
     dialogRefEdit.afterClosed().subscribe(async result => {
-      await this.loadAllGames();
+      await this.loadGames();
     });
   }
 
@@ -135,7 +137,7 @@ export class AllGamesComponent {
     });
 
     dialogRefAdd.afterClosed().subscribe(async result => {
-      await this.loadAllGames();
+      await this.loadGames();
     });
   }
 

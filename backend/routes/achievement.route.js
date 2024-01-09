@@ -31,6 +31,7 @@ router.post('/allAchievements', async function(req, res) {
             let searchCriteria = req.body;
             let allAchievements;
             let achievementCount;
+            console.log(searchCriteria)
             if(searchCriteria.pagination === 'true'){
                 achievementCount = await achievementController.findCount(searchCriteria);
                 searchCriteria.achievementCount = achievementCount;

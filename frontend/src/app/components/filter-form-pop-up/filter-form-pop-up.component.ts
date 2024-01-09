@@ -21,7 +21,7 @@ export class FilterFormPopUpComponent {
   filterForm = new FormGroup({
     searchTerm: new FormControl(''),
     sort: new FormControl('', [Validators.required]),
-    pagination: new FormControl('false', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required])
@@ -62,14 +62,26 @@ export class FilterFormPopUpComponent {
           { display: 'Genre', sql: 'genre' },
           { display: 'Release Date', sql: 'releaseDate' },
           { display: 'Platform', sql: 'platform' },
-        ]
+        ];
         break;
+      case ('Achievement'):
+        this.filterForm.controls.sort.patchValue('achievementID');
+        this.sortItems = [
+          { display: 'Achievement ID', sql: 'achievementID' },
+          { display: 'Game ID', sql: 'gameID'},
+          { display: 'Game Name', sql: 'gameName' },
+          { display: 'Achievement Name', sql: 'achievementName'},
+          { display: 'Achievement Description', sql: 'achievementDescription'}
+        ];
     }
   }
 
   closeDialog(data?: any) {
     ///check if user submitted form or not
     if (data !== null && data !== undefined && data === 'confirm') {
+      if(typeof this.filterForm.controls.limit.value === 'string'){
+        this.filterForm.controls.limit.patchValue(parseInt(this.filterForm.controls.limit.value));
+      }
       this.dialogRef?.close({ event: 'Filter Adjusted', data: this.filterForm });
     } else {
       this.dialogRef?.close({ event: 'Cancel' });
