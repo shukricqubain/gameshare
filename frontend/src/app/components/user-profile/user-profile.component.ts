@@ -37,6 +37,7 @@ import { GameInfoComponent } from '../games/game-info/game-info.component';
 import { UserBoard } from 'src/app/models/userBoard.model';
 import { Router } from '@angular/router';
 import { UserThread } from 'src/app/models/userThread.model';
+import { Achievement } from 'src/app/models/achievement.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -93,42 +94,29 @@ export class UserProfileComponent {
     page: new FormControl(0, [Validators.required]),
     userID: new FormControl('')
   });
+
   allGameNames: GameName[] = [];
   userGames: any[] = [];
   allGames: any[] = [];
   gamesLoaded: boolean = false;
   userGamesLoaded: boolean = false;
 
-  achievementSearchCriteria = new FormGroup({
+  userAchievementSearchCriteria = new FormGroup({
     achievementSearchTerm: new FormControl(''),
     sort: new FormControl('userAchievementID', [Validators.required]),
-    pagination: new FormControl('true', [Validators.required]),
+    pagination: new FormControl('false', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required]),
     userID: new FormControl('')
   });
 
-  displayedUserAchievementColumns: string[] = ['userAchievementID', 'achievementName', 'gameID', 'gameName', 'userID', 'achievementStatus', 'createdAt', 'updatedAt', 'actions'];
-  userAchievementDataSource = new MatTableDataSource<any>;
-  userAchievementData: UserAchievement[];
-  achievementPageSize = 5;
-  currentAchievementPage = 0;
-  achievementResultsLength = 0;
+  userAchievements: UserAchievement[];
+  userAchievementsLoaded: boolean = false;
   achievementsLoaded: boolean = false;
+  achievements: Achievement[];
 
-  @ViewChild('achievementPaginator') achievementPaginator: MatPaginator;
-  @ViewChild('achievementSort') achievementSort: MatSort;
-
-  displayedUserBoardColumns: string[] = ['userBoardID', 'boardName', 'userID', 'gameID', 'gameName', 'createdAt', 'updatedAt', 'actions'];
-  userBoardsDataSource = new MatTableDataSource<any>;
   userBoards: Board[];
-  boardPageSize = 5;
-  currentBoardPage = 0;
-  boardResultsLength = 0;
-
-  @ViewChild('boardPaginator') boardPaginator: MatPaginator;
-  @ViewChild('boardSort') boardSort: MatSort;
 
   boardSearchCriteria = new FormGroup({
     boardSearchTerm: new FormControl(''),
@@ -147,12 +135,8 @@ export class UserProfileComponent {
   achievementNamesLoaded: boolean = false;
   userBoardsLoaded: boolean = false;
 
-  displayedUserThreadColumns: string[] = ['userThreadID', 'threadID', 'threadName', 'boardName', 'userID', 'createdAt', 'updatedAt', 'actions'];
   userThreadsLoaded: boolean = false;
   userThreads: Thread[] = [];
-  threadPageSize = 5;
-  currentThreadPage = 0;
-  threadResultsLength = 0;
 
   threadSearchCriteria = new FormGroup({
     threadSearchTerm: new FormControl(''),
@@ -200,33 +184,11 @@ export class UserProfileComponent {
       await this.loadAllGames();
       await this.loadAllGameNames();
       await this.loadAllUserGames();
-    } else if (this.currentTabIndex == 3 && this.achievementsLoaded == false) {
+    } else if (this.currentTabIndex == 3 && this.userAchievementsLoaded == false) {
       await this.loadAllGameNames();
       await this.loadAchievementNames();
-      this.userAchievementDataSource.sort = this.achievementSort;
-      ///if user changes the sort order reset the page back to the first page
-      this.achievementSort.sortChange.subscribe(() => (this.achievementPaginator.pageIndex = 0));
-      merge(this.achievementSort.sortChange, this.achievementPaginator.page, this.achievementPaginator.pageSize)
-        .pipe(
-          startWith({}),
-          switchMap(() => {
-            this.achievementSearchCriteria.controls.sort.patchValue(this.achievementSort.active);
-            this.achievementSearchCriteria.controls.direction.patchValue(this.achievementSort.direction);
-            this.achievementSearchCriteria.controls.page.patchValue(this.achievementPaginator.pageIndex);
-            this.achievementSearchCriteria.controls.limit.patchValue(this.achievementPaginator.pageSize);
-            return this.userAchievementService!.getAll(this.achievementSearchCriteria.value).pipe(catchError(() => observableOf(null)));
-          }),
-          map(data => {
-            if (data === null) {
-              return [];
-            }
-            this.achievementResultsLength = data.achievementCount;
-            this.achievementsLoaded = true;
-            return data.data;
-          }),
-        )
-        .subscribe(data => (this.userAchievementDataSource = data));
-      this.changeForm();
+      await this.loadAllUserAchievements();
+      await this.loadAllAchievementsBasedOnUserAchievements();
     } else if (this.currentTabIndex == 4) {
       this.changeForm();
     }
@@ -330,7 +292,7 @@ export class UserProfileComponent {
     this.userProfileForm.controls.createdAt.setValue(data.createdAt ? data.createdAt : '');
     this.userProfileForm.controls.updatedAt.setValue(data.updatedAt ? data.updatedAt : '');
     //patch search forms with userID for games and achievement collections
-    this.achievementSearchCriteria.controls.userID.setValue(data.userID);
+    this.userAchievementSearchCriteria.controls.userID.setValue(data.userID);
     this.userGameSearchCriteria.controls.userID.setValue(data.userID);
     this.boardSearchCriteria.controls.userID.patchValue(data.userID);
     this.threadSearchCriteria.controls.userID.patchValue(data.userID);
@@ -339,14 +301,11 @@ export class UserProfileComponent {
 
   public handleAchievementSearchResponse(data: any) {
     if (data == null || data.message === 'No data in user achievement table to fetch.') {
-      this.userAchievementDataSource.data = [];
-      this.achievementResultsLength = 0;
-      this.ngAfterViewInit();
+      this.userAchievements = [];
     } else {
-      this.userAchievementDataSource.data = data.data;
-      this.achievementResultsLength = data.achievementCount;
-      this.ngAfterViewInit();
+      this.userAchievements = data.data;
     }
+    this.userAchievementsLoaded = true;
   }
 
   editUserGame(element: any) {
@@ -463,11 +422,19 @@ export class UserProfileComponent {
   }
 
   applyAchievementSearch = async () => {
-    this.achievementsLoaded = false;
-    this.userAchievementService.getAll(this.achievementSearchCriteria.value).subscribe({
-      next: this.handleAchievementSearchResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+    try{
+      this.userAchievementsLoaded = false;
+      this.achievementsLoaded = false;
+      await this.loadAllUserAchievements();
+      await this.loadAllAchievementsBasedOnUserAchievements();
+    } catch(err){
+      console.error(err);
+      this.userAchievements = [];
+      this.achievements = [];
+      this.snackBar.open('Error loading all user achievements.', 'dismiss', {
+        duration: 2000
+      });
+    }
   }
 
   async clearGameSearch() {
@@ -481,18 +448,26 @@ export class UserProfileComponent {
     await this.loadAllUserGames();
   }
 
-  public clearAchievementSearch() {
-    this.achievementSearchCriteria.controls.achievementSearchTerm.patchValue('');
-    this.achievementSearchCriteria.controls.sort.patchValue('userAchievementID');
-    this.achievementSearchCriteria.controls.pagination.patchValue('true');
-    this.achievementSearchCriteria.controls.direction.patchValue('asc');
-    this.achievementSearchCriteria.controls.limit.patchValue(5);
-    this.achievementSearchCriteria.controls.page.patchValue(0);
-    this.achievementsLoaded = false;
-    this.userAchievementService.getAll(this.achievementSearchCriteria.value).subscribe({
-      next: this.handleAchievementSearchResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+  public async clearAchievementSearch() {
+    try{
+      this.userAchievementSearchCriteria.controls.achievementSearchTerm.patchValue('');
+      this.userAchievementSearchCriteria.controls.sort.patchValue('userAchievementID');
+      this.userAchievementSearchCriteria.controls.pagination.patchValue('false');
+      this.userAchievementSearchCriteria.controls.direction.patchValue('asc');
+      this.userAchievementSearchCriteria.controls.limit.patchValue(5);
+      this.userAchievementSearchCriteria.controls.page.patchValue(0);
+      this.userAchievementsLoaded = false;
+      this.achievementsLoaded = false;
+      await this.loadAllUserAchievements();
+      await this.loadAllAchievementsBasedOnUserAchievements();
+    } catch(err){
+      console.error(err);
+      this.userAchievements = [];
+      this.achievements = [];
+      this.snackBar.open('Error loading all user achievements.', 'dismiss', {
+        duration: 2000
+      });
+    }
   }
 
   async loadAllGameNames() {
@@ -623,11 +598,9 @@ export class UserProfileComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(async result => {
       if (result !== undefined) {
-        this.ngAfterViewInit();
-      } else {
-        this.ngAfterViewInit();
+        await this.clearAchievementSearch();
       }
     });
   }
@@ -907,5 +880,71 @@ export class UserProfileComponent {
       this.userThreadsLoaded = false;
       await this.loadUserThreads();
     }
-  }  
+  }
+
+  async loadAllUserAchievements() {
+    try {
+      if (!this.userAchievementsLoaded) {
+        let result = await lastValueFrom(this.userAchievementService.getAll(this.userAchievementSearchCriteria.value).pipe());
+        if(result != null && result != undefined){
+          if(result != undefined && result === 'No data in userAchievement table to fetch.'){
+            this.userAchievements = [];
+          } else {
+            this.userAchievements = result.data;
+          }
+          this.userAchievementsLoaded = true;
+        }
+      }
+    } catch(err){
+      console.error(err);
+      this.userGames = [];
+      this.snackBar.open('Error loading user achievements.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
+
+  async loadAllAchievementsBasedOnUserAchievements(){
+    try {
+      if (!this.achievementsLoaded) {
+        let userAchievements = this.userAchievements;
+        let achievementIDs: any[] = [];
+        for(let userAchievement of userAchievements){
+          if(!achievementIDs.includes(userAchievement.achievementID)){
+            achievementIDs.push(userAchievement.achievementID);
+          }
+        }
+        let achievementIDsString: string = ``;
+        for(let i = 0; i < achievementIDs.length; i++){
+          if(i == (achievementIDs.length - 1)){
+            achievementIDsString += `${achievementIDs[i]}`;
+          } else {
+            achievementIDsString += `${achievementIDs[i]},`
+          }
+        }
+        let result = await lastValueFrom(this.achievementService.getAllBasedOnIDList(achievementIDsString).pipe());
+        if(result != null && result != undefined){
+          if(result != undefined && result === 'No data in achievement table to fetch.'){
+            this.achievements = [];
+          } else {
+            this.achievements = result;
+            for(let userAchievement of this.userAchievements){
+              let findAchievement = this.achievements.find(obj => obj.achievementID == userAchievement.achievementID);
+              if(findAchievement != undefined){
+                userAchievement.achievementIcon = findAchievement.achievementIcon;
+                userAchievement.achievementDescription = findAchievement.achievementDescription;
+              }
+            }
+          }
+          this.achievementsLoaded = true;
+        }
+      }
+    } catch(err){
+      console.error(err);
+      this.userGames = [];
+      this.snackBar.open('Error loading achievements.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
 }

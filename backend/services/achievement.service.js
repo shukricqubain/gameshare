@@ -110,6 +110,25 @@ async function getAll(searchCriteria) {
     }
 }
 
+async function findAllBasedOnUserAchievements(achievementIDListString){
+    try {
+        let achievementIDArray = achievementIDListString.split(',');
+        return await db.achievement.findAll({
+            where: {
+                achievementID: {
+                    [Op.in]: achievementIDArray
+                }
+            },
+            order: [
+                ['achievementName', 'ASC'],
+            ],
+            raw: true,
+        });
+    } catch(err){
+        console.log(err);
+    }
+}
+
 async function create(achievement){
     try{
         return await db.achievement.create({
@@ -201,6 +220,7 @@ async function getAllAchievementNames(){
 module.exports = {
     findCount,
     getAll,
+    findAllBasedOnUserAchievements,
     getAllAchievementNames,
     getOne,
     getByGameID,

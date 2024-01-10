@@ -74,3 +74,24 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.achievement-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.achievement-margin {
+    padding: 3px 3px 3px 3px;
+}
+
+.achievement-item {
+    cursor: pointer;
+}
+
+.achievement-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+

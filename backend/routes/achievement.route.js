@@ -24,14 +24,13 @@ router.post('/addAchievement', async function(req, res){
     }
 });
 
-// get all achievement
+// get all achievements
 router.post('/allAchievements', async function(req, res) {
     try{
         if(req.body !== null){
             let searchCriteria = req.body;
             let allAchievements;
             let achievementCount;
-            console.log(searchCriteria)
             if(searchCriteria.pagination === 'true'){
                 achievementCount = await achievementController.findCount(searchCriteria);
                 searchCriteria.achievementCount = achievementCount;
@@ -54,6 +53,25 @@ router.post('/allAchievements', async function(req, res) {
             }
         } else {
             res.status(400).send('Search criteria is required.');
+        }
+    } catch(err){
+        console.log(err)
+    }
+});
+
+// get all achievements based on achievementID list string
+router.get('/getAllBasedOnIDList/:achievementIDListString', async function(req, res){
+    try{
+        if(req.body !== null){
+            let achievementIDListString = req.params.achievementIDListString;
+            let allAchievements = await achievementController.loadAllAchievementsBasedOnUserAchievements(achievementIDListString);
+            if(allAchievements.message !== 'No data in achievement table to fetch.'){
+                return res.status(200).json(allAchievements);
+            } else {
+                return res.status(200).json({message:'No data in achievement table to fetch.'});
+            }
+        } else {
+            res.status(400).send('AchievementID list is required.');
         }
     } catch(err){
         console.log(err)

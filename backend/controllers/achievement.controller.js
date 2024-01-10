@@ -38,6 +38,20 @@ exports.findAll = async (req, res) => {
     }
 };
 
+// get all achievements based on achievementID list string
+exports.loadAllAchievementsBasedOnUserAchievements = async (achievementIDListString) => {
+    try{
+        let allAchievements = await achievementService.findAllBasedOnUserAchievements(achievementIDListString);
+        if(allAchievements.length > 0){
+            return allAchievements;
+        } else {
+            return {message: 'No data in achievement table to fetch.'};
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 // Get all achievement names
 exports.findAllAchievementNames = async () => {
     try{

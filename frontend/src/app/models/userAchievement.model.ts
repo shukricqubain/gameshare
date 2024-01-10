@@ -6,6 +6,8 @@ export class UserAchievement {
     gameName?: string;
     userID?: Number;
     achievementStatus?: string;
+    achievementDescription?: string;
+    achievementIcon?: string;
     createdAt?: string;
     updatedAt?: string;
 }

@@ -15,6 +15,10 @@ export class AchievementService {
     return this.http.post(`${baseUrl}/allAchievements`, search);
   }
 
+  getAllBasedOnIDList(achievementIDList: string): Observable<any>{
+    return this.http.get(`${baseUrl}/getAllBasedOnIDList/${achievementIDList}`);
+  }
+
   getAllAchievementsNames(): Observable<any> {
     return this.http.get(`${baseUrl}/allAchievementNames`);
   }
