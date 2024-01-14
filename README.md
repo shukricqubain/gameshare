@@ -115,14 +115,29 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Add unfollow button to followed threads on user profile
   - [x] Change userID to userName for each post in a thread
   - [x] Fix depth logic for responses in a thread
-- [ ] User Friends Page
-  - [ ] Allow users to befriend other users when viewing their profile
-  - [ ] Allow users to view anothers profile by clicking thier userName in a thread post
 - [x] Revamp User Signup and Edit
   - [x] Restrict input to only allow numbers in phone number input in user creation/edit
   - [x] Add regex to email input in user creation/edit
   - [x] Add minimum date for date of birth in user creation/edit
   - [x] Add restrictions for user role updation in user creation/edit
+     
+### Version 1.2
+- [ ] User profile page
+   - [ ] Restrict dmiensions in user profile, so the width and height won't resize.
+   - [ ] Create and display default message when user has no boards, threads, games, and or achievements.
+   - [ ] Add pagination to user boards, threads, and games pages.
+   - [ ] Add a paginator under the material cards, so user doesn't have to click filter icon to paginate data.
+   - [ ] Add user profile picture.
+   - [ ] User Achievements
+      - [ ] Update user achievements api, so the user achievements come with achievement information need to lessen the amount of api calls. 
+      - [ ] Remove Delete and Edit icons/functionality from user Achievement page.
+      - [ ] Add progress bar displaying the achievement status, so user can view and update the status.
+      - [ ] Show percentage of people who have obtained the achievement in the application.
+      - [ ] Show completion date of the achievement.
+      - [ ] Change the display of the achievement as user makes progress.
+   - [ ] User Friends Page
+     - [ ] Allow users to befriend other users when viewing their profile
+     - [ ] Allow users to view anothers profile by clicking thier userName in a thread post or in user friends page.
 
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
 
