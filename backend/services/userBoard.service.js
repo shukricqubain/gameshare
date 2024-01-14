@@ -6,7 +6,7 @@ async function findCount(searchCriteria) {
     try {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
-        let searchTerm = searchCriteria.boardSearchTerm;
+        let searchTerm = searchCriteria.searchTerm;
         let userBoards;
         if (searchTerm !== '') {
             if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
@@ -60,7 +60,7 @@ async function getAll(searchCriteria) {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
         let pagination = searchCriteria.pagination;
-        let searchTerm = searchCriteria.boardSearchTerm;
+        let searchTerm = searchCriteria.searchTerm;
         let limit;
         let offset;
         let page = searchCriteria.page;

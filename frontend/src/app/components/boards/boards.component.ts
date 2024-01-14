@@ -266,7 +266,7 @@ export class BoardsComponent {
         userID: this.user.userID
       }
       let result = await lastValueFrom(this.userBoardService.getAll(userBoardSearchCriteria).pipe());
-      if(result !== null && result !== undefined){
+      if(result !== null && result !== undefined && result.message == undefined){
         this.userBoards = result.data;
         this.checkBoards();
         this.userBoardsLoaded = true;
@@ -275,7 +275,7 @@ export class BoardsComponent {
         this.userBoardsLoaded = true;
       }
     } catch (err) {
-      this.snackBar.open('Error loading user games!', 'dismiss', {
+      this.snackBar.open('Error loading user boards!', 'dismiss', {
         duration: 3000
       });
       console.log(err)

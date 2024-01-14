@@ -6,7 +6,7 @@
                     <form [formGroup]="threadSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyThreadSearch()">
                         <mat-form-field>
                             <mat-label>Search</mat-label>
-                            <input matInput formControlName="threadSearchTerm" placeholder="Search Table" #input>
+                            <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
                         </mat-form-field>
                         <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyThreadSearch()">
                             search
@@ -43,7 +43,7 @@
                     <form [formGroup]="boardSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyBoardSearch()">
                         <mat-form-field>
                             <mat-label>Search</mat-label>
-                            <input matInput formControlName="boardSearchTerm" placeholder="Search Table" #input>
+                            <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
                         </mat-form-field>
                         <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyBoardSearch()">
                             search
@@ -122,13 +122,16 @@
                 <form [formGroup]="userAchievementSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyAchievementSearch()">
                     <mat-form-field>
                         <mat-label>Search</mat-label>
-                        <input matInput formControlName="achievementSearchTerm" placeholder="Search Table" #input>
+                        <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
                     </mat-form-field>
                     <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyAchievementSearch()">
                         search
                     </mat-icon>
                     <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearAchievementSearch()">
                         clear
+                    </mat-icon>
+                    <mat-icon style="margin-left: 10px;cursor: pointer;" class="search-icon" matTooltip="Click for a more detailed search." (click)="filterForm()">
+                        filter_list
                     </mat-icon>
                 </form>
                 <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUserAchievement()">Add Achievement</button>

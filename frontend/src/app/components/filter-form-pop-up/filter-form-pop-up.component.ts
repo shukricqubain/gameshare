@@ -24,7 +24,8 @@ export class FilterFormPopUpComponent {
     pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
-    page: new FormControl(0, [Validators.required])
+    page: new FormControl(0, [Validators.required]),
+    userID: new FormControl('')
   });
 
   ngAfterContentInit() {
@@ -50,6 +51,9 @@ export class FilterFormPopUpComponent {
       if(this.data.form.page != undefined){
         this.filterForm.controls.page.patchValue(this.data.form.page);
       }
+      if(this.data.form.userID != undefined){
+        this.filterForm.controls.userID.patchValue(this.data.form.userID);
+      }
     }
     switch (this.modelType) {
       case ('Game'):
@@ -73,6 +77,19 @@ export class FilterFormPopUpComponent {
           { display: 'Achievement Name', sql: 'achievementName'},
           { display: 'Achievement Description', sql: 'achievementDescription'}
         ];
+        break;
+      case ('UserAchievement'):
+        this.filterForm.controls.sort.patchValue('userAchievementID');
+        this.sortItems = [
+          { display: 'User Achievement ID', sql: 'userAchievementID' },
+          { display: 'Achievement ID', sql: 'achievementID' },
+          { display: 'Game ID', sql: 'gameID'},
+          { display: 'Game Name', sql: 'gameName' },
+          { display: 'Achievement Name', sql: 'achievementName'},
+          { display: 'Achievement Description', sql: 'achievementDescription'},
+          { display: 'Achievement Status', sql: 'achievementStatus'}
+        ];
+        break;
     }
   }
 

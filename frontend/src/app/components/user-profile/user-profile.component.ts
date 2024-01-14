@@ -38,6 +38,7 @@ import { UserBoard } from 'src/app/models/userBoard.model';
 import { Router } from '@angular/router';
 import { UserThread } from 'src/app/models/userThread.model';
 import { Achievement } from 'src/app/models/achievement.model';
+import { FilterFormPopUpComponent } from '../filter-form-pop-up/filter-form-pop-up.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -102,7 +103,7 @@ export class UserProfileComponent {
   userGamesLoaded: boolean = false;
 
   userAchievementSearchCriteria = new FormGroup({
-    achievementSearchTerm: new FormControl(''),
+    searchTerm: new FormControl(''),
     sort: new FormControl('userAchievementID', [Validators.required]),
     pagination: new FormControl('false', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
@@ -119,7 +120,7 @@ export class UserProfileComponent {
   userBoards: Board[];
 
   boardSearchCriteria = new FormGroup({
-    boardSearchTerm: new FormControl(''),
+    searchTerm: new FormControl(''),
     sort: new FormControl('userBoardID', [Validators.required]),
     pagination: new FormControl('false', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
@@ -139,7 +140,7 @@ export class UserProfileComponent {
   userThreads: Thread[] = [];
 
   threadSearchCriteria = new FormGroup({
-    threadSearchTerm: new FormControl(''),
+    searchTerm: new FormControl(''),
     sort: new FormControl('userThreadID', [Validators.required]),
     pagination: new FormControl('false', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
@@ -450,7 +451,7 @@ export class UserProfileComponent {
 
   public async clearAchievementSearch() {
     try{
-      this.userAchievementSearchCriteria.controls.achievementSearchTerm.patchValue('');
+      this.userAchievementSearchCriteria.controls.searchTerm.patchValue('');
       this.userAchievementSearchCriteria.controls.sort.patchValue('userAchievementID');
       this.userAchievementSearchCriteria.controls.pagination.patchValue('false');
       this.userAchievementSearchCriteria.controls.direction.patchValue('asc');
@@ -667,9 +668,9 @@ export class UserProfileComponent {
 
   applyBoardSearch() {
     this.userBoardsLoaded = false;
-    let trimmedSearch = this.boardSearchCriteria.controls.boardSearchTerm.value?.trim();
+    let trimmedSearch = this.boardSearchCriteria.controls.searchTerm.value?.trim();
     if (trimmedSearch !== undefined && trimmedSearch !== null) {
-      this.boardSearchCriteria.controls.boardSearchTerm.patchValue(trimmedSearch);
+      this.boardSearchCriteria.controls.searchTerm.patchValue(trimmedSearch);
       this.userBoardService.getAll(this.boardSearchCriteria.value).subscribe({
         next: this.handleBoardSearchResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
@@ -678,7 +679,7 @@ export class UserProfileComponent {
   }
 
   clearBoardSearch() {
-    this.boardSearchCriteria.controls.boardSearchTerm.patchValue('');
+    this.boardSearchCriteria.controls.searchTerm.patchValue('');
     this.boardSearchCriteria.controls.sort.patchValue('userBoardID');
     this.boardSearchCriteria.controls.pagination.patchValue('false');
     this.boardSearchCriteria.controls.direction.patchValue('asc');
@@ -738,9 +739,9 @@ export class UserProfileComponent {
 
   applyThreadSearch() {
     this.userThreadsLoaded = false;
-    let trimmedSearch = this.threadSearchCriteria.controls.threadSearchTerm.value?.trim();
+    let trimmedSearch = this.threadSearchCriteria.controls.searchTerm.value?.trim();
     if (trimmedSearch !== undefined && trimmedSearch !== null) {
-      this.threadSearchCriteria.controls.threadSearchTerm.patchValue(trimmedSearch);
+      this.threadSearchCriteria.controls.searchTerm.patchValue(trimmedSearch);
       this.userThreadService.getAll(this.threadSearchCriteria.value).subscribe({
         next: this.handleThreadSearchResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
@@ -749,7 +750,7 @@ export class UserProfileComponent {
   }
 
   clearThreadSearch() {
-    this.threadSearchCriteria.controls.threadSearchTerm.patchValue('');
+    this.threadSearchCriteria.controls.searchTerm.patchValue('');
     this.threadSearchCriteria.controls.sort.patchValue('userThreadID');
     this.threadSearchCriteria.controls.pagination.patchValue('false');
     this.threadSearchCriteria.controls.direction.patchValue('asc');
@@ -906,7 +907,7 @@ export class UserProfileComponent {
 
   async loadAllAchievementsBasedOnUserAchievements(){
     try {
-      if (!this.achievementsLoaded) {
+      if (!this.achievementsLoaded && this.userAchievements != undefined && this.userAchievements.length > 0) {
         let userAchievements = this.userAchievements;
         let achievementIDs: any[] = [];
         for(let userAchievement of userAchievements){
@@ -938,6 +939,8 @@ export class UserProfileComponent {
           }
           this.achievementsLoaded = true;
         }
+      } else {
+        this.achievementsLoaded = true;
       }
     } catch(err){
       console.error(err);
@@ -946,5 +949,28 @@ export class UserProfileComponent {
         duration: 2000
       });
     }
+  }
+
+  filterForm(){
+    const dialogRefAdd = this.matDialog.open(FilterFormPopUpComponent, {
+      disableClose: false,
+      data: {
+        model: 'UserAchievement',
+        form: this.userAchievementSearchCriteria.value
+      }
+    });
+
+    dialogRefAdd.afterClosed().subscribe(result => {
+
+      ///if form was submitted we check if the search criteria are different and apply a search
+      if (result != undefined && result.event != undefined && result.event != null && result.event === 'Filter Adjusted') {
+        let currentSearch = JSON.stringify(this.userAchievementSearchCriteria.value);
+        let newSearch = JSON.stringify(result.data.value);
+        if(currentSearch !== newSearch){
+          this.userAchievementSearchCriteria = result.data;
+          this.applyAchievementSearch();
+        }
+      }
+    });
   }
 }

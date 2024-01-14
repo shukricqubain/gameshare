@@ -6,7 +6,7 @@ async function findCount(searchCriteria) {
     try {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
-        let searchTerm = searchCriteria.threadSearchTerm;
+        let searchTerm = searchCriteria.searchTerm;
         let userThreads;
         let where;
         if (searchTerm !== '') {
@@ -66,7 +66,7 @@ async function getAll(searchCriteria) {
         let sort = searchCriteria.sort;
         let sortDirection = searchCriteria.direction;
         let pagination = searchCriteria.pagination;
-        let searchTerm = searchCriteria.threadSearchTerm;
+        let searchTerm = searchCriteria.searchTerm;
         let limit;
         let offset;
         let page = searchCriteria.page;
