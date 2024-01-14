@@ -11,7 +11,7 @@ contribute to discussion boards about games, and interact with friends in the pl
 ### Built with
 
 * [![Angular][Angular.io]][Angular-url]
-* [Node.js][Node-url]
+* [![Node.js][Node.io]][Node-url]
 * [Express][Express-url]
 * [MySQL][MySQL-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
@@ -25,12 +25,12 @@ To get a local copy up and running follow these simple example steps.
 <!-- Prerequisites -->
 ### Prerequisites
 
-todo
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Listed below are a list of software you will need to install to run this project.
+
+* Node and npm [Install-Node-npm]
+* Angular and Angular Cli [Install-Angular]
+* MySQL Workbench [Install-MySQL]
+
 
 <!-- Installation -->
 ### Installation
@@ -146,5 +146,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [MySQL-url]: https://www.mysql.com/
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
 [Bootstrap-url]: https://getbootstrap.com
+[Install-Node-npm]: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+[Install-Angular]: https://angular.io/guide/setup-local
+[Install-MySQL]: https://www.mysql.com/products/workbench/
 
 
