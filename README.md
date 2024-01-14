@@ -123,7 +123,7 @@ Use this space to show useful examples of how a project can be used. Additional 
      
 ### Version 1.2
 - [ ] User profile page
-   - [ ] Restrict dmiensions in user profile, so the width and height won't resize.
+   - [ ] Restrict dimensions in user profile, so the width and height won't resize.
    - [ ] Create and display default message when user has no boards, threads, games, and or achievements.
    - [ ] Add pagination to user boards, threads, and games pages.
    - [ ] Add a paginator under the material cards, so user doesn't have to click filter icon to paginate data.
