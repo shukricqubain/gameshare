@@ -125,12 +125,12 @@ Use this space to show useful examples of how a project can be used. Additional 
 - [ ] User profile page
    - [ ] Restrict dimensions in user profile, so the width and height won't resize.
    - [ ] Create and display default message when user has no boards, threads, games, and or achievements.
-   - [ ] Add pagination to user boards, threads, and games pages.
-   - [ ] Add a paginator under the material cards, so user doesn't have to click filter icon to paginate data.
+   - [x] Add pagination to user boards, threads, and games pages.
+   - [x] Add a paginator under the material cards, so user doesn't have to click filter icon to paginate data.
    - [ ] Add user profile picture.
    - [ ] User Achievements
       - [ ] Update user achievements and user games api.
-      - [ ] Remove Delete and Edit icons/functionality from user Achievement page.
+      - [x] Remove Delete and Edit icons/functionality from user Achievement page.
       - [ ] Add progress bar displaying the achievement status, so user can view and update the status.
       - [ ] Show percentage of people who have obtained the achievement in the application.
       - [ ] Show completion date of the achievement.
