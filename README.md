@@ -129,7 +129,7 @@ Use this space to show useful examples of how a project can be used. Additional 
    - [ ] Add a paginator under the material cards, so user doesn't have to click filter icon to paginate data.
    - [ ] Add user profile picture.
    - [ ] User Achievements
-      - [ ] Update user achievements api, so the user achievements come with achievement information need to lessen the amount of api calls. 
+      - [ ] Update user achievements and user games api.
       - [ ] Remove Delete and Edit icons/functionality from user Achievement page.
       - [ ] Add progress bar displaying the achievement status, so user can view and update the status.
       - [ ] Show percentage of people who have obtained the achievement in the application.
