@@ -47,6 +47,7 @@ router.post('/allBoards', async function(req, res) {
             } else {
                 allBoards = await boardController.findAll(searchCriteria);
                 boardCount = allBoards.length;
+                searchCriteria.boardCount = boardCount;
                 if(allBoards.message !== 'No data in board table to fetch.'){
                     searchCriteria.data = allBoards;
                     return res.status(200).json(searchCriteria);

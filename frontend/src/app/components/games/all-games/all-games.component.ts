@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { Game } from 'src/app/models/game.model';
@@ -29,7 +29,7 @@ export class AllGamesComponent {
   gameData: any;
   search: any;
   pageSize = 5;
-  currentPage = 0;
+  pageIndex = 0;
   resultsLength = 0;
   isLoadingGames: boolean = true;
 
@@ -50,14 +50,7 @@ export class AllGamesComponent {
   }
 
   async loadGames() {
-    this.gameService.getAll({
-      searchTerm: '',
-      sort: 'gameID',
-      pagination: 'true',
-      direction: 'asc',
-      limit: 5,
-      page: 0
-    }).subscribe({
+    this.gameService.getAll(this.searchCriteria.value).subscribe({
       next: this.handleSearchResponse.bind(this),
       error: this.handleErrorResponse.bind(this)
     });
@@ -66,8 +59,10 @@ export class AllGamesComponent {
   public handleSearchResponse(data: any) {
     if (data == null) {
       this.gameData = [];
+      this.resultsLength = 0;
     } else {
       this.gameData = data.data;
+      this.resultsLength = data.gameCount;
     }
     this.isLoadingGames = false;
   }
@@ -97,7 +92,7 @@ export class AllGamesComponent {
     this.isLoadingGames = true;
     this.searchCriteria.controls.searchTerm.patchValue('');
     this.searchCriteria.controls.sort.patchValue('gameID');
-    this.searchCriteria.controls.pagination.patchValue('false');
+    this.searchCriteria.controls.pagination.patchValue('true');
     this.searchCriteria.controls.direction.patchValue('asc');
     this.searchCriteria.controls.limit.patchValue(5);
     this.searchCriteria.controls.page.patchValue(0);
@@ -204,6 +199,16 @@ export class AllGamesComponent {
       }
     });
   }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.searchCriteria.controls.page.patchValue(this.pageIndex);
+    this.searchCriteria.controls.limit.patchValue(this.pageSize);
+    this.isLoadingGames = true;
+    this.loadGames();
+  }
+
 }
 
 

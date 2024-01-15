@@ -35,6 +35,14 @@
                         </mat-card>
                       </div>
                 </div>
+                <mat-paginator
+                    [pageSize]="this.userThreadsPageSize"
+                    [pageIndex]="this.userThreadsPageIndex"
+                    [pageSizeOptions]="[5, 10, 25, 50]"
+                    [length]="this.totalUserThreads"
+                    [showFirstLastButtons]="true" 
+                    (page)="onUserThreadsPageChange($event)"
+                ></mat-paginator>
             </div>
         </mat-tab>
         <mat-tab label="Board Collection">
@@ -73,6 +81,14 @@
                         </mat-card>
                       </div>
                 </div>
+                <mat-paginator
+                    [pageSize]="this.userBoardsPageSize"
+                    [pageIndex]="this.userBoardsPageIndex"
+                    [pageSizeOptions]="[5, 10, 25, 50]"
+                    [length]="this.totalUserBoards"
+                    [showFirstLastButtons]="true" 
+                    (page)="onUserBoardsPageChange($event)"
+                ></mat-paginator>
             </div>
         </mat-tab>
         <mat-tab label="Game Collection">
@@ -115,6 +131,14 @@
                         </mat-card>
                     </div>
                 </div>
+                <mat-paginator
+                    [pageSize]="this.userGamesPageSize"
+                    [pageIndex]="this.userGamesPageIndex"
+                    [pageSizeOptions]="[5, 10, 25, 50]"
+                    [length]="this.totalUserGames"
+                    [showFirstLastButtons]="true" 
+                    (page)="onUserGamesPageChange($event)"
+                ></mat-paginator>
             </div>
         </mat-tab>
         <mat-tab label="Achievement-collection">
@@ -149,18 +173,16 @@
                                 <mat-card-subtitle>{{achievement.achievementDescription}}</mat-card-subtitle>
                             </div>
                         </mat-card-content>
-                        <mat-card-actions class="actions-style">
-                            <mat-icon class="icon-style" matTooltip="Click to edit an achievement." style="color: green;"
-                                (click)="editUserAchievement(achievement)">
-                                edit
-                            </mat-icon>
-                            <mat-icon class="icon-style" matTooltip="Click to delete an achievement." color="warn"
-                                (click)="deleteUserAchievement(achievement)">
-                                delete
-                            </mat-icon>
-                        </mat-card-actions>
                     </mat-card>
                 </div>
+                <mat-paginator
+                    [pageSize]="this.userAchievementsPageSize"
+                    [pageIndex]="this.userAchievementsPageIndex"
+                    [pageSizeOptions]="[5, 10, 25, 50]"
+                    [length]="this.totalUserAchievements"
+                    [showFirstLastButtons]="true" 
+                    (page)="onUserAchievementsPageChange($event)"
+                ></mat-paginator>
             </div>
         </mat-tab>
         <mat-tab label="user-details">

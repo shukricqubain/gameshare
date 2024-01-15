@@ -42,6 +42,9 @@
           </mat-card-actions>
         </mat-card>
       </div>
+      <mat-paginator [pageSize]="this.pageSize" [pageIndex]="this.pageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
+                [length]="this.resultsLength" [showFirstLastButtons]="true"
+                (page)="onPageChange($event)"></mat-paginator>
     </div>
   </div>
 </div>

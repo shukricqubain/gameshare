@@ -7,7 +7,7 @@ import { Board } from 'src/app/models/board.model';
 import { BoardService } from 'src/app/services/board.service';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { MatCard } from '@angular/material/card';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BoardComponent } from './board/board.component';
@@ -40,15 +40,15 @@ export class BoardsComponent {
   ) { }
 
   search: any;
-  pageSize = 100;
-  currentPage = 0;
+  pageSize = 5;
+  pageIndex = 0;
   resultsLength = 0;
   isLoadingResults: boolean = false;
 
   boardSearchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
     sort: new FormControl('boardID', [Validators.required]),
-    pagination: new FormControl('false', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required])
@@ -80,8 +80,6 @@ export class BoardsComponent {
   async handleSearchResponse(data: any) {
     this.dataSource.data = data.data;
     this.resultsLength = data.boardCount;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
     if(!this.userBoardsLoaded){
       await this.loadAllUserBoards();
     } else {
@@ -120,7 +118,7 @@ export class BoardsComponent {
   clearBoardSearch() {
     this.boardSearchCriteria.controls.searchTerm.patchValue('');
     this.boardSearchCriteria.controls.sort.patchValue('boardID');
-    this.boardSearchCriteria.controls.pagination.patchValue('false');
+    this.boardSearchCriteria.controls.pagination.patchValue('true');
     this.boardSearchCriteria.controls.direction.patchValue('asc');
     this.boardSearchCriteria.controls.limit.patchValue(5);
     this.boardSearchCriteria.controls.page.patchValue(0);
@@ -291,5 +289,14 @@ export class BoardsComponent {
         board.isFollowing = false;
       }
     }
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.boardSearchCriteria.controls.page.patchValue(this.pageIndex);
+    this.boardSearchCriteria.controls.limit.patchValue(this.pageSize);
+    this.isLoadingResults = true;
+    this.loadAllBoards();
   }
 }

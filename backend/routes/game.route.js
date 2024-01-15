@@ -44,6 +44,7 @@ router.post('/allGames', async function(req, res) {
             } else {
                 allGames = await gameController.findAll(searchCriteria);
                 gameCount = allGames.length;
+                searchCriteria.gameCount = gameCount;
                 if(allGames.message !== 'No data in game table to fetch.'){
                     searchCriteria.data = allGames;
                     return res.status(200).json(searchCriteria);

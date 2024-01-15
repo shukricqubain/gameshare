@@ -14,6 +14,7 @@ import { lastValueFrom } from 'rxjs';
 import { UserThread } from 'src/app/models/userThread.model';
 import { UserThreadService } from 'src/app/services/userThread.service';
 import { UserService } from 'src/app/services/user.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-board',
@@ -36,7 +37,7 @@ export class BoardComponent {
   boardSearchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
     sort: new FormControl('boardID', [Validators.required]),
-    pagination: new FormControl('false', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required]),
@@ -50,6 +51,9 @@ export class BoardComponent {
   userName: any;
   userThreads: UserThread[];
   userThreadsLoaded: boolean = false;
+  pageSize = 5;
+  pageIndex = 0;
+  resultsLength = 0;
 
   async ngOnInit() {
     await this.checkCurrentUser();
@@ -93,8 +97,10 @@ export class BoardComponent {
       } else {
         this.checkThreads();
       }
+      this.resultsLength = result.threadCount;
     } else {
       this.allThreads = [];
+      this.resultsLength = 0;
     }
     
   }
@@ -302,5 +308,13 @@ export class BoardComponent {
         thread.isFollowing = false;
       }
     }
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.boardSearchCriteria.controls.page.patchValue(this.pageIndex);
+    this.boardSearchCriteria.controls.limit.patchValue(this.pageSize);
+    this.loadBoardThreads();
   }
 }

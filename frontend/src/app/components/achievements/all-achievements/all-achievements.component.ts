@@ -8,6 +8,7 @@ import { AchievementService } from 'src/app/services/achievement.service';
 import { AddAchievementComponent } from '../add-achievement/add-achievement.component';
 import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
 import { FilterFormPopUpComponent } from '../../filter-form-pop-up/filter-form-pop-up.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-all-achievements',
@@ -25,6 +26,9 @@ export class AllAchievementsComponent {
 
   achievementData: any;
   isLoadingAchievements: boolean = true;
+  pageSize = 5;
+  pageIndex = 0;
+  resultsLength = 0;
 
   searchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
@@ -47,10 +51,13 @@ export class AllAchievementsComponent {
   }
 
   public handleSearchResponse(data: any) {
+    console.log(data)
     if (data == null) {
       this.achievementData = [];
+      this.resultsLength = 0;
     } else {
       this.achievementData = data.data;
+      this.resultsLength = data.achievementCount;
     }
     this.isLoadingAchievements = false;
   }
@@ -77,7 +84,7 @@ export class AllAchievementsComponent {
   public clearSearch() {
     this.searchCriteria.controls.searchTerm.patchValue('');
     this.searchCriteria.controls.sort.patchValue('achievementID');
-    this.searchCriteria.controls.pagination.patchValue('false');
+    this.searchCriteria.controls.pagination.patchValue('true');
     this.searchCriteria.controls.direction.patchValue('asc');
     this.searchCriteria.controls.limit.patchValue(5);
     this.searchCriteria.controls.page.patchValue(0);
@@ -159,4 +166,14 @@ export class AllAchievementsComponent {
       }
     });
   }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.searchCriteria.controls.page.patchValue(this.pageIndex);
+    this.searchCriteria.controls.limit.patchValue(this.pageSize);
+    this.isLoadingAchievements = true;
+    this.loadAchievements();
+  }
+
 }
