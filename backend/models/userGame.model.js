@@ -10,6 +10,7 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         gameID: {
+            foriegnKey: true,
             type: Sequelize.INTEGER,
             validate:{
                 isInt: true

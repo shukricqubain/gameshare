@@ -1,6 +1,17 @@
 const db = require('../models/index');
 var Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const userGame = db.userGame;
+const game = db.game;
+
+game.hasMany(userGame, {
+    foreignKey: 'gameID'
+});
+userGame.belongsTo(game,{
+    foreignKey: 'gameID'
+});
+
+
 
 async function findCount(searchCriteria) {
     try {
@@ -43,13 +54,13 @@ async function findCount(searchCriteria) {
                 where = '';
             }   
         }
-        userGames = await db.userGame.findAll({
+        userGames = await userGame.findAll({
             where: where,
             order: [
                 [sort, sortDirection],
-                ['gameID', 'ASC'],
+                ['userGameID', 'ASC'],
             ],
-            attributes: ['gameID'],
+            attributes: ['userGameID'],
             raw: true,
         });
         if (userGames !== null && userGames !== undefined) {
@@ -111,42 +122,35 @@ async function getAllUserGames(searchCriteria) {
             if (page != 0) {
                 offset = page * limit;
             }
-            return await db.userGame.findAll({
+            let userGames = await userGame.findAll({
                 where: where,
+                include: { 
+                    model: game,
+                    attributes: [
+                        'gameCover'
+                    ]
+                },
                 order: [
                     [sort, sortDirection],
-                    ['gameID', 'ASC'],
+                    ['userGameID', 'ASC'],
                 ],
                 limit: limit,
                 offset: offset,
-                attributes: [
-                    'userGameID',
-                    'gameID',
-                    'gameName',
-                    'userID',
-                    'gameEnjoymentRating',
-                    'createdAt',
-                    'updatedAt'
-                ],
-                raw: true,
             });
+            return userGames;
         } else {
-            return await db.userGame.findAll({
+            return await userGame.findAll({
                 where: where,
+                include: { 
+                    model: game,
+                    attributes: [
+                        'gameCover'
+                    ]
+                },
                 order: [
                     [sort, sortDirection],
-                    ['gameID', 'ASC'],
+                    ['userGameID', 'ASC'],
                 ],
-                attributes: [
-                    'userGameID',
-                    'gameID',
-                    'gameName',
-                    'userID',
-                    'gameEnjoymentRating',
-                    'createdAt',
-                    'updatedAt'
-                ],
-                raw: true,
             });
         }
     } catch (err) {
@@ -154,14 +158,14 @@ async function getAllUserGames(searchCriteria) {
     }
 }
 
-async function createUserGame(userGame) {
+async function createUserGame(newUserGame) {
     try {
-        return await db.userGame.create({
-            userGameID: userGame.userGameID,
-            gameID: userGame.gameID,
-            gameName: userGame.gameName,
-            userID: userGame.userID,
-            gameEnjoymentRating: userGame.gameEnjoymentRating,
+        return await userGame.create({
+            userGameID: newUserGame.userGameID,
+            gameID: newUserGame.gameID,
+            gameName: newUserGame.gameName,
+            userID: newUserGame.userID,
+            gameEnjoymentRating: newUserGame.gameEnjoymentRating,
         });
     } catch (err) {
         console.log(err)
@@ -173,7 +177,7 @@ async function createUserGame(userGame) {
 
 async function getOneUserGame(userGameID) {
     try {
-        return await db.userGame.findOne({
+        return await userGame.findOne({
             where: { userGameID: userGameID },
             raw: true
         });
@@ -186,7 +190,7 @@ async function findOneByUserIDAndGameID(body) {
     try {
         let userID = body.userID;
         let gameID = body.gameID;
-        return await db.userGame.findOne({
+        return await userGame.findOne({
             where: { 
                 userID: userID,
                 gameID: gameID
@@ -198,10 +202,10 @@ async function findOneByUserIDAndGameID(body) {
     }
 }
 
-async function updateUserGame(userGameID, userGame) {
+async function updateUserGame(userGameID, updatedUserGame) {
     try {
-        return result = await db.userGame.update(
-            userGame,
+        return result = await userGame.update(
+            updatedUserGame,
             {
                 where: {
                     userGameID: userGameID
@@ -218,7 +222,7 @@ async function updateUserGame(userGameID, userGame) {
 
 async function deleteUserGame(userGameID) {
     try {
-        return result = await db.userGame.destroy({
+        return result = await userGame.destroy({
             where: {
                 userGameID: userGameID
             }

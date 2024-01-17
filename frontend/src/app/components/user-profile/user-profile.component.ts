@@ -197,7 +197,6 @@ export class UserProfileComponent {
 
     } else if (this.currentTabIndex == 2) {
 
-      await this.loadAllGames();
       await this.loadAllGameNames();
       await this.loadAllUserGames();
 
@@ -339,6 +338,8 @@ export class UserProfileComponent {
     this.userGameSearchCriteria.controls.direction.patchValue('asc');
     this.userGameSearchCriteria.controls.limit.patchValue(5);
     this.userGameSearchCriteria.controls.page.patchValue(0);
+    this.userGamesPageIndex = 0;
+    this.userGamesPageSize = 5;
     this.userGamesLoaded = false;
     await this.loadAllUserGames();
   }
@@ -354,12 +355,6 @@ export class UserProfileComponent {
           } else {
             this.userGames = result.data;
             this.totalUserGames = result.gameCount;
-            for (let userGame of this.userGames) {
-              let game = this.allGames.find(obj => obj.gameID == userGame.gameID);
-              if (game != null && game != undefined) {
-                userGame.game = game;
-              }
-            }
           }
           this.userGamesLoaded = true;
         }
@@ -378,29 +373,6 @@ export class UserProfileComponent {
       this.gameService.getAllGameNames().subscribe({
         next: this.handleGetAllNamesResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
-      });
-    }
-  }
-
-  async loadAllGames() {
-    try {
-      if (!this.gamesLoaded) {
-        let result = await lastValueFrom(this.gameService.getAll({
-          searchTerm: '',
-          sort: 'gameID',
-          pagination: 'false',
-          direction: 'asc'
-        }).pipe());
-        if (result != undefined) {
-          this.allGames = result.data;
-          this.gamesLoaded = true;
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      this.allGames = [];
-      this.snackBar.open('Error loading all games.', 'dismiss', {
-        duration: 2000
       });
     }
   }
@@ -561,6 +533,8 @@ export class UserProfileComponent {
       this.userAchievementSearchCriteria.controls.direction.patchValue('asc');
       this.userAchievementSearchCriteria.controls.limit.patchValue(5);
       this.userAchievementSearchCriteria.controls.page.patchValue(0);
+      this.userAchievementsPageIndex = 0;
+      this.userAchievementsPageSize = 5;
       this.userAchievementsLoaded = false;
       this.achievementsLoaded = false;
       await this.loadAllUserAchievements();
@@ -796,6 +770,8 @@ export class UserProfileComponent {
     this.boardSearchCriteria.controls.direction.patchValue('asc');
     this.boardSearchCriteria.controls.limit.patchValue(5);
     this.boardSearchCriteria.controls.page.patchValue(0);
+    this.userBoardsPageIndex = 0;
+    this.userBoardsPageSize = 5;
     this.userBoardsLoaded = false;
     this.userBoardService.getAll(this.boardSearchCriteria.value).subscribe({
       next: this.handleBoardSearchResponse.bind(this),
@@ -931,6 +907,8 @@ export class UserProfileComponent {
     this.threadSearchCriteria.controls.direction.patchValue('asc');
     this.threadSearchCriteria.controls.limit.patchValue(5);
     this.threadSearchCriteria.controls.page.patchValue(0);
+    this.userThreadsPageIndex = 0;
+    this.userThreadsPageSize = 5;
     this.userThreadsLoaded = false;
     this.userThreadService.getAll(this.threadSearchCriteria.value).subscribe({
       next: this.handleThreadSearchResponse.bind(this),
