@@ -158,19 +158,18 @@
                         filter_list
                     </mat-icon>
                 </form>
-                <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUserAchievement()">Add Achievement</button>
             </div>
-            <div *ngIf="!achievementsLoaded" class="loading-container">
+            <div *ngIf="!userAchievementsLoaded" class="loading-container">
                 <mat-spinner [diameter]="100"></mat-spinner>
             </div>
-            <div *ngIf="achievementsLoaded" class="achievement-container">
-                <div fxFlex *ngFor="let achievement of userAchievements" class="achievement-margin">
+            <div *ngIf="userAchievementsLoaded" class="achievement-container">
+                <div fxFlex *ngFor="let userAchievement of userAchievements" class="achievement-margin">
                     <mat-card class="achievement-item">
                         <mat-card-content class="achievement-content">
-                            <img src="{{achievement.achievementIcon}}">
+                            <img src="{{userAchievement.achievement.achievementIcon}}">
                             <div style="margin-left: 15px;">
-                                <mat-card-title>{{achievement.achievementName}}</mat-card-title>
-                                <mat-card-subtitle>{{achievement.achievementDescription}}</mat-card-subtitle>
+                                <mat-card-title>{{userAchievement.achievementName}}</mat-card-title>
+                                <mat-card-subtitle>{{userAchievement.achievementDescription}}</mat-card-subtitle>
                             </div>
                         </mat-card-content>
                     </mat-card>

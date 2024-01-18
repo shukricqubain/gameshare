@@ -124,9 +124,8 @@ export class UserProfileComponent {
   userAchievementsPageSize = 5;
   userAchievementsPageIndex = 0;
   totalUserAchievements = 0;
-  userAchievements: UserAchievement[];
+  userAchievements: any[];
   userAchievementsLoaded: boolean = false;
-  achievementsLoaded: boolean = false;
   achievements: Achievement[];
   allAchievementNames: AchievementName[] = [];
   achievementNamesLoaded: boolean = false;
@@ -205,7 +204,6 @@ export class UserProfileComponent {
       await this.loadAllGameNames();
       await this.loadAchievementNames();
       await this.loadAllUserAchievements();
-      await this.loadAllAchievementsBasedOnUserAchievements();
 
     } else if (this.currentTabIndex == 4) {
 
@@ -390,7 +388,9 @@ export class UserProfileComponent {
     dialogRef.afterClosed().subscribe(async result => {
       if (result !== undefined) {
         this.userGamesLoaded = false;
+        this.userAchievementsLoaded = false;
         await this.loadAllUserGames();
+        await this.loadAllUserAchievements();
       }
     });
   }
@@ -457,7 +457,9 @@ export class UserProfileComponent {
   public async handleGameDeleteResponse(data: any) {
     if (data !== null) {
       this.userGamesLoaded = false;
+      this.userAchievementsLoaded = false;
       await this.loadAllUserGames();
+      await this.loadAllUserAchievements();
     }
   }
 
@@ -512,9 +514,7 @@ export class UserProfileComponent {
   applyAchievementSearch = async () => {
     try {
       this.userAchievementsLoaded = false;
-      this.achievementsLoaded = false;
       await this.loadAllUserAchievements();
-      await this.loadAllAchievementsBasedOnUserAchievements();
     } catch (err) {
       console.error(err);
       this.userAchievements = [];
@@ -536,9 +536,7 @@ export class UserProfileComponent {
       this.userAchievementsPageIndex = 0;
       this.userAchievementsPageSize = 5;
       this.userAchievementsLoaded = false;
-      this.achievementsLoaded = false;
       await this.loadAllUserAchievements();
-      await this.loadAllAchievementsBasedOnUserAchievements();
     } catch (err) {
       console.error(err);
       this.userAchievements = [];
@@ -568,52 +566,6 @@ export class UserProfileComponent {
       console.error(err);
       this.userGames = [];
       this.snackBar.open('Error loading user achievements.', 'dismiss', {
-        duration: 2000
-      });
-    }
-  }
-
-  async loadAllAchievementsBasedOnUserAchievements() {
-    try {
-      if (!this.achievementsLoaded && this.userAchievements != undefined && this.userAchievements.length > 0) {
-        let userAchievements = this.userAchievements;
-        let achievementIDs: any[] = [];
-        for (let userAchievement of userAchievements) {
-          if (!achievementIDs.includes(userAchievement.achievementID)) {
-            achievementIDs.push(userAchievement.achievementID);
-          }
-        }
-        let achievementIDsString: string = ``;
-        for (let i = 0; i < achievementIDs.length; i++) {
-          if (i == (achievementIDs.length - 1)) {
-            achievementIDsString += `${achievementIDs[i]}`;
-          } else {
-            achievementIDsString += `${achievementIDs[i]},`
-          }
-        }
-        let result = await lastValueFrom(this.achievementService.getAllBasedOnIDList(achievementIDsString).pipe());
-        if (result != null && result != undefined) {
-          if (result != undefined && result === 'No data in achievement table to fetch.') {
-            this.achievements = [];
-          } else {
-            this.achievements = result;
-            for (let userAchievement of this.userAchievements) {
-              let findAchievement = this.achievements.find(obj => obj.achievementID == userAchievement.achievementID);
-              if (findAchievement != undefined) {
-                userAchievement.achievementIcon = findAchievement.achievementIcon;
-                userAchievement.achievementDescription = findAchievement.achievementDescription;
-              }
-            }
-          }
-          this.achievementsLoaded = true;
-        }
-      } else {
-        this.achievementsLoaded = true;
-      }
-    } catch (err) {
-      console.error(err);
-      this.userGames = [];
-      this.snackBar.open('Error loading achievements.', 'dismiss', {
         duration: 2000
       });
     }

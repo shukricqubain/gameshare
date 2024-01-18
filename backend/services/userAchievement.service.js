@@ -1,6 +1,15 @@
 const db = require('../models/index');
 var Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const userAchievement = db.userAchievement;
+const achievement = db.achievement;
+
+achievement.hasMany(userAchievement, {
+    foreignKey: 'achievementID'
+});
+userAchievement.belongsTo(achievement,{
+    foreignKey: 'achievementID'
+});
 
 async function findCount(searchCriteria) {
     try {
@@ -52,7 +61,7 @@ async function findCount(searchCriteria) {
                 where = '';
             }
         }
-        userAchievements = await db.userAchievement.findAll({
+        userAchievements = await userAchievement.findAll({
             where: where,
             order: [
                 [sort, sortDirection],
@@ -125,46 +134,34 @@ async function getAll(searchCriteria) {
             if (page != 0) {
                 offset = page * limit;
             }
-            return await db.userAchievement.findAll({
+            return await userAchievement.findAll({
                 where: where,
+                include: { 
+                    model: achievement,
+                    attributes: [
+                        'achievementIcon'
+                    ]
+                },
                 order: [
                     [sort, sortDirection],
                     ['achievementName', 'ASC'],
                 ],
                 limit: limit,
                 offset: offset,
-                attributes: [
-                    'userAchievementID',
-                    'achievementID',
-                    'achievementName',
-                    'gameID',
-                    'gameName',
-                    'userID',
-                    'achievementStatus',
-                    'createdAt',
-                    'updatedAt'
-                ],
-                raw: true,
             });
         } else {
-            return await db.userAchievement.findAll({
+            return await userAchievement.findAll({
                 where: where,
+                include: { 
+                    model: achievement,
+                    attributes: [
+                        'achievementIcon'
+                    ]
+                },
                 order: [
                     [sort, sortDirection],
                     ['achievementName', 'ASC'],
                 ],
-                attributes: [
-                    'userAchievementID',
-                    'achievementID',
-                    'achievementName',
-                    'gameID',
-                    'gameName',
-                    'userID',
-                    'achievementStatus',
-                    'createdAt',
-                    'updatedAt'
-                ],
-                raw: true,
             });
         } 
     } catch (err) {
@@ -172,15 +169,15 @@ async function getAll(searchCriteria) {
     }
 }
 
-async function create(userAchievement) {
+async function create(newUserAchievement) {
     try {
-        return await db.userAchievement.create({
-            achievementID: userAchievement.achievementID,
-            achievementName: userAchievement.achievementName,
-            gameID: userAchievement.gameID,
-            gameName: userAchievement.gameName,
-            userID: userAchievement.userID,
-            achievementStatus: userAchievement.achievementStatus
+        return await userAchievement.create({
+            achievementID: newUserAchievement.achievementID,
+            achievementName: newUserAchievement.achievementName,
+            gameID: newUserAchievement.gameID,
+            gameName: newUserAchievement.gameName,
+            userID: newUserAchievement.userID,
+            achievementStatus: newUserAchievement.achievementStatus
         });
     } catch (err) {
         console.log(err)
@@ -192,7 +189,7 @@ async function create(userAchievement) {
 
 async function getOne(userAchievementID) {
     try {
-        return await db.userAchievement.findOne({
+        return await userAchievement.findOne({
             where: { userAchievementID: userAchievementID },
             raw: true
         });
@@ -203,7 +200,7 @@ async function getOne(userAchievementID) {
 
 async function getAllByUserID(userID) {
     try {
-        return await db.userAchievement.findAll({
+        return await userAchievement.findAll({
             where: { userID: userID },
             raw: true
         });
@@ -216,7 +213,7 @@ async function getAllByGameID(body) {
     try {
         let userID = body.userID;
         let gameID = body.gameID;
-        return await db.userAchievement.findAll({
+        return await userAchievement.findAll({
             where: { 
                 userID: userID,
                 gameID: gameID
@@ -228,10 +225,10 @@ async function getAllByGameID(body) {
     }
 }
 
-async function update(userAchievementID, userAchievement) {
+async function update(userAchievementID, newUserAchievement) {
     try {
-        return result = await db.userAchievement.update(
-            userAchievement,
+        return result = await userAchievement.update(
+            newUserAchievement,
             {
                 where: {
                     userAchievementID: userAchievementID
@@ -248,7 +245,7 @@ async function update(userAchievementID, userAchievement) {
 
 async function deleteAchievement(userAchievementID) {
     try {
-        return result = await db.userAchievement.destroy({
+        return result = await userAchievement.destroy({
             where: {
                 userAchievementID: userAchievementID
             }
@@ -260,7 +257,7 @@ async function deleteAchievement(userAchievementID) {
 
 async function bulkDelete(userID, gameID) {
     try {
-        return result = await db.userAchievement.destroy({
+        return result = await userAchievement.destroy({
             where: {
                 userID: userID,
                 gameID: gameID
