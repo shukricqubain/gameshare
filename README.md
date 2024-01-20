@@ -128,7 +128,7 @@ Use this space to show useful examples of how a project can be used. Additional 
    - [x] Add pagination to user boards, threads, and games pages.
    - [x] Add a paginator under the material cards, so user doesn't have to click filter icon to paginate data.
    - [ ] Add user profile picture.
-   - [ ] Reorganize User profile tabs into their own components.
+   - [x] Reorganize User profile tabs into their own components.
    - [ ] User Achievements
       - [x] Update user achievements and user games api.
       - [x] Remove Delete and Edit icons/functionality from user Achievement page.
