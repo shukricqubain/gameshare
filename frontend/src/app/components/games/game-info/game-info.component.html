@@ -1,16 +1,21 @@
 <div class="game-info-component">
     <div class="game-container">
         <div class="header-container">
-            <div class="image-column">
-                <img src="{{game.gameCover}}" class="game-image">
+            <div *ngIf="!gameLoaded">
+                <mat-spinner [diameter]="100"></mat-spinner>
             </div>
-            <div class="info-column">
-                <h3>{{game.gameName}}</h3>
-                <p>Release in {{formatDate(game.releaseDate)}}</p>
-                <p>Developed by {{game.developers}}</p>
-                <p>Published by {{game.publishers}}</p>
-                <p>Genre {{game.genre}}</p>
-                <p>Playable on {{game.platform}}</p>
+            <div *ngIf="gameLoaded" class="header-container">
+                <div class="image-column">
+                    <img src="{{game.gameCover}}" class="game-image">
+                </div>
+                <div class="info-column">
+                    <h3>{{game.gameName}}</h3>
+                    <p>Release in {{formatDate(game.releaseDate)}}</p>
+                    <p>Developed by {{game.developers}}</p>
+                    <p>Published by {{game.publishers}}</p>
+                    <p>Genre {{game.genre}}</p>
+                    <p>Playable on {{game.platform}}</p>
+                </div>
             </div>
         </div>
         <div class="achievement-container">

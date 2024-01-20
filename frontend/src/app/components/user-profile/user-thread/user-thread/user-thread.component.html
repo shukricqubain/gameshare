@@ -1,0 +1,11 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{userThread.threadName}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+        <div class="card-actions-container">
+            <button mat-button (click)="unfollowThread(userThread)">Unfollow</button>
+            <button (click)="openThread(userThread)" mat-button>Open</button>
+        </div>
+    </mat-card-actions>
+</mat-card>

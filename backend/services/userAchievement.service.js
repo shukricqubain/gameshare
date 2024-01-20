@@ -139,7 +139,8 @@ async function getAll(searchCriteria) {
                 include: { 
                     model: achievement,
                     attributes: [
-                        'achievementIcon'
+                        'achievementIcon',
+                        'achievementDescription'
                     ]
                 },
                 order: [
@@ -155,7 +156,8 @@ async function getAll(searchCriteria) {
                 include: { 
                     model: achievement,
                     attributes: [
-                        'achievementIcon'
+                        'achievementIcon',
+                        'achievementDescription'
                     ]
                 },
                 order: [

@@ -1,0 +1,12 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{userBoard.boardName}}</mat-card-title>
+        <mat-card-subtitle class="open-board">This board discusses the game {{userBoard.gameName}}.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-actions>
+        <div class="card-actions-container">
+            <button mat-button (click)="unfollowBoard(userBoard)" type="button">Unfollow</button>
+            <button mat-button (click)="openBoard(userBoard)" type="button">Open</button>
+        </div>
+    </mat-card-actions>
+</mat-card>

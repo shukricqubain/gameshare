@@ -52,7 +52,11 @@ export class ThreadComponent {
     let data: any = this.location.getState();
     await this.checkCurrentUser();
     await this.loadAllUsers();
-    this.thread = data.thread;
+    if(data.thread != undefined){
+      this.thread = data.thread;
+    } else if(data.userThread != undefined){
+      this.thread = data.userThread;
+    }
     if (this.thread !== null && this.thread !== undefined && this.thread.threadID !== undefined && this.thread.threadID !== null) {
       this.threadItemSearchCriteria.controls.threadID.patchValue(this.thread.threadID);
       this.threadItemService.getAll(this.threadItemSearchCriteria.value).subscribe({
@@ -67,7 +71,7 @@ export class ThreadComponent {
   }
 
   handleSearchResponse(result: any) {
-    if (result !== null) {
+    if (result !== null && result.message == undefined) {
       this.allThreadItems = result.data;
       this.checkReplyDepth();
       this.finishedLoadingData = true;

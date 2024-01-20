@@ -1,3 +1,5 @@
+import { Achievement } from "./achievement.model";
+
 export class UserAchievement {
     userAchievementID?: Number;
     achievementID?: Number;
@@ -6,8 +8,7 @@ export class UserAchievement {
     gameName?: string;
     userID?: Number;
     achievementStatus?: string;
-    achievementDescription?: string;
-    achievementIcon?: string;
+    achievement?: Achievement;
     createdAt?: string;
     updatedAt?: string;
 }

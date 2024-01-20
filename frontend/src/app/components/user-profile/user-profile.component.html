@@ -21,18 +21,8 @@
                     <mat-spinner [diameter]="100"></mat-spinner>
                 </div>
                 <div *ngIf="userThreadsLoaded" class="thread-container">
-                    <div fxFlex *ngFor="let thread of userThreads" class="thread-item">
-                        <mat-card>
-                          <mat-card-header>
-                            <mat-card-title>{{thread.threadName}}</mat-card-title>
-                          </mat-card-header>
-                          <mat-card-actions>
-                            <div class="card-actions-container">
-                                <button mat-button (click)="unfollowThread(thread)">Unfollow</button>
-                                <button (click)="openThread(thread)" mat-button>Open</button>
-                            </div>
-                          </mat-card-actions>
-                        </mat-card>
+                    <div fxFlex *ngFor="let userThread of userThreads" class="thread-item">
+                        <app-user-thread [userThread]="userThread" (unfollowThreadEvent)="loadUserThreads($event)"></app-user-thread>
                       </div>
                 </div>
                 <mat-paginator
@@ -66,19 +56,8 @@
                     <mat-spinner [diameter]="100"></mat-spinner>
                 </div>
                 <div *ngIf="userBoardsLoaded" class="board-container">
-                    <div fxFlex *ngFor="let board of userBoards" class="board-item">
-                        <mat-card>
-                          <mat-card-header>
-                            <mat-card-title>{{board.boardName}}</mat-card-title>
-                            <mat-card-subtitle class="open-board">This board discusses the game {{board.gameName}}.</mat-card-subtitle>
-                          </mat-card-header>
-                          <mat-card-actions>
-                            <div class="card-actions-container">
-                                <button mat-button (click)="unfollowBoard(board)" type="button">Unfollow</button>
-                                <button mat-button (click)="openBoard(board)" type="button">Open</button>
-                            </div>
-                          </mat-card-actions>
-                        </mat-card>
+                    <div fxFlex *ngFor="let userBoard of userBoards" class="board-item">
+                        <app-user-board [userBoard]="userBoard" (unfollowBoardEvent)="loadUserBoards($event)"></app-user-board>
                       </div>
                 </div>
                 <mat-paginator
@@ -113,22 +92,7 @@
                 </div>
                 <div *ngIf="userGamesLoaded" class="game-container">
                     <div fxFlex *ngFor="let userGame of userGames" class="game-margin">
-                        <mat-card class="game-item">
-                            <mat-card-content>
-                                <img src="{{userGame.game.gameCover}}" class="game-image">
-                            </mat-card-content>
-                            <mat-card-actions class="actions-style">
-                                <mat-icon class="icon-style" matTooltip="Click to read information about a game." color="primary" (click)="gameInfoPopup(userGame.game)">
-                                    info
-                                </mat-icon>
-                                <mat-icon class="icon-style" matTooltip="Click to edit a game." style="color: green;" (click)="editUserGame(userGame)">
-                                    edit
-                                </mat-icon>
-                                <mat-icon class="icon-style" matTooltip="Click to delete a game." color="warn" (click)="deleteUserGame(userGame)">
-                                    delete
-                                </mat-icon>
-                            </mat-card-actions>
-                        </mat-card>
+                        <app-user-game [userGame]="userGame" (loadGameEvent)="loadGameEvent($event)"></app-user-game>
                     </div>
                 </div>
                 <mat-paginator
@@ -164,15 +128,7 @@
             </div>
             <div *ngIf="userAchievementsLoaded" class="achievement-container">
                 <div fxFlex *ngFor="let userAchievement of userAchievements" class="achievement-margin">
-                    <mat-card class="achievement-item">
-                        <mat-card-content class="achievement-content">
-                            <img src="{{userAchievement.achievement.achievementIcon}}">
-                            <div style="margin-left: 15px;">
-                                <mat-card-title>{{userAchievement.achievementName}}</mat-card-title>
-                                <mat-card-subtitle>{{userAchievement.achievementDescription}}</mat-card-subtitle>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
+                    <app-user-achievement [userAchievement]="userAchievement"></app-user-achievement>
                 </div>
                 <mat-paginator
                     [pageSize]="this.userAchievementsPageSize"

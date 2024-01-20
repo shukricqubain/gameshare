@@ -42,15 +42,7 @@ export class PopUpComponent {
           this.dataLoaded = true;
           break;
         case ('userGame'):
-          this.allGameNames = this.data.allGameNames;
-          let gameID = this.data.element.gameID;
-          let game = this.allGameNames.filter((obj: { gameID: any; }) => obj.gameID == gameID);
-          if (game.length > 0) {
-            game = game[0];
-          } else {
-            ///throw error no game found
-          }
-          this.name = game.gameName;
+          this.name = this.data.element.gameName;
           this.model = this.data.model;
           this.dataLoaded = true;
           break;

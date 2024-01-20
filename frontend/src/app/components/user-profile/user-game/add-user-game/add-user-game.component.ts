@@ -35,8 +35,8 @@ export class AddUserGameComponent {
 
   ratings = [1,2,3,4,5,6,7,8,9,10]
   allGameNames: GameName[] = [];
-
   isEdit: boolean = false;
+  gameName: string = '';
 
   async ngOnInit() {
     this.allGameNames = this.data.allGameNames;
@@ -47,6 +47,7 @@ export class AddUserGameComponent {
       let gameEnjoymentRating = this.data.element.gameEnjoymentRating;
       let createdAt = `${this.data.element.createdAt}`;
       let updatedAt = `${this.data.element.updatedAt}`;
+      this.gameName = this.data.element.gameName;
       this.addUserGameForm.controls.gameID.patchValue(gameID);
       this.addUserGameForm.controls.userID.patchValue(userID);
       this.addUserGameForm.controls.gameEnjoymentRating.patchValue(gameEnjoymentRating);
@@ -56,42 +57,56 @@ export class AddUserGameComponent {
   }
 
   onSubmit() {
-    let newGame: UserGame = {
-      userGameID: 0,
-      gameID: 0,
-      gameName: '',
-      userID: 0,
-      gameEnjoymentRating: 0,
-      createdAt: '',
-      updatedAt: ''
-    }
-    newGame.gameID = this.addUserGameForm.controls.gameID.value || 0;
-    let gameName = this.allGameNames.find(obj => obj.gameID == newGame.gameID);
-    if(gameName !== undefined){
-      newGame.gameName = gameName.gameName;
-    } else {
-      this.snackBar.open('Game name somehow not found!', 'dismiss', {
-        duration: 3000
-      });
-      return;
-    }
-    newGame.userID = this.data.userID;
-    newGame.gameEnjoymentRating = this.addUserGameForm.controls.gameEnjoymentRating.value || 0;
-    newGame.createdAt = this.addUserGameForm.controls.createdAt.value || '';
-    newGame.updatedAt = this.addUserGameForm.controls.updatedAt.value || '';
-    if (this.isEdit) {
-      newGame.userGameID = this.data.element.userGameID;
-      this.userGameService.update(newGame).subscribe({
+    if(this.isEdit){
+      let updatedGame: UserGame = {
+        userGameID: 0,
+        gameID: 0,
+        gameName: '',
+        userID: 0,
+        gameEnjoymentRating: 0,
+        createdAt: '',
+        updatedAt: ''
+      }
+      updatedGame.gameID = this.addUserGameForm.controls.gameID.value || 0;
+      updatedGame.gameName = this.gameName;
+      updatedGame.userID = this.addUserGameForm.controls.userID.value || 0;
+      updatedGame.userGameID = this.data.element.userGameID;
+      updatedGame.gameEnjoymentRating = this.addUserGameForm.controls.gameEnjoymentRating.value || 0;
+      updatedGame.createdAt = this.addUserGameForm.controls.createdAt.value || '';
+      updatedGame.updatedAt = this.addUserGameForm.controls.updatedAt.value || '';
+      this.userGameService.update(updatedGame).subscribe({
         next: this.handleEditResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
     } else {
+      let newGame: UserGame = {
+        userGameID: 0,
+        gameID: 0,
+        gameName: '',
+        userID: 0,
+        gameEnjoymentRating: 0,
+        createdAt: '',
+        updatedAt: ''
+      }
+      newGame.gameID = this.addUserGameForm.controls.gameID.value || 0;
+      let gameName = this.allGameNames.find(obj => obj.gameID == newGame.gameID);
+      if(gameName !== undefined){
+        newGame.gameName = gameName.gameName;
+      } else {
+        this.snackBar.open('Game name somehow not found!', 'dismiss', {
+          duration: 3000
+        });
+        return;
+      }
+      newGame.userID = this.data.userID;
+      newGame.gameEnjoymentRating = this.addUserGameForm.controls.gameEnjoymentRating.value || 0;
+      newGame.createdAt = this.addUserGameForm.controls.createdAt.value || '';
+      newGame.updatedAt = this.addUserGameForm.controls.updatedAt.value || '';
       this.userGameService.create(newGame).subscribe({
         next: this.handleCreateResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
     }
-
   }
 
   handleCreateResponse(data: any) {
@@ -140,7 +155,7 @@ export class AddUserGameComponent {
   }
 
   closeDialog(data?: any) {
-    if (data !== null) {
+    if (data != null && data != undefined) {
       this.dialogRef?.close({ event: 'Edited Game', data: data });
     } else {
       this.dialogRef?.close({ event: 'Cancel' });

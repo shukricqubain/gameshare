@@ -51,7 +51,6 @@ export class AllAchievementsComponent {
   }
 
   public handleSearchResponse(data: any) {
-    console.log(data)
     if (data == null) {
       this.achievementData = [];
       this.resultsLength = 0;

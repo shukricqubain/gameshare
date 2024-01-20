@@ -55,15 +55,6 @@
     padding: 3px 3px 3px 3px;
 }
 
-.game-item {
-    cursor: pointer;
-}
-
-.game-image {
-    width: 250px;
-    height: 250px;
-}
-
 .loading-container {
     display: grid; 
     place-items: center;
@@ -83,15 +74,5 @@
 
 .achievement-margin {
     padding: 3px 3px 3px 3px;
-}
-
-.achievement-item {
-    cursor: pointer;
-}
-
-.achievement-content{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
 }
 

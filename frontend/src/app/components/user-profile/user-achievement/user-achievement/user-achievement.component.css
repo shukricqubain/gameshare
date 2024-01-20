@@ -1,0 +1,9 @@
+.achievement-item {
+    cursor: pointer;
+}
+
+.achievement-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}

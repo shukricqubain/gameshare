@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
@@ -7,31 +7,29 @@ import { UserService } from 'src/app/services/user.service';
 import { UsernameService } from 'src/app/services/username.service';
 import { RoleService } from 'src/app/services/roleID.service';
 import { UserGameService } from 'src/app/services/userGame.service';
-import { MatTableDataSource } from '@angular/material/table';
 import { UserGame } from 'src/app/models/userGame.model';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { PageEvent } from '@angular/material/paginator';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
-import { AddUserGameComponent } from './add-user-game/add-user-game.component';
+import { AddUserGameComponent } from './user-game/add-user-game/add-user-game.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GameName } from 'src/app/models/gameName.model';
 import { GameService } from 'src/app/services/game.service';
 import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
-import { catchError, map, merge, startWith, switchMap, of as observableOf, lastValueFrom } from 'rxjs';
+import { of as observableOf, lastValueFrom } from 'rxjs';
 import { UserAchievement } from 'src/app/models/userAchievement.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { AddUserAchievementComponent } from './add-user-achievement/add-user-achievement.component';
+import { AddUserAchievementComponent } from './user-achievement/add-user-achievement/add-user-achievement.component';
 import { UserAchievementService } from 'src/app/services/userAchievement.service';
 import { AchievementName } from 'src/app/models/achievementName.model';
 import { AchievementService } from 'src/app/services/achievement.service';
 import { Board } from 'src/app/models/board.model';
 import { UserBoardService } from 'src/app/services/userBoard.service';
-import { AddUserBoardComponent } from './add-user-board/add-user-board.component';
+import { AddUserBoardComponent } from './user-board/add-user-board/add-user-board.component';
 import { BoardService } from 'src/app/services/board.service';
 import { Thread } from 'src/app/models/thread.model';
 import { ThreadService } from 'src/app/services/thread.service';
 import { UserThreadService } from 'src/app/services/userThread.service';
-import { AddUserThreadComponent } from './add-user-thread/add-user-thread.component';
+import { AddUserThreadComponent } from './user-thread/add-user-thread/add-user-thread.component';
 import { Game } from 'src/app/models/game.model';
 import { GameInfoComponent } from '../games/game-info/game-info.component';
 import { UserBoard } from 'src/app/models/userBoard.model';
@@ -366,6 +364,13 @@ export class UserProfileComponent {
     }
   }
 
+  async loadGameEvent(loadGameEvent?: any){
+    this.userGamesLoaded = false;
+    this.userAchievementsLoaded = false;
+    await this.loadAllUserGames();
+    await this.loadAllUserAchievements();
+  }
+
   async loadAllGameNames() {
     if (!this.gameNamesLoaded) {
       this.gameService.getAllGameNames().subscribe({
@@ -395,74 +400,6 @@ export class UserProfileComponent {
     });
   }
 
-  editUserGame(element: any) {
-    const dialogRef = this.matDialog.open(AddUserGameComponent, {
-      width: '100%',
-      disableClose: true,
-      data: {
-        isEdit: true,
-        userID: this.user.userID,
-        allGameNames: this.allGameNames,
-        element: element
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result !== undefined) {
-        this.userGamesLoaded = false;
-        await this.loadAllUserGames();
-      }
-    });
-  }
-
-  deleteUserGame(element: any) {
-    const dialogRefDelete = this.matDialog.open(PopUpComponent, {
-      width: '100%',
-      disableClose: true,
-      data: {
-        element,
-        model: 'userGame',
-        allGameNames: this.allGameNames
-      }
-    });
-    let game = this.allGameNames.find(obj => obj.gameID == element.gameID);
-    let gameName = '';
-    if (game !== undefined) {
-      gameName = game.gameName ? game.gameName : '';
-    } else {
-      ///throw error
-      this.snackBar.open(`No game with this ID found in the system.`, 'dismiss', {
-        duration: 3000
-      });
-      return;
-    }
-
-    dialogRefDelete.afterClosed().subscribe(result => {
-      if (result.event === 'delete') {
-        this.userGameService.delete(element.userGameID).subscribe({
-          next: this.handleGameDeleteResponse.bind(this),
-          error: this.handleErrorResponse.bind(this)
-        });
-        this.snackBar.open(`${gameName} has been deleted.`, 'dismiss', {
-          duration: 3000
-        });
-      } else {
-        this.snackBar.open(`${gameName} has not been deleted.`, 'dismiss', {
-          duration: 3000
-        });
-      }
-    });
-  }
-
-  public async handleGameDeleteResponse(data: any) {
-    if (data !== null) {
-      this.userGamesLoaded = false;
-      this.userAchievementsLoaded = false;
-      await this.loadAllUserGames();
-      await this.loadAllUserAchievements();
-    }
-  }
-
   handleGetAllNamesResponse(data: any) {
     if (data !== null && data !== undefined) {
       this.allGameNames = data;
@@ -486,19 +423,6 @@ export class UserProfileComponent {
     } else {
       return 'No Game with this ID'
     }
-  }
-
-  gameInfoPopup(game: Game) {
-    const dialogRefAdd = this.matDialog.open(GameInfoComponent, {
-      disableClose: false,
-      height: '80vh',
-      data: {
-        game
-      }
-    });
-
-    dialogRefAdd.afterClosed().subscribe(result => {
-    });
   }
 
   onUserGamesPageChange(event: PageEvent) {
@@ -623,45 +547,6 @@ export class UserProfileComponent {
     });
   }
 
-  deleteUserAchievement(element: any) {
-    const dialogRefDelete = this.matDialog.open(PopUpComponent, {
-      width: '100%',
-      disableClose: true,
-      data: {
-        element,
-        model: 'userAchievement',
-        allAchievementNames: this.allAchievementNames
-      }
-    });
-    let achievement = this.allAchievementNames.find(obj => obj.achievementID == element.achievementID);
-    let achievementName = '';
-    if (achievement !== undefined) {
-      achievementName = achievement.achievementName ? achievement.achievementName : '';
-    } else {
-      ///throw error
-      this.snackBar.open(`No achievement with this ID found in the system.`, 'dismiss', {
-        duration: 3000
-      });
-      return;
-    }
-
-    dialogRefDelete.afterClosed().subscribe(result => {
-      if (result.event === 'delete') {
-        this.userAchievementService.delete(element.userAchievementID).subscribe({
-          next: this.handleAchievementDeleteResponse.bind(this),
-          error: this.handleErrorResponse.bind(this)
-        });
-        this.snackBar.open(`${achievementName} has been deleted.`, 'dismiss', {
-          duration: 3000
-        });
-      } else {
-        this.snackBar.open(`${achievementName} has not been deleted.`, 'dismiss', {
-          duration: 3000
-        });
-      }
-    });
-  }
-
   public handleAchievementDeleteResponse(data: any) {
     if (data !== null) {
       this.ngAfterViewInit();
@@ -742,9 +627,9 @@ export class UserProfileComponent {
     this.userBoardsLoaded = true;
   }
 
-  async loadUserBoards() {
+  async loadUserBoards(unfollowEvent?: any) {
     try {
-      if (!this.userBoardsLoaded) {
+      if (!this.userBoardsLoaded || unfollowEvent != undefined) {
         let result = await lastValueFrom(this.userBoardService.getAll(this.boardSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
           if (result != undefined && result === 'No data in userBoard table to fetch.') {
@@ -801,33 +686,6 @@ export class UserProfileComponent {
         await this.loadUserBoards();
       }
     });
-  }
-
-  openBoard(board: Board) {
-    this.router.navigate([`/board/${board.boardID}`], { state: { board: board, user: this.user } });
-  }
-
-  async unfollowBoard(userBoard: UserBoard) {
-    if (userBoard !== undefined) {
-      this.userBoardService.delete(userBoard?.userBoardID).subscribe({
-        next: this.handleUnfollowResponse.bind(this),
-        error: this.handleErrorResponse.bind(this)
-      });
-      this.snackBar.open('Successfully unfollowed a board!', 'dismiss', {
-        duration: 3000
-      });
-    } else {
-      this.snackBar.open('Unfollow was not successful: User Board was undefined.', 'dismiss', {
-        duration: 3000
-      });
-    }
-  }
-
-  async handleUnfollowResponse(data: any) {
-    if (data !== null) {
-      this.userBoardsLoaded = false;
-      await this.loadUserBoards();
-    }
   }
 
   onUserBoardsPageChange(event: PageEvent) {
@@ -915,9 +773,9 @@ export class UserProfileComponent {
     this.loadUserThreads();
   }
 
-  async loadUserThreads() {
+  async loadUserThreads(unfollowEvent?: any) {
     try {
-      if (!this.userThreadsLoaded) {
+      if (!this.userThreadsLoaded || unfollowEvent != undefined && unfollowEvent === 'unfollowedThread') {
         let result = await lastValueFrom(this.userThreadService.getAll(this.threadSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
           if (result != undefined && result === 'No data in userThread table to fetch.') {
@@ -936,33 +794,6 @@ export class UserProfileComponent {
       this.snackBar.open('Error loading user threads.', 'dismiss', {
         duration: 2000
       });
-    }
-  }
-
-  openThread(thread: Thread) {
-    this.router.navigate([`/thread/${thread.threadID}`], { state: { thread } });
-  }
-
-  async unfollowThread(userThread: UserThread) {
-    if (userThread !== undefined) {
-      this.userThreadService.delete(userThread?.userThreadID).subscribe({
-        next: this.handleUnfollowThreadResponse.bind(this),
-        error: this.handleErrorResponse.bind(this)
-      });
-      this.snackBar.open('Successfully unfollowed a thread!', 'dismiss', {
-        duration: 3000
-      });
-    } else {
-      this.snackBar.open('Unfollow was not successful: User Thread was undefined.', 'dismiss', {
-        duration: 3000
-      });
-    }
-  }
-
-  async handleUnfollowThreadResponse(data: any) {
-    if (data !== null) {
-      this.userThreadsLoaded = false;
-      await this.loadUserThreads();
     }
   }
 

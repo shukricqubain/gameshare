@@ -39,8 +39,8 @@ import { AddGameComponent } from './components/games/add-game/add-game.component
 import { AllGamesComponent } from './components/games/all-games/all-games.component';
 import { AddAchievementComponent } from './components/achievements/add-achievement/add-achievement.component';
 import { AllAchievementsComponent } from './components/achievements/all-achievements/all-achievements.component';
-import { AddUserGameComponent } from './components/user-profile/add-user-game/add-user-game.component';
-import { AddUserAchievementComponent } from './components/user-profile/add-user-achievement/add-user-achievement.component';
+import { AddUserGameComponent } from './components/user-profile/user-game/add-user-game/add-user-game.component';
+import { AddUserAchievementComponent } from './components/user-profile/user-achievement/add-user-achievement/add-user-achievement.component';
 import { AddBoardComponent } from './components/boards/add-board/add-board.component';
 import { AllBoardsComponent } from './components/boards/all-boards/all-boards.component';
 import { AddThreadComponent } from './components/boards/threads/add-thread/add-thread.component';
@@ -50,11 +50,15 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { BoardComponent } from './components/boards/board/board.component';
 import { ThreadComponent } from './components/boards/threads/thread/thread.component';
 import { AddThreadItemComponent } from './components/boards/threads/thread/add-thread-item/add-thread-item.component';
-import { AddUserBoardComponent } from './components/user-profile/add-user-board/add-user-board.component';
-import { AddUserThreadComponent } from './components/user-profile/add-user-thread/add-user-thread.component';
+import { AddUserBoardComponent } from './components/user-profile/user-board/add-user-board/add-user-board.component';
+import { AddUserThreadComponent } from './components/user-profile/user-thread/add-user-thread/add-user-thread.component';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { GameInfoComponent } from './components/games/game-info/game-info.component';
 import { FilterFormPopUpComponent } from './components/filter-form-pop-up/filter-form-pop-up.component';
+import { UserAchievementComponent } from './components/user-profile/user-achievement/user-achievement/user-achievement.component';
+import { UserBoardComponent } from './components/user-profile/user-board/user-board/user-board.component';
+import { UserGameComponent } from './components/user-profile/user-game/user-game/user-game.component';
+import { UserThreadComponent } from './components/user-profile/user-thread/user-thread/user-thread.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +88,11 @@ import { FilterFormPopUpComponent } from './components/filter-form-pop-up/filter
     AddUserBoardComponent,
     AddUserThreadComponent,
     GameInfoComponent,
-    FilterFormPopUpComponent
+    FilterFormPopUpComponent,
+    UserAchievementComponent,
+    UserBoardComponent,
+    UserGameComponent,
+    UserThreadComponent
   ],
   imports: [
     BrowserModule,

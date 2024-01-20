@@ -3,16 +3,16 @@
         <div class="form-row">
             <ng-container *ngIf="isEdit; then editGame; else addGame"></ng-container>
             <ng-template #addGame>
-                <h1>Add a Game</h1>
+                <h1>Add a Game to your collection.</h1>
             </ng-template>
             <ng-template #editGame>
-                <h1>Edit a Game</h1>
+                <h1>Edit a Game in your collection.</h1>
             </ng-template>
         </div>
         <form [formGroup]="addUserGameForm" (ngSubmit)="onSubmit()">
             <div class="form-column">
                 <div class="form-row">
-                    <mat-form-field>
+                    <mat-form-field *ngIf="!isEdit">
                         <label>Game Name</label>
                         <mat-select placeholder="Select Game" formControlName="gameID"
                             name="gameID" id="gameID" required>

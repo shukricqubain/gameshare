@@ -1,0 +1,19 @@
+<mat-card class="game-item">
+    <mat-card-content>
+        <img src="{{userGame.game?.gameCover}}" class="game-image">
+    </mat-card-content>
+    <mat-card-actions class="actions-style">
+        <mat-icon matTooltip="Click to read information about a game." color="primary"
+            (click)="gameInfoPopup(userGame)">
+            info
+        </mat-icon>
+        <mat-icon matTooltip="Click to edit a game." style="color: green;"
+            (click)="editUserGame(userGame)">
+            edit
+        </mat-icon>
+        <mat-icon matTooltip="Click to delete a game." color="warn"
+            (click)="deleteUserGame(userGame)">
+            delete
+        </mat-icon>
+    </mat-card-actions>
+</mat-card>

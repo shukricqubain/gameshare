@@ -1,0 +1,14 @@
+.game-item {
+    cursor: pointer;
+}
+
+.game-image {
+    width: 250px;
+    height: 250px;
+}
+
+.actions-style{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
