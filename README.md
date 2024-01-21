@@ -132,9 +132,9 @@ Use this space to show useful examples of how a project can be used. Additional 
    - [ ] User Achievements
       - [x] Update user achievements and user games api.
       - [x] Remove Delete and Edit icons/functionality from user Achievement page.
-      - [ ] Add progress bar displaying the achievement status, so user can view and update the status.
+      - [x] Add progress bar displaying the achievement status, so user can view and update the status.
       - [ ] Show percentage of people who have obtained the achievement in the application.
-      - [ ] Show completion date of the achievement.
+      - [x] Show completion date of the achievement.
       - [ ] Change the display of the achievement as user makes progress.
    - [ ] User Friends Page
      - [ ] Allow users to befriend other users when viewing their profile
