@@ -7,3 +7,8 @@
     flex-direction: row;
     justify-content: flex-start;
 }
+
+.achievement-actions-container{
+    display: flex;
+    flex-direction: row;
+}

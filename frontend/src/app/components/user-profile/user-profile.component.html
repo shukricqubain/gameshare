@@ -128,7 +128,7 @@
             </div>
             <div *ngIf="userAchievementsLoaded" class="achievement-container">
                 <div fxFlex *ngFor="let userAchievement of userAchievements" class="achievement-margin">
-                    <app-user-achievement [userAchievement]="userAchievement"></app-user-achievement>
+                    <app-user-achievement [userAchievement]="userAchievement" (loadAchievementEvent)="loadAllUserAchievements($event)"></app-user-achievement>
                 </div>
                 <mat-paginator
                     [pageSize]="this.userAchievementsPageSize"

@@ -1,4 +1,4 @@
-<mat-card class="achievement-item">
+<mat-card>
     <mat-card-content class="achievement-content">
         <img src="{{userAchievement.achievement?.achievementIcon}}">
         <div style="margin-left: 15px;">
@@ -6,4 +6,12 @@
             <mat-card-subtitle>{{userAchievement.achievement?.achievementDescription}}</mat-card-subtitle>
         </div>
     </mat-card-content>
+    <mat-card-actions class="achievement-actions-container">
+        <mat-button-toggle-group class="achievement-item" [value]="userAchievement.achievementStatus" (change)="updateAchievementStatus($event.value, userAchievement)" matTooltip="Change achievement status.">
+            <mat-button-toggle value="not_started">Not Started</mat-button-toggle>
+            <mat-button-toggle value="in_progress">In Progress</mat-button-toggle>
+            <mat-button-toggle value="completed">Completed</mat-button-toggle>
+        </mat-button-toggle-group>
+        <p *ngIf="userAchievement.achievementStatus === 'completed'" style="margin-left: 10px;">Completed on {{formatDate(userAchievement.updatedAt)}}</p>
+    </mat-card-actions>
 </mat-card>

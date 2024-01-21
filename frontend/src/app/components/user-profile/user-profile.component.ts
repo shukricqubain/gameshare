@@ -7,18 +7,14 @@ import { UserService } from 'src/app/services/user.service';
 import { UsernameService } from 'src/app/services/username.service';
 import { RoleService } from 'src/app/services/roleID.service';
 import { UserGameService } from 'src/app/services/userGame.service';
-import { UserGame } from 'src/app/models/userGame.model';
 import { PageEvent } from '@angular/material/paginator';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { AddUserGameComponent } from './user-game/add-user-game/add-user-game.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GameName } from 'src/app/models/gameName.model';
 import { GameService } from 'src/app/services/game.service';
-import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
 import { of as observableOf, lastValueFrom } from 'rxjs';
-import { UserAchievement } from 'src/app/models/userAchievement.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { AddUserAchievementComponent } from './user-achievement/add-user-achievement/add-user-achievement.component';
 import { UserAchievementService } from 'src/app/services/userAchievement.service';
 import { AchievementName } from 'src/app/models/achievementName.model';
 import { AchievementService } from 'src/app/services/achievement.service';
@@ -30,11 +26,7 @@ import { Thread } from 'src/app/models/thread.model';
 import { ThreadService } from 'src/app/services/thread.service';
 import { UserThreadService } from 'src/app/services/userThread.service';
 import { AddUserThreadComponent } from './user-thread/add-user-thread/add-user-thread.component';
-import { Game } from 'src/app/models/game.model';
-import { GameInfoComponent } from '../games/game-info/game-info.component';
-import { UserBoard } from 'src/app/models/userBoard.model';
 import { Router } from '@angular/router';
-import { UserThread } from 'src/app/models/userThread.model';
 import { Achievement } from 'src/app/models/achievement.model';
 import { FilterFormPopUpComponent } from '../filter-form-pop-up/filter-form-pop-up.component';
 
@@ -471,9 +463,9 @@ export class UserProfileComponent {
     }
   }
 
-  async loadAllUserAchievements() {
+  async loadAllUserAchievements(loadAchievementEvent?: any) {
     try {
-      if (!this.userAchievementsLoaded) {
+      if (!this.userAchievementsLoaded || loadAchievementEvent != undefined) {
         let result = await lastValueFrom(this.userAchievementService.getAll(this.userAchievementSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
           if (result != undefined && result === 'No data in userAchievement table to fetch.') {
@@ -505,53 +497,6 @@ export class UserProfileComponent {
         duration: 3000
       });
       console.log(err);
-    }
-  }
-
-  addUserAchievement() {
-    const dialogRef = this.matDialog.open(AddUserAchievementComponent, {
-      width: '100%',
-      data: {
-        isEdit: false,
-        userID: this.user.userID,
-        allGameNames: this.allGameNames
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.ngAfterViewInit();
-      } else {
-        this.ngAfterViewInit();
-      }
-    });
-  }
-
-  editUserAchievement(element: any) {
-    const dialogRef = this.matDialog.open(AddUserAchievementComponent, {
-      width: '100%',
-      disableClose: true,
-      data: {
-        isEdit: true,
-        userID: this.user.userID,
-        allAchievementNames: this.allAchievementNames,
-        allGameNames: this.allGameNames,
-        element: element
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result !== undefined) {
-        await this.clearAchievementSearch();
-      }
-    });
-  }
-
-  public handleAchievementDeleteResponse(data: any) {
-    if (data !== null) {
-      this.ngAfterViewInit();
-    } else {
-      this.ngAfterViewInit();
     }
   }
 

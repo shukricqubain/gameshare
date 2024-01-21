@@ -7,7 +7,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatToolbarModule } from '@angular/material/toolbar'; 
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatNativeDateModule, MatRippleModule } from '@angular/material/core';
@@ -59,6 +59,7 @@ import { UserAchievementComponent } from './components/user-profile/user-achieve
 import { UserBoardComponent } from './components/user-profile/user-board/user-board/user-board.component';
 import { UserGameComponent } from './components/user-profile/user-game/user-game/user-game.component';
 import { UserThreadComponent } from './components/user-profile/user-thread/user-thread/user-thread.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,7 @@ import { UserThreadComponent } from './components/user-profile/user-thread/user-
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatButtonModule, 
+    MatButtonModule,
     MatCheckboxModule,
     MatCardModule,
     HttpClientModule,
@@ -124,8 +125,9 @@ import { UserThreadComponent } from './components/user-profile/user-thread/user-
     MatTabsModule,
     MatSelectModule,
     MatExpansionModule,
-    NgxMaskDirective, 
-    NgxMaskPipe
+    NgxMaskDirective,
+    NgxMaskPipe,
+    MatButtonToggleModule
   ],
   exports: [
     MatButtonModule,
@@ -140,7 +142,8 @@ import { UserThreadComponent } from './components/user-profile/user-thread/user-
     MatDialogModule,
     MatMenuModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonToggleModule
   ],
   providers: [
     MatDatepickerModule,

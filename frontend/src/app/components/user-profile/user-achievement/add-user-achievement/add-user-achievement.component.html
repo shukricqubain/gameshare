@@ -47,8 +47,8 @@
                         <mat-select placeholder="Select Achievement Status" formControlName="achievementStatus"
                             name="achievementStatus" id="achievementStatus" required>
                             <mat-option>--</mat-option>
-                            <mat-option *ngFor="let achievementStatus of allAchievementStatuses" [value]="achievementStatus">
-                                {{achievementStatus}}
+                            <mat-option *ngFor="let achievementStatus of allAchievementStatuses" [value]="achievementStatus.value">
+                                {{achievementStatus.display}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>

@@ -38,10 +38,10 @@ export class AddUserAchievementComponent {
   allGameNames: GameName[] = [];
   allAchievementNames: AchievementName[] = [];
   allDisplayedNames: AchievementName[] = [];
-  allAchievementStatuses: String[] = [
-    'Not Started',
-    'In Progress',
-    'Completed'
+  allAchievementStatuses = [
+    {display: 'Not Started', value: 'not_started'},
+    {display: 'In Progress', value: 'in_progress'},
+    {display: 'Completed', value: 'completed'}
   ];
 
   isEdit: boolean = false;

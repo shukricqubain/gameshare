@@ -63,7 +63,7 @@ router.post('/addUserGame', async function (req, res) {
                             gameID: achievement.gameID,
                             gameName: achievement.gameName,
                             userID: req.body.userID,
-                            achievementStatus: 'Not Started'
+                            achievementStatus: 'not_started'
                         });
                     } catch (err) {
                         console.error(err);
