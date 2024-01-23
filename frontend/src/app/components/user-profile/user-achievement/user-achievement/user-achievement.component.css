@@ -2,13 +2,26 @@
     cursor: pointer;
 }
 
-.achievement-content{
+.achievement-content {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
 
-.achievement-actions-container{
+.achievement-actions-container {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+}
+
+.completed {
+    background-color: #3cec00;
+}
+
+.in_progress {
+    background-color: #adff91;
+}
+
+.not_started {
+    background-color: #ffffff;
 }

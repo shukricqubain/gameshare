@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card [ngClass]="{'not_started': userAchievement.achievementStatus === 'not_started', 'in_progress': userAchievement.achievementStatus === 'in_progress','completed': userAchievement.achievementStatus === 'completed'}">
     <mat-card-content class="achievement-content">
         <img src="{{userAchievement.achievement?.achievementIcon}}">
         <div style="margin-left: 15px;">
@@ -12,6 +12,7 @@
             <mat-button-toggle value="in_progress">In Progress</mat-button-toggle>
             <mat-button-toggle value="completed">Completed</mat-button-toggle>
         </mat-button-toggle-group>
-        <p *ngIf="userAchievement.achievementStatus === 'completed'" style="margin-left: 10px;">Completed on {{formatDate(userAchievement.updatedAt)}}</p>
+        <p *ngIf="userAchievement.achievementStatus === 'completed'" >Completed on {{formatDate(userAchievement.updatedAt)}}</p>
+        <p *ngIf="userAchievement.achievementStatus === 'completed'" >Rate of completion: {{userAchievement.completedUserAchievementRatio | number:'1.0-2'}}%</p>
     </mat-card-actions>
 </mat-card>

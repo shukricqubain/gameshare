@@ -270,6 +270,33 @@ async function bulkDelete(userID, gameID) {
     }
 }
 
+async function getCompletedUserAchievementsRatio(achievementID) {
+    try {
+        const completedAchievements = await userAchievement.count({
+            where: { 
+                achievementID: achievementID,
+                achievementStatus: 'completed'
+            },
+            raw: true
+        });
+        const totalAchievements = await userAchievement.count({
+            where: { 
+                achievementID: achievementID
+            },
+            raw: true
+        });
+        if(completedAchievements != 0 && totalAchievements != 0){
+            return completedAchievements / totalAchievements;
+        } else if(completedAchievements == 0) {
+            return 'No completed achievements.';
+        } else if (totalAchievements == 0){
+            return 'No users with this achievement.';
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 module.exports = {
     findCount,
     getAll,
@@ -279,5 +306,6 @@ module.exports = {
     create,
     update,
     deleteAchievement,
-    bulkDelete
+    bulkDelete,
+    getCompletedUserAchievementsRatio
 };

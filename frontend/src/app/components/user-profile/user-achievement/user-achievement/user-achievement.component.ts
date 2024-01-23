@@ -22,10 +22,6 @@ export class UserAchievementComponent {
 
   ngOnInit(){}
 
-  editUserAchievement(element: any) {
-    ///reload achievements in parent
-  }
-
   updateAchievementStatus($event: any, userAchievement: UserAchievement){
     let updatedAchievement: UserAchievement = {
       userAchievementID: 0,

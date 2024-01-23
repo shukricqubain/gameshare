@@ -9,6 +9,7 @@ export class UserAchievement {
     userID?: Number;
     achievementStatus?: string;
     achievement?: Achievement;
+    completedUserAchievementRatio?: string;
     createdAt?: string;
     updatedAt?: string;
 }
