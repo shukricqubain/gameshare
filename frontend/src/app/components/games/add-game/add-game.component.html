@@ -10,24 +10,24 @@
         <form [formGroup]="addGameForm" (ngSubmit)="onSubmit()">
             <div class="form-column">
                 <div class="form-row">
-                    <mat-form-field MatFormFieldAppearance="outline">
+                    <mat-form-field appearance="outline">
                         <label>Game Name</label>
                         <input matInput name="gameName" id="gameName" type="text" formControlName="gameName"
                             placeholder="Enter game name." required (blur)="checkGameExists()" />
                     </mat-form-field>
-                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                    <mat-form-field appearance="outline" style="margin-left:10px;">
                         <label>Developers</label>
                         <input matInput name="developers" id="developers" type="text" formControlName="developers"
                             placeholder="Enter developers." required />
                     </mat-form-field>
                 </div>
                 <div class="form-row">
-                    <mat-form-field MatFormFieldAppearance="outline">
+                    <mat-form-field appearance="outline">
                         <label>Publishers</label>
                         <input matInput name="publishers" id="publishers" type="text" formControlName="publishers"
                             placeholder="Enter publishers." required />
                     </mat-form-field>
-                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                    <mat-form-field appearance="outline" style="margin-left:10px;">
                         <label>Genre</label>
                         <input matInput name="genre" id="genre" formControlName="genre" placeholder="Enter genre."
                             required />
@@ -48,7 +48,7 @@
                 </div>
                 <br>
                 <div class="form-row">
-                    <mat-form-field MatFormFieldAppearance="outline">
+                    <mat-form-field appearance="outline">
                         <label>Platform</label>
                         <input matInput name="platform" id="platform" type="text" formControlName="platform"
                             placeholder="Enter platform." required />

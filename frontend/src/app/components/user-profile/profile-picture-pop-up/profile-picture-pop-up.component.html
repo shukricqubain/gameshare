@@ -1,0 +1,26 @@
+<div class="profile-picture-container">
+    <ng-container *ngIf="isEdit; then editPicture; else addPicture"></ng-container>
+    <ng-template #addPicture>
+        <h1>Add your profile picture</h1>
+    </ng-template>
+    <ng-template #editPicture>
+        <h1>Update your profile picture</h1>
+    </ng-template>
+    <div class="upload-container">
+        <button type="button" matTooltip="Upload a profile picture" mat-icon-button (click)="fileInput.click()">
+            <mat-icon>
+                file_upload
+            </mat-icon>
+        </button>
+        <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
+        <span class="file-name">{{fileName}}</span>
+    </div>
+    <div style="display:flex; justify-content: center;">
+        <button mat-raised-button style="color:green;" (click)="closeDialog('confirm')">
+            Confirm
+        </button>
+        <button mat-raised-button color="warn" style="margin-left:10px" (click)="closeDialog()">
+            Cancel
+        </button>
+    </div>
+</div>

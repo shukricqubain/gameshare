@@ -18,6 +18,14 @@
     justify-content: center;
 }
 
+.header-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 20px;
+    max-height: 50px;
+}
+
 .search-form-container{
     display: flex;
     justify-content: space-between;
@@ -76,3 +84,29 @@
     padding: 3px 3px 3px 3px;
 }
 
+.profile-page {
+    width: 200px;
+    height: 200px;
+}
+
+.blank-profile {
+    width: 200px;
+    height: 200px;
+    background-color: grey;
+    margin-bottom: 20px;
+}
+
+.profile-icon {
+    font-size: 200px;
+    cursor: pointer;
+}
+
+.submit-row {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-image {
+    width: 200px;
+    height: 200px;
+}

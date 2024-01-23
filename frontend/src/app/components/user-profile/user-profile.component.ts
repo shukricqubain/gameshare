@@ -29,6 +29,7 @@ import { AddUserThreadComponent } from './user-thread/add-user-thread/add-user-t
 import { Router } from '@angular/router';
 import { Achievement } from 'src/app/models/achievement.model';
 import { FilterFormPopUpComponent } from '../filter-form-pop-up/filter-form-pop-up.component';
+import { ProfilePicturePopUpComponent } from './profile-picture-pop-up/profile-picture-pop-up.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -69,6 +70,7 @@ export class UserProfileComponent {
     phoneNumber: new FormControl('', [Validators.required]),
     userRole: new FormControl(''),
     userPassword: new FormControl('', [Validators.required]),
+    profilePicture: new FormControl(''),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
   });
@@ -303,6 +305,7 @@ export class UserProfileComponent {
     this.userProfileForm.controls.phoneNumber.setValue(data.phoneNumber ? data.phoneNumber : '');
     this.userProfileForm.controls.userRole.setValue(data.userRole ? `${data.userRole}` : '');
     this.userProfileForm.controls.userPassword.setValue(data.userPassword ? data.userPassword : '');
+    this.userProfileForm.controls.profilePicture.setValue(data.profilePicture ? data.profilePicture: '');
     this.userProfileForm.controls.createdAt.setValue(data.createdAt ? data.createdAt : '');
     this.userProfileForm.controls.updatedAt.setValue(data.updatedAt ? data.updatedAt : '');
     //patch search forms with userID for each collection
@@ -311,6 +314,25 @@ export class UserProfileComponent {
     this.boardSearchCriteria.controls.userID.patchValue(data.userID);
     this.threadSearchCriteria.controls.userID.patchValue(data.userID);
     this.userLoaded = true;
+  }
+
+  updateProfileImage(){
+    const dialogRefAdd = this.matDialog.open(ProfilePicturePopUpComponent, {
+      disableClose: false,
+      data: {
+        form: this.userProfileForm
+      }
+    });
+
+    dialogRefAdd.afterClosed().subscribe(async result => {
+      
+      if(result != undefined && result.event != undefined && result.event === 'Update profile picture.'){
+        this.userLoaded = false;
+        let userID = this.userProfileForm.controls.userID.value;
+        await this.loadUserDetails(userID);
+      }
+      
+    });
   }
 
   /** User Game Section */

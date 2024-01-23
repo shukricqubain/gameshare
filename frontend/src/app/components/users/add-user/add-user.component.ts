@@ -78,6 +78,7 @@ export class AddUserComponent {
       email: '',
       dateOfBirth: '',
       userID: 0,
+      profilePicture: '',
       createdAt: '',
       updatedAt: ''
     };

@@ -49,6 +49,11 @@ module.exports = (sequelize, Sequelize) => {
             validate:{
             }
         },
+        profilePicture:{
+            type: Sequelize.TEXT('long'),
+            validate: {
+            }
+        },
         createdAt: {
             type: Sequelize.DATE,
         },

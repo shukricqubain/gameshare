@@ -107,6 +107,7 @@ async function getAll(searchCriteria) {
                     'phoneNumber',
                     'userRole',
                     'userPassword',
+                    'profilePicture',
                     'createdAt',
                     'updatedAt'
                 ],
@@ -150,6 +151,7 @@ async function getAll(searchCriteria) {
                     'phoneNumber',
                     'userRole',
                     'userPassword',
+                    'profilePicture',
                     'createdAt',
                     'updatedAt'
                 ],
@@ -185,6 +187,7 @@ async function create(user) {
                 '${user.phoneNumber}', 
                 '${user.userRole}', 
                 '${user.userPassword}', 
+                '${user.profilePicture}',
                 STR_TO_DATE('${user.createdAt}',"%Y-%m-%d %H:%i:%s") 
             );`
         );
@@ -233,6 +236,7 @@ async function getOne(userID) {
                 'phoneNumber',
                 'userRole',
                 'userPassword',
+                'profilePicture',
                 'createdAt',
                 'updatedAt'
             ],
@@ -278,6 +282,7 @@ async function getUserByUserName(username) {
                 'phoneNumber',
                 'userRole',
                 'userPassword',
+                'profilePicture',
                 'createdAt',
                 'updatedAt'
             ],
@@ -317,6 +322,7 @@ async function update(userID, user) {
             phoneNumber = '${user.phoneNumber}',
             userRole = '${user.userRole}',
             userPassword = '${user.userPassword}',
+            profilePicture = '${user.profilePicture}',
             createdAt = STR_TO_DATE('${user.createdAt}',"%Y-%m-%d %H:%i:%s"),
             updatedAt = STR_TO_DATE('${user.updatedAt}',"%m-%d-%Y")
             WHERE user.userID = ${userID};`

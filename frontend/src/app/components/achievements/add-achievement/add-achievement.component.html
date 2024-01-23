@@ -10,7 +10,7 @@
         <form [formGroup]="addAchievementForm" (ngSubmit)="onSubmit()">
             <div class="form-column">
                 <div class="form-row">
-                    <mat-form-field MatFormFieldAppearance="outline">
+                    <mat-form-field appearance="outline">
                         <label>Game Name</label>
                         <mat-select placeholder="Select Game" formControlName="gameID"
                             name="gameID" id="gameID" required>
@@ -20,14 +20,14 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                    <mat-form-field appearance="outline" style="margin-left:10px;">
                         <label>Achievement Name</label>
                         <input matInput name="achievementName" id="achievementName" type="text" formControlName="achievementName"
                             placeholder="Enter achievement name." required />
                     </mat-form-field>
                 </div>
                 <div>
-                    <mat-form-field style="width:100%;" MatFormFieldAppearance="outline">
+                    <mat-form-field style="width:100%;" appearance="outline">
                         <label>Achievement Description</label>
                         <textarea matInput name="achievementDescription" id="achievementDescription" type="text" formControlName="achievementDescription"
                             placeholder="Enter achievement description." required></textarea>

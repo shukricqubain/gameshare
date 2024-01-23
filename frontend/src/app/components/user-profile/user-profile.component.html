@@ -142,34 +142,49 @@
         </mat-tab>
         <mat-tab label="user-details">
             <div class="form-column">
-                <div class="form-row">
+                <div class="header-row">
                     <h1 style="text-align: center;">Edit Profile</h1>
                     <mat-slide-toggle style="margin-left: 1.23rem;margin-top:1.70rem;" [matTooltip]="enableMessage"
                         [(ngModel)]="editEnabled" (ngModelChange)="changeForm()">
                     </mat-slide-toggle>
                 </div>
-                <br>
                 <form [formGroup]="userProfileForm" (ngSubmit)="onSubmit()">
                     <div class="form-column">
                         <div class="form-row">
-                            <mat-form-field MatFormFieldAppearance="outline">
+                            <ng-container *ngIf="userProfileForm.controls.profilePicture.value !== ''; then hasImage; else blankImage"></ng-container>
+                            <ng-template #hasImage>
+                                <div (click)="updateProfileImage()">
+                                    <img src="{{userProfileForm.controls.profilePicture.value}}" class="profile-image" >
+                                </div>
+                            </ng-template>
+                            <ng-template #blankImage>
+                                <div class="profile-icon">
+                                    <mat-icon matTooltip="Click to update your profile image." [inline]="true" (click)="updateProfileImage()">
+                                        account_circle
+                                    </mat-icon>
+                                </div>
+                                <!-- <div class="blank-profile"></div> -->
+                            </ng-template>
+                        </div>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline">
                                 <label>Firstname</label>
                                 <input matInput gameName="firstName" id="firstName" type="text"
                                     formControlName="firstName" placeholder="Enter firstname." required />
                             </mat-form-field>
-                            <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                            <mat-form-field appearance="outline" style="margin-left:10px;">
                                 <label>Lastname</label>
                                 <input matInput gameName="lastName" id="lastName" type="text" formControlName="lastName"
                                     placeholder="Enter lastname." required />
                             </mat-form-field>
                         </div>
                         <div class="form-row">
-                            <mat-form-field MatFormFieldAppearance="outline">
+                            <mat-form-field appearance="outline">
                                 <label>Username</label>
                                 <input matInput gameName="userName" id="userName" type="text" formControlName="userName"
                                     placeholder="Enter username." required />
                             </mat-form-field>
-                            <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                            <mat-form-field appearance="outline" style="margin-left:10px;">
                                 <label>Password</label>
                                 <input matInput gameName="userPassword" id="userPassword"
                                     [type]=" showPassword ? 'text' : 'password' " formControlName="userPassword"
@@ -177,28 +192,27 @@
                             </mat-form-field>
                         </div>
                         <div class="form-row">
-                            <mat-form-field MatFormFieldAppearance="outline">
+                            <mat-form-field appearance="outline">
                                 <label>Email</label>
                                 <input matInput gameName="email" id="email" type="text" formControlName="email"
                                     placeholder="Enter email." required [pattern]="emailValidation" />
                             </mat-form-field>
-                            <mat-form-field MatFormFieldAppearance="outline" style="margin-left:10px;">
+                            <mat-form-field appearance="outline" style="margin-left:10px;">
                                 <label>Phone Number</label>
                                 <input matInput gameName="phoneNumber" id="phoneNumber" type="text" mask="(000)-000-0000"
                                     formControlName="phoneNumber" placeholder="Enter phone number." required />
                             </mat-form-field>
                         </div>
-                        <div class="form-row">
-                            <input [matDatepicker]="picker" placeholder="Choose a date" [max]="minDate" required
+                        <div class="submit-row">
+                            <div style="margin-right:120px;">
+                                <input [matDatepicker]="picker" placeholder="Choose a date" [max]="minDate" required
                                 formControlName="dateOfBirth" />
-                            <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="form-row">
-                        <button mat-raised-button [disabled]="!userProfileForm.dirty || !userProfileForm.valid"
+                                <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </div>
+                            <button mat-raised-button [disabled]="!userProfileForm.dirty || !userProfileForm.valid"
                             type="submit">Submit</button>
+                        </div>
                     </div>
                 </form>
             </div>

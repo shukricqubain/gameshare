@@ -1,0 +1,15 @@
+.profile-picture-container {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 2rem 2rem 2rem;
+}
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.file-name {
+    margin-top: 1rem;
+}
