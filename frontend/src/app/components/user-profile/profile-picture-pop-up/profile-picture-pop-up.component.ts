@@ -30,18 +30,24 @@ export class ProfilePicturePopUpComponent {
   });
 
   ngAfterContentInit() {
-    console.log(this.data)
     if(this.data != undefined && this.data.form != undefined){
       this.userProfileForm = this.data.form;
+      let profilePicture = this.userProfileForm.controls.profilePicture.value;
+      if(profilePicture !== ''){
+        this.isEdit = true;
+      }
     }
-    this.userProfileForm
+  }
+
+  removeProfilePicture(){
+    this.profilePictureForm.controls.profilePicture.patchValue('');
+    this.profilePictureForm.controls.profilePicture.markAsDirty();
   }
 
   async closeDialog(data?: any) {
     ///check if user submitted form or not
     if (data !== null && data !== undefined && data === 'confirm') {
       this.savingPicture = true;
-      console.log(this.userProfileForm)
       let updatedUser: User = {
         userName: '',
         firstName: '',
@@ -66,15 +72,11 @@ export class ProfilePicturePopUpComponent {
       updatedUser.phoneNumber = this.userProfileForm.controls.phoneNumber.value || '';
       updatedUser.createdAt = this.userProfileForm.controls.createdAt.value || '';
       updatedUser.updatedAt = this.userProfileForm.controls.updatedAt.value || '';
-      console.log(updatedUser)
       updatedUser.profilePicture = this.profilePictureForm.controls.profilePicture.value || '';
       await this.userService.update(updatedUser).subscribe({
         next: this.handleUpdateResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
-
-
-      this.dialogRef?.close({ event: 'Update profile picture.'});
     } else {
       this.dialogRef?.close({ event: 'Cancel' });
     }
@@ -108,14 +110,13 @@ export class ProfilePicturePopUpComponent {
   }
 
   handleUpdateResponse(data: any) {
-    console.log(data)
     this.snackBar.open(data.message, 'dismiss', {
       duration: 2000
     });
+    this.dialogRef?.close({ event: 'Update profile picture.'});
   }
 
   handleErrorResponse(data: any) {
-    console.log(data)
     this.snackBar.open(data.message, 'dismiss', {
       duration: 2000
     });

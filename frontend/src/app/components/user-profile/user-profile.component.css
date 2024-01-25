@@ -89,16 +89,10 @@
     height: 200px;
 }
 
-.blank-profile {
-    width: 200px;
-    height: 200px;
-    background-color: grey;
-    margin-bottom: 20px;
-}
-
 .profile-icon {
     font-size: 200px;
     cursor: pointer;
+    max-height: 200px;
 }
 
 .submit-row {
@@ -109,4 +103,24 @@
 .profile-image {
     width: 200px;
     height: 200px;
+}
+
+.image-cropper {
+    cursor: pointer;
+    width: 200px;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.tab-group-container {
+    max-width: 80%;
+    width: 80%;
+}
+
+.paginator-style {
+    display: flex;
+    justify-content: center;
 }

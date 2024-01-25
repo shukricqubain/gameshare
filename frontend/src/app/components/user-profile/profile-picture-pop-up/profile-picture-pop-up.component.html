@@ -7,16 +7,21 @@
         <h1>Update your profile picture</h1>
     </ng-template>
     <div class="upload-container">
-        <button type="button" matTooltip="Upload a profile picture" mat-icon-button (click)="fileInput.click()">
+        <button type="button" matTooltip="Upload a profile picture." mat-icon-button (click)="fileInput.click()">
             <mat-icon>
                 file_upload
             </mat-icon>
         </button>
         <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
         <span class="file-name">{{fileName}}</span>
+        <button type="button" color="warn" matTooltip="Remove current profile picture." mat-icon-button (click)="removeProfilePicture()">
+            <mat-icon>
+                clear
+            </mat-icon>
+        </button>
     </div>
     <div style="display:flex; justify-content: center;">
-        <button mat-raised-button style="color:green;" (click)="closeDialog('confirm')">
+        <button mat-raised-button style="color:green;" [disabled]="!this.profilePictureForm.dirty" (click)="closeDialog('confirm')">
             Confirm
         </button>
         <button mat-raised-button color="warn" style="margin-left:10px" (click)="closeDialog()">

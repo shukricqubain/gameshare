@@ -325,7 +325,6 @@ export class UserProfileComponent {
     });
 
     dialogRefAdd.afterClosed().subscribe(async result => {
-      
       if(result != undefined && result.event != undefined && result.event === 'Update profile picture.'){
         this.userLoaded = false;
         let userID = this.userProfileForm.controls.userID.value;
