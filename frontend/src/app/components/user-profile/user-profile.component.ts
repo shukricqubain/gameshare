@@ -13,7 +13,7 @@ import { AddUserGameComponent } from './user-game/add-user-game/add-user-game.co
 import { MatDialog } from '@angular/material/dialog';
 import { GameName } from 'src/app/models/gameName.model';
 import { GameService } from 'src/app/services/game.service';
-import { of as observableOf, lastValueFrom } from 'rxjs';
+import { of as observableOf, lastValueFrom, last } from 'rxjs';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { UserAchievementService } from 'src/app/services/userAchievement.service';
 import { AchievementName } from 'src/app/models/achievementName.model';
@@ -161,14 +161,7 @@ export class UserProfileComponent {
   async ngAfterViewInit() {
 
     let data: any = this.location.getState();
-    if (this.userLoaded == false && data !== null) {
-      await this.loadUserDetails(data);
-    } else if (data == null) {
-      this.snackBar.open('An error occured while trying to load user profile with id of ``', 'dismiss', {
-        duration: 3000
-      });
-    }
-
+    await this.loadUserDetails(data);
     ///setup minimum date of birth for user to be 13
     let currentDate = new Date();
     let year = currentDate.getFullYear() - 13;
@@ -278,23 +271,30 @@ export class UserProfileComponent {
   }
 
   async loadUserDetails(data: any) {
-    if (data.userID == undefined) {
-      let userName = localStorage.getItem('userName');
-      if (userName !== null) {
-        await this.userService.getUserByName(userName).subscribe({
-          next: this.handleGetResponse.bind(this),
-          error: this.handleErrorResponse.bind(this)
-        });
+    try {
+      if(!this.userLoaded){
+
+        if (data.userID == undefined) {
+          let userName = localStorage.getItem('userName');
+          if (userName !== null) {
+            let result = await lastValueFrom(this.userService.getUserByName(userName).pipe());
+            this.setupUser(result);
+          }
+        } else {
+          let result = await lastValueFrom(this.userService.get(data.userID).pipe());
+          this.setupUser(result)
+        }
       }
-    } else {
-      await this.userService.get(data.userID).subscribe({
-        next: this.handleGetResponse.bind(this),
-        error: this.handleErrorResponse.bind(this)
+    } catch(err){
+      console.error(err);
+      this.userGames = [];
+      this.snackBar.open('Error loading user details.', 'dismiss', {
+        duration: 2000
       });
     }
   }
 
-  handleGetResponse(data: any) {
+  setupUser(data: any){
     this.user = data;
     this.userProfileForm.controls.userID.setValue(data.userID ? `${data.userID}` : '');
     this.userProfileForm.controls.userName.setValue(data.userName ? data.userName : '');
@@ -741,7 +741,7 @@ export class UserProfileComponent {
 
   async loadUserThreads(unfollowEvent?: any) {
     try {
-      if (!this.userThreadsLoaded || unfollowEvent != undefined && unfollowEvent === 'unfollowedThread') {
+      if (!this.userThreadsLoaded || (unfollowEvent != undefined && unfollowEvent === 'unfollowedThread')) {
         let result = await lastValueFrom(this.userThreadService.getAll(this.threadSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
           if (result != undefined && result === 'No data in userThread table to fetch.') {

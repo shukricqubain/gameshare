@@ -35,18 +35,16 @@ router.post('/allUserAchievements', async function(req, res) {
                 userAchievementCount = await userAchievementController.findCount(searchCriteria);
                 searchCriteria.achievementCount = userAchievementCount;
                 allUserAchievements = await userAchievementController.findAll(searchCriteria);
-                
-                ///check for completed achievements
-                for(let userAchievement of allUserAchievements){
-
-                    if(userAchievement.achievementStatus === 'completed'){
-                        let completedUserAchievementRatio = await userAchievementController.getCompletedUserAchievementsRatio(userAchievement.achievementID);
-                        userAchievement.dataValues.completedUserAchievementRatio = completedUserAchievementRatio;
-                    }
-                    
-                }
-                
                 if(allUserAchievements.message !== 'No data in user achievement table to fetch.'){
+                    ///check for completed achievements
+                    for(let userAchievement of allUserAchievements){
+
+                        if(userAchievement.achievementStatus === 'completed'){
+                            let completedUserAchievementRatio = await userAchievementController.getCompletedUserAchievementsRatio(userAchievement.achievementID);
+                            userAchievement.dataValues.completedUserAchievementRatio = completedUserAchievementRatio;
+                        }
+                        
+                    }
                     searchCriteria.data = allUserAchievements;
                     return res.status(200).json(searchCriteria);
                 } else {
