@@ -177,7 +177,7 @@ async function create(user) {
         createdString = `${createdArray[0]}`;
         user.createdAt = createdString;
         return await db.sequelize.query(
-            `INSERT INTO user ( userName, firstName, lastName, dateOfBirth, email, phoneNumber, userRole, userPassword, createdAt ) VALUES
+            `INSERT INTO user ( userName, firstName, lastName, dateOfBirth, email, phoneNumber, userRole, userPassword, profilePicture, createdAt ) VALUES
             ( 
                 '${user.userName}', 
                 AES_ENCRYPT('${user.firstName}','${secretKey}'), 
