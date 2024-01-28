@@ -1,0 +1,70 @@
+const userFriendService = require('../services/userFriend.service');
+
+// Create and Save a new userFriend
+exports.create = async (req) => {
+    try {
+        return await userFriendService.createUserFriend(req);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+// Get count of userFriends by searchCriteria
+exports.findCount = async (searchCriteria) => {
+    try {
+        let userFriendCount = await userFriendService.findCount(searchCriteria);
+        if (userFriendCount > 0) {
+            return userFriendCount;
+        } else {
+            return { message: 'No data in user friend table to fetch.' };
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+// Get all userFriends by searchCriteria
+exports.findAll = async (searchCriteria) => {
+    try {
+        let allUserFriends = await userFriendService.findAll(searchCriteria);
+        if (allUserFriends.length > 0) {
+            return allUserFriends;
+        } else {
+            return { message: 'No data in user friend table to fetch.' };
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// Get all userFriends by userFriendID
+exports.findOne = async (req) => {
+    try {
+        let userFriend = await userFriendService.getOneUserFriend(req);
+        if (userFriend == null || userFriend == undefined) {
+            return 'Cannot find user friend with specified userFriendID';
+        } else {
+            return userFriend;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+// Update a userFriend by their userFriendID
+exports.update = async (userFriendID, userFriend) => {
+    try {
+        return await userFriendService.updateUserFriend(userFriendID, userFriend);
+    } catch(err){
+        console.error(err);
+    }
+}
+
+// Delete a userFriend by their userFriendID
+exports.delete = async (userFriendID) => {
+    try {
+        return await userFriendService.deleteUserFriend(userFriendID);
+    } catch (err) {
+        console.error(err);
+    }
+};

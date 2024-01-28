@@ -143,7 +143,8 @@ router.post('/allUserGames', async function (req, res) {
             res.status(400).json('Search criteria is required.');
         }
     } catch (err) {
-        console.log(err)
+        console.error(err)
+        res.status(500).send("There was an error fetching all userGames from the database.");
     }
 });
 
