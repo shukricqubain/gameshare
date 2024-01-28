@@ -21,9 +21,12 @@
                     <mat-spinner [diameter]="100"></mat-spinner>
                 </div>
                 <div *ngIf="userThreadsLoaded" class="thread-container">
+                    <div *ngIf="totalUserThreads == 0" class="no-threads-container">
+                        <p>Currently following no threads.</p>
+                    </div>
                     <div fxFlex *ngFor="let userThread of userThreads" class="thread-item">
                         <app-user-thread [userThread]="userThread" (unfollowThreadEvent)="loadUserThreads($event)"></app-user-thread>
-                      </div>
+                    </div>
                 </div>
                 <mat-paginator class="paginator-style"
                     [pageSize]="this.userThreadsPageSize"
@@ -56,9 +59,12 @@
                     <mat-spinner [diameter]="100"></mat-spinner>
                 </div>
                 <div *ngIf="userBoardsLoaded" class="board-container">
+                    <div *ngIf="totalUserBoards == 0" class="no-boards-container">
+                        <p>Currently following no boards.</p>
+                    </div>
                     <div fxFlex *ngFor="let userBoard of userBoards" class="board-item">
                         <app-user-board [userBoard]="userBoard" (unfollowBoardEvent)="loadUserBoards($event)"></app-user-board>
-                      </div>
+                    </div>
                 </div>
                 <mat-paginator class="paginator-style"
                     [pageSize]="this.userBoardsPageSize"
@@ -90,9 +96,18 @@
                 <div *ngIf="!userGamesLoaded" class="loading-container">
                     <mat-spinner [diameter]="100"></mat-spinner>
                 </div>
-                <div *ngIf="userGamesLoaded" class="game-container">
-                    <div fxFlex *ngFor="let userGame of userGames" class="game-margin">
-                        <app-user-game [userGame]="userGame" (loadGameEvent)="loadGameEvent($event)"></app-user-game>
+                <div *ngIf="userGamesLoaded">
+                    <div [ngSwitch]="this.hasGames">
+                        <div *ngSwitchCase="true" class="game-container">
+                            <div fxFlex *ngFor="let userGame of userGames" class="game-margin">
+                                <app-user-game [userGame]="userGame" (loadGameEvent)="loadGameEvent($event)"></app-user-game>
+                            </div>
+                        </div>
+                        <div *ngSwitchCase="false">
+                            <div *ngIf="totalUserGames == 0" class="no-games-container">
+                                <p>Currently no games in your collection.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <mat-paginator class="paginator-style"
@@ -127,6 +142,9 @@
                 <mat-spinner [diameter]="100"></mat-spinner>
             </div>
             <div *ngIf="userAchievementsLoaded" class="achievement-container">
+                <div *ngIf="totalUserAchievements == 0" class="no-achievements-container">
+                    <p>Currently no achievements.</p>
+                </div>
                 <div fxFlex *ngFor="let userAchievement of userAchievements" class="achievement-margin">
                     <app-user-achievement [userAchievement]="userAchievement" (loadAchievementEvent)="loadAllUserAchievements($event)"></app-user-achievement>
                 </div>

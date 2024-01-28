@@ -94,6 +94,7 @@ export class UserProfileComponent {
   userGamesPageSize = 5;
   userGamesPageIndex = 0;
   totalUserGames = 0;
+  hasGames: boolean = false;
 
   allGameNames: GameName[] = [];
   userGames: any[] = [];
@@ -288,6 +289,7 @@ export class UserProfileComponent {
     } catch(err){
       console.error(err);
       this.userGames = [];
+      this.hasGames = false;
       this.snackBar.open('Error loading user details.', 'dismiss', {
         duration: 2000
       });
@@ -361,9 +363,11 @@ export class UserProfileComponent {
           if (result != undefined && result === 'No data in userGame table to fetch.') {
             this.totalUserGames = 0;
             this.userGames = [];
+            this.hasGames = false;
           } else {
             this.userGames = result.data;
             this.totalUserGames = result.gameCount;
+            this.hasGames = true;
           }
           this.userGamesLoaded = true;
         }
@@ -371,6 +375,7 @@ export class UserProfileComponent {
     } catch (err) {
       console.error(err);
       this.userGames = [];
+      this.hasGames = false;
       this.snackBar.open('Error loading user games.', 'dismiss', {
         duration: 2000
       });
@@ -477,6 +482,7 @@ export class UserProfileComponent {
     } catch (err) {
       console.error(err);
       this.userAchievements = [];
+      this.totalUserAchievements = 0;
       this.achievements = [];
       this.snackBar.open('Error loading all user achievements.', 'dismiss', {
         duration: 2000
@@ -489,7 +495,7 @@ export class UserProfileComponent {
       if (!this.userAchievementsLoaded || loadAchievementEvent != undefined) {
         let result = await lastValueFrom(this.userAchievementService.getAll(this.userAchievementSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
-          if (result != undefined && result === 'No data in userAchievement table to fetch.') {
+          if (result != undefined && result.message === 'No data in user achievement table to fetch.') {
             this.userAchievements = [];
             this.totalUserAchievements = 0;
           } else {
@@ -502,6 +508,7 @@ export class UserProfileComponent {
     } catch (err) {
       console.error(err);
       this.userGames = [];
+      this.hasGames = false;
       this.snackBar.open('Error loading user achievements.', 'dismiss', {
         duration: 2000
       });
@@ -598,7 +605,7 @@ export class UserProfileComponent {
       if (!this.userBoardsLoaded || unfollowEvent != undefined) {
         let result = await lastValueFrom(this.userBoardService.getAll(this.boardSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
-          if (result != undefined && result === 'No data in userBoard table to fetch.') {
+          if (result != undefined && result.message === 'No data in userBoard table to fetch.') {
             this.userBoards = [];
             this.totalUserBoards = 0;
           } else {
@@ -611,6 +618,7 @@ export class UserProfileComponent {
     } catch (err) {
       console.error(err);
       this.userGames = [];
+      this.hasGames = false;
       this.snackBar.open('Error loading user boards.', 'dismiss', {
         duration: 2000
       });
@@ -744,7 +752,7 @@ export class UserProfileComponent {
       if (!this.userThreadsLoaded || (unfollowEvent != undefined && unfollowEvent === 'unfollowedThread')) {
         let result = await lastValueFrom(this.userThreadService.getAll(this.threadSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
-          if (result != undefined && result === 'No data in userThread table to fetch.') {
+          if (result != undefined && result.message === 'No data in userThread table to fetch.') {
             this.userThreads = [];
             this.totalUserThreads = 0;
           } else {
