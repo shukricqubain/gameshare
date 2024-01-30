@@ -158,6 +158,7 @@ export class UserProfileComponent {
   allThreadNames: Thread[] = [];
 
   private currentTabIndex = 0;
+  viewingProfile: boolean = false;
 
   async ngAfterViewInit() {
 
@@ -273,6 +274,7 @@ export class UserProfileComponent {
 
   async loadUserDetails(data: any) {
     try {
+      console.log(data);
       if(!this.userLoaded){
 
         if (data.userID == undefined) {
@@ -281,6 +283,10 @@ export class UserProfileComponent {
             let result = await lastValueFrom(this.userService.getUserByName(userName).pipe());
             this.setupUser(result);
           }
+        } else if(data.viewUserID == undefined) {
+          this.viewingProfile = true;
+          let result = await lastValueFrom(this.userService.get(data.viewUserID).pipe());
+          this.setupUser(result);
         } else {
           let result = await lastValueFrom(this.userService.get(data.userID).pipe());
           this.setupUser(result)

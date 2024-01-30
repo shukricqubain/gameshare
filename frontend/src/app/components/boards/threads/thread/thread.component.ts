@@ -281,4 +281,8 @@ export class ThreadComponent {
       return 'userName not found';
     }
   }
+
+  viewUserProfile(element: any){
+    this.router.navigate([`/user-profile/${element.userID}`], { state: {viewUserID: element.userID}});
+  }
 }

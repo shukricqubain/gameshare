@@ -31,3 +31,13 @@
     padding: 10px 10px 30px;
     margin: 10px 10px 10px 10px;
 }
+
+.username-style {
+    cursor: pointer; 
+    color: #673ab7;
+}
+
+.mat-mdc-card-title{
+    padding-top: 0px;
+    max-width: 20px;
+}

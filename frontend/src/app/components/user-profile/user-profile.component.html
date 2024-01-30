@@ -15,7 +15,7 @@
                             clear
                         </mat-icon>
                     </form>
-                    <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUserThread()">Follow Thread</button>
+                    <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" [disabled]="viewingProfile" (click)="addUserThread()">Follow Thread</button>
                 </div>
                 <div *ngIf="!userThreadsLoaded" class="loading-container">
                     <mat-spinner [diameter]="100"></mat-spinner>
@@ -53,7 +53,7 @@
                             clear
                         </mat-icon>
                     </form>
-                    <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUserBoard()">Follow Board</button>
+                    <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" [disabled]="viewingProfile" (click)="addUserBoard()">Follow Board</button>
                 </div>
                 <div *ngIf="!userBoardsLoaded" class="loading-container">
                     <mat-spinner [diameter]="100"></mat-spinner>
@@ -91,7 +91,7 @@
                             clear
                         </mat-icon>
                     </form>
-                    <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUserGame()">Add Game</button>
+                    <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" [disabled]="viewingProfile" (click)="addUserGame()">Add Game</button>
                 </div>
                 <div *ngIf="!userGamesLoaded" class="loading-container">
                     <mat-spinner [diameter]="100"></mat-spinner>
@@ -163,7 +163,7 @@
                 <div class="header-row">
                     <h1 style="text-align: center;">Edit Profile</h1>
                     <mat-slide-toggle style="margin-left: 1.23rem;margin-top:1.70rem;" [matTooltip]="enableMessage"
-                        [(ngModel)]="editEnabled" (ngModelChange)="changeForm()">
+                        [(ngModel)]="editEnabled" [disabled]="viewingProfile" (ngModelChange)="changeForm()">
                     </mat-slide-toggle>
                 </div>
                 <div *ngIf="!userLoaded" class="loading-container">

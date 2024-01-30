@@ -255,7 +255,7 @@ export class BoardsComponent {
   async loadAllUserBoards() {
     try {
       let userBoardSearchCriteria = {
-        boardSearchTerm: '',
+        searchTerm: '',
         sort: 'userBoardID',
         pagination: 'false',
         direction: 'asc',

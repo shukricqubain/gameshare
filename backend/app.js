@@ -37,6 +37,7 @@ const userBoard = require('./routes/userBoard.route');
 const thread = require('./routes/thread.route');
 const threadItem = require('./routes/threadItem.route');
 const userThread = require('./routes/userThread.route');
+const userFriend = require('./routes/userFriend.route');
 
 app.use("/home", home);
 app.use("/user", user);
@@ -51,6 +52,7 @@ app.use("/userThread", userThread);
 app.use("/board", board);
 app.use("/thread", thread);
 app.use("/threadItem", threadItem);
+app.use("/userFriend", userFriend);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
