@@ -1,0 +1,35 @@
+.view-user-profile-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-left: 190px;
+    margin-bottom: 10px;
+
+}
+
+.user-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.profile-class {
+    width: 250px;
+    height: 250px;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.card-style {
+
+}

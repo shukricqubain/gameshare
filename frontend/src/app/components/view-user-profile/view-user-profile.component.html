@@ -1,0 +1,66 @@
+<div class="view-user-profile-container">
+    <div *ngIf="!userLoaded" class="loading-container">
+        <mat-spinner [diameter]="100"></mat-spinner>
+    </div>
+    <div *ngIf="userLoaded" class="header-container">
+        <img src="{{user.profilePicture}}" class="profile-class">
+        <div class="user-container">
+            <h1>{{user.userName}}</h1>
+            <div>
+                <p>Member since {{formatDate(user.createdAt)}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="card-container">
+        <mat-card class="card-style">
+            <mat-card-header>
+                <mat-card-title>Threads</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                Content
+            </mat-card-content>
+            <mat-card-actions>
+            </mat-card-actions>
+        </mat-card>
+        <mat-card class="card-style">
+            <mat-card-header>
+                <mat-card-title>Boards</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                Content
+            </mat-card-content>
+            <mat-card-actions>
+            </mat-card-actions>
+        </mat-card>
+        <mat-card class="card-style">
+            <mat-card-header>
+                <mat-card-title>Games</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                Content
+            </mat-card-content>
+            <mat-card-actions>
+            </mat-card-actions>
+        </mat-card>
+        <mat-card class="card-style">
+            <mat-card-header>
+                <mat-card-title>Achievements</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                Content
+            </mat-card-content>
+            <mat-card-actions>
+            </mat-card-actions>
+        </mat-card>
+        <mat-card class="card-style">
+            <mat-card-header>
+                <mat-card-title>Friends</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                Content
+            </mat-card-content>
+            <mat-card-actions>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

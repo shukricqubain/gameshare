@@ -17,6 +17,7 @@ import { AddThreadComponent } from './components/boards/threads/add-thread/add-t
 import { BoardsComponent } from './components/boards/boards.component';
 import { BoardComponent } from './components/boards/board/board.component';
 import { ThreadComponent } from './components/boards/threads/thread/thread.component';
+import { ViewUserProfileComponent } from './components/view-user-profile/view-user-profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -36,7 +37,8 @@ const routes: Routes = [
   { path: 'add-thread', component: AddThreadComponent, title: 'Add Thread'},
   { path: 'boards', component: BoardsComponent, title: 'Boards'},
   { path: 'board/:boardID', component: BoardComponent, title: 'Board'},
-  { path: 'thread/:threadID', component: ThreadComponent, title: 'Thread'}
+  { path: 'thread/:threadID', component: ThreadComponent, title: 'Thread'},
+  { path: 'view-user-profile/:userID', component: ViewUserProfileComponent, title: 'View User Profile'}
   
 ];
 

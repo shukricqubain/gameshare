@@ -61,6 +61,7 @@ import { UserGameComponent } from './components/user-profile/user-game/user-game
 import { UserThreadComponent } from './components/user-profile/user-thread/user-thread/user-thread.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ProfilePicturePopUpComponent } from './components/user-profile/profile-picture-pop-up/profile-picture-pop-up.component';
+import { ViewUserProfileComponent } from './components/view-user-profile/view-user-profile.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { ProfilePicturePopUpComponent } from './components/user-profile/profile-
     UserBoardComponent,
     UserGameComponent,
     UserThreadComponent,
-    ProfilePicturePopUpComponent
+    ProfilePicturePopUpComponent,
+    ViewUserProfileComponent
   ],
   imports: [
     BrowserModule,
