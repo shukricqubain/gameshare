@@ -167,6 +167,21 @@ async function getOneUserFriend(userFriendID) {
     }
 }
 
+// get one by sentUserID ReceivedUserID
+async function getUserSentAndUserReceivedID(req) {
+    try {
+        return await userFriend.findOne({
+            where: {
+                userIDSentRequest: req.userIDSentRequest,
+                userIDReceivedRequest: req.userIDReceivedRequest
+            },
+            raw: true
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 // update userFriend by userFriendID
 async function updateUserFriend(userFriendID, updatedUserFriend) {
     try {
@@ -204,6 +219,7 @@ module.exports = {
     findAll,
     createUserFriend,
     getOneUserFriend,
+    getUserSentAndUserReceivedID,
     updateUserFriend,
     deleteUserFriend
 }

@@ -80,6 +80,31 @@ router.get('/singleUserFriend/:userFriendID', async function (req, res) {
     }
 });
 
+// get all userFriends by userSentID and userReceivedIDs
+router.post('/getByUserSentAndUserReceivedIDs', async function (req, res) {
+    try {
+        if(req.body !== undefined){
+            let userIDSentRequest = req.body.userIDSentRequest;
+            let userIDReceivedRequest = req.body.userIDReceivedRequest;
+            if(userIDSentRequest && userIDReceivedRequest){
+                let userFriend = await userFriendController.getUserSentAndUserReceivedIDs({userIDSentRequest,userIDReceivedRequest});
+                if(userFriend != undefined && typeof userFriend !== 'string'){
+                    res.status(200).send(userFriend);
+                } else {
+                    res.status(404).send(userFriend);
+                }
+            } else {
+                res.status(400).send('The userIDSentRequest and userIDReceivedRequest are required.');
+            }            
+        } else {
+            res.status(500).send('The request came in undefined.');
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("There was an error fetching a single userFriend from the database.");
+    }
+});
+
 // edit a userFriend by userID
 router.put('/editUserFriend', async function (req, res) {
     try {

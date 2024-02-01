@@ -3,18 +3,19 @@
         <mat-spinner [diameter]="100"></mat-spinner>
     </div>
     <div *ngIf="userLoaded" class="header-container">
-        <img src="{{user.profilePicture}}" class="profile-class">
+        <img src="{{viewedUser.profilePicture}}" class="profile-class">
         <div class="user-container">
-            <h1>{{user.userName}}</h1>
+            <h1>{{viewedUser.userName}}</h1>
             <div>
-                <p>Member since {{formatDate(user.createdAt)}}</p>
+                <p>Member since {{formatDate(viewedUser.createdAt)}}</p>
             </div>
         </div>
+        <button mat-raised-button style="cursor: pointer;" color="primary" type="button" [disabled]="requestSent" (click)="sendFriendRequest()">{{buttonMessage}}</button>
     </div>
     <div class="card-container">
         <mat-card class="card-style">
             <mat-card-header>
-                <mat-card-title>Threads</mat-card-title>
+                <mat-card-title>Thread Highlights</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 Content
@@ -24,7 +25,7 @@
         </mat-card>
         <mat-card class="card-style">
             <mat-card-header>
-                <mat-card-title>Boards</mat-card-title>
+                <mat-card-title>Board Highlights</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 Content
@@ -34,7 +35,7 @@
         </mat-card>
         <mat-card class="card-style">
             <mat-card-header>
-                <mat-card-title>Games</mat-card-title>
+                <mat-card-title>Game Highlights</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 Content
@@ -44,7 +45,7 @@
         </mat-card>
         <mat-card class="card-style">
             <mat-card-header>
-                <mat-card-title>Achievements</mat-card-title>
+                <mat-card-title>Achievement Highlights</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 Content

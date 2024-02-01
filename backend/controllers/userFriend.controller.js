@@ -51,6 +51,20 @@ exports.findOne = async (req) => {
     }
 };
 
+// Get userFriends by sentUserID ReceivedUserID
+exports.getUserSentAndUserReceivedIDs = async (req) => {
+    try {
+        let userFriend = await userFriendService.getUserSentAndUserReceivedID(req);
+        if (userFriend == null || userFriend == undefined) {
+            return 'Cannot find user friend with specified userIDSentRequest and userIDReceivedRequest';
+        } else {
+            return userFriend;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 // Update a userFriend by their userFriendID
 exports.update = async (userFriendID, userFriend) => {
     try {

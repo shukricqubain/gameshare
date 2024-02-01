@@ -6,9 +6,10 @@
 .header-container {
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 100px;
     margin-left: 190px;
     margin-bottom: 10px;
+    align-items: center;
 
 }
 
