@@ -2,6 +2,28 @@ const db = require('../models/index');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const userFriend = db.userFriend;
+const sentBy = db.user;
+const receivedBy = db.user;
+userFriend.hasOne(sentBy, {
+    foreignKey: 'userID',
+    sourceKey: 'userIDSentRequest',
+    as: 'SentBy'
+});
+userFriend.hasOne(receivedBy, {
+    foreignKey: 'userID',
+    sourceKey: 'userIDReceivedRequest',
+    as: 'ReceivedBy'
+});
+sentBy.belongsTo(userFriend,{
+    foreignKey: 'userIDSentRequest',
+    sourceKey: 'userID',
+    as: 'SentBy'
+});
+receivedBy.belongsTo(userFriend,{
+    foreignKey: 'userIDReceivedRequest',
+    sourceKey: 'userID',
+    as: 'RecievedBy'
+});
 
 // find count of userFriends based on searchCriteria
 async function findCount(searchCriteria) {
@@ -36,8 +58,8 @@ async function findCount(searchCriteria) {
             if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
                 where = {
                     [Op.or]: {
-                        userIDSentRequest: userID,
-                        userIDReceivedRequest: userID,
+                        userIDSentRequest: searchCriteria.userID,
+                        userIDReceivedRequest: searchCriteria.userID,
                     }
                 };
             } else {
@@ -83,7 +105,10 @@ async function findAll(searchCriteria) {
                             userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
                             userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
                         },
-                        userID: searchCriteria.userID
+                        [Op.or]: {
+                            userIDSentRequest: searchCriteria.userID,
+                            userIDReceivedRequest: searchCriteria.userID,
+                        }
                     }
                 };
             } else {
@@ -99,8 +124,8 @@ async function findAll(searchCriteria) {
             if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
                 where = {
                     [Op.or]: {
-                        userIDSentRequest: userID,
-                        userIDReceivedRequest: userID,
+                        userIDSentRequest: searchCriteria.userID,
+                        userIDReceivedRequest: searchCriteria.userID,
                     }
                 };
             } else {
@@ -114,6 +139,22 @@ async function findAll(searchCriteria) {
             }
             return await userFriend.findAll({
                 where: where,
+                include: [
+                    {    
+                        model: sentBy,
+                        as: 'SentBy',
+                        attributes: [
+                            'userName'
+                        ],
+                    },
+                    {    
+                        model: receivedBy,
+                        as: 'ReceivedBy',
+                        attributes: [
+                            'userName'
+                        ],
+                    },
+                ],
                 order: [
                     [sort, sortDirection],
                     ['userFriendID', 'ASC']
@@ -124,6 +165,22 @@ async function findAll(searchCriteria) {
         } else {
             return await userFriend.findAll({
                 where: where,
+                include: [
+                    {    
+                        model: sentBy,
+                        as: 'SentBy',
+                        attributes: [
+                            'userName'
+                        ],
+                    },
+                    {    
+                        model: receivedBy,
+                        as: 'ReceivedBy',
+                        attributes: [
+                            'userName'
+                        ],
+                    },
+                ],
                 order: [
                     [sort, sortDirection],
                     ['userFriendID', 'ASC']
@@ -159,6 +216,22 @@ async function getOneUserFriend(userFriendID) {
         return await userFriend.findOne({
             where: {
                 userFriendID: userFriendID,
+            },
+            raw: true
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function findAllByUserID(userID){
+    try {
+        return await userFriend.findAll({
+            where: {
+                [Op.or]: {
+                    userIDSentRequest: userID,
+                    userIDReceivedRequest: userID,
+                }
             },
             raw: true
         });
@@ -220,6 +293,7 @@ module.exports = {
     createUserFriend,
     getOneUserFriend,
     getUserSentAndUserReceivedID,
+    findAllByUserID,
     updateUserFriend,
     deleteUserFriend
 }

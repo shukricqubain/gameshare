@@ -19,6 +19,10 @@ export class UserFriendService {
     return this.http.get(`${baseUrl}/singleUserFriend/${userFriendID}`);
   }
 
+  getAllByUserID(userID: any): Observable<any> {
+    return this.http.get(`${baseUrl}/getAllByUserID/${userID}`);
+  }
+
   getByUserSentAndUserReceivedIDs(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/getByUserSentAndUserReceivedIDs`, data);
   }

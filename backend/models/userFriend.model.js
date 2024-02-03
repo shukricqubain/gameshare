@@ -10,22 +10,22 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         userIDSentRequest: {
+            foriegnKey: true,
             type: Sequelize.INTEGER,
             validate:{
                 isInt: true
             }
         },
         userIDReceivedRequest: {
+            foriegnKey: true,
             type: Sequelize.INTEGER,
             validate:{
                 isInt: true
             }
         },
         areFriends: {
-            type: Sequelize.INTEGER,
-            validate:{
-                isInt: true
-            }
+            type: Sequelize.ENUM,
+            values: ['accepted', 'pending', 'rejected']
         },
         createdBy: {
             type: Sequelize.INTEGER,

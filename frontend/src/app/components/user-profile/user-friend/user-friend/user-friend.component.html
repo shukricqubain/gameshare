@@ -1,0 +1,39 @@
+<mat-card>
+    <mat-card-content class="friend-content">
+        <div [ngSwitch]="userFriend.userIDSentRequest == currentUser.userID">
+            <div *ngSwitchCase="true">
+                <div style="margin-left: 15px;">
+                    <mat-card-title>Friend Request Sent</mat-card-title>
+                    <mat-card-subtitle>Sent Date: {{formatDate(userFriend.createdAt)}}</mat-card-subtitle>
+                    <mat-card-subtitle>Recieved By: {{userFriend.ReceivedBy?.userName}}</mat-card-subtitle>
+                </div>
+            </div>
+            <div *ngSwitchCase="false">
+                <div style="margin-left: 15px;">
+                    <mat-card-title>Friend Request Received</mat-card-title>
+                    <mat-card-subtitle>Recieved Date: {{formatDate(userFriend.createdAt)}}</mat-card-subtitle>
+                    <mat-card-subtitle>Sent By: {{userFriend.SentBy?.userName}}</mat-card-subtitle>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <div [ngSwitch]="userFriend.userIDSentRequest == currentUser.userID">
+            <div *ngSwitchCase="true" class="friend-actions-container">
+                <mat-button-toggle-group  [value]="userFriend.areFriends">
+                    <mat-button-toggle disabled value="accepted">Accepted</mat-button-toggle>
+                    <mat-button-toggle disabled value="rejected">Rejected</mat-button-toggle>
+                </mat-button-toggle-group>
+                <mat-icon class="icon-style" matTooltip="Click to delete a friend request." color="warn" (click)="deleteFriendRequest(userFriend)">
+                            delete
+                </mat-icon>
+            </div>
+            <div *ngSwitchCase="false" class="friend-actions-container">
+                <mat-button-toggle-group [value]="userFriend.areFriends" (change)="updateFriendStatus($event.value, userFriend)" matTooltip="Update Friend Request.">
+                    <mat-button-toggle value="accepted">Accept</mat-button-toggle>
+                    <mat-button-toggle value="rejected">Reject</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </div>
+    </mat-card-actions>
+</mat-card>

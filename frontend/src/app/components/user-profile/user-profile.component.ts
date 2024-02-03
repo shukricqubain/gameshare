@@ -30,6 +30,8 @@ import { Router } from '@angular/router';
 import { Achievement } from 'src/app/models/achievement.model';
 import { FilterFormPopUpComponent } from '../filter-form-pop-up/filter-form-pop-up.component';
 import { ProfilePicturePopUpComponent } from './profile-picture-pop-up/profile-picture-pop-up.component';
+import { UserFriend } from 'src/app/models/userFriend.model';
+import { UserFriendService } from 'src/app/services/userFriend.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -53,6 +55,7 @@ export class UserProfileComponent {
     private boardService: BoardService,
     private threadService: ThreadService,
     private userThreadService: UserThreadService,
+    private userFriendService: UserFriendService,
     private matDialog: MatDialog,
     private router: Router,
   ) {
@@ -157,6 +160,22 @@ export class UserProfileComponent {
   userThreads: Thread[] = [];
   allThreadNames: Thread[] = [];
 
+  /** User Friend Form Section */
+  friendSearchCriteria = new FormGroup({
+    searchTerm: new FormControl(''),
+    sort: new FormControl('userFriendID', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
+    direction: new FormControl('asc', [Validators.required]),
+    limit: new FormControl(5, [Validators.required]),
+    page: new FormControl(0, [Validators.required]),
+    userID: new FormControl('')
+  });
+  userFriendsLoaded: boolean = false;
+  userFriends: UserFriend[] = [];
+  totalUserFriends = 0;
+  userFriendsPageSize = 5;
+  userFriendsPageIndex = 0;
+
   private currentTabIndex = 0;
 
   async ngAfterViewInit() {
@@ -191,7 +210,11 @@ export class UserProfileComponent {
       await this.loadAchievementNames();
       await this.loadAllUserAchievements();
 
-    } else if (this.currentTabIndex == 4) {
+    } else if (this.currentTabIndex == 4 && this.userFriendsLoaded == false){
+      
+      await this.loadUserFriends();
+      
+    } else if (this.currentTabIndex == 5) {
 
       this.changeForm();
 
@@ -316,6 +339,7 @@ export class UserProfileComponent {
     this.userGameSearchCriteria.controls.userID.setValue(data.userID);
     this.boardSearchCriteria.controls.userID.patchValue(data.userID);
     this.threadSearchCriteria.controls.userID.patchValue(data.userID);
+    this.friendSearchCriteria.controls.userID.patchValue(data.userID);
     this.userLoaded = true;
   }
 
@@ -772,4 +796,55 @@ export class UserProfileComponent {
     }
   }
 
+  /** User Friends Section */
+  async applyFriendSearch() {
+    this.userFriendsLoaded = false;
+    await this.loadUserFriends();
+  }
+
+  async clearFriendSearch() {
+    this.friendSearchCriteria.controls.searchTerm.patchValue('');
+    this.friendSearchCriteria.controls.sort.patchValue('userFriendID');
+    this.friendSearchCriteria.controls.pagination.patchValue('true');
+    this.friendSearchCriteria.controls.direction.patchValue('asc');
+    this.friendSearchCriteria.controls.limit.patchValue(5);
+    this.friendSearchCriteria.controls.page.patchValue(0);
+    this.userFriendsPageIndex = 0;
+    this.userFriendsPageSize = 5;
+    this.userFriendsLoaded = false;
+    await this.loadUserFriends();
+  }
+
+  async loadUserFriends(loadFriendEvent?: any){
+    try {
+      if (!this.userFriendsLoaded || (loadFriendEvent != undefined && loadFriendEvent === 'loadFriendEvent')) {
+        let result = await lastValueFrom(this.userFriendService.getAll(this.friendSearchCriteria.value).pipe());
+        if (result != null && result != undefined) {
+          if (result != undefined && result.message === 'No data in user friend table to fetch.') {
+            this.userFriends = [];
+            this.totalUserFriends = 0;
+          } else {
+            this.userFriends = result.data;
+            this.totalUserFriends = result.userFriendCount;
+          }
+          this.userFriendsLoaded = true;
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      this.userThreads = [];
+      this.snackBar.open('Error loading user threads.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
+
+  onUserFriendsPageChange(event: PageEvent) {
+    this.userFriendsPageIndex = event.pageIndex;
+    this.userFriendsPageSize = event.pageSize;
+    this.threadSearchCriteria.controls.page.patchValue(this.userThreadsPageIndex);
+    this.threadSearchCriteria.controls.limit.patchValue(this.userThreadsPageSize);
+    this.userFriendsLoaded = false;
+    this.loadUserFriends();
+  }
 }

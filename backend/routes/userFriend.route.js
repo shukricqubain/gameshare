@@ -80,6 +80,26 @@ router.get('/singleUserFriend/:userFriendID', async function (req, res) {
     }
 });
 
+// get all userFriends by userID
+router.get('/getAllByUserID/:userID', async function (req, res) {
+    try {
+        if(req.params.userID !== undefined){
+            let userID = Number(req.params.userID);
+            let userFriends = await userFriendController.findAllByUserID(userID);
+            if(userFriends != undefined && typeof userFriends !== 'string'){
+                res.status(200).send(userFriends);
+            } else {
+                res.status(404).send(userFriends);
+            }
+        } else {
+            res.status(400).send('userID is required.');
+        }
+    } catch(err){
+        console.error(err);
+        res.status(500).send("There was an error fetching all userFriends from the database by userID.");
+    }
+});
+
 // get all userFriends by userSentID and userReceivedIDs
 router.post('/getByUserSentAndUserReceivedIDs', async function (req, res) {
     try {
@@ -91,7 +111,9 @@ router.post('/getByUserSentAndUserReceivedIDs', async function (req, res) {
                 if(userFriend != undefined && typeof userFriend !== 'string'){
                     res.status(200).send(userFriend);
                 } else {
-                    res.status(404).send(userFriend);
+                    res.status(200).json({
+                        message: userFriend
+                    });
                 }
             } else {
                 res.status(400).send('The userIDSentRequest and userIDReceivedRequest are required.');

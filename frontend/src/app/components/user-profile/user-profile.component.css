@@ -160,3 +160,22 @@
     display: flex;
     justify-content: center;
 }
+
+.user-friend-container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.no-friends-container {
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-color: #673ab7;
+    border-radius: 10px;
+    height: 400px;
+}
+
+.friend-margin {
+    padding: 3px 3px 3px 3px;
+}

@@ -46,6 +46,11 @@ export class PopUpComponent {
           this.model = this.data.model;
           this.dataLoaded = true;
           break;
+        case ('userFriend'):
+          this.model = 'friend request sent to';
+          this.name = this.data.element.ReceivedBy.userName;
+          this.dataLoaded = true;
+          break;
         case ('userAchievement'):
           this.allAchievementNames = this.data.allAchievementNames;
           let achievementID = this.data.element.achievementID;

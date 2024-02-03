@@ -37,6 +37,20 @@ exports.findAll = async (searchCriteria) => {
     }
 }
 
+// Get all userFriends by userID
+exports.findAllByUserID = async (userID) => {
+    try {
+        let allUserFriends = await userFriendService.findAllByUserID(userID);
+        if (allUserFriends.length > 0) {
+            return allUserFriends;
+        } else {
+            return { message: 'No data in user friend table to fetch based on userID.' };
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 // Get all userFriends by userFriendID
 exports.findOne = async (req) => {
     try {

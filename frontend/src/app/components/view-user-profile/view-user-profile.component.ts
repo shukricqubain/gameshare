@@ -115,6 +115,8 @@ export class ViewUserProfileComponent {
   }
 
   handleCreateUserFriend(data: any){
+    this.requestSent = true;
+    this.alreadyChecked = true;
     this.snackBar.open(`Successfully sent friend request.`, 'dismiss', {
       duration: 3000
     });
@@ -133,13 +135,16 @@ export class ViewUserProfileComponent {
         let userIDSentRequest = this.currentUser.userID;
         let userIDReceivedRequest = this.viewedUser.userID;
         let result = await lastValueFrom(this.userFriendService.getByUserSentAndUserReceivedIDs({userIDSentRequest,userIDReceivedRequest}).pipe());
-        if(result != undefined){
+        if(result != undefined && result.message == undefined){
           if(result.areFriends){
             this.buttonMessage = 'Already Friends'
           } else {
             this.buttonMessage = 'Request Already Sent'
           }
           this.requestSent = true;
+          this.alreadyChecked = true;
+        } else if (result != undefined && result.message != undefined){
+          this.requestSent = false;
           this.alreadyChecked = true;
         } else {
           this.alreadyChecked = true;
