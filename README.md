@@ -122,7 +122,7 @@ Use this space to show useful examples of how a project can be used. Additional 
   - [x] Add restrictions for user role updation in user creation/edit
      
 ### Version 1.2
-- [ ] User profile page
+- [x] User profile page
    - [x] Restrict dimensions in user profile, so the width won't resize.
    - [x] Create and display default message when user has no boards, threads, games, and or achievements.
    - [x] Add pagination to user boards, threads, and games pages.
@@ -136,9 +136,9 @@ Use this space to show useful examples of how a project can be used. Additional 
       - [x] Show percentage of people who have obtained the achievement in the application.
       - [x] Show completion date of the achievement.
       - [x] Change the display of the achievement as user makes progress.
-   - [ ] User Friends Page
-     - [ ] Allow users to befriend other users when viewing their profile
-     - [ ] Allow users to view anothers profile by clicking thier userName in a thread post or in user friends page.
+   - [x] User Friends Page
+     - [x] Allow users to befriend other users when viewing their profile
+     - [x] Allow users to view anothers profile by clicking thier userName in a thread post or in user friends page.
      - [x] Basic CRUD for userFriends.
 
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
