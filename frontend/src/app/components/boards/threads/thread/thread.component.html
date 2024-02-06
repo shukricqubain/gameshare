@@ -20,40 +20,22 @@
         <br>
         <div fxLayout="row" fxFlex.md="70" fxLayoutWrap class="thread-item-container mat-elevation-z4">
             <div fxFlex *ngFor="let threadItem of allThreadItems" class="thread-item">
-                <ng-container
-                    *ngIf="threadItem.depth != undefined && threadItem.depth > 0; then applyDepth; else noDepth"></ng-container>
-                <ng-template #applyDepth>
-                    <mat-card [ngStyle]="{'margin-left': threadItem.depthStyle}">
-                        <mat-card-header>
-                            <mat-card-title class="username-style"
-                                (click)="viewUserProfile(threadItem)">{{getUserNameByUserID(threadItem.userID)}}</mat-card-title>
-                            <mat-card-subtitle>{{threadItem?.threadMessage}}</mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-actions>
-                            <button mat-button (click)="replyToThreadItem(threadItem)">Reply</button>
-                            <button *ngIf="this.user.userID == threadItem.userID" mat-button
-                                (click)="editThreadItem(threadItem)">Edit</button>
-                            <button *ngIf="this.user.userID == threadItem.userID" mat-button
-                                (click)="deleteThreadItem(threadItem)">Delete</button>
-                        </mat-card-actions>
-                    </mat-card>
-                </ng-template>
-                <ng-template #noDepth>
-                    <mat-card>
-                        <mat-card-header>
-                            <mat-card-title class="username-style"
-                                (click)="viewUserProfile(threadItem)">{{getUserNameByUserID(threadItem.userID)}}</mat-card-title>
-                            <mat-card-subtitle>{{threadItem?.threadMessage}}</mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-actions>
-                            <button mat-button (click)="replyToThreadItem(threadItem)">Reply</button>
-                            <button *ngIf="this.user.userID == threadItem.userID" mat-button
-                                (click)="editThreadItem(threadItem)">Edit</button>
-                            <button *ngIf="this.user.userID == threadItem.userID" mat-button
-                                (click)="deleteThreadItem(threadItem)">Delete</button>
-                        </mat-card-actions>
-                    </mat-card>
-                </ng-template>
+                <mat-card [ngStyle]="{'margin-left': threadItem.depthStyle}">
+                    <mat-card-header>
+                        <mat-card-title
+                            [ngClass]="{'is-user-style': user.userID == threadItem.userID, 'not-user-style': user.userID != threadItem.userID}"
+                            (click)="viewUserProfile(threadItem)">{{getUserNameByUserID(threadItem.userID)}}
+                        </mat-card-title>
+                        <mat-card-subtitle>{{threadItem?.threadMessage}}</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-actions>
+                        <button mat-button (click)="replyToThreadItem(threadItem)">Reply</button>
+                        <button *ngIf="this.user.userID == threadItem.userID" mat-button
+                            (click)="editThreadItem(threadItem)">Edit</button>
+                        <button *ngIf="this.user.userID == threadItem.userID" mat-button
+                            (click)="deleteThreadItem(threadItem)">Delete</button>
+                    </mat-card-actions>
+                </mat-card>
             </div>
         </div>
     </div>

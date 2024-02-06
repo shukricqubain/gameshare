@@ -91,11 +91,10 @@ export class ViewUserProfileComponent {
   }
 
   sendFriendRequest(){
-    console.log('send invite')
     let newFriend: UserFriend = {
       userIDSentRequest: 0,
       userIDReceivedRequest: 0,
-      areFriends: 0,
+      areFriends: 'pending',
       createdBy: 0,
       updatedBy: 0,
       createdAt: '',
@@ -136,7 +135,7 @@ export class ViewUserProfileComponent {
         let userIDReceivedRequest = this.viewedUser.userID;
         let result = await lastValueFrom(this.userFriendService.getByUserSentAndUserReceivedIDs({userIDSentRequest,userIDReceivedRequest}).pipe());
         if(result != undefined && result.message == undefined){
-          if(result.areFriends){
+          if(result.areFriends === 'accepted'){
             this.buttonMessage = 'Already Friends'
           } else {
             this.buttonMessage = 'Request Already Sent'

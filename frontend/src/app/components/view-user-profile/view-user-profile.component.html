@@ -3,7 +3,19 @@
         <mat-spinner [diameter]="100"></mat-spinner>
     </div>
     <div *ngIf="userLoaded" class="header-container">
-        <img src="{{viewedUser.profilePicture}}" class="profile-class">
+        <ng-container *ngIf="viewedUser.profilePicture != null; then hasImage; else blankImage"></ng-container>
+        <ng-template #hasImage>
+            <div class="image-cropper">
+                <img src="{{viewedUser.profilePicture}}" class="profile-class">
+            </div>
+        </ng-template>
+        <ng-template #blankImage>
+            <div class="profile-icon">
+                <mat-icon [inline]="true">
+                    account_circle
+                </mat-icon>
+            </div>
+        </ng-template>
         <div class="user-container">
             <h1>{{viewedUser.userName}}</h1>
             <div>

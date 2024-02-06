@@ -283,10 +283,12 @@ export class ThreadComponent {
   }
 
   viewUserProfile(element: any){
-    this.router.navigate([`/view-user-profile/${element.userID}`], 
-    { state: {
-        userID: element.userID
-      }
-    });
+    if(element.userID != this.user.userID){
+      this.router.navigate([`/view-user-profile/${element.userID}`], 
+      { state: {
+          userID: element.userID
+        }
+      });
+    }
   }
 }

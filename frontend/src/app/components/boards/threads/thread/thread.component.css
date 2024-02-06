@@ -32,9 +32,13 @@
     margin: 10px 10px 10px 10px;
 }
 
-.username-style {
-    cursor: pointer; 
+.is-user-style {
+    color: black;
+}
+
+.not-user-style {
     color: #673ab7;
+    cursor: pointer;
 }
 
 .mat-mdc-card-title{

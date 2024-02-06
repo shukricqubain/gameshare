@@ -6,7 +6,7 @@ export class UserFriend {
     userIDReceivedRequest?: Number;
     SentBy?: User;
     ReceivedBy?: User;
-    areFriends?: Number;
+    areFriends?: String;
     createdBy?: Number;
     updatedBy?: Number;
     createdAt?: String;

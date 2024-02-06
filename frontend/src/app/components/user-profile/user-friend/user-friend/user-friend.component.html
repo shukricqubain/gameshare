@@ -24,9 +24,11 @@
                     <mat-button-toggle disabled value="accepted">Accepted</mat-button-toggle>
                     <mat-button-toggle disabled value="rejected">Rejected</mat-button-toggle>
                 </mat-button-toggle-group>
-                <mat-icon class="icon-style" matTooltip="Click to delete a friend request." color="warn" (click)="deleteFriendRequest(userFriend)">
-                            delete
-                </mat-icon>
+                <div [hidden]="userFriend.areFriends !== 'pending'">
+                    <mat-icon  class="icon-style" matTooltip="Click to delete a friend request." color="warn" (click)="deleteFriendRequest(userFriend)">
+                        delete
+                    </mat-icon>
+                </div>
             </div>
             <div *ngSwitchCase="false" class="friend-actions-container">
                 <mat-button-toggle-group [value]="userFriend.areFriends" (change)="updateFriendStatus($event.value, userFriend)" matTooltip="Update Friend Request.">
