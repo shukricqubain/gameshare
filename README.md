@@ -19,8 +19,7 @@ contribute to discussion boards about games, and interact with friends in the pl
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Below is a list of instructions to set up this project locally.
 
 <!-- Prerequisites -->
 ### Prerequisites
@@ -35,22 +34,34 @@ Listed below are a list of software you will need to install to run this project
 <!-- Installation -->
 ### Installation
 
-todo
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+1. Clone the repo
+   ```sh
+   https://github.com/shukricqubain/gameshare.git
+   ```
+2. Install NPM packages
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+   Open two terminals, so we can install npm packages for both the frontend and the backend.
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   C:\Users\user\Desktop\gameshare> cd frontend
+   C:\Users\user\Desktop\gameshare\frontend>
+   C:\Users\user\Desktop\gameshare\frontend> npm install
    ```
-3. Install NPM packages
    ```sh
-   npm install
+   C:\Users\user\Desktop\gameshare> cd backend
+   C:\Users\user\Desktop\gameshare\backend>
+    C:\Users\user\Desktop\gameshare\backend> npm install
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+3. Setup the MySQL database
+
+   Open the following link [Import-MySQL-Database] and follow the import tutorial.
+   - At step 2 in the tutorial please select "Import from Self-Contained File" and upload the testdbDump.sql.
+      - Note: This file is located in the database folder of gameshare.
+   - At step 4 in the tutorial please select the "New" button instead of the default target schema and name the target schema as 'demodb'.
+      - Note: If you named it anything else be sure to update the "DB" property in the db.config.js file, so the backend can connect properly.
+   - Ignore step 5.
+   - At step 6, please select "Dump Structure and Data: include the table structure and the data in the tables."
+   - Lastly, at step 7, Click Start Import.
+
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -166,5 +177,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Install-Node-npm]: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 [Install-Angular]: https://angular.io/guide/setup-local
 [Install-MySQL]: https://www.mysql.com/products/workbench/
+[Import-MySQL-Database]: https://www.databasestar.com/mysql-workbench-export-database/#How_to_Import_a_MySQL_Database
 
 
