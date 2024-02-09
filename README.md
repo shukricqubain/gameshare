@@ -12,8 +12,8 @@ contribute to discussion boards about games, and interact with friends in the pl
 
 * [![Angular][Angular.io]][Angular-url]
 * [![Node.js][Node.io]][Node-url]
-* [Express][Express-url]
-* [MySQL][MySQL-url]
+* [![Express][Express.io]][Express-url]
+* [![MySQL][MySQL.io]][MySQL-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 
 <!-- GETTING STARTED -->
@@ -49,7 +49,7 @@ Listed below are a list of software you will need to install to run this project
    ```sh
    C:\Users\user\Desktop\gameshare> cd backend
    C:\Users\user\Desktop\gameshare\backend>
-    C:\Users\user\Desktop\gameshare\backend> npm install
+   C:\Users\user\Desktop\gameshare\backend> npm install
    ```
 3. Setup the MySQL database
 
@@ -170,8 +170,11 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
 [Angular-url]: https://angular.io/
 [Node-url]: https://nodejs.org/en
+[Node.io]: https://img.shields.io/badge/Node.js-%23026e00?style=for-the-badge&logo=node.js&labelColor=%23026e00
 [Express-url]: https://expressjs.com/
+[Express.io]: https://img.shields.io/badge/Express-%23ffffff?style=for-the-badge&logo=express&labelColor=%23026e00
 [MySQL-url]: https://www.mysql.com/
+[MySQL.io]: https://img.shields.io/badge/MySQL-%23f29111?style=for-the-badge&logo=mysql&labelColor=%2300758f
 [Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
 [Bootstrap-url]: https://getbootstrap.com
 [Install-Node-npm]: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
