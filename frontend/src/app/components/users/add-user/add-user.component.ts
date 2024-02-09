@@ -41,6 +41,8 @@ export class AddUserComponent {
 
   isEdit: boolean = false;
   showPassword: boolean = false;
+  minDate: Date;
+  emailValidation = '^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$';
   
   ngOnInit(){
     if(this.data !== null && this.data != undefined && this.data.isEdit == true){
@@ -66,6 +68,7 @@ export class AddUserComponent {
       this.addUserForm.controls.createdAt.patchValue(createdAt);
       this.addUserForm.controls.updatedAt.patchValue(updatedAt);
     }
+    this.setupMinDate();
   }
   
   async onSubmit(){
@@ -166,6 +169,15 @@ export class AddUserComponent {
     } else {
       this.dialogRef?.close({event:'Cancel'});
     }
+  }
+
+  setupMinDate(){
+    ///setup minimum date of birth for user to be 13
+    let currentDate = new Date();
+    let year = currentDate.getFullYear() - 13;
+    let month = currentDate.getMonth() + 1;
+    let day = currentDate.getDate();
+    this.minDate = new Date(`${year}-${month}-${day}`);
   }
 
 }

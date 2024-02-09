@@ -842,8 +842,8 @@ export class UserProfileComponent {
   onUserFriendsPageChange(event: PageEvent) {
     this.userFriendsPageIndex = event.pageIndex;
     this.userFriendsPageSize = event.pageSize;
-    this.threadSearchCriteria.controls.page.patchValue(this.userThreadsPageIndex);
-    this.threadSearchCriteria.controls.limit.patchValue(this.userThreadsPageSize);
+    this.friendSearchCriteria.controls.page.setValue(this.userFriendsPageIndex);
+    this.friendSearchCriteria.controls.limit.setValue(this.userFriendsPageSize);
     this.userFriendsLoaded = false;
     this.loadUserFriends();
   }

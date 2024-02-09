@@ -36,7 +36,7 @@
                 <div class="form-row">
                     <mat-form-field appearance="outline">
                         <label>Email</label>
-                        <input matInput name="email" id="email" type="text" formControlName="email"
+                        <input matInput name="email" id="email" type="text" formControlName="email" [pattern]="emailValidation"
                             placeholder="Enter email." required />
                     </mat-form-field>
                     <mat-form-field appearance="outline" style="margin-left:10px;">
@@ -46,7 +46,7 @@
                     </mat-form-field>
                 </div>
                 <div class="form-row">
-                    <input [matDatepicker]="picker" placeholder="Choose a date" required formControlName="dateOfBirth" />
+                    <input [matDatepicker]="picker" placeholder="Choose a date" [max]="minDate" required formControlName="dateOfBirth" />
                     <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                     <mat-form-field appearance="outline" style="margin-left:10px;">

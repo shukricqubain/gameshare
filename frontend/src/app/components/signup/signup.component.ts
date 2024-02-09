@@ -45,12 +45,7 @@ export class SignupComponent {
     let data: any = this.location.getState();
     this.signupForm.controls.userName.patchValue(data.userPass.userName);
     this.signupForm.controls.password.patchValue(data.userPass.password);
-    ///setup minimum date of birth for user to be 13
-    let currentDate = new Date();
-    let year = currentDate.getFullYear() - 13;
-    let month = currentDate.getMonth() + 1;
-    let day = currentDate.getDate();
-    this.minDate = new Date(`${year}-${month}-${day}`);
+    this.setupMinDate();
   }
 
   onSubmit(){
@@ -103,4 +98,14 @@ export class SignupComponent {
   redirect(){
     this.router.navigate(['/']);
   }
+
+  setupMinDate(){
+    ///setup minimum date of birth for user to be 13
+    let currentDate = new Date();
+    let year = currentDate.getFullYear() - 13;
+    let month = currentDate.getMonth() + 1;
+    let day = currentDate.getDate();
+    this.minDate = new Date(`${year}-${month}-${day}`);
+  }
+  
 }
