@@ -152,6 +152,36 @@ Use this space to show useful examples of how a project can be used. Additional 
      - [x] Allow users to view anothers profile by clicking thier userName in a thread post or in user friends page.
      - [x] Basic CRUD for userFriends.
 
+### Version 1.3
+- [ ] User Profile Task/Enhancements
+   - [ ] User Friends
+      - [ ] Usernames in the friends tab should be clickable and reroute user to View user page.
+      - [ ] Each friend material card should have their profile picture displayed within a circle icon.
+      - [ ] Each friend material card should indicate visually if they are currently friends.
+      - [ ] Each friend material card should display the date two users became friends.
+      - [ ] Change the accept/reject toggle button to a check and cross icon instead.
+      - [ ] After becoming friends the check and cross icon should disappear and a friend icon should appear.
+      - [ ] Upon clicking the friend icon the user may unfriend another user.
+      - [ ] Each friend material card should display the mutual friends between two users. 
+   - [ ] Chat/Messages
+      - [ ] New tab should be created to display active messages between the current user and each of their friends.
+      - [ ] The user should be able to send images in the chat.
+      - [ ] There should be a clickable icon to create a new chat between one or more friends (Selected via a dropdown).
+      - [ ] Each message should display the time it was delivered.
+      - [ ] Each chat should visually display whether new messages have been read by the user.
+- [ ] View User Page Task/Enhancements
+   - [ ] Game Highlights
+      - [ ] Should display recently updated games in a vertical list of material cards.
+      - [ ] Each game should display its game cover along with the user's enjoyment rating and progress (measured via achievement completion).
+      - [ ] Material card should contain an information icon which displays game information when clicked.
+   - [ ] Thread Highlights
+      - [ ] Should display each thread in a vertical list of material cards a user has been active in recently (measured via posting or editing).
+      - [ ] The thread name should be clickable and reroute the user to the thread.
+      - [ ] Should display an icon indicting if the user is following threads displayed in the list.
+- [ ] Miscellanious Tasks
+   - [ ] Add the ability to upload images in a thread.
+   - [ ] Add user's profile picture to the header icon.
+
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
 
 <!-- LICENSE -->
