@@ -7,6 +7,8 @@ import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { UserFriendService } from 'src/app/services/userFriend.service';
 import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-user-friend',
@@ -23,14 +25,18 @@ export class UserFriendComponent {
     private snackBar: MatSnackBar,
     private userFriendService: UserFriendService,
     private dateFunction: DateFunctionsService,
+    private userService: UserService,
     private matDialog: MatDialog,
     private router: Router,
-  ){}
+  ) { }
 
-  ngOnInit(){
+  profilePicture: string = '';
+
+  async ngOnInit() {
+    await this.loadUserFriendProfilePicture();
   }
 
-  updateFriendStatus($event: any, userFriend: UserFriend){
+  updateFriendStatus($event: any, userFriend: UserFriend) {
     let updatedUserFriend = {
       userFriendID: userFriend.userFriendID,
       userIDReceivedRequest: userFriend.userIDReceivedRequest,
@@ -51,7 +57,7 @@ export class UserFriendComponent {
     return formattedDate;
   }
 
-  public deleteFriendRequest(userFriend: UserFriend){
+  public deleteFriendRequest(userFriend: UserFriend) {
     const dialogRefDelete = this.matDialog.open(PopUpComponent, {
       width: '100%',
       disableClose: true,
@@ -78,39 +84,79 @@ export class UserFriendComponent {
     });
   }
 
-  public handleErrorResponse(data: any){
+  public handleErrorResponse(data: any) {
     this.snackBar.open(data.message, 'dismiss', {
       duration: 2000
     });
   }
 
-  public handleDeleteResponse(data: any){
+  public handleDeleteResponse(data: any) {
     if (data != null) {
       this.loadFriendEvent.next('loadFriendEvent');
     }
   }
 
-  public handleUpdateResponse(data: any){
-    if(data != null){
+  public handleUpdateResponse(data: any) {
+    if (data != null) {
       this.loadFriendEvent.next('loadFriendEvent');
     }
   }
 
-  viewUserProfile(element: any){
-    if(element.userIDSentRequest == this.currentUser.userID){
-      this.router.navigate([`/view-user-profile/${element.userIDReceivedRequest}`], 
-      { state: {
-          userID: element.userIDReceivedRequest
-        }
-      });
-    } else if(element.userIDReceivedRequest == this.currentUser.userID){
-      this.router.navigate([`/view-user-profile/${element.userIDSentRequest}`], 
-      { state: {
-          userID: element.userIDSentRequest
-        }
-      });
+  viewUserProfile(element: any) {
+    if (element.userIDSentRequest == this.currentUser.userID) {
+      this.router.navigate([`/view-user-profile/${element.userIDReceivedRequest}`],
+        {
+          state: {
+            userID: element.userIDReceivedRequest
+          }
+        });
+    } else if (element.userIDReceivedRequest == this.currentUser.userID) {
+      this.router.navigate([`/view-user-profile/${element.userIDSentRequest}`],
+        {
+          state: {
+            userID: element.userIDSentRequest
+          }
+        });
     } else {
       this.snackBar.open(`Both sentID ${element.userIDSentRequest} and receivedID ${element.userIDReceivedRequest} not matching current user.`, 'dismiss', {
+        duration: 3000
+      });
+    }
+  }
+
+  async loadUserFriendProfilePicture() {
+    if (this.userFriend.userIDSentRequest == this.currentUser.userID) {
+      try {
+        let result = await lastValueFrom(this.userService.get(this.userFriend.userIDReceivedRequest).pipe());
+        if(result != undefined && result != null && result.profilePicture != undefined && result.profilePicture != null){
+          this.profilePicture = result.profilePicture;
+        } else {
+          this.snackBar.open(`Error loading profile picture for ${this.userFriend.ReceivedBy}`, 'dismiss', {
+            duration: 3000
+          });
+        }
+      } catch (err) {
+        this.snackBar.open(`Error loading profile picture for ${this.userFriend.ReceivedBy}`, 'dismiss', {
+          duration: 3000
+        });
+      }
+    } else if (this.userFriend.userIDReceivedRequest == this.currentUser.userID) {
+      try {
+        let result = await lastValueFrom(this.userService.get(this.userFriend.userIDSentRequest).pipe());
+        if(result != undefined && result != null && result.profilePicture != undefined && result.profilePicture != null){
+          this.profilePicture = result.profilePicture;
+        } else {
+          this.snackBar.open(`Error loading profile picture for ${this.userFriend.ReceivedBy}`, 'dismiss', {
+            duration: 3000
+          });
+        }
+      } catch (err) {
+        this.snackBar.open(`Error loading profile picture for ${this.userFriend.SentBy}`, 'dismiss', {
+          duration: 3000
+        });
+      }
+    } else {
+      this.snackBar.open(`Both sentID ${this.userFriend.userIDSentRequest} and receivedID ${this.userFriend.userIDReceivedRequest} not matching current user.`, 'dismiss', {
         duration: 3000
       });
     }

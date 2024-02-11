@@ -24,3 +24,19 @@
     cursor: pointer;
     color: #673ab7;
 }
+
+.profile-icon {
+    font-size: 100px;
+    background-size: 100px 100px;
+}
+
+.image-cropper {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    background-size: 100px 100px;
+
+}
