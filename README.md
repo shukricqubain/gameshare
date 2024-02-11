@@ -155,7 +155,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 ### Version 1.3
 - [ ] User Profile Task/Enhancements
    - [ ] User Friends
-      - [ ] Usernames in the friends tab should be clickable and reroute user to View user page.
+      - [x] Usernames in the friends tab should be clickable and reroute user to View user page.
       - [ ] Each friend material card should have their profile picture displayed within a circle icon.
       - [ ] Each friend material card should indicate visually if they are currently friends.
       - [ ] Each friend material card should display the date two users became friends.
