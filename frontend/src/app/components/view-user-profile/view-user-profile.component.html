@@ -3,7 +3,7 @@
         <mat-spinner [diameter]="100"></mat-spinner>
     </div>
     <div *ngIf="userLoaded" class="header-container">
-        <ng-container *ngIf="viewedUser.profilePicture != null; then hasImage; else blankImage"></ng-container>
+        <ng-container *ngIf="viewedUser.profilePicture != null && viewedUser.profilePicture != undefined && viewedUser.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
         <ng-template #hasImage>
             <div class="image-cropper">
                 <img src="{{viewedUser.profilePicture}}" class="profile-class">

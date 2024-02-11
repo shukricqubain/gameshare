@@ -6,6 +6,7 @@ import { UserFriend } from 'src/app/models/userFriend.model';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { UserFriendService } from 'src/app/services/userFriend.service';
 import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-friend',
@@ -23,6 +24,7 @@ export class UserFriendComponent {
     private userFriendService: UserFriendService,
     private dateFunction: DateFunctionsService,
     private matDialog: MatDialog,
+    private router: Router,
   ){}
 
   ngOnInit(){
@@ -91,6 +93,26 @@ export class UserFriendComponent {
   public handleUpdateResponse(data: any){
     if(data != null){
       this.loadFriendEvent.next('loadFriendEvent');
+    }
+  }
+
+  viewUserProfile(element: any){
+    if(element.userIDSentRequest == this.currentUser.userID){
+      this.router.navigate([`/view-user-profile/${element.userIDReceivedRequest}`], 
+      { state: {
+          userID: element.userIDReceivedRequest
+        }
+      });
+    } else if(element.userIDReceivedRequest == this.currentUser.userID){
+      this.router.navigate([`/view-user-profile/${element.userIDSentRequest}`], 
+      { state: {
+          userID: element.userIDSentRequest
+        }
+      });
+    } else {
+      this.snackBar.open(`Both sentID ${element.userIDSentRequest} and receivedID ${element.userIDReceivedRequest} not matching current user.`, 'dismiss', {
+        duration: 3000
+      });
     }
   }
 }

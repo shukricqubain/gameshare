@@ -242,6 +242,9 @@ router.get('/singleUser/:userID', async function (req, res) {
             let userID = Number(req.params.userID);
             let user = await userController.findOne(userID);
             if (user !== undefined && typeof user !== 'string') {
+                if(user.profilePicture == undefined || user.profilePicture == null || !user.profilePicture.includes('data:image/')){
+                    user.profilePicture = '';
+                }
                 res.status(200).send(user);
             } else {
                 res.status(404).send(user);
@@ -265,6 +268,9 @@ router.get('/singleUserByName/:userName', async function (req, res) {
             let userName = req.params.userName;
             let user = await userController.findUsername(userName);
             if (user !== undefined && typeof user !== 'string') {
+                if(user.profilePicture == undefined || user.profilePicture == null || !user.profilePicture.includes('data:image/')){
+                    user.profilePicture = '';
+                }
                 res.status(200).send(user);
             } else {
                 res.status(404).send(user);

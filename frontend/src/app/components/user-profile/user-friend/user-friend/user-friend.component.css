@@ -19,3 +19,8 @@
 .icon-style {
     cursor: pointer;
 }
+
+.friend-name {
+    cursor: pointer;
+    color: #673ab7;
+}
