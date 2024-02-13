@@ -88,7 +88,8 @@ router.post('/loginUser', async function (req, res) {
                         message: "Logged in successfully.",
                         userName: username,
                         token: token.token,
-                        roleID: result.roleID
+                        roleID: result.roleID,
+                        profilePicture: user.profilePicture
                     });
                 }
                 ///need to check username and password, then generate new token
@@ -104,7 +105,8 @@ router.post('/loginUser', async function (req, res) {
                                 message: "Logged in successfully.",
                                 userName: username,
                                 token: token,
-                                roleID: user.userRole
+                                roleID: user.userRole,
+                                profilePicture: user.profilePicture
                             });
                         } catch (err) {
                             return res.status(500).send({
@@ -168,11 +170,16 @@ router.post('/checkUserIsLoggedIn', async function (req, res) {
                         message: 'JsonWebTokenError'
                     });
                 } else if (result.returnString === 'Logged in successfully.') {
+                    const user = await userController.findUsername(userName);
+                    if (typeof user === 'string') {
+                        return res.status(404).send(user);
+                    }
                     return res.status(200).send({
                         message: "Logged in successfully.",
                         userName: userName,
                         token: token.token,
-                        roleID: result.roleID
+                        roleID: result.roleID,
+                        profilePicture: user.profilePicture
                     });
                 }
             } else {

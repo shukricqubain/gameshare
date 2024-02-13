@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { UsernameService } from 'src/app/services/username.service';
 import { RoleService } from 'src/app/services/roleID.service';
+import { ProfilePictureService } from 'src/app/services/profilePicture.service';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,8 @@ export class LoginComponent {
     private snackBar: MatSnackBar,
     private router: Router,
     private usernameService: UsernameService,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private profilePictureService: ProfilePictureService
   ) {
   }
 
@@ -80,20 +82,27 @@ export class LoginComponent {
       });
       this.usernameService.setUsernameObs(data.userName);
       this.roleService.setRoleObs(data.roleID);
+      this.profilePictureService.setProfilePictureObs(data.profilePicture);
       localStorage.setItem('userName', data.userName);
       localStorage.setItem('roleID', data.roleID);
+      if(data.profilePicture == undefined){
+        data.profilePicture = '';
+      }
+      localStorage.setItem('profilePicture', data.profilePicture);
       this.router.navigate(['/home']);
     } else if(data.message === 'Token deleted, reload login.') {
-      localStorage.removeItem("userName"); 
-      localStorage.removeItem("roleID");
+      localStorage.removeItem('userName'); 
+      localStorage.removeItem('roleID');
+      localStorage.removeItem('profilePicture');
       this.loginForm.controls.username.patchValue('');
       this.loginForm.controls.password.patchValue('');
       this.snackBar.open('Token expired. Please login again.', 'dismiss', {
         duration: 3000
       });
     } else {
-      localStorage.removeItem("userName"); 
-      localStorage.removeItem("roleID");
+      localStorage.removeItem('userName'); 
+      localStorage.removeItem('roleID');
+      localStorage.removeItem('profilePicture');
       this.loginForm.controls.username.patchValue('');
       this.loginForm.controls.password.patchValue('');
     }

@@ -1,42 +1,62 @@
 <mat-toolbar class="header-container mat-elevation-z8" color="primary">
     <mat-toolbar-row class="row-container">
         <div class="links-container">
-            <a class="header-item" style="margin-top:2.3px;" routerLink="/home" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a>
+            <a class="header-item" style="margin-top:2.3px;" routerLink="/home" routerLinkActive="active"
+                ariaCurrentWhenActive="page">Home</a>
             <button class="header-item" *ngIf="roleID == 1" mat-button [matMenuTriggerFor]="users">Users</button>
             <mat-menu #users="matMenu">
-                <a mat-menu-item *ngIf="roleID == 1" routerLink="/all-users" routerLinkActive="active" ariaCurrentWhenActive="page">Users</a>
-                <a mat-menu-item *ngIf="roleID == 1" routerLink="/add-user" routerLinkActive="active" ariaCurrentWhenActive="page">Add User</a>    
+                <a mat-menu-item *ngIf="roleID == 1" routerLink="/all-users" routerLinkActive="active"
+                    ariaCurrentWhenActive="page">Users</a>
+                <a mat-menu-item *ngIf="roleID == 1" routerLink="/add-user" routerLinkActive="active"
+                    ariaCurrentWhenActive="page">Add User</a>
             </mat-menu>
             <button class="header-item" *ngIf="roleID == 1" mat-button [matMenuTriggerFor]="games">Games</button>
             <mat-menu #games="matMenu">
-                <a mat-menu-item *ngIf="roleID == 1" routerLink="/all-games" routerLinkActive="active" ariaCurrentWhenActive="page">Games</a>
-                <a mat-menu-item *ngIf="roleID == 1" routerLink="/add-game" routerLinkActive="active" ariaCurrentWhenActive="page">Add Game</a>    
+                <a mat-menu-item *ngIf="roleID == 1" routerLink="/all-games" routerLinkActive="active"
+                    ariaCurrentWhenActive="page">Games</a>
+                <a mat-menu-item *ngIf="roleID == 1" routerLink="/add-game" routerLinkActive="active"
+                    ariaCurrentWhenActive="page">Add Game</a>
             </mat-menu>
-            <button class="header-item" *ngIf="roleID == 1" mat-button [matMenuTriggerFor]="achievements">Achievements</button>
+            <button class="header-item" *ngIf="roleID == 1" mat-button
+                [matMenuTriggerFor]="achievements">Achievements</button>
             <mat-menu #achievements="matMenu">
-                <a mat-menu-item routerLink="/all-achievements" routerLinkActive="active" ariaCurrentWhenActive="page">All Achievements</a>
-                <a mat-menu-item routerLink="/add-achievement" routerLinkActive="active" ariaCurrentWhenActive="page">Add Achievement</a>
+                <a mat-menu-item routerLink="/all-achievements" routerLinkActive="active"
+                    ariaCurrentWhenActive="page">All Achievements</a>
+                <a mat-menu-item routerLink="/add-achievement" routerLinkActive="active"
+                    ariaCurrentWhenActive="page">Add Achievement</a>
             </mat-menu>
             <button class="header-item" mat-button [matMenuTriggerFor]="boards">Boards</button>
             <mat-menu #boards="matMenu">
-                <a mat-menu-item routerLink="/all-boards" *ngIf="roleID == 1" routerLinkActive="active" ariaCurrentWhenActive="page">All Boards</a>
-                <a mat-menu-item routerLink="/add-board" *ngIf="roleID == 1" routerLinkActive="active" ariaCurrentWhenActive="page">Add Board</a>
+                <a mat-menu-item routerLink="/all-boards" *ngIf="roleID == 1" routerLinkActive="active"
+                    ariaCurrentWhenActive="page">All Boards</a>
+                <a mat-menu-item routerLink="/add-board" *ngIf="roleID == 1" routerLinkActive="active"
+                    ariaCurrentWhenActive="page">Add Board</a>
                 <a mat-menu-item routerLink="/boards" routerLinkActive="active" ariaCurrentWhenActive="page">Boards</a>
             </mat-menu>
             <button class="header-item" *ngIf="roleID == 1" mat-button [matMenuTriggerFor]="threads">Threads</button>
             <mat-menu #threads="matMenu">
-                <a mat-menu-item routerLink="/all-threads" routerLinkActive="active" ariaCurrentWhenActive="page">All Threads</a>
-                <a mat-menu-item routerLink="/add-thread" routerLinkActive="active" ariaCurrentWhenActive="page">Add Thread</a>
+                <a mat-menu-item routerLink="/all-threads" routerLinkActive="active" ariaCurrentWhenActive="page">All
+                    Threads</a>
+                <a mat-menu-item routerLink="/add-thread" routerLinkActive="active" ariaCurrentWhenActive="page">Add
+                    Thread</a>
             </mat-menu>
         </div>
         <br>
         <div class="user-container">
             <h2>{{userName}}</h2>
-            <br>
-            <mat-icon class="header-icon" (click)="viewProfile()">
-                account_circle
-            </mat-icon>
-            <br>
+            <ng-container
+                *ngIf="this.profilePicture != undefined && this.profilePicture != null && this.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
+            <ng-template #hasImage>
+                <div matTooltip="Click to view your profile image." (click)="viewProfile()">
+                    <img src="{{this.profilePicture}}" class="profile-icon">
+                </div>
+            </ng-template>
+            <ng-template #blankImage>
+                <mat-icon class="blank-profile-icon" matTooltip="Click to view your profile image."
+                    (click)="viewProfile()" [inline]="true">
+                    account_circle
+                </mat-icon>
+            </ng-template>
             <mat-icon class="header-icon" (click)="logout()">
                 logout
             </mat-icon>

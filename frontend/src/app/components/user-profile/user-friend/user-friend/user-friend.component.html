@@ -2,8 +2,8 @@
     <mat-card-content class="friend-content">
         <ng-container *ngIf="this.profilePicture != null && this.profilePicture != undefined && this.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
         <ng-template #hasImage>
-            <div class="image-cropper">
-                <img src="{{this.profilePicture}}" class="profile-class">
+            <div>
+                <img src="{{this.profilePicture}}" class="image-cropper">
             </div>
         </ng-template>
         <ng-template #blankImage>

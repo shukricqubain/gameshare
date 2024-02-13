@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, lastValueFrom, takeUntil } from 'rxjs';
+import { User } from 'src/app/models/user.model';
+import { ProfilePictureService } from 'src/app/services/profilePicture.service';
 import { RoleService } from 'src/app/services/roleID.service';
 
 import { UserService } from 'src/app/services/user.service';
@@ -18,26 +21,34 @@ export class HeaderComponent {
     private userService: UserService,
     private router: Router,
     private usernameService: UsernameService,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private profilePictureService: ProfilePictureService,
+    private snackBar: MatSnackBar
   ){
   }
 
   unsubscribe$: Subject<boolean> = new Subject();
   userName: string = '';
   roleID: number = 0;
+  profilePicture: string;
 
-  ngOnInit(){
+  async ngOnInit(){
     this.usernameService.getUsernameObs()
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(username => this.userName = username);
     this.roleService.getRoleObs()
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(roleID => this.roleID = Number(roleID));
+    this.profilePictureService.getProfilePictureObs()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(profilePicture => this.profilePicture = profilePicture);
     let localUserName = localStorage.getItem('userName');
     let localRoleID = localStorage.getItem('roleID');
-    if(localUserName !== null && localRoleID !== null){
+    let localProfilePicture = localStorage.getItem('profilePicture');
+    if(localUserName != null && localRoleID != null && localProfilePicture != null){
       this.userName = localUserName;
       this.roleID = Number(localRoleID);
+      this.profilePicture = localProfilePicture; 
     }
   }
 
@@ -57,6 +68,8 @@ export class HeaderComponent {
   logout(){
     localStorage.removeItem("userName");
     localStorage.removeItem('roleID');
+    localStorage.removeItem('profilePicture');
+    this.profilePicture = '';
     this.router.navigate(['/login']);
   }
 

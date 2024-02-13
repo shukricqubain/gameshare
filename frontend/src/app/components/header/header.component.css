@@ -27,10 +27,32 @@
 .user-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    height: 50px;
 }
 
 .header-icon {
     cursor: pointer;
     margin-top: 4px;
     margin-left: 10px;
+}
+
+.blank-profile-icon {
+    margin-top: 27px;
+    margin-left: 20px;
+    margin-right: 9px;
+    cursor: pointer;
+    transform: scale(1.67);
+}
+
+.profile-icon {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    background-size: 10px 10px;
+    margin-left: 10px;
+    margin-top: 5px;
 }
