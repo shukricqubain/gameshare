@@ -180,7 +180,7 @@ Use this space to show useful examples of how a project can be used. Additional 
       - [ ] Should display an icon indicting if the user is following threads displayed in the list.
 - [ ] Miscellanious Tasks
    - [ ] Add the ability to upload images in a thread.
-   - [ ] Add user's profile picture to the header icon.
+   - [x] Add user's profile picture to the header icon.
 
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
 
