@@ -27,6 +27,10 @@ export class UserFriendService {
     return this.http.post(`${baseUrl}/getByUserSentAndUserReceivedIDs`, data);
   }
 
+  getMutualFriends(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/getMutualFriends`, data);
+  }
+
   create(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/addUserFriend`, data);
   }

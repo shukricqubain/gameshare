@@ -79,6 +79,20 @@ exports.getUserSentAndUserReceivedIDs = async (req) => {
     }
 };
 
+//get mutual friends
+exports.getMutualFriends = async (req) => {
+    try {
+        let userFriends = await userFriendService.getMutualFriends(req);
+        if (userFriends == null || userFriends == undefined || userFriends.length == 0) {
+            return 'Cannot find mutual friends between the two provided userIDs';
+        } else {
+            return userFriends;
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 // Update a userFriend by their userFriendID
 exports.update = async (userFriendID, userFriend) => {
     try {

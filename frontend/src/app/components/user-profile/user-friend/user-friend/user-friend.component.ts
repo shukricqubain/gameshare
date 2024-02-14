@@ -31,9 +31,11 @@ export class UserFriendComponent {
   ) { }
 
   profilePicture: string = '';
+  mutualFriends: UserFriend[] = [];
 
   async ngOnInit() {
     await this.loadUserFriendProfilePicture();
+    await this.loadMutualFriends();
   }
 
   updateFriendStatus($event: any, userFriend: UserFriend) {
@@ -157,6 +159,34 @@ export class UserFriendComponent {
       }
     } else {
       this.snackBar.open(`Both sentID ${this.userFriend.userIDSentRequest} and receivedID ${this.userFriend.userIDReceivedRequest} not matching current user.`, 'dismiss', {
+        duration: 3000
+      });
+    }
+  }
+
+  async loadMutualFriends(){
+    try {
+      let otherID;
+      if(this.currentUser.userID == this.userFriend.userIDReceivedRequest){
+        otherID = this.userFriend.userIDSentRequest;
+      } else if (this.currentUser.userID == this.userFriend.userIDSentRequest){
+        otherID = this.userFriend.userIDReceivedRequest;
+      } else {
+        this.snackBar.open(`Error loading mutual friends for ${this.currentUser.userName}`, 'dismiss', {
+          duration: 3000
+        });
+      }
+      let result = await lastValueFrom(this.userFriendService.getMutualFriends({ userIDOne: this.currentUser.userID, userIDTwo: otherID}).pipe());
+      if(result != undefined && result != null && result.length > 0){
+        this.mutualFriends = result;
+      } else {
+        this.mutualFriends = [];
+        this.snackBar.open(`Error loading mutual friends for ${this.currentUser.userName}`, 'dismiss', {
+          duration: 3000
+        });
+      }
+    } catch (err) {
+      this.snackBar.open(`Error loading mutual friends for ${this.currentUser.userName}`, 'dismiss', {
         duration: 3000
       });
     }

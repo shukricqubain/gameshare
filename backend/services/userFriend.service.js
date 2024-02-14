@@ -255,6 +255,31 @@ async function getUserSentAndUserReceivedID(req) {
     }
 }
 
+// get all mutual friends between two ids
+async function getMutualFriends(req){
+    try {
+        return await userFriend.findAll({
+            where: {
+                [Op.and]: {
+                    areFriends: 'accepted',
+                    [Op.or]: {
+                        userIDSentRequest: {
+                            [Op.in]: [req.userIDOne, req.userIDTwo]
+                        },
+                        userIDReceivedRequest: {
+                            [Op.in]: [req.userIDOne, req.userIDTwo]
+                        }
+                    }
+                }
+                
+            },
+            raw: true
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 // update userFriend by userFriendID
 async function updateUserFriend(userFriendID, updatedUserFriend) {
     try {
@@ -293,6 +318,7 @@ module.exports = {
     createUserFriend,
     getOneUserFriend,
     getUserSentAndUserReceivedID,
+    getMutualFriends,
     findAllByUserID,
     updateUserFriend,
     deleteUserFriend

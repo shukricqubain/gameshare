@@ -127,6 +127,33 @@ router.post('/getByUserSentAndUserReceivedIDs', async function (req, res) {
     }
 });
 
+// get all mutual friends between two users
+router.post('/getMutualFriends', async function (req, res){
+    try {
+        if(req.body !== undefined){
+            let userIDOne = req.body.userIDOne;
+            let userIDTwo = req.body.userIDTwo;
+            if(userIDOne && userIDTwo){
+                let userFriends = await userFriendController.getMutualFriends({userIDOne,userIDTwo});
+                if(userFriends != undefined && userFriends.length > 0){
+                    res.status(200).send(userFriends);
+                } else {
+                    res.status(200).json({
+                        message: 'Error loading mutual friends.'
+                    });
+                }
+            } else {
+                res.status(400).send('Two userIDs are required.');
+            }            
+        } else {
+            res.status(500).send('The request came in undefined.');
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("There was an error fetching mutual friends from the database.");
+    }
+});
+
 // edit a userFriend by userID
 router.put('/editUserFriend', async function (req, res) {
     try {
