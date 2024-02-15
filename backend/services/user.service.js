@@ -359,11 +359,31 @@ async function getAllUserNames(){
     });
 }
 
+async function getAllProfilePicturesByIDs(userIDString){
+    return await db.user.findAll({
+        where: {
+            userID: {
+                [Op.in]: [userIDString]
+            }
+        },
+        attributes: [
+            'userID',
+            'userName',
+            'profilePicture'
+        ],
+        order: [
+            ['userName', 'ASC'],
+        ],
+        raw: true
+    });
+}
+
 module.exports = {
     getAll,
     getOne,
     getUserByUserName,
     getAllUserNames,
+    getAllProfilePicturesByIDs,
     create,
     update,
     deleteUser,

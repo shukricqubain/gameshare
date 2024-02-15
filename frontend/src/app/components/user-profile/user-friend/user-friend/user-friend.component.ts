@@ -31,7 +31,7 @@ export class UserFriendComponent {
   ) { }
 
   profilePicture: string = '';
-  mutualFriends: UserFriend[] = [];
+  mutualFriends: any[] = [];
 
   async ngOnInit() {
     await this.loadUserFriendProfilePicture();
@@ -177,8 +177,15 @@ export class UserFriendComponent {
         });
       }
       let result = await lastValueFrom(this.userFriendService.getMutualFriends({ userIDOne: this.currentUser.userID, userIDTwo: otherID}).pipe());
-      if(result != undefined && result != null && result.length > 0){
-        this.mutualFriends = result;
+      if(result != undefined && result != null){
+
+        if(result.length > 0){
+          this.mutualFriends = result;
+          console.log(this.mutualFriends)
+        } else {
+          this.mutualFriends = [];
+        }
+        
       } else {
         this.mutualFriends = [];
         this.snackBar.open(`Error loading mutual friends for ${this.currentUser.userName}`, 'dismiss', {

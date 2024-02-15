@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userFriendController = require('../controllers/userFriend.controller.js');
+const userController = require('../controllers/user.controller.js');
 const db = require('../models/index');
 
 // create a userFriend
@@ -134,9 +135,32 @@ router.post('/getMutualFriends', async function (req, res){
             let userIDOne = req.body.userIDOne;
             let userIDTwo = req.body.userIDTwo;
             if(userIDOne && userIDTwo){
+                
+                //get all mutual friend ids
                 let userFriends = await userFriendController.getMutualFriends({userIDOne,userIDTwo});
-                if(userFriends != undefined && userFriends.length > 0){
-                    res.status(200).send(userFriends);
+                if(userFriends != undefined && userFriends.length > 0 && typeof userFriends !== 'string'){
+
+                    let userString = ``;
+                    for(let i = 0; i < userFriends.length; i++){
+                        if(i < userFriends.length && userFriends.length != 1){
+                            userString += `${userFriends[i]},`
+                        } else {
+                            userString += `${userFriends[i]}`
+                        }
+                    }
+                    
+                    //get all profilePictures and userNames based on ids
+                    let mutualFriendData = await userController.getAllProfilePicturesByIDs(userString);
+                    if(mutualFriendData != undefined && mutualFriendData.length > 0){
+                        res.status(200).send(mutualFriendData);
+                    } else {
+                        res.status(200).send('Error finding mutual friend data.')
+                    }
+                    
+                } else if(userFriends.length == 0) {
+                    res.status(200).json({
+                        message: 'No mutual friends.'
+                    });
                 } else {
                     res.status(200).json({
                         message: 'Error loading mutual friends.'

@@ -103,3 +103,13 @@ exports.getAllUserNames = async () => {
         throw err;
     }
 }
+
+//Get all profilePictures and userNames based on userIDs
+exports.getAllProfilePicturesByIDs = async(req) => {
+    try {
+        return await userService.getAllProfilePicturesByIDs(req);
+    } catch(err) {
+        console.error(err);
+        throw err;
+    }
+}

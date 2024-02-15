@@ -258,23 +258,96 @@ async function getUserSentAndUserReceivedID(req) {
 // get all mutual friends between two ids
 async function getMutualFriends(req){
     try {
-        return await userFriend.findAll({
+        let friendListOne = await userFriend.findAll({
             where: {
                 [Op.and]: {
                     areFriends: 'accepted',
                     [Op.or]: {
                         userIDSentRequest: {
-                            [Op.in]: [req.userIDOne, req.userIDTwo]
+                            [Op.in]: [req.userIDOne]
                         },
                         userIDReceivedRequest: {
-                            [Op.in]: [req.userIDOne, req.userIDTwo]
+                            [Op.in]: [req.userIDOne]
                         }
                     }
                 }
                 
             },
+            include: [
+                {    
+                    model: sentBy,
+                    as: 'SentBy',
+                    attributes: [
+                        'userName'
+                    ],
+                },
+                {    
+                    model: receivedBy,
+                    as: 'ReceivedBy',
+                    attributes: [
+                        'userName'
+                    ],
+                },
+            ],
             raw: true
         });
+        let friendListTwo = await userFriend.findAll({
+            where: {
+                [Op.and]: {
+                    areFriends: 'accepted',
+                    [Op.or]: {
+                        userIDSentRequest: {
+                            [Op.in]: [req.userIDTwo]
+                        },
+                        userIDReceivedRequest: {
+                            [Op.in]: [req.userIDTwo]
+                        }
+                    }
+                }
+                
+            },
+            include: [
+                {    
+                    model: sentBy,
+                    as: 'SentBy',
+                    attributes: [
+                        'userName'
+                    ],
+                },
+                {    
+                    model: receivedBy,
+                    as: 'ReceivedBy',
+                    attributes: [
+                        'userName'
+                    ],
+                },
+            ],
+            raw: true
+        });
+        let potentialMutualsOne = [];
+        let potentialMutualsTwo = [];
+        let mutualFriends;
+        ///find all friendships for first user
+        for(let friend of friendListOne){
+            if(friend.userIDReceivedRequest != req.userIDOne && friend.userIDReceivedRequest != req.userIDTwo){
+                potentialMutualsOne.push(friend.userIDReceivedRequest);
+            } else if(friend.userIDSentRequest != req.userIDOne){
+                potentialMutualsOne.push(friend.userIDSentRequest);
+            }
+        }
+        ///find all friendships for second user
+        for(let friend of friendListTwo){
+            if(friend.userIDReceivedRequest != req.userIDTwo && friend.userIDReceivedRequest != req.userIDOne){
+                potentialMutualsTwo.push(friend.userIDReceivedRequest);
+            } else if(friend.userIDSentRequest != req.userIDTwo && friend.userIDReceivedRequest != req.userIDOne){
+                potentialMutualsTwo.push(friend.userIDSentRequest);
+            }
+        }
+        ///find intersecting friends
+        mutualFriends = potentialMutualsOne.filter(friend => {
+            return potentialMutualsTwo.includes(friend);
+        });
+        return mutualFriends;
     } catch (err) {
         console.error(err);
     }
