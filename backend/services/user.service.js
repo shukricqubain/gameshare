@@ -359,11 +359,11 @@ async function getAllUserNames(){
     });
 }
 
-async function getAllProfilePicturesByIDs(userIDString){
+async function getAllProfilePicturesByIDs(userFriends){
     return await db.user.findAll({
         where: {
             userID: {
-                [Op.in]: [userIDString]
+                [Op.in]: userFriends
             }
         },
         attributes: [

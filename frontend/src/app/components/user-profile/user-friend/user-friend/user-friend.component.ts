@@ -32,10 +32,32 @@ export class UserFriendComponent {
 
   profilePicture: string = '';
   mutualFriends: any[] = [];
+  titleString: string = '';
+  titleUserName: string = '';
+  dateString: string = '';
+  subtitleString: string = '';
+  subtitleUserName: string = '';
 
   async ngOnInit() {
+    this.prepareUserFriend();
     await this.loadUserFriendProfilePicture();
     await this.loadMutualFriends();
+  }
+
+  prepareUserFriend(){
+    if(this.userFriend.userIDSentRequest == this.currentUser.userID){
+      this.titleString = 'Friend Request Sent to';
+      this.titleUserName = `${this.userFriend.ReceivedBy?.userName}`;
+      this.dateString = 'Sent Date:';
+      this.subtitleString = 'Sent By:';      
+      this.subtitleUserName = `${this.userFriend.SentBy?.userName}`;
+    } else {
+      this.titleString = 'Friend Request Received from';
+      this.titleUserName = `${this.userFriend.SentBy?.userName}`;
+      this.dateString = 'Recieved Date:';
+      this.subtitleString = 'Recieved By:';
+      this.subtitleUserName = `${this.userFriend.ReceivedBy?.userName}`;
+    }
   }
 
   updateFriendStatus($event: any, userFriend: UserFriend) {
@@ -181,7 +203,6 @@ export class UserFriendComponent {
 
         if(result.length > 0){
           this.mutualFriends = result;
-          console.log(this.mutualFriends)
         } else {
           this.mutualFriends = [];
         }

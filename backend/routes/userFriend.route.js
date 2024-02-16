@@ -139,25 +139,17 @@ router.post('/getMutualFriends', async function (req, res){
                 //get all mutual friend ids
                 let userFriends = await userFriendController.getMutualFriends({userIDOne,userIDTwo});
                 if(userFriends != undefined && userFriends.length > 0 && typeof userFriends !== 'string'){
-
-                    let userString = ``;
-                    for(let i = 0; i < userFriends.length; i++){
-                        if(i < userFriends.length && userFriends.length != 1){
-                            userString += `${userFriends[i]},`
-                        } else {
-                            userString += `${userFriends[i]}`
-                        }
-                    }
-                    
                     //get all profilePictures and userNames based on ids
-                    let mutualFriendData = await userController.getAllProfilePicturesByIDs(userString);
+                    let mutualFriendData = await userController.getAllProfilePicturesByIDs(userFriends);
                     if(mutualFriendData != undefined && mutualFriendData.length > 0){
                         res.status(200).send(mutualFriendData);
+                    } else if(mutualFriendData != undefined && mutualFriendData.length == 0) { 
+                        res.status(200).send('No mutual friend data.')
                     } else {
-                        res.status(200).send('Error finding mutual friend data.')
+                        res.status(500).send('Error finding mutual friend data.');
                     }
                     
-                } else if(userFriends.length == 0) {
+                } else if(typeof userFriends === 'string' && userFriends === 'Cannot find mutual friends between the two provided userIDs') {
                     res.status(200).json({
                         message: 'No mutual friends.'
                     });

@@ -14,28 +14,15 @@
                 </mat-icon>
             </div>
         </ng-template>
-        <div [ngSwitch]="userFriend.userIDSentRequest == currentUser.userID" class="friendship-details-container">
-            <div *ngSwitchCase="true">
-                <div style="margin-left: 15px;">
-                    <mat-card-title>Friend Request Sent to <span (click)="viewUserProfile(userFriend)"
-                            class="friend-name">{{userFriend.ReceivedBy?.userName}}</span></mat-card-title>
-                    <mat-card-subtitle>Sent Date: {{formatDate(userFriend.createdAt)}}</mat-card-subtitle>
-                    <mat-card-subtitle
-                        *ngIf="userFriend.areFriends==='accepted' && userFriend.updatedAt != null">Friends Since:
-                        {{formatDate(userFriend.updatedAt)}}</mat-card-subtitle>
-                    <mat-card-subtitle>Recieved By: {{userFriend.ReceivedBy?.userName}}</mat-card-subtitle>
-                </div>
-            </div>
-            <div *ngSwitchCase="false">
-                <div style="margin-left: 15px;">
-                    <mat-card-title>Friend Request Received from <span (click)="viewUserProfile(userFriend)"
-                            class="friend-name">{{userFriend.SentBy?.userName}}</span></mat-card-title>
-                    <mat-card-subtitle>Recieved Date: {{formatDate(userFriend.createdAt)}}</mat-card-subtitle>
-                    <mat-card-subtitle
-                        *ngIf="userFriend.areFriends==='accepted' && userFriend.updatedAt != null">Friends Since:
-                        {{formatDate(userFriend.updatedAt)}}</mat-card-subtitle>
-                    <mat-card-subtitle>Sent By: {{userFriend.SentBy?.userName}}</mat-card-subtitle>
-                </div>
+        <div class="friendship-details-container">
+            <div style="margin-left: 15px;">
+                <mat-card-title>{{titleString}} <span (click)="viewUserProfile(userFriend)"
+                        class="friend-name">{{titleUserName}}</span></mat-card-title>
+                <mat-card-subtitle>{{dateString}} {{formatDate(userFriend.createdAt)}}</mat-card-subtitle>
+                <mat-card-subtitle
+                    *ngIf="userFriend.areFriends==='accepted' && userFriend.updatedAt != null">Friends Since:
+                    {{formatDate(userFriend.updatedAt)}}</mat-card-subtitle>
+                <mat-card-subtitle>{{subtitleString}} {{subtitleUserName}}</mat-card-subtitle>
             </div>
         </div>
         <div *ngFor="let mutualFriend of mutualFriends" class="mutual-container">

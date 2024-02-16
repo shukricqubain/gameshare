@@ -42,7 +42,10 @@ async function findCount(searchCriteria) {
                             userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
                             userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
                         },
-                        userID: searchCriteria.userID
+                        [Op.or]: {
+                            userIDSentRequest: searchCriteria.userID,
+                            userIDReceivedRequest: searchCriteria.userID,
+                        }
                     }
                 };
             } else {
@@ -326,10 +329,10 @@ async function getMutualFriends(req){
         });
         let potentialMutualsOne = [];
         let potentialMutualsTwo = [];
-        let mutualFriends;
+        let mutualFriends = [];
         ///find all friendships for first user
         for(let friend of friendListOne){
-            if(friend.userIDReceivedRequest != req.userIDOne && friend.userIDReceivedRequest != req.userIDTwo){
+            if(friend.userIDReceivedRequest != req.userIDOne){
                 potentialMutualsOne.push(friend.userIDReceivedRequest);
             } else if(friend.userIDSentRequest != req.userIDOne){
                 potentialMutualsOne.push(friend.userIDSentRequest);
@@ -337,16 +340,23 @@ async function getMutualFriends(req){
         }
         ///find all friendships for second user
         for(let friend of friendListTwo){
-            if(friend.userIDReceivedRequest != req.userIDTwo && friend.userIDReceivedRequest != req.userIDOne){
-                potentialMutualsTwo.push(friend.userIDReceivedRequest);
-            } else if(friend.userIDSentRequest != req.userIDTwo && friend.userIDReceivedRequest != req.userIDOne){
+            if(friend.userIDSentRequest != req.userIDTwo){
                 potentialMutualsTwo.push(friend.userIDSentRequest);
+            } else if (friend.userIDReceivedRequest != req.userIDTwo){
+                potentialMutualsTwo.push(friend.userIDReceivedRequest);
             }
         }
         ///find intersecting friends
-        mutualFriends = potentialMutualsOne.filter(friend => {
-            return potentialMutualsTwo.includes(friend);
-        });
+        for(let friend of potentialMutualsOne){
+            if(potentialMutualsTwo.includes(friend) && !mutualFriends.includes(friend)){
+                mutualFriends.push(friend);
+            }
+        }
+        for(let friend of potentialMutualsTwo){
+            if(potentialMutualsOne.includes(friend) && !mutualFriends.includes(friend)){
+                mutualFriends.push(friend);
+            }
+        }
         return mutualFriends;
     } catch (err) {
         console.error(err);
