@@ -36,7 +36,7 @@ export class ViewUserProfileComponent {
     let userName: any = localStorage.getItem('userName');
     await this.loadCurrentUser(userName);
     await this.loadUserToView(data);
-    await this.checkFriendRequestSent();
+    await this.checkFriendStatus();
   }
 
   async loadUserToView(data: any){
@@ -122,18 +122,17 @@ export class ViewUserProfileComponent {
   }
 
   handleErrorResponse(data: any){
-    console.log(data)
     this.snackBar.open(`Error occured while sending friend request.`, 'dismiss', {
       duration: 3000
     });
   }
 
-  async checkFriendRequestSent(){
+  async checkFriendStatus(){
     try {
       if(!this.alreadyChecked){
-        let userIDSentRequest = this.currentUser.userID;
-        let userIDReceivedRequest = this.viewedUser.userID;
-        let result = await lastValueFrom(this.userFriendService.getByUserSentAndUserReceivedIDs({userIDSentRequest,userIDReceivedRequest}).pipe());
+        let userIDOne = this.currentUser.userID;
+        let userIDTwo = this.viewedUser.userID;
+        let result = await lastValueFrom(this.userFriendService.getByUserSentAndUserReceivedIDs({userIDOne,userIDTwo}).pipe());
         if(result != undefined && result.message == undefined){
           if(result.areFriends === 'accepted'){
             this.buttonMessage = 'Already Friends'

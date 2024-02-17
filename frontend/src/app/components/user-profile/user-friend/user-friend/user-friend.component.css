@@ -45,22 +45,6 @@
 
 .mutual-container {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
-}
-
-.mutual-cropper {
-    width: 50px;
-    height: 50px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 50%;
-    margin-bottom: 20px;
-    background-size: 100px 100px;
-}
-
-.mutual-profile-icon {
-    font-size: 60px;
-    background-size: 60px 60px;
+    flex-direction: column;
+    flex-wrap: wrap;
 }

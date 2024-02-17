@@ -63,7 +63,6 @@ export class GameInfoComponent {
   async loadGame(){
     try{
       let result = await lastValueFrom(this.gameService.get(this.game.gameID).pipe());
-      console.log(result);
       this.game = result;
       this.gameLoaded = true;
     } catch(err){

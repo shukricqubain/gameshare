@@ -70,7 +70,7 @@ exports.getUserSentAndUserReceivedIDs = async (req) => {
     try {
         let userFriend = await userFriendService.getUserSentAndUserReceivedID(req);
         if (userFriend == null || userFriend == undefined) {
-            return 'Cannot find user friend with specified userIDSentRequest and userIDReceivedRequest';
+            return 'Cannot find user friend with specified userIDs';
         } else {
             return userFriend;
         }

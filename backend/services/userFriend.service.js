@@ -248,8 +248,12 @@ async function getUserSentAndUserReceivedID(req) {
     try {
         return await userFriend.findOne({
             where: {
-                userIDSentRequest: req.userIDSentRequest,
-                userIDReceivedRequest: req.userIDReceivedRequest
+                userIDSentRequest: {
+                    [Op.in]: [req.userIDOne,req.userIDTwo]
+                },
+                userIDReceivedRequest: {
+                    [Op.in]: [req.userIDOne,req.userIDTwo]
+                } 
             },
             raw: true
         });

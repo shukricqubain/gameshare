@@ -105,10 +105,10 @@ router.get('/getAllByUserID/:userID', async function (req, res) {
 router.post('/getByUserSentAndUserReceivedIDs', async function (req, res) {
     try {
         if(req.body !== undefined){
-            let userIDSentRequest = req.body.userIDSentRequest;
-            let userIDReceivedRequest = req.body.userIDReceivedRequest;
-            if(userIDSentRequest && userIDReceivedRequest){
-                let userFriend = await userFriendController.getUserSentAndUserReceivedIDs({userIDSentRequest,userIDReceivedRequest});
+            let userIDOne = req.body.userIDOne;
+            let userIDTwo = req.body.userIDTwo;
+            if(userIDOne && userIDTwo){
+                let userFriend = await userFriendController.getUserSentAndUserReceivedIDs({userIDOne,userIDTwo});
                 if(userFriend != undefined && typeof userFriend !== 'string'){
                     res.status(200).send(userFriend);
                 } else {

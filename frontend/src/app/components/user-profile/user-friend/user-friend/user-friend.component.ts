@@ -131,14 +131,16 @@ export class UserFriendComponent {
       this.router.navigate([`/view-user-profile/${element.userIDReceivedRequest}`],
         {
           state: {
-            userID: element.userIDReceivedRequest
+            userID: element.userIDReceivedRequest,
+            userFriend: element
           }
         });
     } else if (element.userIDReceivedRequest == this.currentUser.userID) {
       this.router.navigate([`/view-user-profile/${element.userIDSentRequest}`],
         {
           state: {
-            userID: element.userIDSentRequest
+            userID: element.userIDSentRequest,
+            userFriend: element
           }
         });
     } else {

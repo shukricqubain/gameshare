@@ -25,20 +25,10 @@
                 <mat-card-subtitle>{{subtitleString}} {{subtitleUserName}}</mat-card-subtitle>
             </div>
         </div>
-        <div *ngFor="let mutualFriend of mutualFriends" class="mutual-container">
-            <ng-container
-                *ngIf="mutualFriend.profilePicture != null && mutualFriend.profilePicture !== ''; then mutualHasImage; else mutualBlankImage"></ng-container>
-            <h5>{{mutualFriend.userName}}</h5>
-            <ng-template #mutualHasImage>
-                <img src="{{mutualFriend.profilePicture}}" class="mutual-cropper">
-            </ng-template>
-            <ng-template #mutualBlankImage>
-                <div class="mutual-profile-icon">
-                    <mat-icon [inline]="true">
-                        account_circle
-                    </mat-icon>
-                </div>
-            </ng-template>
+        <div class="mutual-container">
+            <div fxFlex *ngFor="let mutualFriend of mutualFriends">
+                <app-mutual-friend [mutualFriend]="mutualFriend"></app-mutual-friend>
+            </div>
         </div>
     </mat-card-content>
     <mat-card-actions>

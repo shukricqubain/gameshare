@@ -63,6 +63,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ProfilePicturePopUpComponent } from './components/user-profile/profile-picture-pop-up/profile-picture-pop-up.component';
 import { ViewUserProfileComponent } from './components/view-user-profile/view-user-profile.component';
 import { UserFriendComponent } from './components/user-profile/user-friend/user-friend/user-friend.component';
+import { MutualFriendComponent } from './components/user-profile/user-friend/mutual-friend/mutual-friend.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { UserFriendComponent } from './components/user-profile/user-friend/user-
     UserThreadComponent,
     ProfilePicturePopUpComponent,
     ViewUserProfileComponent,
-    UserFriendComponent
+    UserFriendComponent,
+    MutualFriendComponent
   ],
   imports: [
     BrowserModule,
