@@ -1,4 +1,7 @@
-<mat-card>
+<mat-card [ngClass]="{
+    'are-friends': userFriend.areFriends === 'accepted', 
+    'are-not-friends': userFriend.areFriends === 'pending' || userFriend.areFriends === 'rejected',
+}">
     <mat-card-content class="friend-content">
         <ng-container
             *ngIf="this.profilePicture != null && this.profilePicture != undefined && this.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
@@ -31,10 +34,10 @@
             </div>
         </div>
     </mat-card-content>
-    <mat-card-actions>
-        <div
-            [ngSwitch]="userFriend.userIDSentRequest == currentUser.userID || (userFriend.userIDReceivedRequest == currentUser.userID && userFriend.areFriends ==='accepted')">
-            <div *ngSwitchCase="true" class="friend-actions-container">
+    <mat-card-actions [hidden]="actionsDisplay === 'hide'">
+        <div 
+            [ngSwitch]="actionsDisplay">
+            <div *ngSwitchCase="'sent'" class="friend-actions-container">
                 <mat-button-toggle-group [value]="userFriend.areFriends">
                     <mat-button-toggle disabled value="accepted">Accepted</mat-button-toggle>
                     <mat-button-toggle disabled value="rejected">Rejected</mat-button-toggle>
@@ -46,7 +49,7 @@
                     </mat-icon>
                 </div>
             </div>
-            <div *ngSwitchCase="false" class="friend-actions-container">
+            <div *ngSwitchCase="'received'" class="friend-actions-container">
                 <mat-button-toggle-group [value]="userFriend.areFriends"
                     (change)="updateFriendStatus($event.value, userFriend)" matTooltip="Update Friend Request.">
                     <mat-button-toggle value="accepted">Accept</mat-button-toggle>

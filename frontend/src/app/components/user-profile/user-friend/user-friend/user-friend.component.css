@@ -1,3 +1,11 @@
+.are-friends {
+    background-color: #c2d8fe;
+}
+
+.are-not-friends {
+    background-color: azure;
+}
+
 .friend-item {
     cursor: pointer;
 }

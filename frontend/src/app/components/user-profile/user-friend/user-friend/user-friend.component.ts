@@ -37,6 +37,7 @@ export class UserFriendComponent {
   dateString: string = '';
   subtitleString: string = '';
   subtitleUserName: string = '';
+  actionsDisplay: string = '';
 
   async ngOnInit() {
     this.prepareUserFriend();
@@ -51,12 +52,26 @@ export class UserFriendComponent {
       this.dateString = 'Sent Date:';
       this.subtitleString = 'Sent By:';      
       this.subtitleUserName = `${this.userFriend.SentBy?.userName}`;
+      this.actionsDisplay = 'sent';
     } else {
       this.titleString = 'Friend Request Received from';
       this.titleUserName = `${this.userFriend.SentBy?.userName}`;
       this.dateString = 'Recieved Date:';
       this.subtitleString = 'Recieved By:';
       this.subtitleUserName = `${this.userFriend.ReceivedBy?.userName}`;
+      this.actionsDisplay = 'received';
+    }
+    switch (this.userFriend.areFriends){
+      case ('accepted'):
+        this.actionsDisplay = 'hide';
+        this.titleString = '';
+        break;
+      case ('rejected'):
+        this.actionsDisplay = 'hide';
+        this.titleString = '';
+        break;
+      case ('pending'):
+        break;
     }
   }
 
