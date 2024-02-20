@@ -159,39 +159,50 @@
             </div>
         </mat-tab>
         <mat-tab label="Friends">
-            <div class="search-form-container">
-                <form [formGroup]="friendSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyFriendSearch()">
-                    <mat-form-field>
-                        <mat-label>Search</mat-label>
-                        <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
-                    </mat-form-field>
-                    <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyFriendSearch()">
-                        search
-                    </mat-icon>
-                    <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearFriendSearch()">
-                        clear
-                    </mat-icon>
-                </form>
-            </div>
-            <div *ngIf="!userFriendsLoaded" class="loading-container">
-                <mat-spinner [diameter]="100"></mat-spinner>
-            </div>
-            <div *ngIf="userFriendsLoaded" class="user-friend-container">
-                <div *ngIf="totalUserFriends == 0" class="no-friends-container">
-                    <p>Currently no friends.</p>
-                </div>
-                <div fxFlex *ngFor="let userFriend of userFriends" class="friend-margin">
-                    <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendEvent)="loadUserFriends($event)"></app-user-friend>
-                </div>
-                <mat-paginator class="paginator-style"
-                    [pageSize]="this.userFriendsPageSize"
-                    [pageIndex]="this.userFriendsPageIndex"
-                    [pageSizeOptions]="[5, 10, 25, 50]"
-                    [length]="this.totalUserFriends"
-                    [showFirstLastButtons]="true" 
-                    (page)="onUserFriendsPageChange($event)"
-                ></mat-paginator>
-            </div>
+            <mat-tab-group class="friend-tab-container">
+                <mat-tab label="Friends">
+                    <div *ngIf="!userFriendsLoaded" class="loading-container">
+                        <mat-spinner [diameter]="100"></mat-spinner>
+                    </div>
+                    <div *ngIf="userFriendsLoaded" class="user-friend-container">
+                        <div *ngIf="totalUserFriends == 0" class="no-friends-container">
+                            <p>Currently no friends.</p>
+                        </div>
+                        <div fxFlex *ngFor="let userFriend of userFriends" class="friend-margin">
+                            <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendEvent)="loadUserFriends($event)"></app-user-friend>
+                        </div>
+                        <mat-paginator class="paginator-style"
+                            [pageSize]="this.userFriendsPageSize"
+                            [pageIndex]="this.userFriendsPageIndex"
+                            [pageSizeOptions]="[5, 10, 25, 50]"
+                            [length]="this.totalUserFriends"
+                            [showFirstLastButtons]="true" 
+                            (page)="onUserFriendsPageChange($event, 'friends')"
+                        ></mat-paginator>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Friend Requests">
+                    <div *ngIf="!userFriendsLoaded" class="loading-container">
+                        <mat-spinner [diameter]="100"></mat-spinner>
+                    </div>
+                    <div *ngIf="userFriendsLoaded" class="user-friend-container">
+                        <div *ngIf="totalUserFriends == 0" class="no-friends-container">
+                            <p>Currently no friends.</p>
+                        </div>
+                        <div fxFlex *ngFor="let userFriend of userFriendRequests" class="friend-margin">
+                            <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendRequestEvent)="loadUserFriendRequests($event)"></app-user-friend>
+                        </div>
+                        <mat-paginator class="paginator-style"
+                            [pageSize]="this.userFriendRequestsPageSize"
+                            [pageIndex]="this.userFriendRequestsPageIndex"
+                            [pageSizeOptions]="[5, 10, 25, 50]"
+                            [length]="this.totalUserFriendRequests"
+                            [showFirstLastButtons]="true" 
+                            (page)="onUserFriendsPageChange($event, 'not-friends')"
+                        ></mat-paginator>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
         </mat-tab>
         <mat-tab label="User Details">
             <div class="form-column">

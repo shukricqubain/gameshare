@@ -168,13 +168,30 @@ export class UserProfileComponent {
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required]),
-    userID: new FormControl('')
+    userID: new FormControl(''),
+    areFriends: new FormControl('accepted')
   });
   userFriendsLoaded: boolean = false;
   userFriends: UserFriend[] = [];
   totalUserFriends = 0;
   userFriendsPageSize = 5;
   userFriendsPageIndex = 0;
+
+  friendRequestSearchCriteria = new FormGroup({
+    searchTerm: new FormControl(''),
+    sort: new FormControl('userFriendID', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
+    direction: new FormControl('asc', [Validators.required]),
+    limit: new FormControl(5, [Validators.required]),
+    page: new FormControl(0, [Validators.required]),
+    userID: new FormControl(''),
+    areFriends: new FormControl('not-accepted')
+  });
+  userFriendRequestsLoaded: boolean = false;
+  userFriendRequests: UserFriend[] = [];
+  totalUserFriendRequests = 0;
+  userFriendRequestsPageSize = 5;
+  userFriendRequestsPageIndex = 0;
 
   private currentTabIndex = 0;
 
@@ -213,6 +230,7 @@ export class UserProfileComponent {
     } else if (this.currentTabIndex == 4 && this.userFriendsLoaded == false){
       
       await this.loadUserFriends();
+      await this.loadUserFriendRequests();
       
     } else if (this.currentTabIndex == 5) {
 
@@ -340,6 +358,7 @@ export class UserProfileComponent {
     this.boardSearchCriteria.controls.userID.patchValue(data.userID);
     this.threadSearchCriteria.controls.userID.patchValue(data.userID);
     this.friendSearchCriteria.controls.userID.patchValue(data.userID);
+    this.friendRequestSearchCriteria.controls.userID.patchValue(data.userID);
     this.userLoaded = true;
   }
 
@@ -802,6 +821,11 @@ export class UserProfileComponent {
     await this.loadUserFriends();
   }
 
+  async applyFriendRequestSearch() {
+    this.userFriendRequestsLoaded = false;
+    await this.loadUserFriendRequests();
+  }
+
   async clearFriendSearch() {
     this.friendSearchCriteria.controls.searchTerm.patchValue('');
     this.friendSearchCriteria.controls.sort.patchValue('userFriendID');
@@ -809,10 +833,25 @@ export class UserProfileComponent {
     this.friendSearchCriteria.controls.direction.patchValue('asc');
     this.friendSearchCriteria.controls.limit.patchValue(5);
     this.friendSearchCriteria.controls.page.patchValue(0);
+    this.friendSearchCriteria.controls.areFriends.patchValue('accepted');
     this.userFriendsPageIndex = 0;
     this.userFriendsPageSize = 5;
     this.userFriendsLoaded = false;
     await this.loadUserFriends();
+  }
+
+  async clearFriendRequestSearch() {
+    this.friendRequestSearchCriteria.controls.searchTerm.patchValue('');
+    this.friendRequestSearchCriteria.controls.sort.patchValue('userFriendID');
+    this.friendRequestSearchCriteria.controls.pagination.patchValue('true');
+    this.friendRequestSearchCriteria.controls.direction.patchValue('asc');
+    this.friendRequestSearchCriteria.controls.limit.patchValue(5);
+    this.friendRequestSearchCriteria.controls.page.patchValue(0);
+    this.friendRequestSearchCriteria.controls.areFriends.patchValue('not-accepted');
+    this.userFriendRequestsPageIndex = 0;
+    this.userFriendRequestsPageSize = 5;
+    this.userFriendRequestsLoaded = false;
+    await this.loadUserFriendRequests();
   }
 
   async loadUserFriends(loadFriendEvent?: any){
@@ -832,19 +871,53 @@ export class UserProfileComponent {
       }
     } catch (err) {
       console.error(err);
-      this.userThreads = [];
-      this.snackBar.open('Error loading user threads.', 'dismiss', {
+      this.userFriends = [];
+      this.snackBar.open('Error loading user friends.', 'dismiss', {
         duration: 2000
       });
     }
   }
 
-  onUserFriendsPageChange(event: PageEvent) {
-    this.userFriendsPageIndex = event.pageIndex;
-    this.userFriendsPageSize = event.pageSize;
-    this.friendSearchCriteria.controls.page.setValue(this.userFriendsPageIndex);
-    this.friendSearchCriteria.controls.limit.setValue(this.userFriendsPageSize);
-    this.userFriendsLoaded = false;
-    this.loadUserFriends();
+  async loadUserFriendRequests(loadFriendEvent?: any){
+    try {
+      if (!this.userFriendRequestsLoaded || (loadFriendEvent != undefined && loadFriendEvent === 'loadFriendEvent')) {
+        let result = await lastValueFrom(this.userFriendService.getAll(this.friendRequestSearchCriteria.value).pipe());
+        if (result != null && result != undefined) {
+          if (result != undefined && result.message === 'No request data in user friend table to fetch.') {
+            this.userFriendRequests = [];
+            this.totalUserFriendRequests = 0;
+          } else {
+            this.userFriendRequests = result.data;
+            this.totalUserFriendRequests = result.userFriendCount;
+          }
+          this.userFriendsLoaded = true;
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      this.userFriendRequests = [];
+      this.snackBar.open('Error loading user friend requests.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
+
+  onUserFriendsPageChange(event: PageEvent, areFriends: string) {
+    if(areFriends === 'friends'){
+      this.userFriendsPageIndex = event.pageIndex;
+      this.userFriendsPageSize = event.pageSize;
+      this.friendSearchCriteria.controls.page.setValue(this.userFriendsPageIndex);
+      this.friendSearchCriteria.controls.limit.setValue(this.userFriendsPageSize);
+      this.userFriendsLoaded = false;
+      this.loadUserFriends();
+    } else if(areFriends === 'not-friends'){
+      this.userFriendRequestsPageIndex = event.pageIndex;
+      this.userFriendRequestsPageSize = event.pageSize;
+      this.friendRequestSearchCriteria.controls.page.setValue(this.userFriendRequestsPageIndex);
+      this.friendRequestSearchCriteria.controls.limit.setValue(this.userFriendRequestsPageSize);
+      this.userFriendRequestsLoaded = false;
+      this.loadUserFriendRequests();
+    }
+    
   }
 }

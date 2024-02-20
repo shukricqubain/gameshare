@@ -34,7 +34,43 @@ async function findCount(searchCriteria) {
         let userFriends;
         let where;
         if (searchTerm !== '') {
-            if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
+            if(searchCriteria.areFriends != undefined && searchCriteria.areFriends != null){
+                if(searchCriteria.areFriends === 'accepted'){
+                    where = {
+                        [Op.and]: {
+                            [Op.or]: {
+                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
+                            },
+                            [Op.or]: {
+                                userIDSentRequest: searchCriteria.userID,
+                                userIDReceivedRequest: searchCriteria.userID,
+                            },
+                            areFriends: {
+                                [Op.eq]: 'accepted'
+                            }
+                        }
+                    };
+                } else if(searchCriteria.areFriends === 'not-accepted'){
+                    where = {
+                        [Op.and]: {
+                            [Op.or]: {
+                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
+                            },
+                            [Op.or]: {
+                                userIDSentRequest: searchCriteria.userID,
+                                userIDReceivedRequest: searchCriteria.userID,
+                            },
+                            areFriends: {
+                                [Op.not]: 'accepted'
+                            }
+                        }
+                    };
+                }
+            } else if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
                 where = {
                     [Op.and]: {
                         [Op.or]: {
@@ -58,7 +94,43 @@ async function findCount(searchCriteria) {
                 };
             }
         } else {
-            if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
+            if(searchCriteria.areFriends != undefined && searchCriteria.areFriends != null) {
+                if(searchCriteria.areFriends === 'accepted'){
+                    where = {
+                        [Op.and]: {
+                            [Op.or]: {
+                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
+                            },
+                            [Op.or]: {
+                                userIDSentRequest: searchCriteria.userID,
+                                userIDReceivedRequest: searchCriteria.userID,
+                            },
+                            areFriends: {
+                                [Op.eq]: 'accepted'
+                            }
+                        }
+                    };
+                } else if(searchCriteria.areFriends === 'not-accepted'){
+                    where = {
+                        [Op.and]: {
+                            [Op.or]: {
+                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
+                            },
+                            [Op.or]: {
+                                userIDSentRequest: searchCriteria.userID,
+                                userIDReceivedRequest: searchCriteria.userID,
+                            },
+                            areFriends: {
+                                [Op.not]: 'accepted'
+                            }
+                        }
+                    };
+                }
+            } else if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
                 where = {
                     [Op.or]: {
                         userIDSentRequest: searchCriteria.userID,
@@ -100,7 +172,43 @@ async function findAll(searchCriteria) {
         let page = searchCriteria.page;
         let where;
         if (searchTerm !== '') {
-            if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
+            if(searchCriteria.areFriends != undefined && searchCriteria.areFriends != null){
+                if(searchCriteria.areFriends === 'accepted'){
+                    where = {
+                        [Op.and]: {
+                            [Op.or]: {
+                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
+                            },
+                            [Op.or]: {
+                                userIDSentRequest: searchCriteria.userID,
+                                userIDReceivedRequest: searchCriteria.userID,
+                            },
+                            areFriends: {
+                                [Op.eq]: 'accepted'
+                            }
+                        }
+                    };
+                } else if(searchCriteria.areFriends === 'not-accepted'){
+                    where = {
+                        [Op.and]: {
+                            [Op.or]: {
+                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
+                            },
+                            [Op.or]: {
+                                userIDSentRequest: searchCriteria.userID,
+                                userIDReceivedRequest: searchCriteria.userID,
+                            },
+                            areFriends: {
+                                [Op.not]: 'accepted'
+                            }
+                        }
+                    };
+                }
+            } else if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
                 where = {
                     [Op.and]: {
                         [Op.or]: {
@@ -124,7 +232,43 @@ async function findAll(searchCriteria) {
                 };
             }
         } else {
-            if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
+            if(searchCriteria.areFriends != undefined && searchCriteria != null){
+                if(searchCriteria.areFriends === 'accepted'){
+                    where = {
+                        [Op.and]: {
+                            [Op.or]: {
+                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
+                            },
+                            [Op.or]: {
+                                userIDSentRequest: searchCriteria.userID,
+                                userIDReceivedRequest: searchCriteria.userID,
+                            },
+                            areFriends: {
+                                [Op.eq]: 'accepted'
+                            }
+                        }
+                    };
+                } else if(searchCriteria.areFriends === 'not-accepted'){
+                    where = {
+                        [Op.and]: {
+                            [Op.or]: {
+                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
+                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
+                            },
+                            [Op.or]: {
+                                userIDSentRequest: searchCriteria.userID,
+                                userIDReceivedRequest: searchCriteria.userID,
+                            },
+                            areFriends: {
+                                [Op.not]: 'accepted'
+                            }
+                        }
+                    };
+                }
+            } else if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
                 where = {
                     [Op.or]: {
                         userIDSentRequest: searchCriteria.userID,
