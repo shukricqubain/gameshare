@@ -169,7 +169,7 @@
                             <p>Currently no friends.</p>
                         </div>
                         <div fxFlex *ngFor="let userFriend of userFriends" class="friend-margin">
-                            <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendEvent)="loadUserFriends($event)"></app-user-friend>
+                            <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendEvent)="loadAllUserFriends()"></app-user-friend>
                         </div>
                         <mat-paginator class="paginator-style"
                             [pageSize]="this.userFriendsPageSize"
@@ -186,11 +186,11 @@
                         <mat-spinner [diameter]="100"></mat-spinner>
                     </div>
                     <div *ngIf="userFriendsLoaded" class="user-friend-container">
-                        <div *ngIf="totalUserFriends == 0" class="no-friends-container">
+                        <div *ngIf="totalUserFriendRequests == 0" class="no-friends-container">
                             <p>Currently no friends.</p>
                         </div>
                         <div fxFlex *ngFor="let userFriend of userFriendRequests" class="friend-margin">
-                            <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendRequestEvent)="loadUserFriendRequests($event)"></app-user-friend>
+                            <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendEvent)="loadAllUserFriends()"></app-user-friend>
                         </div>
                         <mat-paginator class="paginator-style"
                             [pageSize]="this.userFriendRequestsPageSize"

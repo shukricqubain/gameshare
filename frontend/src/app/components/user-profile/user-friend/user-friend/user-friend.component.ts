@@ -20,7 +20,6 @@ export class UserFriendComponent {
   @Input() userFriend: UserFriend;
   @Input() currentUser: User;
   @Output() loadFriendEvent = new EventEmitter<string>();
-  @Output() loadFriendRequestEvent = new EventEmitter<string>();
 
   constructor(
     private snackBar: MatSnackBar,
@@ -67,27 +66,23 @@ export class UserFriendComponent {
         this.actionsDisplay = 'hide';
         this.titleString = '';
         break;
-      case ('rejected'):
-        this.actionsDisplay = 'hide';
-        this.titleString = '';
-        break;
       case ('pending'):
         break;
     }
   }
 
-  updateFriendStatus($event: any, userFriend: UserFriend) {
+  updateFriendStatus(areFriends: string, userFriend: UserFriend) {
     let updatedUserFriend = {
       userFriendID: userFriend.userFriendID,
       userIDReceivedRequest: userFriend.userIDReceivedRequest,
       userIDSentRequest: userFriend.userIDSentRequest,
-      areFriends: $event,
+      areFriends: areFriends,
       createdBy: userFriend.createdBy,
       updatedBy: this.currentUser.userID,
       createdAt: userFriend.createdAt
     }
     this.userFriendService.update(updatedUserFriend).subscribe({
-      next: this.handleUpdateResponse.bind(this, userFriend.areFriends),
+      next: this.handleUpdateResponse.bind(this, updatedUserFriend.areFriends),
       error: this.handleErrorResponse.bind(this)
     });
   }
@@ -110,7 +105,7 @@ export class UserFriendComponent {
     dialogRefDelete.afterClosed().subscribe(result => {
       if (result.event === 'delete') {
         this.userFriendService.delete(userFriend.userFriendID).subscribe({
-          next: this.handleDeleteResponse.bind(this,userFriend.areFriends),
+          next: this.handleDeleteResponse.bind(this, userFriend.areFriends),
           error: this.handleErrorResponse.bind(this)
         });
         this.snackBar.open(`Friend request has been deleted.`, 'dismiss', {
@@ -131,18 +126,14 @@ export class UserFriendComponent {
   }
 
   public handleDeleteResponse(data: any, areFriends: string) {
-    if (data != null && areFriends === 'accepted') {
+    if (data != null) {
       this.loadFriendEvent.next('loadFriendEvent');
-    } else if(data != null && areFriends !== 'accepted'){
-      this.loadFriendEvent.next('loadFriendRequestEvent');
     }
   }
 
   public handleUpdateResponse(data: any, areFriends: string) {
-    if (data != null && areFriends === 'accepted') {
+    if (data != null) {
       this.loadFriendEvent.next('loadFriendEvent');
-    } else if(data != null && areFriends !== 'accepted'){
-      this.loadFriendEvent.next('loadFriendRequestEvent');
     }
   }
 

@@ -50,11 +50,12 @@
                 </div>
             </div>
             <div *ngSwitchCase="'received'" class="friend-actions-container">
-                <mat-button-toggle-group [value]="userFriend.areFriends"
-                    (change)="updateFriendStatus($event.value, userFriend)" matTooltip="Update Friend Request.">
-                    <mat-button-toggle value="accepted">Accept</mat-button-toggle>
-                    <mat-button-toggle value="rejected">Reject</mat-button-toggle>
-                </mat-button-toggle-group>
+                <mat-icon class="friend-item" style="color: green" matTooltip="Accept Friend Request." (click)="updateFriendStatus('accepted', userFriend)">
+                    done
+                </mat-icon>
+                <mat-icon class="friend-item" color="warn" matTooltip="Reject Friend Request." (click)="updateFriendStatus('rejected', userFriend)">
+                    close
+                </mat-icon>
             </div>
         </div>
     </mat-card-actions>

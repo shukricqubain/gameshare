@@ -229,8 +229,7 @@ export class UserProfileComponent {
 
     } else if (this.currentTabIndex == 4 && this.userFriendsLoaded == false){
       
-      await this.loadUserFriends();
-      await this.loadUserFriendRequests();
+      await this.loadAllUserFriends();
       
     } else if (this.currentTabIndex == 5) {
 
@@ -854,9 +853,9 @@ export class UserProfileComponent {
     await this.loadUserFriendRequests();
   }
 
-  async loadUserFriends(loadFriendEvent?: any){
+  async loadUserFriends(){
     try {
-      if (!this.userFriendsLoaded || (loadFriendEvent != undefined && loadFriendEvent === 'loadFriendEvent')) {
+      if (!this.userFriendsLoaded) {
         let result = await lastValueFrom(this.userFriendService.getAll(this.friendSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
           if (result != undefined && result.message === 'No data in user friend table to fetch.') {
@@ -878,9 +877,9 @@ export class UserProfileComponent {
     }
   }
 
-  async loadUserFriendRequests(loadFriendEvent?: any){
+  async loadUserFriendRequests(){
     try {
-      if (!this.userFriendRequestsLoaded || (loadFriendEvent != undefined && loadFriendEvent === 'loadFriendEvent')) {
+      if (!this.userFriendRequestsLoaded) {
         let result = await lastValueFrom(this.userFriendService.getAll(this.friendRequestSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
           if (result != undefined && result.message === 'No request data in user friend table to fetch.') {
@@ -890,7 +889,7 @@ export class UserProfileComponent {
             this.userFriendRequests = result.data;
             this.totalUserFriendRequests = result.userFriendCount;
           }
-          this.userFriendsLoaded = true;
+          this.userFriendRequestsLoaded = true;
         }
       }
     } catch (err) {
@@ -900,6 +899,13 @@ export class UserProfileComponent {
         duration: 2000
       });
     }
+  }
+
+  async loadAllUserFriends(){
+    this.userFriendsLoaded = false;
+    this.userFriendRequestsLoaded = false;
+    await this.loadUserFriends();
+    await this.loadUserFriendRequests();
   }
 
   onUserFriendsPageChange(event: PageEvent, areFriends: string) {
@@ -917,7 +923,6 @@ export class UserProfileComponent {
       this.friendRequestSearchCriteria.controls.limit.setValue(this.userFriendRequestsPageSize);
       this.userFriendRequestsLoaded = false;
       this.loadUserFriendRequests();
-    }
-    
+    } 
   }
 }
