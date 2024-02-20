@@ -157,7 +157,7 @@ Use this space to show useful examples of how a project can be used. Additional 
    - [ ] User Friends
       - [x] Usernames in the friends tab should be clickable and reroute user to View user page.
       - [x] Each friend material card should have their profile picture displayed within a circle icon.
-      - [ ] Each friend material card should indicate visually if they are currently friends.
+      - [x] Each friend material card should indicate visually if they are currently friends.
       - [x] Each friend material card should display the date two users became friends.
       - [ ] Change the accept/reject toggle button to a check and cross icon instead.
       - [ ] After becoming friends the check and cross icon should disappear and a friend icon should appear.
