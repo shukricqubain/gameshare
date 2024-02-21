@@ -47,27 +47,41 @@ export class UserFriendComponent {
 
   prepareUserFriend(){
     if(this.userFriend.userIDSentRequest == this.currentUser.userID){
-      this.titleString = 'Friend Request Sent to';
       this.titleUserName = `${this.userFriend.ReceivedBy?.userName}`;
       this.dateString = 'Sent Date:';
       this.subtitleString = 'Sent By:';      
       this.subtitleUserName = `${this.userFriend.SentBy?.userName}`;
       this.actionsDisplay = 'sent';
+      switch (this.userFriend.areFriends){
+        case ('accepted'):
+          this.actionsDisplay = 'hide';
+          this.titleString = '';
+          break;
+        case ('pending'):
+          this.titleString = 'Friend Request Sent to';
+          break;
+        case ('rejected'):
+          this.actionsDisplay = 'hide';
+          this.titleString = 'Request rejected by';
+      }
     } else {
-      this.titleString = 'Friend Request Received from';
       this.titleUserName = `${this.userFriend.SentBy?.userName}`;
       this.dateString = 'Recieved Date:';
       this.subtitleString = 'Recieved By:';
       this.subtitleUserName = `${this.userFriend.ReceivedBy?.userName}`;
       this.actionsDisplay = 'received';
-    }
-    switch (this.userFriend.areFriends){
-      case ('accepted'):
-        this.actionsDisplay = 'hide';
-        this.titleString = '';
-        break;
-      case ('pending'):
-        break;
+      switch (this.userFriend.areFriends){
+        case ('accepted'):
+          this.actionsDisplay = 'hide';
+          this.titleString = '';
+          break;
+        case ('pending'):
+        this.titleString = 'Friend Request Received from';
+          break;
+        case ('rejected'):
+          this.actionsDisplay = 'hide';
+          this.titleString = 'Rejected Request from';
+      }
     }
   }
 

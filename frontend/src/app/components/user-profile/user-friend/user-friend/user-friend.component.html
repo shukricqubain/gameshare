@@ -1,6 +1,7 @@
 <mat-card [ngClass]="{
-    'are-friends': userFriend.areFriends === 'accepted', 
-    'are-not-friends': userFriend.areFriends === 'pending' || userFriend.areFriends === 'rejected',
+    'accepted': userFriend.areFriends === 'accepted', 
+    'pending': userFriend.areFriends === 'pending',
+    'rejected': userFriend.areFriends === 'rejected'
 }">
     <mat-card-content class="friend-content">
         <ng-container
@@ -29,7 +30,8 @@
             </div>
         </div>
         <div class="mutual-container">
-            <div fxFlex *ngFor="let mutualFriend of mutualFriends">
+            <h4 [hidden]="mutualFriends.length == 0" class="title-style">Mutual Friends</h4>
+            <div fxFlex *ngFor="let mutualFriend of mutualFriends" class="mutual-friend-padding">
                 <app-mutual-friend [mutualFriend]="mutualFriend"></app-mutual-friend>
             </div>
         </div>
@@ -38,10 +40,6 @@
         <div 
             [ngSwitch]="actionsDisplay">
             <div *ngSwitchCase="'sent'" class="friend-actions-container">
-                <mat-button-toggle-group [value]="userFriend.areFriends">
-                    <mat-button-toggle disabled value="accepted">Accepted</mat-button-toggle>
-                    <mat-button-toggle disabled value="rejected">Rejected</mat-button-toggle>
-                </mat-button-toggle-group>
                 <div [hidden]="userFriend.areFriends !== 'pending'">
                     <mat-icon class="icon-style" matTooltip="Click to delete a friend request." color="warn"
                         (click)="deleteFriendRequest(userFriend)">

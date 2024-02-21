@@ -1,18 +1,28 @@
 <ng-container
     *ngIf="mutualFriend.profilePicture != null && mutualFriend.profilePicture !== ''; then mutualHasImage; else mutualBlankImage"></ng-container>
 <ng-template #mutualHasImage>
-    <div class="mutual-style">
-        <img src="{{mutualFriend.profilePicture}}" class="mutual-cropper">
-        <h5 (click)="viewUserProfile()" class="friend-name">{{mutualFriend.userName}}</h5>
-    </div>
+    <mat-card [ngClass]="{
+            'accepted': mutualFriend.areFriends === 'accepted', 
+            'pending': mutualFriend.areFriends === 'pending',
+            'rejected': mutualFriend.areFriends === 'rejected'
+        }">
+        <mat-card-content class="mutual-style">
+            <img src="{{mutualFriend.profilePicture}}" class="mutual-cropper">
+            <h5 (click)="viewUserProfile()" class="friend-name">{{mutualFriend.userName}}</h5>
+        </mat-card-content>
+    </mat-card>
 </ng-template>
 <ng-template #mutualBlankImage>
-    <div class="mutual-style">
-        <div class="mutual-profile-icon">
-            <mat-icon [inline]="true">
+    <mat-card [ngClass]="{
+            'accepted': mutualFriend.areFriends === 'accepted', 
+            'pending': mutualFriend.areFriends === 'pending',
+            'rejected': mutualFriend.areFriends === 'rejected'
+        }">
+        <mat-card-content class="mutual-style">
+            <mat-icon [inline]="true" class="mutual-profile-icon">
                 account_circle
             </mat-icon>
-        </div>
-        <h5 (click)="viewUserProfile()" class="friend-name">{{mutualFriend.userName}}</h5>
-    </div>
+            <h5 (click)="viewUserProfile()" class="friend-name">{{mutualFriend.userName}}</h5>
+        </mat-card-content>
+    </mat-card>
 </ng-template>
