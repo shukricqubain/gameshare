@@ -159,10 +159,10 @@ Use this space to show useful examples of how a project can be used. Additional 
       - [x] Each friend material card should have their profile picture displayed within a circle icon.
       - [x] Each friend material card should indicate visually if they are currently friends.
       - [x] Each friend material card should display the date two users became friends.
-      - [ ] Change the accept/reject toggle button to a check and cross icon instead.
-      - [ ] After becoming friends the check and cross icon should disappear and a friend icon should appear.
+      - [x] Change the accept/reject toggle button to a check and cross icon instead.
+      - [x] After becoming friends the check and cross icon should disappear.
       - [ ] Upon clicking the friend icon the user may unfriend another user.
-      - [ ] Each friend material card should display the mutual friends between two users. 
+      - [x] Each friend material card should display the mutual friends between two users. 
    - [ ] Chat/Messages
       - [ ] New tab should be created to display active messages between the current user and each of their friends.
       - [ ] The user should be able to send images in the chat.
