@@ -154,14 +154,14 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 ### Version 1.3
 - [ ] User Profile Task/Enhancements
-   - [ ] User Friends
+   - [x] User Friends
       - [x] Usernames in the friends tab should be clickable and reroute user to View user page.
       - [x] Each friend material card should have their profile picture displayed within a circle icon.
       - [x] Each friend material card should indicate visually if they are currently friends.
       - [x] Each friend material card should display the date two users became friends.
       - [x] Change the accept/reject toggle button to a check and cross icon instead.
       - [x] After becoming friends the check and cross icon should disappear.
-      - [ ] Upon clicking the friend icon the user may unfriend another user.
+      - [x] Upon clicking the friend icon the user may unfriend another user.
       - [x] Each friend material card should display the mutual friends between two users. 
    - [ ] Chat/Messages
       - [ ] New tab should be created to display active messages between the current user and each of their friends.
