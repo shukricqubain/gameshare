@@ -21,6 +21,7 @@ export class PopUpComponent {
   allGameNames: any;
   allAchievementNames: any;
   dataLoaded: boolean;
+  submitString: string = 'Delete';
 
   ngAfterContentInit() {
     this.dataLoaded = false;
@@ -47,6 +48,7 @@ export class PopUpComponent {
           this.dataLoaded = true;
           break;
         case ('userFriend'):
+          this.submitString = 'Unfriend';
           this.model = 'friend request sent to';
           this.name = this.data.element.ReceivedBy.userName;
           this.dataLoaded = true;

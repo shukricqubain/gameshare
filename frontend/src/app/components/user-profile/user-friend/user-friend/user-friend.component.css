@@ -17,6 +17,13 @@
 .friend-content {
     display: flex;
     flex-direction: row;
+    gap: 15px;
+}
+
+.friend-style {
+    cursor: pointer;
+    margin-top: 7px;
+    color: #673ab7;
 }
 
 .friend-actions-container {

@@ -35,6 +35,9 @@
                 <app-mutual-friend [mutualFriend]="mutualFriend"></app-mutual-friend>
             </div>
         </div>
+        <mat-icon matTooltip="Click to unfriend" class="friend-style" [hidden]="userFriend.areFriends !== 'accepted'" (click)="unfriendPopUp(userFriend)">
+            person
+        </mat-icon>
     </mat-card-content>
     <mat-card-actions [hidden]="actionsDisplay === 'hide'">
         <div 

@@ -246,4 +246,51 @@ export class UserFriendComponent {
       });
     }
   }
+
+  unfriendPopUp(userFriend: UserFriend){
+    let otherUser: string;
+    if(userFriend.userIDSentRequest == this.currentUser.userID){
+      otherUser = userFriend.ReceivedBy?.userName ? userFriend.ReceivedBy?.userName : '';
+    } else {
+      otherUser = userFriend.SentBy?.userName ? userFriend.SentBy?.userName : '';
+    }
+
+    let updatedUserFriend: UserFriend = {
+      userFriendID: userFriend.userFriendID,
+      userIDSentRequest: userFriend.userIDSentRequest,
+      userIDReceivedRequest: userFriend.userIDReceivedRequest,
+      SentBy: userFriend.SentBy,
+      ReceivedBy: userFriend.ReceivedBy,
+      areFriends: 'rejected',
+      createdBy: userFriend.createdBy,
+      updatedBy: this.currentUser.userID,
+      createdAt: userFriend.createdAt
+    }
+
+    const dialogRef = this.matDialog.open(PopUpComponent, {
+      width: '100%',
+      disableClose: true,
+      data: {
+        element: userFriend,
+        model: 'userFriend'
+      }
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+
+      if(result.event === 'delete'){
+        this.userFriendService.update(updatedUserFriend).subscribe({
+          next: this.handleUpdateResponse.bind(this, updatedUserFriend.areFriends),
+          error: this.handleErrorResponse.bind(this)
+        });
+        this.snackBar.open(`You and ${otherUser} are no longer friends.`, 'dismiss',{
+          duration: 3000
+        });
+      } else {
+        this.snackBar.open(`Unfriending ${otherUser} was unsuccessful.`, 'dismiss',{
+          duration: 3000
+        });
+      }
+    });
+  }
 }
