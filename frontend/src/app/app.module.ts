@@ -64,6 +64,7 @@ import { ProfilePicturePopUpComponent } from './components/user-profile/profile-
 import { ViewUserProfileComponent } from './components/view-user-profile/view-user-profile.component';
 import { UserFriendComponent } from './components/user-profile/user-friend/user-friend/user-friend.component';
 import { MutualFriendComponent } from './components/user-profile/user-friend/mutual-friend/mutual-friend.component';
+import { UserMessageComponent } from './components/user-profile/user-message/user-message.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { MutualFriendComponent } from './components/user-profile/user-friend/mut
     ProfilePicturePopUpComponent,
     ViewUserProfileComponent,
     UserFriendComponent,
-    MutualFriendComponent
+    MutualFriendComponent,
+    UserMessageComponent
   ],
   imports: [
     BrowserModule,

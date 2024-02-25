@@ -177,7 +177,7 @@ router.put('/editUserFriend', async function (req, res) {
             const userFriendID = req.body.userFriendID;
             let userFriend = await userFriendController.findOne(userFriendID);
             if(userFriend == undefined || typeof userFriend === 'string'){
-                return res.status(404).send(userBoard);
+                return res.status(404).send(userFriend);
             }
             
             ///update userFriend

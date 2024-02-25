@@ -1,27 +1,28 @@
 const db = require('../models/index');
+const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const userMessage = db.userMessage;
 const sentBy = db.user;
 const receivedBy = db.user;
-userFriend.hasOne(sentBy, {
+userMessage.hasOne(sentBy, {
     foreignKey: 'userID',
     sourceKey: 'userIDSentMessage',
-    as: 'SentBy'
+    as: 'MessageSentBy'
 });
-userFriend.hasOne(receivedBy, {
+userMessage.hasOne(receivedBy, {
     foreignKey: 'userID',
     sourceKey: 'userIDReceivedMessage',
-    as: 'ReceivedBy'
+    as: 'MessageReceivedBy'
 });
 sentBy.belongsTo(userMessage, {
     foreignKey: 'userIDSentMessage',
     sourceKey: 'userID',
-    as: 'SentBy'
+    as: 'MessageSentBy'
 });
 receivedBy.belongsTo(userMessage, {
     foreignKey: 'userIDReceivedMessage',
     sourceKey: 'userID',
-    as: 'RecievedBy'
+    as: 'MessageRecievedBy'
 });
 
 // Get count of userMessages by searchCriteria
@@ -146,14 +147,14 @@ async function findAll(searchCriteria) {
                 include: [
                     {    
                         model: sentBy,
-                        as: 'SentBy',
+                        as: 'MessageSentBy',
                         attributes: [
                             'userName'
                         ],
                     },
                     {    
                         model: receivedBy,
-                        as: 'ReceivedBy',
+                        as: 'MessageReceivedBy',
                         attributes: [
                             'userName'
                         ],
@@ -173,14 +174,14 @@ async function findAll(searchCriteria) {
                 include: [
                     {    
                         model: sentBy,
-                        as: 'SentBy',
+                        as: 'MessageSentBy',
                         attributes: [
                             'userName'
                         ],
                     },
                     {    
                         model: receivedBy,
-                        as: 'ReceivedBy',
+                        as: 'MessageReceivedBy',
                         attributes: [
                             'userName'
                         ],

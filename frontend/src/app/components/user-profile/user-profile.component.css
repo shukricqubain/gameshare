@@ -183,3 +183,12 @@
 .friend-tab-container {
     margin-top: 35px;
 }
+
+.no-messages-container {
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-color: #673ab7;
+    border-radius: 10px;
+    height: 400px;
+}

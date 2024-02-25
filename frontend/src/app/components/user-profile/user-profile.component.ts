@@ -32,6 +32,8 @@ import { FilterFormPopUpComponent } from '../filter-form-pop-up/filter-form-pop-
 import { ProfilePicturePopUpComponent } from './profile-picture-pop-up/profile-picture-pop-up.component';
 import { UserFriend } from 'src/app/models/userFriend.model';
 import { UserFriendService } from 'src/app/services/userFriend.service';
+import { UserMessage } from 'src/app/models/userMessage.model';
+import { UserMessageService } from 'src/app/services/userMessage.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -56,6 +58,7 @@ export class UserProfileComponent {
     private threadService: ThreadService,
     private userThreadService: UserThreadService,
     private userFriendService: UserFriendService,
+    private userMessageService: UserMessageService,
     private matDialog: MatDialog,
     private router: Router,
   ) {
@@ -193,6 +196,22 @@ export class UserProfileComponent {
   userFriendRequestsPageSize = 5;
   userFriendRequestsPageIndex = 0;
 
+  /* User Message Form Section */
+  messageSearchCriteria = new FormGroup({
+    searchTerm: new FormControl(''),
+    sort: new FormControl('userMessageID', [Validators.required]),
+    pagination: new FormControl('true', [Validators.required]),
+    direction: new FormControl('asc', [Validators.required]),
+    limit: new FormControl(5, [Validators.required]),
+    page: new FormControl(0, [Validators.required]),
+    userID: new FormControl(''),
+  });
+  userMessagesLoaded: boolean = false;
+  userMessages: UserMessage[] = [];
+  totalUserMessages = 0;
+  userMessagesPageSize = 5;
+  userMessagesPageIndex = 0;
+
   private currentTabIndex = 0;
 
   async ngAfterViewInit() {
@@ -230,8 +249,12 @@ export class UserProfileComponent {
     } else if (this.currentTabIndex == 4 && this.userFriendsLoaded == false){
       
       await this.loadAllUserFriends();
-      
-    } else if (this.currentTabIndex == 5) {
+    
+    } else if (this.currentTabIndex == 5 && this.userMessagesLoaded == false){
+    
+      await this.loadAllUserMessages();
+
+    } else if (this.currentTabIndex == 6) {
 
       this.changeForm();
 
@@ -358,6 +381,7 @@ export class UserProfileComponent {
     this.threadSearchCriteria.controls.userID.patchValue(data.userID);
     this.friendSearchCriteria.controls.userID.patchValue(data.userID);
     this.friendRequestSearchCriteria.controls.userID.patchValue(data.userID);
+    this.messageSearchCriteria.controls.userID.patchValue(data.userID);
     this.userLoaded = true;
   }
 
@@ -924,5 +948,58 @@ export class UserProfileComponent {
       this.userFriendRequestsLoaded = false;
       this.loadUserFriendRequests();
     } 
+  }
+
+  /* User Messages Section */
+
+  async applyMessageSearch() {
+    this.userMessagesLoaded = false;
+    await this.loadAllUserMessages();
+  }
+
+  async clearMessageSearch() {
+    this.messageSearchCriteria.controls.searchTerm.patchValue('');
+    this.messageSearchCriteria.controls.sort.patchValue('userMessagesID');
+    this.messageSearchCriteria.controls.pagination.patchValue('true');
+    this.messageSearchCriteria.controls.direction.patchValue('asc');
+    this.messageSearchCriteria.controls.limit.patchValue(5);
+    this.messageSearchCriteria.controls.page.patchValue(0);
+    this.userMessagesPageIndex = 0;
+    this.userMessagesPageSize = 5;
+    this.userMessagesLoaded = false;
+    await this.loadAllUserMessages();
+  }
+
+  async loadAllUserMessages(loadMessageEvent?: any){
+    try {
+      if (!this.userMessagesLoaded || (loadMessageEvent != undefined && loadMessageEvent === 'loadMessageEvent')) {
+        let result = await lastValueFrom(this.userMessageService.getAll(this.messageSearchCriteria.value).pipe());
+        if (result != null && result != undefined) {
+          if (result != undefined && result.message === 'No data in user message table to fetch.') {
+            this.userMessages = [];
+            this.totalUserMessages = 0;
+          } else {
+            this.userMessages = result.data;
+            this.totalUserMessages = result.userMessageCount;
+          }
+          this.userMessagesLoaded = true;
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      this.userMessages = [];
+      this.snackBar.open('Error loading user messages.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
+
+  onUserMessagesPageChange(event: PageEvent){
+    this.userMessagesPageIndex = event.pageIndex;
+    this.userMessagesPageSize = event.pageSize;
+    this.messageSearchCriteria.controls.page.setValue(this.userMessagesPageIndex);
+    this.messageSearchCriteria.controls.limit.setValue(this.userMessagesPageSize);
+    this.userMessagesLoaded = false;
+    this.loadAllUserMessages();
   }
 }
