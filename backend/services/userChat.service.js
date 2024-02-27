@@ -96,6 +96,9 @@ async function findAll(searchCriteria) {
         let searchTerm = searchCriteria.searchTerm;
         let pagination = searchCriteria.pagination;
         let userChats;
+        let limit;
+        let offset;
+        let page = searchCriteria.page;
         let where;
         if (searchTerm !== '') {
             if (searchCriteria.userID != undefined && searchCriteria.userID != null) {
@@ -143,14 +146,14 @@ async function findAll(searchCriteria) {
                 include: [
                     {    
                         model: userOne,
-                        as: 'userOneID',
+                        as: 'userOne',
                         attributes: [
                             'userName'
                         ],
                     },
                     {    
                         model: userTwo,
-                        as: 'userTwoID',
+                        as: 'userTwo',
                         attributes: [
                             'userName'
                         ],
@@ -170,14 +173,14 @@ async function findAll(searchCriteria) {
                 include: [
                     {    
                         model: userOne,
-                        as: 'userOneID',
+                        as: 'userOne',
                         attributes: [
                             'userName'
                         ],
                     },
                     {    
                         model: userTwo,
-                        as: 'userTwoID',
+                        as: 'userTwo',
                         attributes: [
                             'userName'
                         ],
@@ -191,7 +194,7 @@ async function findAll(searchCriteria) {
             });
         }
         if (userChats != null && userChats != undefined) {
-            return userChats.length;
+            return userChats;
         } else {
             return 0;
         }

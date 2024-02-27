@@ -20,6 +20,8 @@ export class UserChatComponent {
     private dateFunction: DateFunctionsService
   ){}
 
-  ngOnInit(){}
+  ngOnInit(){
+    console.log(this.userChat)
+  }
 
 }

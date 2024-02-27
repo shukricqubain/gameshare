@@ -1,1 +1,33 @@
-<p>add-user-chat works!</p>
+<div class="add-user-chat-container">
+    <ng-container *ngIf="isEdit; then editChat; else addChat"></ng-container>
+    <ng-template #addChat>
+        <h1 style="text-align: center;">Create a Chat</h1>
+    </ng-template>
+    <ng-template #editChat>
+        <h1 style="text-align: center;">Edit a Chat</h1>
+    </ng-template>
+    <form [formGroup]="addUserChatForm" (ngSubmit)="onSubmit()">
+        <div class="form-column">
+            <div class="form-row">
+                <mat-form-field>
+                    <label>Friends</label>
+                    <mat-select placeholder="Select Friend" formControlName="userID"
+                        name="userID" id="userID" required>
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let friendName of allFriendNames" [value]="friendName.userID">
+                            {{friendName.UserName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <button style="background-color: green; color: white;" mat-raised-button [disabled]="!addUserChatForm.dirty || !addUserChatForm.valid"
+            type="submit">Submit</button>
+            <button color="warn" mat-raised-button type="button" style="margin-left:10px;"
+                (click)="closeDialog()">Cancel</button>
+        </div>
+        <br>
+    </form>
+</div>

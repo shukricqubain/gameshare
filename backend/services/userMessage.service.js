@@ -99,6 +99,9 @@ async function findAll(searchCriteria) {
         let searchTerm = searchCriteria.searchTerm;
         let pagination = searchCriteria.pagination;
         let userMessages;
+        let limit;
+        let offset;
+        let page = searchCriteria.page;
         let where;
         if (searchTerm !== '') {
             if (searchCriteria.userID != undefined && searchCriteria.userID != null) {

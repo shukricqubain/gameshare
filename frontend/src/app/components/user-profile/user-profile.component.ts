@@ -34,6 +34,8 @@ import { UserFriend } from 'src/app/models/userFriend.model';
 import { UserFriendService } from 'src/app/services/userFriend.service';
 import { UserChat } from 'src/app/models/userChat.model';
 import { UserChatService } from 'src/app/services/userChat.service';
+import { AddUserChatComponent } from './user-chat/add-user-chat/add-user-chat.component';
+import { UserName } from 'src/app/models/userName.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -1007,6 +1009,38 @@ export class UserProfileComponent {
   }
   
   addChat(){
-    console.log('add chat')
+    let friendNames: UserName[] = [];
+    this.userFriends.forEach(friend => {
+      let friendID: Number;
+      let friendName = '';
+      if(friend.userIDReceivedRequest == this.user.userID){
+        friendID = friend.userIDSentRequest!;
+        friendName = friend.SentBy?.userName!;
+      } else {
+        friendID = friend.userIDReceivedRequest!;
+        friendName = friend.ReceivedBy?.userName!;
+      }
+      friendNames.push({
+        userID: friendID, 
+        UserName: friendName
+      });
+    });
+
+    const dialogRef = this.matDialog.open(AddUserChatComponent, {
+      width: '100%',
+      data: {
+        isEdit: false,
+        friendNames: friendNames,
+        currentUser: this.user
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(async result => {
+      if (result !== undefined) {
+        this.userChatsLoaded = false;
+        await this.loadAllUserChats();
+      }
+    });
   }
+
 }
