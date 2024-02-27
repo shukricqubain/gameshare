@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const UserMessage = sequelize.define("userMessage", {
-        userMessageID:{
+    const UserChat = sequelize.define("userChat", {
+        userChatID:{
             unique: true,
             autoIncrement: true,
             primaryKey: true,  
@@ -9,40 +9,18 @@ module.exports = (sequelize, Sequelize) => {
                 isInt: true
             }
         },
-        userChatID: {
-            foriegnKey: true,  
-            type: Sequelize.INTEGER,
-            validate:{
-                isInt: true
-            }
-        },
-        userIDSentMessage: {
+        userOneID: {
             foriegnKey: true,
             type: Sequelize.INTEGER,
             validate:{
                 isInt: true
             }
         },
-        userIDReceivedMessage: {
+        userTwoID: {
             foriegnKey: true,
             type: Sequelize.INTEGER,
             validate:{
                 isInt: true
-            }
-        },
-        userMessage: {
-            type: Sequelize.STRING,
-            validate: {
-            }
-        },
-        isRead: {
-            type: Sequelize.INTEGER,
-            validate: {
-            }
-        },
-        messageImage:{
-            type: Sequelize.TEXT('long'),
-            validate: {
             }
         },
         createdBy: {
@@ -65,11 +43,11 @@ module.exports = (sequelize, Sequelize) => {
             defaultValue: null
         }
     },{
-        tableName: 'userMessage'
+        tableName: 'userChat'
     },{
         indexes:[{
             unique:true, 
-            fields: ['userMessageID']}]
+            fields: ['userChatID']}]
     });
-    return UserMessage;
+    return UserChat;
 };

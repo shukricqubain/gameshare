@@ -26,7 +26,7 @@ exports.findCount = async (searchCriteria) => {
 // get all userMessages by searchCriteria
 exports.findAll = async (searchCriteria) => {
     try {
-        let allUserMessages = await userMessageService.findCount(searchCriteria);
+        let allUserMessages = await userMessageService.findAll(searchCriteria);
         if( allUserMessages.length > 0) {
             return allUserMessages;
         } else {

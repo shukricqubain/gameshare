@@ -38,6 +38,7 @@ const thread = require('./routes/thread.route');
 const threadItem = require('./routes/threadItem.route');
 const userThread = require('./routes/userThread.route');
 const userFriend = require('./routes/userFriend.route');
+const userChat = require('./routes/userChat.route');
 const userMessage = require('./routes/userMessage.route');
 
 app.use("/home", home);
@@ -54,6 +55,7 @@ app.use("/board", board);
 app.use("/thread", thread);
 app.use("/threadItem", threadItem);
 app.use("/userFriend", userFriend);
+app.use("/userChat", userChat);
 app.use("/userMessage", userMessage);
 
 // set port, listen for requests

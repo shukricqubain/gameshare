@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserMessageComponent } from './user-message.component';
+import { UserChatComponent } from './user-chat.component';
 
 describe('UserMessageComponent', () => {
-  let component: UserMessageComponent;
-  let fixture: ComponentFixture<UserMessageComponent>;
+  let component: UserChatComponent;
+  let fixture: ComponentFixture<UserChatComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [UserMessageComponent]
+      declarations: [UserChatComponent]
     });
-    fixture = TestBed.createComponent(UserMessageComponent);
+    fixture = TestBed.createComponent(UserChatComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

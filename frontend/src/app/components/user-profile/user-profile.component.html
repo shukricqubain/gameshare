@@ -206,36 +206,37 @@
         </mat-tab>
         <mat-tab label="Chat">
             <div class="search-form-container">
-                <form [formGroup]="messageSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyMessageSearch()">
+                <form [formGroup]="chatSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyChatSearch()">
                     <mat-form-field>
                         <mat-label>Search</mat-label>
                         <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
                     </mat-form-field>
-                    <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyMessageSearch()">
+                    <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyChatSearch()">
                         search
                     </mat-icon>
-                    <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearMessageSearch()">
+                    <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearChatSearch()">
                         clear
                     </mat-icon>
                 </form>
+                <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addChat()">Add Chat</button>
             </div>
-            <div *ngIf="!userMessagesLoaded" class="loading-container">
+            <div *ngIf="!userChatsLoaded" class="loading-container">
                 <mat-spinner [diameter]="100"></mat-spinner>
             </div>
-            <div *ngIf="userMessagesLoaded" class="message-container">
-                <div *ngIf="totalUserMessages == 0" class="no-messages-container">
-                    <p>Currently no messages.</p>
+            <div *ngIf="userChatsLoaded" class="chat-container">
+                <div *ngIf="totalUserChats == 0" class="no-chats-container">
+                    <p>Currently no chats.</p>
                 </div>
-                <div fxFlex *ngFor="let userMessage of userMessages" class="messages-margin">
-                    <app-user-message [userMessage]="userMessage" (loadMessageEvent)="loadAllUserMessages($event)"></app-user-message>
+                <div fxFlex *ngFor="let userChat of userChats" class="chat-margin">
+                    <app-user-chat [userChat]="userChat" (loadMessageEvent)="loadAllUserChats($event)"></app-user-chat>
                 </div>
                 <mat-paginator class="paginator-style"
-                    [pageSize]="this.userMessagesPageSize"
-                    [pageIndex]="this.userMessagesPageIndex"
+                    [pageSize]="this.userChatsPageSize"
+                    [pageIndex]="this.userChatsPageIndex"
                     [pageSizeOptions]="[5, 10, 25, 50]"
-                    [length]="this.totalUserMessages"
+                    [length]="this.totalUserChats"
                     [showFirstLastButtons]="true" 
-                    (page)="onUserMessagesPageChange($event)"
+                    (page)="onUserChatsPageChange($event)"
                 ></mat-paginator>
             </div>
         </mat-tab>

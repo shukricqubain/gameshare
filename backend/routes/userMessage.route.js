@@ -30,9 +30,9 @@ router.post('/allUserMessages', async function (req, res){
             if(searchCriteria.pagination === 'true'){
                 userMessageCount = await userMessageController.findCount(searchCriteria);
                 if(userMessageCount > 0){
-                    searchCriteria.userFriendCount = userMessageCount;
+                    searchCriteria.userMessageCount = userMessageCount;
                     allUserMessages = await userMessageController.findAll(searchCriteria);
-                    if(allUserMessages.message !== 'No data in user friend table to fetch.'){
+                    if(allUserMessages.message !== 'No data in user message table to fetch.'){
                         searchCriteria.data = allUserMessages;
                         return res.status(200).json(searchCriteria);
                     } else {

@@ -42,6 +42,7 @@ async function findCount(searchCriteria) {
                             userMessage: { [Op.like]: '%' + searchTerm + '%' },
                             userIDSentMessage: { [Op.like]: '%' + searchTerm + '%' },
                             userIDReceivedMessage: { [Op.like]: '%' + searchTerm + '%' },
+                            userChatID: { [Op.like]: '%' + searchTerm + '%' }
                         },
                         [Op.or]: {
                             userIDSentRequest: searchCriteria.userID,
@@ -243,6 +244,7 @@ async function findAllByUserID(userID) {
 async function createUserMessage(newUserMessage) {
     try {
         return await userMessage.create({
+            userChatID: newUserMessage.userChatID,
             userIDSentMessage: newUserMessage.userIDSentMessage,
             userIDReceivedMessage: newUserMessage.userIDReceivedMessage,
             userMessage: newUserMessage.userMessage,

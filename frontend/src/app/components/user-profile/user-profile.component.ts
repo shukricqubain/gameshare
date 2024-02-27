@@ -32,8 +32,8 @@ import { FilterFormPopUpComponent } from '../filter-form-pop-up/filter-form-pop-
 import { ProfilePicturePopUpComponent } from './profile-picture-pop-up/profile-picture-pop-up.component';
 import { UserFriend } from 'src/app/models/userFriend.model';
 import { UserFriendService } from 'src/app/services/userFriend.service';
-import { UserMessage } from 'src/app/models/userMessage.model';
-import { UserMessageService } from 'src/app/services/userMessage.service';
+import { UserChat } from 'src/app/models/userChat.model';
+import { UserChatService } from 'src/app/services/userChat.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -58,7 +58,7 @@ export class UserProfileComponent {
     private threadService: ThreadService,
     private userThreadService: UserThreadService,
     private userFriendService: UserFriendService,
-    private userMessageService: UserMessageService,
+    private userChatService: UserChatService,
     private matDialog: MatDialog,
     private router: Router,
   ) {
@@ -196,21 +196,21 @@ export class UserProfileComponent {
   userFriendRequestsPageSize = 5;
   userFriendRequestsPageIndex = 0;
 
-  /* User Message Form Section */
-  messageSearchCriteria = new FormGroup({
+  /* User Chat Form Section */
+  chatSearchCriteria = new FormGroup({
     searchTerm: new FormControl(''),
-    sort: new FormControl('userMessageID', [Validators.required]),
+    sort: new FormControl('userChatID', [Validators.required]),
     pagination: new FormControl('true', [Validators.required]),
     direction: new FormControl('asc', [Validators.required]),
     limit: new FormControl(5, [Validators.required]),
     page: new FormControl(0, [Validators.required]),
     userID: new FormControl(''),
   });
-  userMessagesLoaded: boolean = false;
-  userMessages: UserMessage[] = [];
-  totalUserMessages = 0;
-  userMessagesPageSize = 5;
-  userMessagesPageIndex = 0;
+  userChatsLoaded: boolean = false;
+  userChats: UserChat[] = [];
+  totalUserChats = 0;
+  userChatsPageSize = 5;
+  userChatsPageIndex = 0;
 
   private currentTabIndex = 0;
 
@@ -250,9 +250,12 @@ export class UserProfileComponent {
       
       await this.loadAllUserFriends();
     
-    } else if (this.currentTabIndex == 5 && this.userMessagesLoaded == false){
-    
-      await this.loadAllUserMessages();
+    } else if (this.currentTabIndex == 5 && this.userChatsLoaded == false){
+      
+      if(!this.userFriendsLoaded){
+        await this.loadAllUserFriends();
+      }
+      await this.loadAllUserChats();
 
     } else if (this.currentTabIndex == 6) {
 
@@ -381,7 +384,7 @@ export class UserProfileComponent {
     this.threadSearchCriteria.controls.userID.patchValue(data.userID);
     this.friendSearchCriteria.controls.userID.patchValue(data.userID);
     this.friendRequestSearchCriteria.controls.userID.patchValue(data.userID);
-    this.messageSearchCriteria.controls.userID.patchValue(data.userID);
+    this.chatSearchCriteria.controls.userID.patchValue(data.userID);
     this.userLoaded = true;
   }
 
@@ -950,56 +953,60 @@ export class UserProfileComponent {
     } 
   }
 
-  /* User Messages Section */
+  /* User Chats Section */
 
-  async applyMessageSearch() {
-    this.userMessagesLoaded = false;
-    await this.loadAllUserMessages();
+  async applyChatSearch() {
+    this.userChatsLoaded = false;
+    await this.loadAllUserChats();
   }
 
-  async clearMessageSearch() {
-    this.messageSearchCriteria.controls.searchTerm.patchValue('');
-    this.messageSearchCriteria.controls.sort.patchValue('userMessagesID');
-    this.messageSearchCriteria.controls.pagination.patchValue('true');
-    this.messageSearchCriteria.controls.direction.patchValue('asc');
-    this.messageSearchCriteria.controls.limit.patchValue(5);
-    this.messageSearchCriteria.controls.page.patchValue(0);
-    this.userMessagesPageIndex = 0;
-    this.userMessagesPageSize = 5;
-    this.userMessagesLoaded = false;
-    await this.loadAllUserMessages();
+  async clearChatSearch() {
+    this.chatSearchCriteria.controls.searchTerm.patchValue('');
+    this.chatSearchCriteria.controls.sort.patchValue('userChatID');
+    this.chatSearchCriteria.controls.pagination.patchValue('true');
+    this.chatSearchCriteria.controls.direction.patchValue('asc');
+    this.chatSearchCriteria.controls.limit.patchValue(5);
+    this.chatSearchCriteria.controls.page.patchValue(0);
+    this.userChatsPageIndex = 0;
+    this.userChatsPageSize = 5;
+    this.userChatsLoaded = false;
+    await this.loadAllUserChats();
   }
 
-  async loadAllUserMessages(loadMessageEvent?: any){
+  async loadAllUserChats(loadChatEvent?: any){
     try {
-      if (!this.userMessagesLoaded || (loadMessageEvent != undefined && loadMessageEvent === 'loadMessageEvent')) {
-        let result = await lastValueFrom(this.userMessageService.getAll(this.messageSearchCriteria.value).pipe());
+      if (!this.userChatsLoaded || (loadChatEvent != undefined && loadChatEvent === 'loadChatEvent')) {
+        let result = await lastValueFrom(this.userChatService.getAll(this.chatSearchCriteria.value).pipe());
         if (result != null && result != undefined) {
-          if (result != undefined && result.message === 'No data in user message table to fetch.') {
-            this.userMessages = [];
-            this.totalUserMessages = 0;
+          if (result != undefined && result.message === 'No data in user chat table to fetch.') {
+            this.userChats = [];
+            this.totalUserChats = 0;
           } else {
-            this.userMessages = result.data;
-            this.totalUserMessages = result.userMessageCount;
+            this.userChats = result.data;
+            this.totalUserChats = result.userChatCount;
           }
-          this.userMessagesLoaded = true;
+          this.userChatsLoaded = true;
         }
       }
     } catch (err) {
       console.error(err);
-      this.userMessages = [];
-      this.snackBar.open('Error loading user messages.', 'dismiss', {
+      this.userChats = [];
+      this.snackBar.open('Error loading user chats.', 'dismiss', {
         duration: 2000
       });
     }
   }
 
-  onUserMessagesPageChange(event: PageEvent){
-    this.userMessagesPageIndex = event.pageIndex;
-    this.userMessagesPageSize = event.pageSize;
-    this.messageSearchCriteria.controls.page.setValue(this.userMessagesPageIndex);
-    this.messageSearchCriteria.controls.limit.setValue(this.userMessagesPageSize);
-    this.userMessagesLoaded = false;
-    this.loadAllUserMessages();
+  onUserChatsPageChange(event: PageEvent){
+    this.userChatsPageIndex = event.pageIndex;
+    this.userChatsPageSize = event.pageSize;
+    this.chatSearchCriteria.controls.page.setValue(this.userChatsPageIndex);
+    this.chatSearchCriteria.controls.limit.setValue(this.userChatsPageSize);
+    this.userChatsLoaded = false;
+    this.loadAllUserChats();
+  }
+  
+  addChat(){
+    console.log('add chat')
   }
 }
