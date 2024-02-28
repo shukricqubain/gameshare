@@ -14,16 +14,6 @@ userChat.hasOne(userTwo, {
     sourceKey: 'userTwoID',
     as: 'userTwo'
 });
-userOne.belongsTo(userChat, {
-    foreignKey: 'userOneID',
-    sourceKey: 'userID',
-    as: 'userOne'
-});
-userTwo.belongsTo(userChat, {
-    foreignKey: 'userTwoID',
-    sourceKey: 'userID',
-    as: 'userTwo'
-});
 
 // Get count of userChats by searchCriteria
 async function findCount(searchCriteria) {

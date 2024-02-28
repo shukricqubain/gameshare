@@ -1,11 +1,9 @@
-import { User } from "./user.model";
-
 export class UserChat {
     userChatID?: Number;
     userOneID?: Number;
     userTwoID?: Number;
-    userOne?: User;
-    userTwo?: User;
+    'userOne.userName'?: String;
+    'userTwo.userName'?: String;
     createdBy?: Number;
     updatedBy?: Number;
     createdAt?: String;

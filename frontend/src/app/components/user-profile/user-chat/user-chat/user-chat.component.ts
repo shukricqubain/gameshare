@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { UserChat } from 'src/app/models/userChat.model';
 import { UserChatService } from 'src/app/services/userChat.service';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-user-chat',
@@ -12,6 +13,7 @@ import { UserChatService } from 'src/app/services/userChat.service';
 export class UserChatComponent {
 
   @Input() userChat: UserChat;
+  @Input() currentUser: User;
   @Output() loadChatEvent = new EventEmitter<string>();
 
   constructor(
@@ -20,8 +22,22 @@ export class UserChatComponent {
     private dateFunction: DateFunctionsService
   ){}
 
+  otherUser: String = '';
+
   ngOnInit(){
-    console.log(this.userChat)
+    this.prepareUserChat();
+  }
+
+  prepareUserChat(){
+    if(this.userChat.userOneID == this.currentUser.userID){
+      this.otherUser = this.userChat["userTwo.userName"] ? this.userChat["userTwo.userName"]: '';
+    } else {
+      this.otherUser = this.userChat["userOne.userName"] ? this.userChat["userOne.userName"]: '';
+    }
+  }
+
+  openMessages(){
+    console.log('open messages of this chat')
   }
 
 }

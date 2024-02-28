@@ -31,6 +31,7 @@ router.post('/allUserChats', async function (req, res){
                 if(userChatCount > 0){
                     searchCriteria.userChatCount = userChatCount;
                     allUserChats = await userChatController.findAll(searchCriteria);
+                    console.log(allUserChats)
                     if(allUserChats.message !== 'No data in user chat table to fetch.'){
                         searchCriteria.data = allUserChats;
                         return res.status(200).json(searchCriteria);

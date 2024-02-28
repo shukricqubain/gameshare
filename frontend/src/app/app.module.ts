@@ -66,6 +66,7 @@ import { UserFriendComponent } from './components/user-profile/user-friend/user-
 import { MutualFriendComponent } from './components/user-profile/user-friend/mutual-friend/mutual-friend.component';
 import { UserChatComponent } from './components/user-profile/user-chat/user-chat/user-chat.component';
 import { AddUserChatComponent } from './components/user-profile/user-chat/add-user-chat/add-user-chat.component';
+import { UserMessageComponent } from './components/user-profile/user-chat/user-message/user-message.component';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import { AddUserChatComponent } from './components/user-profile/user-chat/add-us
     UserFriendComponent,
     MutualFriendComponent,
     UserChatComponent,
-    AddUserChatComponent
+    AddUserChatComponent,
+    UserMessageComponent
   ],
   imports: [
     BrowserModule,

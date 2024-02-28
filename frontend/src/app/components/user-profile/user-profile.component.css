@@ -192,3 +192,7 @@
     border-radius: 10px;
     height: 400px;
 }
+
+.chat-margin {
+    padding: 3px 3px 3px 3px;
+}

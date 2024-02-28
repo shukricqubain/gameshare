@@ -1,3 +1,8 @@
 <mat-card>
-    <mat-card-title>User Chat</mat-card-title>
+    <mat-card-content>
+        <mat-card-title>Chat with {{otherUser}}</mat-card-title>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button (click)="openMessages()" type="button">Open</button>
+    </mat-card-actions>
 </mat-card>
