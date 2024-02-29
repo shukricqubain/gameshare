@@ -31,7 +31,6 @@ router.post('/allUserChats', async function (req, res){
                 if(userChatCount > 0){
                     searchCriteria.userChatCount = userChatCount;
                     allUserChats = await userChatController.findAll(searchCriteria);
-                    console.log(allUserChats)
                     if(allUserChats.message !== 'No data in user chat table to fetch.'){
                         searchCriteria.data = allUserChats;
                         return res.status(200).json(searchCriteria);
@@ -121,7 +120,7 @@ router.put('/editUserChat', async function (req, res) {
 });
 
 // delete a userChat by userID
-router.post('/deleteUserChat:userChatID', async function (req, res) {
+router.delete('/deleteUserChat/:userChatID', async function (req, res) {
     try {
         if(req.params.userChatID !== undefined){
             let userChatID = Number(req.params.userChatID);

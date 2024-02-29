@@ -1,12 +1,12 @@
 export class User {
-    userID?: Number;
+    userID?: number;
     userName?: string;
     firstName?: string;
     lastName?: string;
     dateOfBirth?: string;
     email?: string;
     phoneNumber?: string;
-    userRole?: Number;
+    userRole?: number;
     userPassword?: string;
     profilePicture?: string;
     createdAt?: string;

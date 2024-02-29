@@ -19,6 +19,10 @@ export class UserMessageService {
     return this.http.get(`${baseUrl}/getAllMessagesByUserID/${userID}`);
   }
 
+  getAllByUserChatID(userChatID: number): Observable<any>{
+    return this.http.get(`${baseUrl}/getAllByUserChatID/${userChatID}`);
+  };
+
   getByUserSentAndUserReceivedIDs(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/getByUserMessagesSentReceivedIDs`, data);
   }

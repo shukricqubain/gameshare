@@ -37,4 +37,21 @@ export class DateFunctionsService {
         return dateString;
     }
 
+    public formatDateTimeAndDate(date: string){
+        let edtDate = `${this.convertDateEDT(date)}`;
+        console.log(edtDate)
+        let dateArray = edtDate.split(' ');
+        let getMonth = this.monthMap.get(`${dateArray[1]}`);
+        let getHour = Number(dateArray[4].split(':')[0]);
+        let getMinute = dateArray[4].split(':')[1];
+        let timestamp;
+        if(getHour > 12){
+            getHour -= 12;
+            timestamp = `${getHour}:${getMinute} PM`;
+        } else {
+            timestamp = `${getHour}:${getMinute} AM`;
+        }
+        let dateString = `${timestamp} ${getMonth}/${dateArray[2]}/${dateArray[3]}`;
+        return dateString;
+    }
 }

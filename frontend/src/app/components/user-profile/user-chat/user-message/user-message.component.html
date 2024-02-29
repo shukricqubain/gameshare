@@ -1,1 +1,46 @@
-<p>user-message works!</p>
+<div class="child-component">
+    <div class="column-container">
+        <div class="header-container">
+            <h1>Chat with {{otherUser}}</h1>
+        </div>
+        <div *ngIf="!messagesLoaded" class="loading-container">
+            <mat-spinner [diameter]="100"></mat-spinner>
+        </div>
+        <div *ngIf="messagesLoaded" class="messages-container">
+            <div *ngIf="userMessages.length == 0">
+                <p>Currently no messages.</p>
+            </div>
+            <div fxLayout="row" fxFlex.md="70" fxLayoutWrap class="message-item">
+                <div fxFlex *ngFor="let message of userMessages">
+                    <mat-card [ngClass]="{
+                        'sent-message-card': message.userIDSentMessage == user.userID, 
+                        'received-message-card': message.userIDReceivedMessage == user.userID}">
+                        <mat-card-content>
+                            {{message.userMessage}}
+                        </mat-card-content>
+                        <mat-card-subtitle>
+                            Sent at: {{formatDate(message.createdAt)}}
+                        </mat-card-subtitle>
+                    </mat-card>
+                </div>
+            </div>
+        </div>
+        <div class="send-message-container mat-elevation-z8">
+            <mat-icon [inline]="true" matTooltip="Click to upload an image." class="icon-style" (click)="uploadImage()">
+                upload
+            </mat-icon>
+            <form [formGroup]="userMessageForm">
+                <mat-form-field appearance="fill" class="input-style">
+                    <label>Message</label>
+                    <input matInput name="userMessage" id="userMessage" type="text" formControlName="userMessage"
+                        placeholder="Enter your message" [maxlength]="255" required />
+                </mat-form-field>
+            </form>
+            <mat-icon [inline]="true" [attr.disabled]="!userMessageForm.valid || !userMessageForm.dirty" matTooltip="Click to send a message." [ngClass]="{
+                'icon-style': userMessageForm.valid, 
+                'disabled-icon': !userMessageForm.valid}" (click)="onSubmit()">
+                send
+            </mat-icon>
+        </div>
+    </div>
+</div>

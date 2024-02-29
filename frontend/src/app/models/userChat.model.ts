@@ -1,11 +1,11 @@
 export class UserChat {
-    userChatID?: Number;
-    userOneID?: Number;
-    userTwoID?: Number;
-    'userOne.userName'?: String;
-    'userTwo.userName'?: String;
-    createdBy?: Number;
-    updatedBy?: Number;
-    createdAt?: String;
-    updatedAt?: String;
+    userChatID?: number;
+    userOneID?: number;
+    userTwoID?: number;
+    'userOne.userName'?: string;
+    'userTwo.userName'?: string;
+    createdBy?: number;
+    updatedBy?: number;
+    createdAt?: string;
+    updatedAt?: string;
 }

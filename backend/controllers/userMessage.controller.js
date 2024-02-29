@@ -16,7 +16,7 @@ exports.findCount = async (searchCriteria) => {
         if( userMessageCount > 0) {
             return userMessageCount;
         } else {
-            return { message: 'No data in user message table to fetch.'};
+            return [];
         }
     } catch(err) {
         console.error(err);
@@ -30,7 +30,7 @@ exports.findAll = async (searchCriteria) => {
         if( allUserMessages.length > 0) {
             return allUserMessages;
         } else {
-            return { message: 'No data in user message table to fetch.'};
+            return [];
         }
     } catch(err) {
         console.error(err);
@@ -42,7 +42,7 @@ exports.getUserMessagesBySentReceivedIDs = async (req) => {
     try {
         let userMessages = await userMessageService.getUserMessagesBySentReceivedIDs(req);
         if (userMessages == null || userMessages == undefined) {
-            return 'Cannot find user messages with specified userIDs';
+            return [];
         } else {
             return userMessages;
         }
@@ -58,7 +58,21 @@ exports.findAllByUserID = async (userID) => {
         if (allUserMessages.length > 0) {
             return allUserMessages;
         } else {
-            return { message: 'No data in user message table to fetch.'};
+            return [];
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+// get userMessages by userChatID
+exports.findAllByUserChatID = async (userChatID) => {
+    try {
+        let allUserMessages = await userMessageService.findAllByUserChatID(userChatID);
+        if (allUserMessages.length > 0) {
+            return allUserMessages;
+        } else {
+            return [];
         }
     } catch (err) {
         console.error(err);

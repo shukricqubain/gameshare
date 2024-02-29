@@ -2,18 +2,18 @@ import { User } from "./user.model";
 import { UserChat } from './userChat.model';
 
 export class UserMessage {
-    userMessageID?: Number;
-    userChatID?: Number;
+    userMessageID?: number;
+    userChatID?: number;
     userChat?: UserChat;
-    userIDSentMessage?: Number;
-    userIDReceivedMessage?: Number;
+    userIDSentMessage?: number;
+    userIDReceivedMessage?: number;
     SentBy?: User;
     ReceivedBy?: User;
-    userMessage?: String;
+    userMessage?: string;
     isRead?: boolean;
     messageImage?: string;
-    createdBy?: Number;
-    updatedBy?: Number;
-    createdAt?: String;
-    updatedAt?: String;
+    createdBy?: number;
+    updatedBy?: number;
+    createdAt?: string;
+    updatedAt?: string;
 }

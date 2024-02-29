@@ -243,6 +243,19 @@ async function findAllByUserID(userID) {
     }
 };
 
+// get userMessages by userChatID
+async function findAllByUserChatID(userChatID){
+    try {
+        return await userMessage.findAll({
+            where: {
+                userChatID: userChatID
+            }
+        });
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 // create userMessage
 async function createUserMessage(newUserMessage) {
     try {
@@ -298,9 +311,10 @@ async function deleteUserMessage(userMessageID) {
 module.exports = {
     findCount,
     findAll,
-    createUserMessage,
     findAllByUserID,
+    findAllByUserChatID,
     getUserMessagesBySentReceivedIDs,
+    createUserMessage,
     updateUserMessage,
     deleteUserMessage
 };

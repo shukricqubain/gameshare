@@ -88,7 +88,7 @@ router.post('/getUserMessagesBySentReceivedIDs', async function (req, res) {
 });
 
 // get userMessage by userID
-router.get('/getAllMessagesByUserID:userID', async function (req, res) {
+router.get('/getAllMessagesByUserID/:userID', async function (req, res) {
     try {
         if(req.params.userID !== undefined){
             let userID = Number(req.params.userID);
@@ -104,6 +104,26 @@ router.get('/getAllMessagesByUserID:userID', async function (req, res) {
     } catch(err){
         console.error(err);
         res.status(500).send("There was an error fetching all userMessages from the database by userID.");
+    }
+});
+
+// get all userMessages by userChatID
+router.get('/getAllByUserChatID/:userChatID', async function (req, res) {
+    try {
+        if(req.params.userChatID !== undefined){
+            let userChatID = Number(req.params.userChatID);
+            let userMessages = await userMessageController.findAllByUserChatID(userChatID);
+            if(userMessages != undefined && typeof userMessages !== 'string'){
+                res.status(200).send(userMessages);
+            } else {
+                res.status(200).send(userMessages);
+            }
+        } else {
+            res.status(400).send('userChatID is required.');
+        }
+    } catch(err){
+        console.error(err);
+        res.status(500).send("There was an error fetching all userMessages from the database by userChatID.");
     }
 });
 
@@ -141,7 +161,7 @@ router.put('/editUserMessage', async function (req, res) {
 });
 
 // delete a userMessage by userID
-router.post('/deleteUserMessage:userMessageID', async function (req, res) {
+router.delete('/deleteUserMessage/:userMessageID', async function (req, res) {
     try {
         if(req.params.userMessageID !== undefined){
             let userMessageID = Number(req.params.userMessageID);

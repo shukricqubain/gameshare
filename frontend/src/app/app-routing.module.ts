@@ -18,6 +18,7 @@ import { BoardsComponent } from './components/boards/boards.component';
 import { BoardComponent } from './components/boards/board/board.component';
 import { ThreadComponent } from './components/boards/threads/thread/thread.component';
 import { ViewUserProfileComponent } from './components/view-user-profile/view-user-profile.component';
+import { UserMessageComponent } from './components/user-profile/user-chat/user-message/user-message.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -38,7 +39,8 @@ const routes: Routes = [
   { path: 'boards', component: BoardsComponent, title: 'Boards'},
   { path: 'board/:boardID', component: BoardComponent, title: 'Board'},
   { path: 'thread/:threadID', component: ThreadComponent, title: 'Thread'},
-  { path: 'view-user-profile/:userID', component: ViewUserProfileComponent, title: 'View User Profile'}
+  { path: 'view-user-profile/:userID', component: ViewUserProfileComponent, title: 'View User Profile'},
+  { path: 'user-message/:userChatID', component: UserMessageComponent, title: 'UserMessage'}
   
 ];
 

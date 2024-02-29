@@ -1,0 +1,61 @@
+.column-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.loading-container {
+    display: grid; 
+    place-items: center;
+}
+
+.send-message-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-style {
+    margin-top: 15px;
+    font-size: 15px;
+    width: 500px;
+}
+
+.icon-style {
+    font-size: 35px;
+    cursor: pointer;
+    color: #673ab7;
+}
+
+.disabled-icon {
+    color: grey;
+    font-size: 35px;
+}
+
+.messages-container {
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-color: #673ab7;
+    border-radius: 10px;
+    width: 80vw;
+    height: 60vh;
+}
+
+.message-item {
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+.sent-message-card {
+    margin-top: 5px;
+    float: right;
+}
+
+.received-message-card {
+    margin-top: 5px;
+    float: left;
+}

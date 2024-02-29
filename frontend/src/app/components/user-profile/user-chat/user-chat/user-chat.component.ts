@@ -4,6 +4,7 @@ import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { UserChat } from 'src/app/models/userChat.model';
 import { UserChatService } from 'src/app/services/userChat.service';
 import { User } from 'src/app/models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-chat',
@@ -19,6 +20,7 @@ export class UserChatComponent {
   constructor(
     private snackBar: MatSnackBar,
     private userChatService: UserChatService,
+    private router: Router,
     private dateFunction: DateFunctionsService
   ){}
 
@@ -37,7 +39,7 @@ export class UserChatComponent {
   }
 
   openMessages(){
-    console.log('open messages of this chat')
+    this.router.navigate([`/user-message/${this.userChat.userChatID}`], { state: { userChat: this.userChat } });
   }
 
 }
