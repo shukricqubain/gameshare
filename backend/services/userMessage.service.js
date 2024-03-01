@@ -256,6 +256,34 @@ async function findAllByUserChatID(userChatID){
     }
 };
 
+async function findOne(userMessageID){
+    try {
+        return await userMessage.findOne({
+            where: {
+                userMessageID: userMessageID
+            }
+        });
+    } catch(err){
+        console.error(err);
+    }
+};
+
+async function findMultiple(idString){
+    try {
+        let idArray = idString.split(',');
+        return await userMessage.findAll({
+            where: {
+                userMessageID: {
+                    [Op.in]: idArray
+                }
+            },
+            raw: true
+        });
+    } catch(err){
+        console.error(err);
+    }
+}
+
 // create userMessage
 async function createUserMessage(newUserMessage) {
     try {
@@ -277,10 +305,10 @@ async function createUserMessage(newUserMessage) {
 };
 
 // edit a userMessage by userMessageID
-async function updateUserMessage(userMessageID, userMessage) {
+async function updateUserMessage(userMessageID, updateUserMessage) {
     try {
         return result = await userMessage.update(
-            userMessage,
+            updateUserMessage,
             {
                 where: {
                     userMessageID: userMessageID
@@ -294,6 +322,29 @@ async function updateUserMessage(userMessageID, userMessage) {
         }
     }
 };
+
+async function updateReadReceipts(idString){
+    try {
+        let idArray = idString.split(',');
+        return result = await userMessage.update(
+            {
+                isRead: 1
+            },
+            {
+                where: {
+                    userMessageID: {
+                        [Op.in]: idArray
+                    }
+                }
+            }
+        );
+    } catch (err) {
+        console.error(err);
+        if (err.errors[0].type === 'unique violation') {
+            return err.errors[0].message;
+        }
+    }
+}
 
 // delete a userMessage by userMessageID
 async function deleteUserMessage(userMessageID) {
@@ -313,8 +364,11 @@ module.exports = {
     findAll,
     findAllByUserID,
     findAllByUserChatID,
+    findOne,
+    findMultiple,
     getUserMessagesBySentReceivedIDs,
     createUserMessage,
     updateUserMessage,
+    updateReadReceipts,
     deleteUserMessage
 };

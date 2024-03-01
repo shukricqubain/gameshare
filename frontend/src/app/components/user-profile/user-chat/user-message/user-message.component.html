@@ -18,17 +18,26 @@
                         <mat-card-content>
                             {{message.userMessage}}
                         </mat-card-content>
-                        <mat-card-subtitle>
-                            Sent at: {{formatDate(message.createdAt)}}
-                        </mat-card-subtitle>
                     </mat-card>
+                    <div *ngIf="message.isRead == 0" [ngClass]="{
+                        'sent-timestamp-style': message.userIDSentMessage == user.userID, 
+                        'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
+                        <p>{{formatDate(message.createdAt)}}</p>
+                    </div>
+                    <div *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" [ngClass]="{
+                        'sent-timestamp-style': message.userIDSentMessage == user.userID, 
+                        'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
+                        <p>Read</p>
+                        <p>{{formatDate(message.updatedAt)}}</p>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="send-message-container mat-elevation-z8">
-            <mat-icon [inline]="true" matTooltip="Click to upload an image." class="icon-style" (click)="uploadImage()">
+            <mat-icon [inline]="true" matTooltip="Click to upload an image." class="icon-style" (click)="fileInput.click()">
                 upload
             </mat-icon>
+            <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
             <form [formGroup]="userMessageForm">
                 <mat-form-field appearance="fill" class="input-style">
                     <label>Message</label>
@@ -36,11 +45,13 @@
                         placeholder="Enter your message" [maxlength]="255" required />
                 </mat-form-field>
             </form>
-            <mat-icon [inline]="true" [attr.disabled]="!userMessageForm.valid || !userMessageForm.dirty" matTooltip="Click to send a message." [ngClass]="{
-                'icon-style': userMessageForm.valid, 
-                'disabled-icon': !userMessageForm.valid}" (click)="onSubmit()">
-                send
-            </mat-icon>
+            <button type="button" [disabled]="!userMessageForm.valid || !userMessageForm.dirty" matTooltip="Click to send a message." mat-icon-button (click)="onSubmit()">
+                <mat-icon [ngClass]="{
+                    'icon-style': userMessageForm.valid, 
+                    'disabled-icon': !userMessageForm.valid}">
+                    send
+                </mat-icon>
+            </button>
         </div>
     </div>
 </div>

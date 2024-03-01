@@ -34,6 +34,7 @@ export class UserMessageComponent {
   userMessages: UserMessage[] = [];
   otherUser: string;
   otherUserID: number;
+  fileName: string;
 
   userMessageForm = new FormGroup({
     userChatID: new FormControl(''),
@@ -47,6 +48,7 @@ export class UserMessageComponent {
       this.userChat = data.userChat;
       await this.checkCurrentUser();
       await this.loadAllMessages();
+      await this.checkReadReceipts();
       this.prepareChat();
     } else {
       this.snackBar.open('Error loading userChat details.', 'dismiss', {
@@ -104,6 +106,34 @@ export class UserMessageComponent {
     }
   }
 
+  async checkReadReceipts(){
+    let receivedMessages = this.userMessages.filter(message => {
+      return message.userIDSentMessage !== this.user.userID && message.isRead == 0;
+    });
+    if(receivedMessages.length > 0 && receivedMessages.length == 1){
+      let updateMessage = receivedMessages[0];
+      updateMessage.isRead = 1;
+      this.userMessageService.update(updateMessage).subscribe({
+        next: this.handleUpdateResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    } else if(receivedMessages.length > 0 && receivedMessages.length > 1) {
+      let updateString = ``;
+      for(let i = 0; i < receivedMessages.length; i++){
+        if(i == receivedMessages.length - 1){
+          updateString += `${receivedMessages[i].userMessageID}`;
+        } else {
+          updateString += `${receivedMessages[i].userMessageID},`;
+        }
+      }
+      let updateObj = {updateString};
+      this.userMessageService.updateReadReceipts(updateObj).subscribe({
+        next: this.handleUpdateResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
+  }
+
   onSubmit(){
     let newUserMessage: UserMessage = {
       userMessageID: 0,
@@ -111,7 +141,7 @@ export class UserMessageComponent {
       userIDSentMessage: 0,
       userIDReceivedMessage: 0,
       userMessage: '',
-      isRead: false,
+      isRead: 0,
       messageImage: '',
       createdBy: 0,
       updatedBy: 0,
@@ -141,17 +171,48 @@ export class UserMessageComponent {
     }
   }
 
+  async handleUpdateResponse(data: any){
+    if (data !== null && data !== undefined) {
+      this.messagesLoaded = false;
+      await this.loadAllMessages();
+    }
+  }
+
+  async onFileSelected(event: any){
+    const file = event.target.files[0] ?? null;
+    this.fileName = file.name;
+    let reader = new FileReader();
+    reader.onloadend = function() {
+      //console.log('RESULT', reader.result)
+    }
+    
+    if(file){
+      let imgCompressed = await this.compressImage(file, 50);
+      imgCompressed = 'data:image/png;base64,' + imgCompressed.split(',')[1];
+      this.userMessageForm.controls.messageImage.patchValue(imgCompressed);
+      this.userMessageForm.controls.messageImage.markAsDirty();
+    }
+  }
+
+  async compressImage(blobImg: any, percent: any){
+    let bitmap = await createImageBitmap(blobImg);
+    let canvas = document.createElement("canvas");
+    let ctx = canvas.getContext('2d');
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    ctx?.drawImage(bitmap, 0, 0);
+    let dataURL = canvas.toDataURL("images/png", percent / 100);
+    return dataURL;
+  }
+
   handleErrorResponse(error: any) {
     this.snackBar.open(error.message, 'dismiss', {
       duration: 3000
     });
   }
 
-  uploadImage(){
-  }
-
   public formatDate(date: any) {
-    let formattedDate = this.dateFunction.formatDateTimeAndDate(date);
+    let formattedDate = this.dateFunction.formatDateTime(date);
     return formattedDate;
   }
 }

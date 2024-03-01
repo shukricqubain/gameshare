@@ -35,6 +35,10 @@ export class UserMessageService {
     return this.http.put(`${baseUrl}/editUserMessage`, data);
   }
 
+  updateReadReceipts(updateString: any): Observable<any> {
+    return this.http.put(`${baseUrl}/updateReadReceipts/`, updateString);
+  }
+
   delete(userMessageID: any): Observable<any> {
     return this.http.delete(`${baseUrl}/deleteUserMessage/${userMessageID}`);
   }

@@ -79,10 +79,44 @@ exports.findAllByUserChatID = async (userChatID) => {
     }
 };
 
-// edit a userMessage by userMessageID
-exports.update = async (userMessageID, userMessage) => {
+exports.findMultiple = async (idString) => {
     try {
-        return await userMessageService.updateUserMessage(userMessageID, userMessage);
+        let allUserMessages = await userMessageService.findMultiple(idString);
+        if (allUserMessages.length > 0) {
+            return allUserMessages;
+        } else {
+            return [];
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+exports.updateReadReceipts = async (idString) => {
+    try {
+        return await userMessageService.updateReadReceipts(idString);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+exports.findOne = async (userMessageID) => {
+    try {
+        let userMessage = await userMessageService.findOne(userMessageID);
+        if (userMessage) {
+            return userMessage;
+        } else {
+            return {message: 'No userMessage found with provided userMessageID.'};
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+// edit a userMessage by userMessageID
+exports.update = async (userMessageID, updateUserMessage) => {
+    try {
+        return await userMessageService.updateUserMessage(userMessageID, updateUserMessage);
     } catch(err){
         console.error(err);
     }

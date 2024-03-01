@@ -10,7 +10,7 @@ export class UserMessage {
     SentBy?: User;
     ReceivedBy?: User;
     userMessage?: string;
-    isRead?: boolean;
+    isRead?: number;
     messageImage?: string;
     createdBy?: number;
     updatedBy?: number;

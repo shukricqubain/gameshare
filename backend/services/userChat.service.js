@@ -257,10 +257,10 @@ async function createUserChat(newUserChat) {
 };
 
 // edit a userChat by userChatID
-async function updateUserChat(userChatID, userChat) {
+async function updateUserChat(userChatID, updateUserChat) {
     try {
         return result = await userChat.update(
-            userChat,
+            updateUserChat,
             {
                 where: {
                     userChatID: userChatID

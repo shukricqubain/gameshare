@@ -24,14 +24,14 @@
 }
 
 .icon-style {
-    font-size: 35px;
+    font-size: 25px;
     cursor: pointer;
     color: #673ab7;
 }
 
 .disabled-icon {
     color: grey;
-    font-size: 35px;
+    font-size: 25px;
 }
 
 .messages-container {
@@ -51,11 +51,30 @@
 }
 
 .sent-message-card {
-    margin-top: 5px;
     float: right;
+    background-color: #7049b4;
+    color: white;
 }
 
 .received-message-card {
-    margin-top: 5px;
     float: left;
+    background-color: #b14581;
+    color: white;
+}
+
+.sent-timestamp-style {
+    display: flex;
+    flex-direction: column;
+    float: right;
+}
+
+.received-timestamp-style {
+    display: flex;
+    flex-direction: column;
+    float: left;
+}
+
+p {
+    margin: 0;
+    padding: 0px;
 }
