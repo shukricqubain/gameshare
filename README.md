@@ -168,7 +168,7 @@ Use this space to show useful examples of how a project can be used. Additional 
       - [ ] The user should be able to send images in the chat.
       - [x] There should be a clickable icon to create a new chat between one or more friends (Selected via a dropdown).
       - [x] Each message should display the time it was delivered.
-      - [ ] Each chat should visually display whether new messages have been read by the user.
+      - [x] Each chat should visually display whether new messages have been read by the user.
 - [ ] View User Page Task/Enhancements
    - [ ] Game Highlights
       - [ ] Should display recently updated games in a vertical list of material cards.
