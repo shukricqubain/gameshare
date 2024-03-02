@@ -38,7 +38,7 @@ export class UserMessageComponent {
 
   userMessageForm = new FormGroup({
     userChatID: new FormControl(''),
-    userMessage: new FormControl('', [Validators.required]),
+    userMessage: new FormControl(''),
     messageImage: new FormControl('')
   });
 
@@ -64,6 +64,14 @@ export class UserMessageComponent {
     } else {
       this.otherUser = this.userChat["userOne.userName"] ? this.userChat["userOne.userName"]: '';
       this.otherUserID = this.userChat.userOneID ? this.userChat.userOneID : 0;
+    }
+  }
+
+  prepareMessageDate(message: UserMessage){
+    if(message.isRead){
+      return this.formatDate(message.updatedAt);
+    } else {
+      return this.formatDate(message.createdAt);
     }
   }
 
@@ -163,6 +171,7 @@ export class UserMessageComponent {
   async handleCreateResponse(data: any) {
     if (data !== null && data !== undefined) {
       this.userMessageForm.reset();
+      this.fileName = '';
       this.messagesLoaded = false;
       await this.loadAllMessages();
       this.snackBar.open('Successfully created a new message!', 'dismiss', {
@@ -183,7 +192,6 @@ export class UserMessageComponent {
     this.fileName = file.name;
     let reader = new FileReader();
     reader.onloadend = function() {
-      //console.log('RESULT', reader.result)
     }
     
     if(file){

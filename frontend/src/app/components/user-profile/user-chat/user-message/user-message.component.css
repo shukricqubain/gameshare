@@ -14,7 +14,11 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    gap: 10px;
+}
+
+.upload-style {
+    display: flex;
+    flex-direction: column;
 }
 
 .input-style {
@@ -39,15 +43,32 @@
     justify-content: center;
     border-style: solid;
     border-color: #673ab7;
-    border-radius: 10px;
     width: 80vw;
     height: 60vh;
+    max-width: 80vw;
+    max-height: 60vh;
+    overflow-y: scroll;
 }
 
 .message-item {
-    width: inherit;
+    width: 80vw;
     display: flex;
     flex-direction: column;
+}
+
+.message-image {
+    width: 250px;
+    height: 250px;
+}
+
+.sent-image {
+    background-color: #7049b4;
+    float: right;
+}
+
+.received-image {
+    float: left;
+    background-color: #b14581;
 }
 
 .sent-message-card {

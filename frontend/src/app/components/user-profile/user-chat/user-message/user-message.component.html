@@ -7,47 +7,68 @@
             <mat-spinner [diameter]="100"></mat-spinner>
         </div>
         <div *ngIf="messagesLoaded" class="messages-container">
-            <div *ngIf="userMessages.length == 0">
-                <p>Currently no messages.</p>
-            </div>
-            <div fxLayout="row" fxFlex.md="70" fxLayoutWrap class="message-item">
-                <div fxFlex *ngFor="let message of userMessages">
-                    <mat-card [ngClass]="{
-                        'sent-message-card': message.userIDSentMessage == user.userID, 
-                        'received-message-card': message.userIDReceivedMessage == user.userID}">
-                        <mat-card-content>
-                            {{message.userMessage}}
-                        </mat-card-content>
-                    </mat-card>
-                    <div *ngIf="message.isRead == 0" [ngClass]="{
-                        'sent-timestamp-style': message.userIDSentMessage == user.userID, 
-                        'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
-                        <p>{{formatDate(message.createdAt)}}</p>
-                    </div>
-                    <div *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" [ngClass]="{
-                        'sent-timestamp-style': message.userIDSentMessage == user.userID, 
-                        'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
-                        <p>Read</p>
-                        <p>{{formatDate(message.updatedAt)}}</p>
+            <div [ngSwitch]="userMessages.length > 0">
+                <div *ngSwitchCase="false">
+                    <p style="text-align: center;">Currently no messages.</p>
+                </div>
+                <div *ngSwitchCase="true" fxLayout="row" fxFlex.md="70" fxLayoutWrap class="message-item">
+                    <div fxFlex *ngFor="let message of userMessages">
+                        <div [ngSwitch]="message.messageImage?.includes('data')">
+                            <div *ngSwitchCase="true">
+                                <mat-card [ngClass]="{
+                                    'sent-image': message.userIDSentMessage == user.userID, 
+                                    'received-image': message.userIDReceivedMessage == user.userID}">
+                                    <mat-card-content>
+                                        <img src="{{message.messageImage}}" class="message-image">
+                                    </mat-card-content>
+                                </mat-card>
+                                <div [ngClass]="{
+                                    'sent-timestamp-style': message.userIDSentMessage == user.userID, 
+                                    'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
+                                    <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID">Read</p>
+                                    <p>{{prepareMessageDate(message)}}</p>
+                                </div>
+                            </div>
+                            <div *ngSwitchCase="false">
+                                <mat-card [ngClass]="{
+                                    'sent-message-card': message.userIDSentMessage == user.userID, 
+                                    'received-message-card': message.userIDReceivedMessage == user.userID}">
+                                    <mat-card-content>
+                                        {{message.userMessage}}
+                                    </mat-card-content>
+                                </mat-card>
+                                <div [ngClass]="{
+                                    'sent-timestamp-style': message.userIDSentMessage == user.userID, 
+                                    'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
+                                    <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID">Read</p>
+                                    <p>{{prepareMessageDate(message)}}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="send-message-container mat-elevation-z8">
-            <mat-icon [inline]="true" matTooltip="Click to upload an image." class="icon-style" (click)="fileInput.click()">
-                upload
-            </mat-icon>
+            <div class="upload-style">
+                <mat-icon [inline]="true" matTooltip="Click to upload an image." class="icon-style"
+                    (click)="fileInput.click()">
+                    upload
+                </mat-icon>
+                <span class="file-name">{{fileName}}</span>
+            </div>
             <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
             <form [formGroup]="userMessageForm">
                 <mat-form-field appearance="fill" class="input-style">
                     <label>Message</label>
                     <input matInput name="userMessage" id="userMessage" type="text" formControlName="userMessage"
-                        placeholder="Enter your message" [maxlength]="255" required />
+                        placeholder="Enter your message" [maxlength]="255" />
                 </mat-form-field>
             </form>
-            <button type="button" [disabled]="!userMessageForm.valid || !userMessageForm.dirty" matTooltip="Click to send a message." mat-icon-button (click)="onSubmit()">
+            <button type="button" [disabled]="!userMessageForm.valid || !userMessageForm.dirty"
+                matTooltip="Click to send a message." mat-icon-button (click)="onSubmit()">
                 <mat-icon [ngClass]="{
-                    'icon-style': userMessageForm.valid, 
+                    'icon-style': userMessageForm.valid && userMessageForm.dirty, 
                     'disabled-icon': !userMessageForm.valid}">
                     send
                 </mat-icon>
