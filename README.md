@@ -163,9 +163,9 @@ Use this space to show useful examples of how a project can be used. Additional 
       - [x] After becoming friends the check and cross icon should disappear.
       - [x] Upon clicking the friend icon the user may unfriend another user.
       - [x] Each friend material card should display the mutual friends between two users. 
-   - [ ] Chat/Messages
+   - [x] Chat/Messages
       - [x] New tab should be created to display active messages between the current user and each of their friends.
-      - [ ] The user should be able to send images in the chat.
+      - [x] The user should be able to send images in the chat.
       - [x] There should be a clickable icon to create a new chat between one or more friends (Selected via a dropdown).
       - [x] Each message should display the time it was delivered.
       - [x] Each chat should visually display whether new messages have been read by the user.
