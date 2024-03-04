@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from '../add-user/add-user.component';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-all-users',

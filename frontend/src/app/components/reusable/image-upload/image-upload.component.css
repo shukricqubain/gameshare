@@ -1,0 +1,10 @@
+.upload-style {
+    display: flex;
+    flex-direction: column;
+}
+
+.icon-style {
+    font-size: 25px;
+    cursor: pointer;
+    color: #673ab7;
+}

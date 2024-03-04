@@ -33,6 +33,11 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
             }
         },
+        threadItemImage: {
+            type: Sequelize.TEXT('long'),
+            validate: {
+            }
+        },
         createdAt: {
             type: Sequelize.DATEONLY,
             defaultValue: Sequelize.NOW,

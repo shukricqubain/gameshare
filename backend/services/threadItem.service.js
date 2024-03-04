@@ -141,7 +141,8 @@ async function create(threadItem){
             threadID: threadItem.threadID,
             threadMessage: threadItem.threadMessage,
             userID: threadItem.userID,
-            replyID: threadItem.replyID
+            replyID: threadItem.replyID,
+            threadItemImage: threadItem.threadItemImage
         });
     } catch(err){
         console.log(err)

@@ -16,11 +16,6 @@
     align-items: center;
 }
 
-.upload-style {
-    display: flex;
-    flex-direction: column;
-}
-
 .input-style {
     margin-top: 15px;
     font-size: 15px;

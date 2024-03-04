@@ -9,7 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AddThreadComponent } from '../threads/add-thread/add-thread.component';
 import { User } from 'src/app/models/user.model';
-import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 import { lastValueFrom } from 'rxjs';
 import { UserThread } from 'src/app/models/userThread.model';
 import { UserThreadService } from 'src/app/services/userThread.service';

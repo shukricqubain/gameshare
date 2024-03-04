@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Achievement } from 'src/app/models/achievement.model';
 import { AchievementService } from 'src/app/services/achievement.service';
 import { AddAchievementComponent } from '../add-achievement/add-achievement.component';
-import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 import { FilterFormPopUpComponent } from '../../filter-form-pop-up/filter-form-pop-up.component';
 import { PageEvent } from '@angular/material/paginator';
 

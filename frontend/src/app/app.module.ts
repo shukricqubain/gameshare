@@ -33,7 +33,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-import { PopUpComponent } from './components/pop-up/pop-up.component';
+import { PopUpComponent } from './components/reusable/pop-up/pop-up.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AddGameComponent } from './components/games/add-game/add-game.component';
 import { AllGamesComponent } from './components/games/all-games/all-games.component';
@@ -67,6 +67,7 @@ import { MutualFriendComponent } from './components/user-profile/user-friend/mut
 import { UserChatComponent } from './components/user-profile/user-chat/user-chat/user-chat.component';
 import { AddUserChatComponent } from './components/user-profile/user-chat/add-user-chat/add-user-chat.component';
 import { UserMessageComponent } from './components/user-profile/user-chat/user-message/user-message.component';
+import { ImageUploadComponent } from './components/reusable/image-upload/image-upload.component';
 
 @NgModule({
   declarations: [
@@ -107,7 +108,8 @@ import { UserMessageComponent } from './components/user-profile/user-chat/user-m
     MutualFriendComponent,
     UserChatComponent,
     AddUserChatComponent,
-    UserMessageComponent
+    UserMessageComponent,
+    ImageUploadComponent
   ],
   imports: [
     BrowserModule,

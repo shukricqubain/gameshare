@@ -6,7 +6,7 @@ import { Game } from 'src/app/models/game.model';
 import { UserGame } from 'src/app/models/userGame.model';
 import { AddUserGameComponent } from '../add-user-game/add-user-game.component';
 import { UserGameService } from 'src/app/services/userGame.service';
-import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-user-game',

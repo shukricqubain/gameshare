@@ -45,3 +45,8 @@
     padding-top: 0px;
     max-width: 20px;
 }
+
+.thread-item-image {
+    width: 250px;
+    height: 250px;
+}

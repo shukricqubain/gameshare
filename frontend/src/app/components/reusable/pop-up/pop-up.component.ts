@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, Inject, Optional } from '@angular/core';
+import { Component, Inject, Optional } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Achievement } from '../../models/achievement.model';
 
 @Component({
   selector: 'app-pop-up',

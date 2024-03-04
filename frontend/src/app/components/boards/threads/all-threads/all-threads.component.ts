@@ -11,7 +11,7 @@ import { Thread } from 'src/app/models/thread.model';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { ThreadService } from 'src/app/services/thread.service';
 import { AddThreadComponent } from '../add-thread/add-thread.component';
-import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-all-threads',

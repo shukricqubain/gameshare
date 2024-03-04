@@ -8,7 +8,7 @@ import { GameService } from 'src/app/services/game.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddGameComponent } from '../add-game/add-game.component';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
-import { PopUpComponent } from '../../pop-up/pop-up.component';
+import { PopUpComponent } from '../../reusable/pop-up/pop-up.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
 import { FilterFormPopUpComponent } from '../../filter-form-pop-up/filter-form-pop-up.component';
 

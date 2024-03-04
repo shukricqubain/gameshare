@@ -11,7 +11,7 @@ import { Board } from 'src/app/models/board.model';
 import { BoardService } from 'src/app/services/board.service';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { AddBoardComponent } from '../add-board/add-board.component';
-import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 
 @Component({
   selector: 'app-all-boards',

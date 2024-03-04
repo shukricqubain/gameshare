@@ -50,14 +50,7 @@
             </div>
         </div>
         <div class="send-message-container mat-elevation-z8">
-            <div class="upload-style">
-                <mat-icon [inline]="true" matTooltip="Click to upload an image." class="icon-style"
-                    (click)="fileInput.click()">
-                    upload
-                </mat-icon>
-                <span class="file-name">{{fileName}}</span>
-            </div>
-            <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
+            <app-image-upload (loadImageEvent)="loadImageEvent($event)"></app-image-upload>
             <form [formGroup]="userMessageForm">
                 <mat-form-field appearance="fill" class="input-style">
                     <label>Message</label>

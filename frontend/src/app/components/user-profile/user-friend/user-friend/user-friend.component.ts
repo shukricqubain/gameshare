@@ -5,7 +5,7 @@ import { User } from 'src/app/models/user.model';
 import { UserFriend } from 'src/app/models/userFriend.model';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { UserFriendService } from 'src/app/services/userFriend.service';
-import { PopUpComponent } from 'src/app/components/pop-up/pop-up.component';
+import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { lastValueFrom } from 'rxjs';

@@ -31,6 +31,7 @@ export class AddThreadItemComponent {
     threadID: new FormControl('', [Validators.required]),
     threadMessage: new FormControl('', [Validators.required]),
     userID: new FormControl('', [Validators.required]),
+    threadItemImage: new FormControl(''),
     replyID: new FormControl(''),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
@@ -104,6 +105,7 @@ export class AddThreadItemComponent {
       threadMessage: '',
       userID: 0,
       replyID: 0,
+      threadItemImage: '',
       createdAt: '',
       updatedAt: ''
     }
@@ -138,6 +140,9 @@ export class AddThreadItemComponent {
       }
       if (this.addThreadItemForm.controls.replyID.value !== null) {
         threadItem.replyID = parseInt(this.addThreadItemForm.controls.replyID.value);
+      }
+      if(this.addThreadItemForm.controls.threadItemImage.value !== null){
+        threadItem.threadItemImage = this.addThreadItemForm.controls.threadItemImage.value;
       }
       this.threadItemService.create(threadItem).subscribe({
         next: this.handleCreateResponse.bind(this),
@@ -180,5 +185,10 @@ export class AddThreadItemComponent {
     } else {
       this.dialogRef?.close({ event: 'Cancel' });
     }
+  }
+
+  loadImageEvent(imgCompressed: string){
+    this.addThreadItemForm.controls.threadItemImage.patchValue(imgCompressed);
+    this.addThreadItemForm.controls.threadItemImage.markAsDirty();
   }
 }

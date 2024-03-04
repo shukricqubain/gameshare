@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
@@ -10,6 +9,7 @@ import { Location } from '@angular/common';
 import { UserChat } from 'src/app/models/userChat.model';
 import { UserMessage } from 'src/app/models/userMessage.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FileNameService } from 'src/app/services/filename.service';
 
 @Component({
   selector: 'app-user-message',
@@ -21,10 +21,10 @@ export class UserMessageComponent {
   constructor(
     private snackBar: MatSnackBar,
     private userMessageService: UserMessageService,
-    private router: Router,
     private dateFunction: DateFunctionsService,
     private userService: UserService,
     private location: Location,
+    private fileNameService: FileNameService
   ) { }
 
   userName: any;
@@ -172,6 +172,7 @@ export class UserMessageComponent {
     if (data !== null && data !== undefined) {
       this.userMessageForm.reset();
       this.fileName = '';
+      this.fileNameService.setFileNameObs('');
       this.messagesLoaded = false;
       await this.loadAllMessages();
       this.snackBar.open('Successfully created a new message!', 'dismiss', {
@@ -187,30 +188,9 @@ export class UserMessageComponent {
     }
   }
 
-  async onFileSelected(event: any){
-    const file = event.target.files[0] ?? null;
-    this.fileName = file.name;
-    let reader = new FileReader();
-    reader.onloadend = function() {
-    }
-    
-    if(file){
-      let imgCompressed = await this.compressImage(file, 50);
-      imgCompressed = 'data:image/png;base64,' + imgCompressed.split(',')[1];
-      this.userMessageForm.controls.messageImage.patchValue(imgCompressed);
-      this.userMessageForm.controls.messageImage.markAsDirty();
-    }
-  }
-
-  async compressImage(blobImg: any, percent: any){
-    let bitmap = await createImageBitmap(blobImg);
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext('2d');
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
-    ctx?.drawImage(bitmap, 0, 0);
-    let dataURL = canvas.toDataURL("images/png", percent / 100);
-    return dataURL;
+  loadImageEvent(imgCompressed: string){
+    this.userMessageForm.controls.messageImage.patchValue(imgCompressed);
+    this.userMessageForm.controls.messageImage.markAsDirty();
   }
 
   handleErrorResponse(error: any) {

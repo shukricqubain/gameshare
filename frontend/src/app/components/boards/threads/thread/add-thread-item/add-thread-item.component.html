@@ -16,6 +16,9 @@
                             placeholder="Enter your post." required />
                     </mat-form-field>
                 </div>
+                <div class="form-row">
+                    <app-image-upload (loadImageEvent)="loadImageEvent($event)"></app-image-upload>
+                </div>
             </div>
             <br>
             <div class="form-row">
