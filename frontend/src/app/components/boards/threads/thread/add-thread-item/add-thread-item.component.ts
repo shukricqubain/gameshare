@@ -54,6 +54,7 @@ export class AddThreadItemComponent {
         let threadID = `${this.thread.threadID}`;
         let threadMessage = `${this.threadItem.threadMessage}`;
         let userID = `${this.threadItem.userID}`;
+        let threadItemImage = `${this.data.threadItem.threadItemImage}`;
         let createdAt = `${this.threadItem.createdAt}`;
         let updatedAt = `${this.threadItem.updatedAt}`;
         ///check if post is a reply
@@ -64,6 +65,7 @@ export class AddThreadItemComponent {
         this.addThreadItemForm.controls.threadItemID.patchValue(threadItemID);
         this.addThreadItemForm.controls.threadID.patchValue(threadID);
         this.addThreadItemForm.controls.threadMessage.patchValue(threadMessage);
+        this.addThreadItemForm.controls.threadItemImage.patchValue(threadItemImage);
         this.addThreadItemForm.controls.userID.patchValue(userID);
         this.addThreadItemForm.controls.createdAt.patchValue(createdAt);
         this.addThreadItemForm.controls.updatedAt.patchValue(updatedAt);
@@ -125,6 +127,9 @@ export class AddThreadItemComponent {
       }
       if (this.addThreadItemForm.controls.createdAt.value !== null) {
         threadItem.createdAt = this.addThreadItemForm.controls.createdAt.value;
+      }
+      if(this.addThreadItemForm.controls.threadItemImage.value !== null){
+        threadItem.threadItemImage = this.addThreadItemForm.controls.threadItemImage.value;
       }
       this.threadItemService.update(threadItem).subscribe({
         next: this.handleUpdateResponse.bind(this),
