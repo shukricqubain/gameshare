@@ -153,7 +153,7 @@ Use this space to show useful examples of how a project can be used. Additional 
      - [x] Basic CRUD for userFriends.
 
 ### Version 1.3
-- [ ] User Profile Task/Enhancements
+- [x] User Profile Task/Enhancements
    - [x] User Friends
       - [x] Usernames in the friends tab should be clickable and reroute user to View user page.
       - [x] Each friend material card should have their profile picture displayed within a circle icon.
