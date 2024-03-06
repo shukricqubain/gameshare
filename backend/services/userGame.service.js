@@ -202,6 +202,24 @@ async function findOneByUserIDAndGameID(body) {
     }
 }
 
+async function findOneHighlight(userID){
+    try {
+        return await userGame.findOne({
+            include: [
+                {
+                    model: game,
+                },
+            ],
+            where: { 
+                userID: userID,
+             },
+            raw: true
+        });
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 async function updateUserGame(userGameID, updatedUserGame) {
     try {
         return result = await userGame.update(
@@ -237,6 +255,7 @@ module.exports = {
     findCount,
     getOneUserGame,
     findOneByUserIDAndGameID,
+    findOneHighlight,
     createUserGame,
     updateUserGame,
     deleteUserGame

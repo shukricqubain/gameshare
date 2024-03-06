@@ -7,6 +7,8 @@ import { lastValueFrom } from 'rxjs';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { UserFriend } from 'src/app/models/userFriend.model';
 import { UserFriendService } from 'src/app/services/userFriend.service';
+import { UserGameService } from 'src/app/services/userGame.service';
+import { UserGame } from 'src/app/models/userGame.model';
 
 @Component({
   selector: 'app-view-user-profile',
@@ -20,7 +22,8 @@ export class ViewUserProfileComponent {
     private snackBar: MatSnackBar,
     private userService: UserService,
     private dateFunction: DateFunctionsService,
-    private userFriendService: UserFriendService
+    private userFriendService: UserFriendService,
+    private userGameService: UserGameService
   ){}
 
   userLoaded: boolean = false;
@@ -30,6 +33,9 @@ export class ViewUserProfileComponent {
   requestSent: boolean = false;
   alreadyChecked: boolean = false;
   buttonMessage: string = 'Send Friend Request';
+  userGameHighlightsLoaded: boolean = false;
+  userGameHighlights: any[] = [];
+  gameContent: string = '';
 
   async ngAfterViewInit(){
     let data: any = this.location.getState();
@@ -37,6 +43,32 @@ export class ViewUserProfileComponent {
     await this.loadCurrentUser(userName);
     await this.loadUserToView(data);
     await this.checkFriendStatus();
+    await this.loadGameHighlights();
+  }
+
+  async loadGameHighlights(){
+    try {
+      if(!this.userGameHighlightsLoaded){
+        let userID = this.viewedUser.userID ? this.viewedUser.userID : 0;
+        if(userID != 0) {
+          let result = await lastValueFrom(this.userGameService.findOneHighlight(userID).pipe());
+          console.log(result)
+          if(result !== 'Cannot find userGameHighlight with specified userID'){
+            this.userGameHighlights = result;
+          } else {
+            this.gameContent = 'No recent gaming activity.';
+          }
+          this.userGameHighlightsLoaded = true;
+        }
+        
+      }
+    } catch(err){
+      console.error(err);
+      this.userGameHighlightsLoaded = true;
+      this.snackBar.open('Error loading game highlights.', 'dismiss', {
+        duration: 2000
+      });
+    }
   }
 
   async loadUserToView(data: any){

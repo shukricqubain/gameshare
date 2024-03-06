@@ -266,4 +266,22 @@ router.delete('/deleteUserGame/:userGameID', async function (req, res) {
     }
 });
 
+router.get('/userGameHighlights/:userID', async function (req, res){
+    try {
+        if (req.params.userID !== undefined) {
+            let userID = Number(req.params.userID);
+            let userGameHighlight = await userGameController.findOneHighlight(userID);
+            if (userGameHighlight !== undefined && typeof userGameHighlight !== 'string') {
+                res.status(200).send(userGameHighlight);
+            } else {
+                res.status(404).send(userGameHighlight);
+            }
+        } else {
+            res.status(400).send('UserID is required.');
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 module.exports = router;

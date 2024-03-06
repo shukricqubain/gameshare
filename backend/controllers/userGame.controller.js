@@ -66,6 +66,19 @@ exports.findOne = async (req) => {
     }
 };
 
+exports.findOneHighlight = async (req) => {
+    try{
+        let userGameHighlight = await userGameService.findOneHighlight(req);
+        if(userGameHighlight == null){
+            return 'Cannot find userGameHighlight with specified userID';
+        } else {
+            return userGameHighlight;
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 // Update a userGame by their id
 exports.update = async (userGameID, userGame) => {
     try{

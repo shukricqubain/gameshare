@@ -23,6 +23,10 @@ export class UserGameService {
     return this.http.get(`${baseUrl}/singleUserGame/${userGameID}`);
   }
 
+  findOneHighlight(userID: number): Observable<any> {
+    return this.http.get(`${baseUrl}/userGameHighlights/${userID}`);
+  }
+
   create(data: any): Observable<any> {
     return this.http.post(`${baseUrl}/addUserGame`, data);
   }
