@@ -50,7 +50,20 @@ exports.findAllByUserID = async (req, res) => {
     } catch (err) {
         console.log(err);
     }
-}
+};
+
+exports.findAchievementHighlights = async (userID) => {
+    try {
+        let achievementHighlights = await userAchievementService.getAllByUserID(userID);
+        if (achievementHighlights && achievementHighlights.length > 0) {
+            return achievementHighlights;
+        } else {
+            return { message: 'No data in user achievement table to fetch.' };
+        }
+    } catch (err) {
+        console.log(err);
+    }
+};
 
 // Get all userAchievements by gameID
 exports.findAllAchievementsByGameID = async (req, res) => {

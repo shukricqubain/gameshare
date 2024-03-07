@@ -40,6 +40,7 @@ const userThread = require('./routes/userThread.route');
 const userFriend = require('./routes/userFriend.route');
 const userChat = require('./routes/userChat.route');
 const userMessage = require('./routes/userMessage.route');
+const userHighlight = require('./routes/userHighlight.route');
 
 app.use("/home", home);
 app.use("/user", user);
@@ -57,6 +58,7 @@ app.use("/threadItem", threadItem);
 app.use("/userFriend", userFriend);
 app.use("/userChat", userChat);
 app.use("/userMessage", userMessage);
+app.use("/userHighlight", userHighlight);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

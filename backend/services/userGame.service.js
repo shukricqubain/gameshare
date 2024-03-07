@@ -202,9 +202,9 @@ async function findOneByUserIDAndGameID(body) {
     }
 }
 
-async function findOneHighlight(userID){
+async function findGameHighlights(userID){
     try {
-        return await userGame.findOne({
+        return await userGame.findAll({
             include: [
                 {
                     model: game,
@@ -255,7 +255,7 @@ module.exports = {
     findCount,
     getOneUserGame,
     findOneByUserIDAndGameID,
-    findOneHighlight,
+    findGameHighlights,
     createUserGame,
     updateUserGame,
     deleteUserGame

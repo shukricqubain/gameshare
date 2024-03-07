@@ -9,6 +9,7 @@ import { UserFriend } from 'src/app/models/userFriend.model';
 import { UserFriendService } from 'src/app/services/userFriend.service';
 import { UserGameService } from 'src/app/services/userGame.service';
 import { UserGame } from 'src/app/models/userGame.model';
+import { UserHighlightService } from 'src/app/services/userHighlight.service';
 
 @Component({
   selector: 'app-view-user-profile',
@@ -23,7 +24,7 @@ export class ViewUserProfileComponent {
     private userService: UserService,
     private dateFunction: DateFunctionsService,
     private userFriendService: UserFriendService,
-    private userGameService: UserGameService
+    private userHighlightService: UserHighlightService
   ){}
 
   userLoaded: boolean = false;
@@ -33,8 +34,8 @@ export class ViewUserProfileComponent {
   requestSent: boolean = false;
   alreadyChecked: boolean = false;
   buttonMessage: string = 'Send Friend Request';
-  userGameHighlightsLoaded: boolean = false;
-  userGameHighlights: any[] = [];
+  userHighlightsLoaded: boolean = false;
+  userHighlights: any[] = [];
   gameContent: string = '';
 
   async ngAfterViewInit(){
@@ -43,29 +44,29 @@ export class ViewUserProfileComponent {
     await this.loadCurrentUser(userName);
     await this.loadUserToView(data);
     await this.checkFriendStatus();
-    await this.loadGameHighlights();
+    await this.loadUserHighlights();
   }
 
-  async loadGameHighlights(){
+  async loadUserHighlights(){
     try {
-      if(!this.userGameHighlightsLoaded){
+      if(!this.userHighlightsLoaded){
         let userID = this.viewedUser.userID ? this.viewedUser.userID : 0;
         if(userID != 0) {
-          let result = await lastValueFrom(this.userGameService.findOneHighlight(userID).pipe());
-          console.log(result)
-          if(result !== 'Cannot find userGameHighlight with specified userID'){
-            this.userGameHighlights = result;
+          let result = await lastValueFrom(this.userHighlightService.getUserHighlights(userID).pipe());
+          if(result !== 'Cannot find userHighlights with specified userID'){
+            this.userHighlights = result;
           } else {
             this.gameContent = 'No recent gaming activity.';
           }
-          this.userGameHighlightsLoaded = true;
+          this.userHighlightsLoaded = true;
+          console.log(this.userHighlights)
         }
         
       }
     } catch(err){
       console.error(err);
-      this.userGameHighlightsLoaded = true;
-      this.snackBar.open('Error loading game highlights.', 'dismiss', {
+      this.userHighlightsLoaded = true;
+      this.snackBar.open('Error loading user highlights.', 'dismiss', {
         duration: 2000
       });
     }
