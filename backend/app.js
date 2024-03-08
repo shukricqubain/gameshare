@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 50
 app.use(express.json());
 // database model
 const db = require("./models");
-db.sequelize.sync({alter: true, force: false}).then(() => {
+db.sequelize.sync({alter: false, force: false}).then(() => {
     console.log("Synced db.");
 }).catch((err) => {
     console.log("Failed to sync db: " + err.message);

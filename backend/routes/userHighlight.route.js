@@ -40,7 +40,6 @@ router.get('/getUserHighlights/:userID', async function (req, res){
                     err
                 });
             }
-            console.log(userAchievementHighlights)
 
             if(userAchievementHighlights.length == 0){
                 res.status(500).json({
@@ -56,21 +55,34 @@ router.get('/getUserHighlights/:userID', async function (req, res){
                 let totalAchievements = userAchievementHighlights.filter(achievement => {
                     return achievement.gameID == userGameHighlight.gameID;
                 }).length;
-
-                if(totalAchievements == 0){
-                    let achievementProgress = 0;
-                    userGameHighlight.achievementProgress = achievementProgress;
-                    highlights.push(userGameHighlight);
-                } else {
+                let achievementProgress = 0;
+                if(totalAchievements > 0){
                     let completedAchievements = userAchievementHighlights.filter(achievement => {
                         return achievement.achievementStatus === 'completed';
                     }).length;
-    
-                    let achievementProgress = 0;
                     achievementProgress = completedAchievements / totalAchievements;
-                    userGameHighlight.achievementProgress = achievementProgress;
-                    highlights.push(userGameHighlight);
                 }
+                
+                let game = {
+                    gameID: userGameHighlight['game.gameID'],
+                    gameName: userGameHighlight['game.gameName'],
+                    developers: userGameHighlight['game.developers'],
+                    publishers: userGameHighlight['game.publishers'], 
+                    genre: userGameHighlight['game.genre'],
+                    releaseDate: userGameHighlight['game.releaseDate'],
+                    gameCover: userGameHighlight['game.gameCover'],
+                    platform: userGameHighlight['game.platform'],
+                }
+                let highlight = {
+                    userGameID: userGameHighlight.userGameID,
+                    userID: userGameHighlight.userID,
+                    gameEnjoymentRating: userGameHighlight.gameEnjoymentRating,
+                    achievementProgress: achievementProgress,
+                    createdAt: userGameHighlight.createdAt,
+                    updatedAt: userGameHighlight.updatedAt
+                }
+                highlight.game = game;
+                highlights.push(highlight);
                 
             }
 

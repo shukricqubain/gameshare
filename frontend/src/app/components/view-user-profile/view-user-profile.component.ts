@@ -10,6 +10,9 @@ import { UserFriendService } from 'src/app/services/userFriend.service';
 import { UserGameService } from 'src/app/services/userGame.service';
 import { UserGame } from 'src/app/models/userGame.model';
 import { UserHighlightService } from 'src/app/services/userHighlight.service';
+import { Game } from 'src/app/models/game.model';
+import { GameInfoComponent } from '../games/game-info/game-info.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-view-user-profile',
@@ -24,7 +27,8 @@ export class ViewUserProfileComponent {
     private userService: UserService,
     private dateFunction: DateFunctionsService,
     private userFriendService: UserFriendService,
-    private userHighlightService: UserHighlightService
+    private userHighlightService: UserHighlightService,
+    private matDialog: MatDialog,
   ){}
 
   userLoaded: boolean = false;
@@ -37,6 +41,10 @@ export class ViewUserProfileComponent {
   userHighlightsLoaded: boolean = false;
   userHighlights: any[] = [];
   gameContent: string = '';
+
+  /* progress bar */
+  color: '#673ab7';
+  mode: 'determinate';
 
   async ngAfterViewInit(){
     let data: any = this.location.getState();
@@ -59,7 +67,6 @@ export class ViewUserProfileComponent {
             this.gameContent = 'No recent gaming activity.';
           }
           this.userHighlightsLoaded = true;
-          console.log(this.userHighlights)
         }
         
       }
@@ -193,4 +200,17 @@ export class ViewUserProfileComponent {
     }
   }
 
+  gameInfoPopup(game: Game) {
+    const dialogRefAdd = this.matDialog.open(GameInfoComponent, {
+      disableClose: false,
+      height: '80vh',
+      data: {
+        game
+      }
+    });
+
+    dialogRefAdd.afterClosed().subscribe(result => {
+    });
+  }
+  
 }

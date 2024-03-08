@@ -3,7 +3,8 @@
         <mat-spinner [diameter]="100"></mat-spinner>
     </div>
     <div *ngIf="userLoaded" class="header-container">
-        <ng-container *ngIf="viewedUser.profilePicture != null && viewedUser.profilePicture != undefined && viewedUser.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
+        <ng-container
+            *ngIf="viewedUser.profilePicture != null && viewedUser.profilePicture != undefined && viewedUser.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
         <ng-template #hasImage>
             <div class="image-cropper">
                 <img src="{{viewedUser.profilePicture}}" class="profile-class">
@@ -22,7 +23,8 @@
                 <p>Member since {{formatDate(viewedUser.createdAt)}}</p>
             </div>
         </div>
-        <button mat-raised-button style="cursor: pointer;" color="primary" type="button" [disabled]="requestSent" (click)="sendFriendRequest()">{{buttonMessage}}</button>
+        <button mat-raised-button style="cursor: pointer;" color="primary" type="button" [disabled]="requestSent"
+            (click)="sendFriendRequest()">{{buttonMessage}}</button>
     </div>
     <div class="card-container">
         <!-- <mat-card class="card-style">
@@ -49,15 +51,25 @@
             <mat-card-header>
                 <mat-card-title>Game Highlights</mat-card-title>
             </mat-card-header>
-            <div [ngSwitch]="userHighlights.length > 0">
+            <div [ngSwitch]="userHighlights.length > 0" class="mat-card-container">
                 <div *ngSwitchCase="true">
                     <mat-card-content>
                         <div fxFlex *ngFor="let gameHighlight of userHighlights" class="game-item">
                             <mat-card>
-                                <mat-card-header>
-                                    {{gameHighlight.gameName}}
+                                <mat-card-header class="name-style">
+                                    {{gameHighlight.game?.gameName}}
                                 </mat-card-header>
-                                <mat-card-content>
+                                <mat-card-content class="content-container">
+                                    <img src="{{gameHighlight.game?.gameCover}}" class="game-image">
+                                    <mat-icon class="icon-style" matTooltip="Click to read information about a game."
+                                        color="primary" (click)="gameInfoPopup(gameHighlight.game)">
+                                        info
+                                    </mat-icon>
+                                    <mat-progress-bar
+                                        [color]="color"
+                                        [mode]="mode"
+                                        [value]="gameHighlight.achievementProgress">
+                                    </mat-progress-bar>
                                 </mat-card-content>
                             </mat-card>
                         </div>

@@ -32,8 +32,8 @@
 }
 
 .card-style {
-    width: 200px;
-
+    width: 30vw;
+    height: 60vh;
 }
 
 .profile-icon {
@@ -49,6 +49,30 @@
     margin-bottom: 20px;
 }
 
+.mat-card-container {
+    overflow-y: scroll;
+}
+
 .game-item {
     padding: 3px 3px 3px 3px;
+}
+
+.name-style {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.game-image {
+    display: block;
+    max-width:300px;
+    max-height:100px;
+    width: auto;
+    height: auto;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 }

@@ -23,6 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -143,7 +144,8 @@ import { ImageUploadComponent } from './components/reusable/image-upload/image-u
     MatExpansionModule,
     NgxMaskDirective,
     NgxMaskPipe,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatProgressBarModule
   ],
   exports: [
     MatButtonModule,
@@ -159,7 +161,8 @@ import { ImageUploadComponent } from './components/reusable/image-upload/image-u
     MatMenuModule,
     MatTabsModule,
     MatSelectModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatProgressBarModule
   ],
   providers: [
     MatDatepickerModule,
