@@ -171,9 +171,9 @@ Use this space to show useful examples of how a project can be used. Additional 
       - [x] Each chat should visually display whether new messages have been read by the user.
 - [ ] View User Page Task/Enhancements
    - [ ] Game Highlights
-      - [ ] Should display recently updated games in a vertical list of material cards.
+      - [x] Should display recently updated games in a vertical list of material cards.
       - [ ] Each game should display its game cover along with the user's enjoyment rating and progress (measured via achievement completion).
-      - [ ] Material card should contain an information icon which displays game information when clicked.
+      - [x] Material card should contain an information icon which displays game information when clicked.
    - [ ] Thread Highlights
       - [ ] Should display each thread in a vertical list of material cards a user has been active in recently (measured via posting or editing).
       - [ ] The thread name should be clickable and reroute the user to the thread.
