@@ -56,20 +56,23 @@
                     <mat-card-content>
                         <div fxFlex *ngFor="let gameHighlight of userHighlights" class="game-item">
                             <mat-card>
-                                <mat-card-header class="name-style">
-                                    {{gameHighlight.game?.gameName}}
-                                </mat-card-header>
                                 <mat-card-content class="content-container">
                                     <img src="{{gameHighlight.game?.gameCover}}" class="game-image">
-                                    <mat-icon class="icon-style" matTooltip="Click to read information about a game."
-                                        color="primary" (click)="gameInfoPopup(gameHighlight.game)">
-                                        info
-                                    </mat-icon>
-                                    <mat-progress-bar
-                                        [color]="color"
-                                        [mode]="mode"
-                                        [value]="gameHighlight.achievementProgress">
-                                    </mat-progress-bar>
+                                    <div class="column-div">
+                                        <div class="row-div">
+                                            <h3 class="name-style">{{gameHighlight.game?.gameName}}</h3>
+                                            <mat-icon class="icon-style"
+                                                matTooltip="Click to read information about a game." color="primary"
+                                                (click)="gameInfoPopup(gameHighlight.game)">
+                                                info
+                                            </mat-icon>
+                                        </div>
+                                        <p>Enjoyment Rating: {{gameHighlight.gameEnjoymentRating}}/10</p>
+                                        <p>Achievement Progress: {{gameHighlight.completedAchievements}}/{{gameHighlight.totalAchievements}}</p>
+                                        <mat-progress-bar class="progress-bar" [color]="color" [mode]="mode"
+                                            [value]="(gameHighlight.achievementProgress) * 100" [bufferValue]="100">
+                                        </mat-progress-bar>
+                                    </div>
                                 </mat-card-content>
                             </mat-card>
                         </div>

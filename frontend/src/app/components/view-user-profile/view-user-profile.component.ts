@@ -61,6 +61,7 @@ export class ViewUserProfileComponent {
         let userID = this.viewedUser.userID ? this.viewedUser.userID : 0;
         if(userID != 0) {
           let result = await lastValueFrom(this.userHighlightService.getUserHighlights(userID).pipe());
+          console.log(result)
           if(result !== 'Cannot find userHighlights with specified userID'){
             this.userHighlights = result;
           } else {

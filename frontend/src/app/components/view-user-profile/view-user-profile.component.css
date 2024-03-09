@@ -73,6 +73,41 @@
 .content-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
     gap: 10px;
+}
+
+.column-div {
+    display: flex;
+    flex-direction: column;
+    width: inherit;
+    row-gap: 10px;
+}
+
+.row-div {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+p {
+    display: block;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+.progress-bar {
+    width: inherit;
 }

@@ -56,8 +56,9 @@ router.get('/getUserHighlights/:userID', async function (req, res){
                     return achievement.gameID == userGameHighlight.gameID;
                 }).length;
                 let achievementProgress = 0;
+                let completedAchievements = 0;
                 if(totalAchievements > 0){
-                    let completedAchievements = userAchievementHighlights.filter(achievement => {
+                    completedAchievements = userAchievementHighlights.filter(achievement => {
                         return achievement.achievementStatus === 'completed';
                     }).length;
                     achievementProgress = completedAchievements / totalAchievements;
@@ -78,6 +79,8 @@ router.get('/getUserHighlights/:userID', async function (req, res){
                     userID: userGameHighlight.userID,
                     gameEnjoymentRating: userGameHighlight.gameEnjoymentRating,
                     achievementProgress: achievementProgress,
+                    completedAchievements: completedAchievements,
+                    totalAchievements: totalAchievements,
                     createdAt: userGameHighlight.createdAt,
                     updatedAt: userGameHighlight.updatedAt
                 }
