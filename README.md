@@ -71,6 +71,85 @@ Use this space to show useful examples of how a project can be used. Additional 
 <!-- ROADMAP -->
 ## Roadmap
 
+### Version 1.3
+- [x] User Profile Task/Enhancements
+   - [x] User Friends
+      - [x] Usernames in the friends tab should be clickable and reroute user to View user page.
+      - [x] Each friend material card should have their profile picture displayed within a circle icon.
+      - [x] Each friend material card should indicate visually if they are currently friends.
+      - [x] Each friend material card should display the date two users became friends.
+      - [x] Change the accept/reject toggle button to a check and cross icon instead.
+      - [x] After becoming friends the check and cross icon should disappear.
+      - [x] Upon clicking the friend icon the user may unfriend another user.
+      - [x] Each friend material card should display the mutual friends between two users. 
+   - [x] Chat/Messages
+      - [x] New tab should be created to display active messages between the current user and each of their friends.
+      - [x] The user should be able to send images in the chat.
+      - [x] There should be a clickable icon to create a new chat between one or more friends (Selected via a dropdown).
+      - [x] Each message should display the time it was delivered.
+      - [x] Each chat should visually display whether new messages have been read by the user.
+- [ ] View User Page Task/Enhancements
+   - [x] Game Highlights
+      - [x] Should display recently updated games in a vertical list of material cards.
+      - [x] Each game should display its game cover along with the user's enjoyment rating and progress (measured via achievement completion).
+      - [x] Material card should contain an information icon which displays game information when clicked.
+   - [ ] Thread Highlights
+      - [ ] Should display each thread in a vertical list of material cards a user has been active in recently (measured via posting or editing).
+      - [ ] The thread name should be clickable and reroute the user to the thread.
+      - [ ] Should display an icon indicting if the user is following threads displayed in the list.
+- [x] Miscellanious Tasks
+   - [x] Add the ability to upload images in a thread.
+   - [x] Add user's profile picture to the header icon.
+     
+### Version 1.2
+- [x] User profile page
+   - [x] Restrict dimensions in user profile, so the width won't resize.
+   - [x] Create and display default message when user has no boards, threads, games, and or achievements.
+   - [x] Add pagination to user boards, threads, and games pages.
+   - [x] Add a paginator under the material cards, so user doesn't have to click filter icon to paginate data.
+   - [x] Add user profile picture.
+   - [x] Reorganize User profile tabs into their own components.
+   - [x] User Achievements
+      - [x] Update user achievements and user games api.
+      - [x] Remove Delete and Edit icons/functionality from user Achievement page.
+      - [x] Add progress bar displaying the achievement status, so user can view and update the status.
+      - [x] Show percentage of people who have obtained the achievement in the application.
+      - [x] Show completion date of the achievement.
+      - [x] Change the display of the achievement as user makes progress.
+   - [x] User Friends Page
+     - [x] Allow users to befriend other users when viewing their profile
+     - [x] Allow users to view anothers profile by clicking thier userName in a thread post or in user friends page.
+     - [x] Basic CRUD for userFriends.
+        
+### Version 1.1
+- [x] Revamp Game and User Game Page
+  - [x] Add cover image to game object
+  - [x] Change display from table to material cards containing the image of the game.
+  - [x] Make cards clickable and display a pop up containing information on the game along with the achievements.
+  - [x] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
+  - [x] Autopopulate achievements when adding a game to a user's collection.
+  - [x] Autoremove achievements when removing a game from a user's collection.
+  - [x] Update User Game Page to match Game page design wise.
+- [x] Revamp Achievement and User Achievement Page
+  - [x] Add icon image to achievement object
+  - [x] Change display from table to material cards containing the icon and title along with actions.
+  - [x] Update User Achievement Page to match Achievement page design wise.
+  - [x] Add info icon to material card to display the details of this achievement.
+  - [x] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
+- [x] Revamp User Boards page
+  - [x] Make user board page visually similar to boards page
+  - [x] Add unfollow button to followed boards on user profile
+- [x] Revamp User Threads page
+  - [x] Make user thread page visually similar to thread page
+  - [x] Add unfollow button to followed threads on user profile
+  - [x] Change userID to userName for each post in a thread
+  - [x] Fix depth logic for responses in a thread
+- [x] Revamp User Signup and Edit
+  - [x] Restrict input to only allow numbers in phone number input in user creation/edit
+  - [x] Add regex to email input in user creation/edit
+  - [x] Add minimum date for date of birth in user creation/edit
+  - [x] Add restrictions for user role updation in user creation/edit
+
 ### Version 1.0
 - [x] Login/Signup Functionality
   - [x] Basic CRUD for Roles
@@ -102,85 +181,6 @@ Use this space to show useful examples of how a project can be used. Additional 
     - [x] Displaying all thread items for a specific thread
     - [x] Allow users to edit or delete their own posts/thread items
     - [x] Allow user to post/reply to a thread item
-
-### Version 1.1
-- [x] Revamp Game and User Game Page
-  - [x] Add cover image to game object
-  - [x] Change display from table to material cards containing the image of the game.
-  - [x] Make cards clickable and display a pop up containing information on the game along with the achievements.
-  - [x] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
-  - [x] Autopopulate achievements when adding a game to a user's collection.
-  - [x] Autoremove achievements when removing a game from a user's collection.
-  - [x] Update User Game Page to match Game page design wise.
-- [x] Revamp Achievement and User Achievement Page
-  - [x] Add icon image to achievement object
-  - [x] Change display from table to material cards containing the icon and title along with actions.
-  - [x] Update User Achievement Page to match Achievement page design wise.
-  - [x] Add info icon to material card to display the details of this achievement.
-  - [x] Add a clickable filter icon at top of page that triggers a pop up containing a filter form.
-- [x] Revamp User Boards page
-  - [x] Make user board page visually similar to boards page
-  - [x] Add unfollow button to followed boards on user profile
-- [x] Revamp User Threads page
-  - [x] Make user thread page visually similar to thread page
-  - [x] Add unfollow button to followed threads on user profile
-  - [x] Change userID to userName for each post in a thread
-  - [x] Fix depth logic for responses in a thread
-- [x] Revamp User Signup and Edit
-  - [x] Restrict input to only allow numbers in phone number input in user creation/edit
-  - [x] Add regex to email input in user creation/edit
-  - [x] Add minimum date for date of birth in user creation/edit
-  - [x] Add restrictions for user role updation in user creation/edit
-     
-### Version 1.2
-- [x] User profile page
-   - [x] Restrict dimensions in user profile, so the width won't resize.
-   - [x] Create and display default message when user has no boards, threads, games, and or achievements.
-   - [x] Add pagination to user boards, threads, and games pages.
-   - [x] Add a paginator under the material cards, so user doesn't have to click filter icon to paginate data.
-   - [x] Add user profile picture.
-   - [x] Reorganize User profile tabs into their own components.
-   - [x] User Achievements
-      - [x] Update user achievements and user games api.
-      - [x] Remove Delete and Edit icons/functionality from user Achievement page.
-      - [x] Add progress bar displaying the achievement status, so user can view and update the status.
-      - [x] Show percentage of people who have obtained the achievement in the application.
-      - [x] Show completion date of the achievement.
-      - [x] Change the display of the achievement as user makes progress.
-   - [x] User Friends Page
-     - [x] Allow users to befriend other users when viewing their profile
-     - [x] Allow users to view anothers profile by clicking thier userName in a thread post or in user friends page.
-     - [x] Basic CRUD for userFriends.
-
-### Version 1.3
-- [x] User Profile Task/Enhancements
-   - [x] User Friends
-      - [x] Usernames in the friends tab should be clickable and reroute user to View user page.
-      - [x] Each friend material card should have their profile picture displayed within a circle icon.
-      - [x] Each friend material card should indicate visually if they are currently friends.
-      - [x] Each friend material card should display the date two users became friends.
-      - [x] Change the accept/reject toggle button to a check and cross icon instead.
-      - [x] After becoming friends the check and cross icon should disappear.
-      - [x] Upon clicking the friend icon the user may unfriend another user.
-      - [x] Each friend material card should display the mutual friends between two users. 
-   - [x] Chat/Messages
-      - [x] New tab should be created to display active messages between the current user and each of their friends.
-      - [x] The user should be able to send images in the chat.
-      - [x] There should be a clickable icon to create a new chat between one or more friends (Selected via a dropdown).
-      - [x] Each message should display the time it was delivered.
-      - [x] Each chat should visually display whether new messages have been read by the user.
-- [ ] View User Page Task/Enhancements
-   - [ ] Game Highlights
-      - [x] Should display recently updated games in a vertical list of material cards.
-      - [ ] Each game should display its game cover along with the user's enjoyment rating and progress (measured via achievement completion).
-      - [x] Material card should contain an information icon which displays game information when clicked.
-   - [ ] Thread Highlights
-      - [ ] Should display each thread in a vertical list of material cards a user has been active in recently (measured via posting or editing).
-      - [ ] The thread name should be clickable and reroute the user to the thread.
-      - [ ] Should display an icon indicting if the user is following threads displayed in the list.
-- [x] Miscellanious Tasks
-   - [x] Add the ability to upload images in a thread.
-   - [x] Add user's profile picture to the header icon.
 
 See the [open issues](https://github.com/shukricqubain/gameshare/issues) for a full list of proposed features (and known issues).
 
