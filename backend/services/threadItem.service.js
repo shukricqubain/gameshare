@@ -1,5 +1,6 @@
 const db = require('../models/index');
-var Sequelize = require('sequelize');
+const threadItem = db.threadItem;
+const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 async function findCount(searchCriteria) {
@@ -43,7 +44,7 @@ async function findCount(searchCriteria) {
                 where = '';
             }
         }
-        threadItems = await db.threadItem.findAll({
+        threadItems = await threadItem.findAll({
             where: where,
             order: [
                 [sort, sortDirection],
@@ -109,7 +110,7 @@ async function getAll(searchCriteria) {
             if (page != 0) {
                 offset = page * limit;
             }
-            return await db.threadItem.findAll({
+            return await threadItem.findAll({
                 where: where,
                 order: [
                     [sort, sortDirection],
@@ -120,7 +121,7 @@ async function getAll(searchCriteria) {
                 raw: true,
             });
         } else {
-            return await db.threadItem.findAll({
+            return await threadItem.findAll({
                 where: where,
                 order: [
                     [sort, sortDirection],
@@ -134,15 +135,15 @@ async function getAll(searchCriteria) {
     }
 }
 
-async function create(threadItem){
+async function create(newThreadItem){
     try{
-        return await db.threadItem.create({
-            threadItemID: threadItem.threadItemID,
-            threadID: threadItem.threadID,
-            threadMessage: threadItem.threadMessage,
-            userID: threadItem.userID,
-            replyID: threadItem.replyID,
-            threadItemImage: threadItem.threadItemImage
+        return await threadItem.create({
+            threadItemID: newThreadItem.threadItemID,
+            threadID: newThreadItem.threadID,
+            threadMessage: newThreadItem.threadMessage,
+            userID: newThreadItem.userID,
+            replyID: newThreadItem.replyID,
+            threadItemImage: newThreadItem.threadItemImage
         });
     } catch(err){
         console.log(err)
@@ -154,7 +155,7 @@ async function create(threadItem){
 
 async function getOne(threadItemID){
     try{
-        return await db.threadItem.findOne({
+        return await threadItem.findOne({
             where: {threadItemID: threadItemID},
             raw: true
         });
@@ -163,10 +164,10 @@ async function getOne(threadItemID){
     }
 }
 
-async function update(threadItemID, threadItem){
+async function update(threadItemID, updateThreadItem){
     try{
-        return result = await db.threadItem.update(
-            threadItem,
+        return result = await threadItem.update(
+            updateThreadItem,
             {
                 where:{
                     threadItemID: threadItemID
@@ -183,13 +184,26 @@ async function update(threadItemID, threadItem){
 
 async function deleteThreadItem(threadItemID) {
     try {
-        return result = await db.threadItem.destroy({
+        return result = await threadItem.destroy({
             where: {
                 threadItemID: threadItemID
             }
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
+    }
+}
+
+async function findThreadItemHighlights(userID){
+    try {
+        return await threadItem.findAll({
+            where: { 
+                userID: userID,
+             },
+            raw: true
+        });
+    } catch (err) {
+        console.error(err);
     }
 }
 
@@ -199,5 +213,6 @@ module.exports = {
     create,
     update,
     deleteThreadItem,
-    findCount
+    findCount,
+    findThreadItemHighlights
 };

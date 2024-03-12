@@ -89,3 +89,17 @@ exports.delete = async (threadItemID) => {
         console.log(err);
     }
 };
+
+// get threadItemHighlights
+exports.findThreadItemHighlights = async (req) => {
+    try{
+        let userThreadItemHighlights = await threadItemService.findThreadItemHighlights(req);
+        if(userThreadItemHighlights == null){
+            return 'Cannot find userThreadItemHighlights with specified userID';
+        } else {
+            return userThreadItemHighlights;
+        }
+    } catch(err){
+        console.log(err);
+    }
+};

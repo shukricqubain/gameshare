@@ -50,7 +50,7 @@
 }
 
 .mat-card-container {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .game-item {

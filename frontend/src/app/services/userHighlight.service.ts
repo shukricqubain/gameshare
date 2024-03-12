@@ -10,7 +10,11 @@ export class UserHighlightService {
 
     constructor(private http: HttpClient) { }
 
-    getUserHighlights(userID: any): Observable<any> {
-        return this.http.get(`${baseUrl}/getUserHighlights/${userID}`);
+    getUserGameHighlights(userID: any): Observable<any> {
+        return this.http.get(`${baseUrl}/getUserGameHighlights/${userID}`);
+    }
+
+    getUserThreadHighlights(userID: any): Observable<any> {
+      return this.http.get(`${baseUrl}/getUserThreadHighlights/${userID}`);
     }
 }

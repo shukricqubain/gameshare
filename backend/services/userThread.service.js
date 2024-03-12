@@ -1,4 +1,5 @@
 const db = require('../models/index');
+const userThread = db.userThread;
 var Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -10,25 +11,25 @@ async function findCount(searchCriteria) {
         let userThreads;
         let where;
         if (searchTerm !== '') {
-            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+            if (searchCriteria.userID !== undefined && searchCriteria.userID !== null) {
                 where = {
-                    [Op.and]:{
+                    [Op.and]: {
                         [Op.or]: {
                             userThreadID: { [Op.like]: '%' + searchTerm + '%' },
-                            threadID: { [Op.like]: '%' + searchTerm + '%' }, 
+                            threadID: { [Op.like]: '%' + searchTerm + '%' },
                             boardID: { [Op.like]: '%' + searchTerm + '%' },
                             boardName: { [Op.like]: '%' + searchTerm + '%' },
                             threadName: { [Op.like]: '%' + searchTerm + '%' },
                             userID: { [Op.like]: '%' + searchTerm + '%' }
                         },
                         userID: searchCriteria.userID
-                    }                    
+                    }
                 };
             } else {
                 where = {
                     [Op.or]: {
                         userThreadID: { [Op.like]: '%' + searchTerm + '%' },
-                        threadID: { [Op.like]: '%' + searchTerm + '%' }, 
+                        threadID: { [Op.like]: '%' + searchTerm + '%' },
                         boardID: { [Op.like]: '%' + searchTerm + '%' },
                         boardName: { [Op.like]: '%' + searchTerm + '%' },
                         threadName: { [Op.like]: '%' + searchTerm + '%' },
@@ -36,9 +37,9 @@ async function findCount(searchCriteria) {
                     }
                 };
             }
-            
+
         } else {
-            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+            if (searchCriteria.userID !== undefined && searchCriteria.userID !== null) {
                 where = {
                     userID: searchCriteria.userID
                 };
@@ -46,7 +47,7 @@ async function findCount(searchCriteria) {
                 where = '';
             }
         }
-        userThreads = await db.userThread.findAll({
+        userThreads = await userThread.findAll({
             where: where,
             order: [
                 [sort, sortDirection],
@@ -72,25 +73,25 @@ async function getAll(searchCriteria) {
         let page = searchCriteria.page;
         let where;
         if (searchTerm !== '') {
-            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+            if (searchCriteria.userID !== undefined && searchCriteria.userID !== null) {
                 where = {
-                    [Op.and]:{
+                    [Op.and]: {
                         [Op.or]: {
                             userThreadID: { [Op.like]: '%' + searchTerm + '%' },
-                            threadID: { [Op.like]: '%' + searchTerm + '%' }, 
+                            threadID: { [Op.like]: '%' + searchTerm + '%' },
                             boardID: { [Op.like]: '%' + searchTerm + '%' },
                             boardName: { [Op.like]: '%' + searchTerm + '%' },
                             threadName: { [Op.like]: '%' + searchTerm + '%' },
                             userID: { [Op.like]: '%' + searchTerm + '%' }
                         },
                         userID: searchCriteria.userID
-                    }                    
+                    }
                 };
             } else {
                 where = {
                     [Op.or]: {
                         userThreadID: { [Op.like]: '%' + searchTerm + '%' },
-                        threadID: { [Op.like]: '%' + searchTerm + '%' }, 
+                        threadID: { [Op.like]: '%' + searchTerm + '%' },
                         boardID: { [Op.like]: '%' + searchTerm + '%' },
                         boardName: { [Op.like]: '%' + searchTerm + '%' },
                         threadName: { [Op.like]: '%' + searchTerm + '%' },
@@ -98,9 +99,9 @@ async function getAll(searchCriteria) {
                     }
                 };
             }
-            
+
         } else {
-            if(searchCriteria.userID !== undefined && searchCriteria.userID !== null){
+            if (searchCriteria.userID !== undefined && searchCriteria.userID !== null) {
                 where = {
                     userID: searchCriteria.userID
                 };
@@ -113,7 +114,7 @@ async function getAll(searchCriteria) {
             if (page != 0) {
                 offset = page * limit;
             }
-            return await db.userThread.findAll({
+            return await userThread.findAll({
                 where: where,
                 order: [
                     [sort, sortDirection],
@@ -124,7 +125,7 @@ async function getAll(searchCriteria) {
                 raw: true,
             });
         } else {
-            return await db.userThread.findAll({
+            return await userThread.findAll({
                 where: where,
                 order: [
                     [sort, sortDirection],
@@ -138,48 +139,61 @@ async function getAll(searchCriteria) {
     }
 }
 
-async function create(userThread){
-    try{
-        return await db.userThread.create({
-            userThreadID: userThread.userThreadID,
-            threadID: userThread.threadID,
-            boardID: userThread.boardID,
-            boardName: userThread.boardName,
-            userID: userThread.userID,
-            threadName: userThread.threadName
+async function create(newUserThread) {
+    try {
+        return await userThread.create({
+            userThreadID: newUserThread.userThreadID,
+            threadID: newUserThread.threadID,
+            boardID: newUserThread.boardID,
+            boardName: newUserThread.boardName,
+            userID: newUserThread.userID,
+            threadName: newUserThread.threadName
         });
-    } catch(err){
+    } catch (err) {
         console.log(err)
-        if(err.errors[0].type === 'unique violation'){
+        if (err.errors[0].type === 'unique violation') {
             return err.errors[0].message;
         }
     }
 }
 
-async function getOne(userThreadID){
-    try{
-        return await db.userThread.findOne({
-            where: {userThreadID: userThreadID},
+async function getOne(userThreadID) {
+    try {
+        return await userThread.findOne({
+            where: { userThreadID: userThreadID },
             raw: true
         });
-    } catch(err){
+    } catch (err) {
         console.log(err);
     }
 }
 
-async function update(userThreadID, userThread){
-    try{
-        return result = await db.userThread.update(
-            userThread,
+async function findThreadHighlights(userID) {
+    try {
+        return await userThread.findAll({
+            where: {
+                userID: userID
+            },
+            raw: true
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function update(userThreadID, updatedUserThread) {
+    try {
+        return result = await userThread.update(
+            updatedUserThread,
             {
-                where:{
+                where: {
                     userThreadID: userThreadID
                 }
             }
         );
-    } catch(err){
+    } catch (err) {
         console.log(err);
-        if(err.errors[0].type === 'unique violation'){
+        if (err.errors[0].type === 'unique violation') {
             return err.errors[0].message;
         }
     }
@@ -187,7 +201,7 @@ async function update(userThreadID, userThread){
 
 async function deleteUserThread(userThreadID) {
     try {
-        return result = await db.userThread.destroy({
+        return result = await userThread.destroy({
             where: {
                 userThreadID: userThreadID
             }
@@ -203,5 +217,6 @@ module.exports = {
     create,
     update,
     deleteUserThread,
-    findCount
+    findCount,
+    findThreadHighlights
 };

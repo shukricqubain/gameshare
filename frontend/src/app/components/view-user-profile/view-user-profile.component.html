@@ -27,34 +27,33 @@
             (click)="sendFriendRequest()">{{buttonMessage}}</button>
     </div>
     <div class="card-container">
-        <!-- <mat-card class="card-style">
+        <mat-card class="card-style">
             <mat-card-header>
                 <mat-card-title>Thread Highlights</mat-card-title>
             </mat-card-header>
-            <mat-card-content>
-                Content
-            </mat-card-content>
+            <div [ngSwitch]="userThreadHighlights && userThreadHighlights.length > 0" class="mat-card-container">
+                <div *ngSwitchCase="true">
+                    <mat-card-content>
+                        <p>Todo</p>
+                    </mat-card-content>
+                </div>
+                <div *ngSwitchCase="false">
+                    <mat-card-content>
+                        <p>{{threadContent}}</p>
+                    </mat-card-content>
+                </div>
+            </div>
             <mat-card-actions>
             </mat-card-actions>
-        </mat-card> -->
-        <!-- <mat-card class="card-style">
-            <mat-card-header>
-                <mat-card-title>Board Highlights</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                Content
-            </mat-card-content>
-            <mat-card-actions>
-            </mat-card-actions>
-        </mat-card> -->
+        </mat-card>
         <mat-card class="card-style">
             <mat-card-header>
                 <mat-card-title>Game Highlights</mat-card-title>
             </mat-card-header>
-            <div [ngSwitch]="userHighlights.length > 0" class="mat-card-container">
+            <div [ngSwitch]="userGameHighlights && userGameHighlights.length > 0" class="mat-card-container">
                 <div *ngSwitchCase="true">
                     <mat-card-content>
-                        <div fxFlex *ngFor="let gameHighlight of userHighlights" class="game-item">
+                        <div fxFlex *ngFor="let gameHighlight of userGameHighlights" class="game-item">
                             <mat-card>
                                 <mat-card-content class="content-container">
                                     <img src="{{gameHighlight.game?.gameCover}}" class="game-image">
@@ -80,32 +79,12 @@
                 </div>
                 <div *ngSwitchCase="false">
                     <mat-card-content>
-                        {{gameContent}}
+                        <p>{{gameContent}}</p>
                     </mat-card-content>
                 </div>
             </div>
             <mat-card-actions>
             </mat-card-actions>
         </mat-card>
-        <!-- <mat-card class="card-style">
-            <mat-card-header>
-                <mat-card-title>Achievement Highlights</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                Content
-            </mat-card-content>
-            <mat-card-actions>
-            </mat-card-actions>
-        </mat-card>
-        <mat-card class="card-style">
-            <mat-card-header>
-                <mat-card-title>Friends</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                Content
-            </mat-card-content>
-            <mat-card-actions>
-            </mat-card-actions>
-        </mat-card> -->
     </div>
 </div>

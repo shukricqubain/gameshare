@@ -7,8 +7,6 @@ import { lastValueFrom } from 'rxjs';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 import { UserFriend } from 'src/app/models/userFriend.model';
 import { UserFriendService } from 'src/app/services/userFriend.service';
-import { UserGameService } from 'src/app/services/userGame.service';
-import { UserGame } from 'src/app/models/userGame.model';
 import { UserHighlightService } from 'src/app/services/userHighlight.service';
 import { Game } from 'src/app/models/game.model';
 import { GameInfoComponent } from '../games/game-info/game-info.component';
@@ -27,7 +25,7 @@ export class ViewUserProfileComponent {
     private userService: UserService,
     private dateFunction: DateFunctionsService,
     private userFriendService: UserFriendService,
-    private userHighlightService: UserHighlightService,
+    private userHighlightservice: UserHighlightService,
     private matDialog: MatDialog,
   ){}
 
@@ -38,9 +36,12 @@ export class ViewUserProfileComponent {
   requestSent: boolean = false;
   alreadyChecked: boolean = false;
   buttonMessage: string = 'Send Friend Request';
-  userHighlightsLoaded: boolean = false;
-  userHighlights: any[] = [];
+  userGameHighlightsLoaded: boolean = false;
+  userGameHighlights: any[] = [];
   gameContent: string = '';
+  userThreadHighlightsLoaded: boolean = false;
+  userThreadHighlights: any[] = [];
+  threadContent: string = '';
 
   /* progress bar */
   color: '#673ab7';
@@ -52,29 +53,56 @@ export class ViewUserProfileComponent {
     await this.loadCurrentUser(userName);
     await this.loadUserToView(data);
     await this.checkFriendStatus();
-    await this.loadUserHighlights();
+    await this.loadGameHighlights();
+    await this.loadThreadHighlights();
   }
 
-  async loadUserHighlights(){
+  async loadGameHighlights(){
     try {
-      if(!this.userHighlightsLoaded){
+      if(!this.userGameHighlightsLoaded){
         let userID = this.viewedUser.userID ? this.viewedUser.userID : 0;
         if(userID != 0) {
-          let result = await lastValueFrom(this.userHighlightService.getUserHighlights(userID).pipe());
-          console.log(result)
-          if(result !== 'Cannot find userHighlights with specified userID'){
-            this.userHighlights = result;
+          let result = await lastValueFrom(this.userHighlightservice.getUserGameHighlights(userID).pipe());
+          if(result.message == undefined){
+            this.userGameHighlights = result;
           } else {
+            this.userGameHighlights = [];
             this.gameContent = 'No recent gaming activity.';
           }
-          this.userHighlightsLoaded = true;
+          this.userGameHighlightsLoaded = true;
         }
         
       }
     } catch(err){
       console.error(err);
-      this.userHighlightsLoaded = true;
-      this.snackBar.open('Error loading user highlights.', 'dismiss', {
+      this.userGameHighlightsLoaded = true;
+      this.snackBar.open('Error loading game highlights.', 'dismiss', {
+        duration: 2000
+      });
+    }
+  }
+
+  async loadThreadHighlights(){
+    try {
+      if(!this.userThreadHighlightsLoaded){
+        let userID = this.viewedUser.userID ? this.viewedUser.userID : 0;
+        if(userID != 0) {
+          let result = await lastValueFrom(this.userHighlightservice.getUserThreadHighlights(userID).pipe());
+          console.log(result)
+          if(result.message == undefined){
+            this.userThreadHighlights = result;
+          } else {
+            this.userThreadHighlights = [];
+            this.threadContent = 'No recent thread activity.';
+          }
+          this.userThreadHighlightsLoaded = true;
+        }
+        
+      }
+    } catch(err){
+      console.error(err);
+      this.userThreadHighlightsLoaded = true;
+      this.snackBar.open('Error loading thread highlights.', 'dismiss', {
         duration: 2000
       });
     }

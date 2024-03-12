@@ -55,6 +55,20 @@ exports.findOne = async (req) => {
     }
 };
 
+// get threadHighlights
+exports.findThreadHighlights = async (userID) => {
+    try{
+        let userThreadHighlights = await userThreadService.findThreadHighlights(userID);
+        if(userThreadHighlights == null){
+            return 'Cannot find userThreadHighlights with specified userID';
+        } else {
+            return userThreadHighlights;
+        }
+    } catch(err){
+        console.log(err);
+    }
+};
+
 // Update a userThread by their id
 exports.update = async (userThreadID, userThread) => {
     try{

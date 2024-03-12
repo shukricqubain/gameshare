@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const userGameController = require("../controllers/userGame.controller");
+const userThreadController = require("../controllers/userThread.controller");
+const threadItemController = require("../controllers/threadItem.controller");
 const userAchievementController = require("../controllers/userAchievement.controller");
-const achievementController = require('../controllers/achievement.controller');
-const db = require('../models/index');
 
-router.get('/getUserHighlights/:userID', async function (req, res){
+router.get('/getUserGameHighlights/:userID', async function (req, res){
     try {
-        if (req.params.userID !== undefined) {
+        if (req.params.userID != undefined) {
             let userID = Number(req.params.userID);
 
             ///fetch userGames
@@ -16,16 +16,15 @@ router.get('/getUserHighlights/:userID', async function (req, res){
                 userGameHighlights = await userGameController.findGameHighlights(userID);
             } catch(err){
                 console.error(err);
-                res.status(500).json({
+                return res.status(500).json({
                     message: "There was an error when fetching userGames for the userHighlights.",
                     err
                 });
             }
 
             if(userGameHighlights.length == 0){
-                res.status(200).json({
-                    message: "There are no games to highlight.",
-                    err
+                return res.status(200).json({
+                    message: "There are no games to highlight."
                 });
             }
 
@@ -35,14 +34,14 @@ router.get('/getUserHighlights/:userID', async function (req, res){
                 userAchievementHighlights = await userAchievementController.findAchievementHighlights(userID);
             } catch(err){
                 console.error(err);
-                res.status(500).json({
+                return res.status(500).json({
                     message: "There was an error when fetching userAchievements for the userHighlights.",
                     err
                 });
             }
 
             if(userAchievementHighlights.length == 0){
-                res.status(500).json({
+               return res.status(500).json({
                     message: "There was an issue fetching achievements for the userHighlights.",
                     err
                 });
@@ -91,15 +90,89 @@ router.get('/getUserHighlights/:userID', async function (req, res){
 
             highlights.sort((a, b) => b.achievementProgress - a.achievementProgress);
             highlights = highlights.slice(0, 5);
-            res.status(200).send(highlights);
+            return res.status(200).send(highlights);
 
         } else {
-            res.status(400).send('UserID is required.');
+            return res.status(400).send('UserID is required.');
         }
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 });
 
+router.get('/getUserThreadHighlights/:userID', async function (req, res){
+    try {
+        if(req.params.userID != undefined){
+            let userID = Number(req.params.userID);
+            let threadIDs = [];
+
+            ///fetch userThreadItems
+            let userThreadItems; 
+            try {
+                userThreadItems = await threadItemController.findThreadItemHighlights(userID);
+            } catch(err){
+                console.error(err);
+                return res.status(500).json({
+                    message: "There was an error when fetching userGames for the userHighlights.",
+                    err
+                });
+            }
+
+            ///check there are userThreadItems
+            if(typeof userThreadItems === 'string' && userThreadItems === 'Cannot find userThreadItemHighlights with specified userID'){
+                return res.status(200).json({
+                    message: "There are no threads to highlight."
+                });
+            }
+
+            ///populate list of threadIDs
+            for(let userThread of userThreadItems){
+
+                if(!threadIDs.includes(userThread.threadID)){
+                    threadIDs.push(userThread.threadID)
+                }
+            }
+
+            ///fetch userThreadHighlights based on usrID and threadIDs
+            let userThreadHighlights; 
+            try {
+                userThreadHighlights = await userThreadController.findThreadHighlights(userID);
+            } catch(err){
+                console.error(err);
+                return res.status(500).json({
+                    message: "There was an error when fetching userGames for the userHighlights.",
+                    err
+                });
+            }
+
+            ///check there are userThreadHighlights
+            if(typeof userThreadHighlights === 'string' && userThreadHighlights === 'Cannot find userThreadHighlights with specified userID'){
+                return res.status(200).json({
+                    message: "There are no threads to highlight."
+                });
+            }
+
+            let highlights = [];
+            console.log(userThreadHighlights)
+
+            for(let userThreadItem of userThreadItems){
+
+                let findThread = userThreadHighlights.find(obj => obj.threadID == userThreadItem.threadID);
+                if(findThread){
+                    
+                }
+            }
+
+            res.status(200).json({
+                message: "Todo."
+            });
+
+        } else {
+            return res.status(400).send('UserID is required.');
+        }
+    } catch (err){
+        console.error(err);
+    }
+});
 
 module.exports = router;
