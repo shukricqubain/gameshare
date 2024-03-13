@@ -34,7 +34,14 @@
             <div [ngSwitch]="userThreadHighlights && userThreadHighlights.length > 0" class="mat-card-container">
                 <div *ngSwitchCase="true">
                     <mat-card-content>
-                        <p>Todo</p>
+                        <div fxFlex *ngFor="let threadHighlight of userThreadHighlights" class="thread-item">
+                            <mat-card>
+                                <mat-card-content class="thread-content-container">
+                                    <h4>{{threadHighlight.threadName}}</h4>
+                                    <p>{{threadHighlight.threadMessage}}</p>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
                     </mat-card-content>
                 </div>
                 <div *ngSwitchCase="false">

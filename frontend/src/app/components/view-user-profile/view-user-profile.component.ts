@@ -88,13 +88,13 @@ export class ViewUserProfileComponent {
         let userID = this.viewedUser.userID ? this.viewedUser.userID : 0;
         if(userID != 0) {
           let result = await lastValueFrom(this.userHighlightservice.getUserThreadHighlights(userID).pipe());
-          console.log(result)
           if(result.message == undefined){
             this.userThreadHighlights = result;
           } else {
             this.userThreadHighlights = [];
             this.threadContent = 'No recent thread activity.';
           }
+          console.log(this.userThreadHighlights)
           this.userThreadHighlightsLoaded = true;
         }
         

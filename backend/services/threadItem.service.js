@@ -1,7 +1,15 @@
 const db = require('../models/index');
-const threadItem = db.threadItem;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const threadItem = db.threadItem;
+const thread = db.thread;
+
+thread.hasMany(threadItem, {
+    foreignKey: 'threadID'
+});
+threadItem.belongsTo(thread,{
+    foreignKey: 'threadID'
+});
 
 async function findCount(searchCriteria) {
     try {
@@ -197,9 +205,14 @@ async function deleteThreadItem(threadItemID) {
 async function findThreadItemHighlights(userID){
     try {
         return await threadItem.findAll({
+            include: [
+                {
+                    model: thread,
+                },
+            ],
             where: { 
                 userID: userID,
-             },
+            },
             raw: true
         });
     } catch (err) {
