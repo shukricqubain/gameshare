@@ -88,15 +88,15 @@ Use this space to show useful examples of how a project can be used. Additional 
       - [x] There should be a clickable icon to create a new chat between one or more friends (Selected via a dropdown).
       - [x] Each message should display the time it was delivered.
       - [x] Each chat should visually display whether new messages have been read by the user.
-- [ ] View User Page Task/Enhancements
+- [x] View User Page Task/Enhancements
    - [x] Game Highlights
       - [x] Should display recently updated games in a vertical list of material cards.
       - [x] Each game should display its game cover along with the user's enjoyment rating and progress (measured via achievement completion).
       - [x] Material card should contain an information icon which displays game information when clicked.
-   - [ ] Thread Highlights
-      - [ ] Should display each thread in a vertical list of material cards a user has been active in recently (measured via posting or editing).
-      - [ ] The thread name should be clickable and reroute the user to the thread.
-      - [ ] Should display an icon indicting if the user is following threads displayed in the list.
+   - [x] Thread Highlights
+      - [x] Should display each thread in a vertical list of material cards a user has been active in recently (measured via posting or editing).
+      - [x] The thread name should be clickable and reroute the user to the thread.
+      - [x] Should display an icon indicting if the user is following threads displayed in the list.
 - [x] Miscellanious Tasks
    - [x] Add the ability to upload images in a thread.
    - [x] Add user's profile picture to the header icon.
