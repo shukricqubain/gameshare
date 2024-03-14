@@ -25,7 +25,7 @@
         </div>
         <div *ngIf="!isLoadingGames" class="game-container">
             <div fxFlex *ngFor="let game of gameData" class="game-margin">
-                <mat-card class="game-item">
+                <mat-card>
                     <mat-card-content>
                         <img src="{{game.gameCover}}" class="game-image">
                     </mat-card-content>

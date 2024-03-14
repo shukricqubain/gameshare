@@ -205,9 +205,18 @@ async function deleteThreadItem(threadItemID) {
 async function findThreadItemHighlights(userID){
     try {
         return await threadItem.findAll({
+            attributes: [
+                "threadID",
+                "threadMessage",
+                "threadItemImage",
+                "createdAt",
+                "updatedAt",
+                [Sequelize.col("thread.threadName"), "threadName"],
+                [Sequelize.col("thread.boardName"), "boardName"],
+            ],
             include: [
                 {
-                    model: thread,
+                    model: thread
                 },
             ],
             where: { 

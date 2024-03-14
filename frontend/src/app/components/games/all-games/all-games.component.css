@@ -14,7 +14,7 @@
     margin-left: 0.5rem;
 }
 
-.icon-class {
+.icon-style {
     cursor: pointer;
 }
 
@@ -130,10 +130,6 @@ table {
 
 .game-margin {
     padding: 3px 3px 3px 3px;
-}
-
-.game-item {
-    cursor: pointer;
 }
 
 .game-image {

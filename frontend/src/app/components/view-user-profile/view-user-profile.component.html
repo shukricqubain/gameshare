@@ -29,7 +29,9 @@
     <div class="card-container">
         <mat-card class="card-style">
             <mat-card-header>
-                <mat-card-title>Thread Highlights</mat-card-title>
+                <mat-card-title>
+                    <h2>Thread Highlights</h2>
+                </mat-card-title>
             </mat-card-header>
             <div [ngSwitch]="userThreadHighlights && userThreadHighlights.length > 0" class="mat-card-container">
                 <div *ngSwitchCase="true">
@@ -37,7 +39,13 @@
                         <div fxFlex *ngFor="let threadHighlight of userThreadHighlights" class="thread-item">
                             <mat-card>
                                 <mat-card-content class="thread-content-container">
-                                    <h4>{{threadHighlight.threadName}}</h4>
+                                    <div class="row-div">
+                                        <h4 (click)="openThread(threadHighlight)" class="thread-name-style">
+                                            {{threadHighlight.threadName}}</h4>
+                                        <mat-icon class="follow-icon" *ngIf="threadHighlight.isFollowing">
+                                            favorite
+                                        </mat-icon>
+                                    </div>
                                     <p>{{threadHighlight.threadMessage}}</p>
                                 </mat-card-content>
                             </mat-card>
@@ -55,7 +63,9 @@
         </mat-card>
         <mat-card class="card-style">
             <mat-card-header>
-                <mat-card-title>Game Highlights</mat-card-title>
+                <mat-card-title>
+                    <h2>Game Highlights</h2>
+                </mat-card-title>
             </mat-card-header>
             <div [ngSwitch]="userGameHighlights && userGameHighlights.length > 0" class="mat-card-container">
                 <div *ngSwitchCase="true">
@@ -74,7 +84,9 @@
                                             </mat-icon>
                                         </div>
                                         <p>Enjoyment Rating: {{gameHighlight.gameEnjoymentRating}}/10</p>
-                                        <p>Achievement Progress: {{gameHighlight.completedAchievements}}/{{gameHighlight.totalAchievements}}</p>
+                                        <p>Achievement Progress:
+                                            {{gameHighlight.completedAchievements}}/{{gameHighlight.totalAchievements}}
+                                        </p>
                                         <mat-progress-bar class="progress-bar" [color]="color" [mode]="mode"
                                             [value]="(gameHighlight.achievementProgress) * 100" [bufferValue]="100">
                                         </mat-progress-bar>

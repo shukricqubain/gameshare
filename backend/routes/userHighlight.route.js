@@ -144,29 +144,17 @@ router.get('/getUserThreadHighlights/:userID', async function (req, res) {
                 });
             }
 
-            let highlights = [];
             //check each post to see if user follows the thread they posted on
             for (let userThreadItem of userThreadItems) {
-
                 let findThread = userThreadHighlights.find(obj => obj.threadID == userThreadItem.threadID);
                 if (findThread) {
                     userThreadItem.isFollowing = true;
                 } else {
                     userThreadItem.isFollowing = false;
                 }
-
-                let threadItem = {
-                    threadName: userThreadItem["thread.threadName"],
-                    boardName: userThreadItem["thread.boardName"],
-                    threadItemImage: userThreadItem["thread.threadItemImage"],
-                    threadMessage: userThreadItem.threadMessage,
-                    createdAt: userThreadItem.createdAt,
-                    updateAt: userThreadItem.updatedAt
-                }
-                highlights.push(threadItem);
             }
 
-            res.status(200).send(highlights);
+            res.status(200).send(userThreadItems);
 
         } else {
             return res.status(400).send('UserID is required.');

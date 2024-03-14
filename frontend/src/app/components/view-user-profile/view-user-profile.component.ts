@@ -11,6 +11,8 @@ import { UserHighlightService } from 'src/app/services/userHighlight.service';
 import { Game } from 'src/app/models/game.model';
 import { GameInfoComponent } from '../games/game-info/game-info.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { Thread } from 'src/app/models/thread.model';
 
 @Component({
   selector: 'app-view-user-profile',
@@ -27,6 +29,7 @@ export class ViewUserProfileComponent {
     private userFriendService: UserFriendService,
     private userHighlightservice: UserHighlightService,
     private matDialog: MatDialog,
+    private router: Router
   ){}
 
   userLoaded: boolean = false;
@@ -240,6 +243,10 @@ export class ViewUserProfileComponent {
 
     dialogRefAdd.afterClosed().subscribe(result => {
     });
+  }
+
+  openThread(thread: Thread) {
+    this.router.navigate([`/thread/${thread.threadID}`], { state: { thread } });
   }
   
 }

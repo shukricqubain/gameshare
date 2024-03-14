@@ -120,3 +120,12 @@ p {
 .progress-bar {
     width: inherit;
 }
+
+.thread-name-style{
+    cursor: pointer;
+    color: #673ab7;
+}
+
+.follow-icon {
+    color: #e11130;
+}
