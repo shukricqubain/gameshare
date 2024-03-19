@@ -22,7 +22,6 @@
 
 .friend-style {
     cursor: pointer;
-    margin-top: 7px;
     color: #673ab7;
 }
 
@@ -64,9 +63,15 @@
     background-size: 100px 100px;
 }
 
-.mutual-container {
+.mutual-friends-container {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.mutual-friends-row {
+    display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
 }
 
@@ -76,5 +81,22 @@
 
 .title-style {
     text-align: center;
-    margin-top: 7px;
+}
+
+h4 {
+    display: block;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+.mdc-card__actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 0px;
+    padding: 0px;
 }

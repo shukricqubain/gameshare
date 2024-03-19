@@ -1,63 +1,67 @@
-<mat-card [ngClass]="{
-    'accepted': userFriend.areFriends === 'accepted', 
-    'pending': userFriend.areFriends === 'pending',
-    'rejected': userFriend.areFriends === 'rejected'
-}">
-    <mat-card-content class="friend-content">
-        <ng-container
-            *ngIf="this.profilePicture != null && this.profilePicture != undefined && this.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
-        <ng-template #hasImage>
-            <div>
-                <img src="{{this.profilePicture}}" class="image-cropper">
-            </div>
-        </ng-template>
-        <ng-template #blankImage>
-            <div class="profile-icon">
-                <mat-icon [inline]="true">
-                    account_circle
-                </mat-icon>
-            </div>
-        </ng-template>
-        <div class="friendship-details-container">
-            <div style="margin-left: 15px;">
-                <mat-card-title>{{titleString}} <span (click)="viewUserProfile(userFriend)"
-                        class="friend-name">{{titleUserName}}</span></mat-card-title>
-                <mat-card-subtitle>{{dateString}} {{formatDate(userFriend.createdAt)}}</mat-card-subtitle>
-                <mat-card-subtitle
-                    *ngIf="userFriend.areFriends==='accepted' && userFriend.updatedAt != null">Friends Since:
-                    {{formatDate(userFriend.updatedAt)}}</mat-card-subtitle>
-                <mat-card-subtitle>{{subtitleString}} {{subtitleUserName}}</mat-card-subtitle>
-            </div>
+<mat-card
+    [ngClass]="{'accepted': userFriend.areFriends === 'accepted', 'pending': userFriend.areFriends === 'pending', 'rejected': userFriend.areFriends === 'rejected'}">
+    <mat-card-content fxFlex fxLayout="row">
+        <div fxFlex.gt-sm="10%" class="profile-container">
+            <ng-container
+                *ngIf="this.profilePicture != null && this.profilePicture != undefined && this.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
+            <ng-template #hasImage>
+                <div>
+                    <img src="{{this.profilePicture}}" class="image-cropper">
+                </div>
+            </ng-template>
+            <ng-template #blankImage>
+                <div class="profile-icon">
+                    <mat-icon [inline]="true">
+                        account_circle
+                    </mat-icon>
+                </div>
+            </ng-template>
         </div>
-        <div class="mutual-container">
+        <div fxFlex.gt-sm="20%" class="friendship-details-container">
+            <div style="display:flex; flex-direction: row; align-items: center;">
+                <h4>{{titleString}}<span (click)="viewUserProfile(userFriend)"
+                        class="friend-name">{{titleUserName}}</span>
+                </h4>
+            </div>
+            <mat-card-subtitle>{{dateString}} {{formatDate(userFriend.createdAt)}}</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="userFriend.areFriends==='accepted' && userFriend.updatedAt != null">Friends Since:
+                {{formatDate(userFriend.updatedAt)}}</mat-card-subtitle>
+            <mat-card-subtitle>{{subtitleString}} {{subtitleUserName}}</mat-card-subtitle>
+        </div>
+        <div fxFlex.gt-sm="40%" class="mutual-friends-container">
             <h4 [hidden]="mutualFriends.length == 0" class="title-style">Mutual Friends</h4>
-            <div fxFlex *ngFor="let mutualFriend of mutualFriends" class="mutual-friend-padding">
-                <app-mutual-friend [mutualFriend]="mutualFriend"></app-mutual-friend>
+            <div class="mutual-friends-row">
+                <div fxFlex *ngFor="let mutualFriend of mutualFriends" class="mutual-friend-padding">
+                    <app-mutual-friend [mutualFriend]="mutualFriend"></app-mutual-friend>
+                </div>
             </div>
         </div>
-        <mat-icon matTooltip="Click to unfriend" class="friend-style" [hidden]="userFriend.areFriends !== 'accepted'" (click)="unfriendPopUp(userFriend)">
-            person
-        </mat-icon>
-    </mat-card-content>
-    <mat-card-actions [hidden]="actionsDisplay === 'hide'">
-        <div 
-            [ngSwitch]="actionsDisplay">
-            <div *ngSwitchCase="'sent'" class="friend-actions-container">
-                <div [hidden]="userFriend.areFriends !== 'pending'">
-                    <mat-icon class="icon-style" matTooltip="Click to delete a friend request." color="warn"
-                        (click)="deleteFriendRequest(userFriend)">
-                        delete
+        <div fxFlex.gt-sm="20%" class="actions-container">
+            <h4>Actions</h4>
+            <mat-icon *ngIf="userFriend.areFriends === 'accepted'" matTooltip="Click to unfriend" class="friend-style"
+                (click)="unfriendPopUp(userFriend)">
+                person
+            </mat-icon>
+            <div [ngSwitch]="actionsDisplay" [hidden]="actionsDisplay === 'hide'">
+                <div *ngSwitchCase="'sent'" class="friend-actions-container">
+                    <div [hidden]="userFriend.areFriends !== 'pending'">
+                        <mat-icon class="icon-style" matTooltip="Click to delete a friend request." color="warn"
+                            (click)="deleteFriendRequest(userFriend)">
+                            delete
+                        </mat-icon>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'received'" class="friend-actions-container">
+                    <mat-icon class="friend-item" style="color: green" matTooltip="Accept Friend Request."
+                        (click)="updateFriendStatus('accepted', userFriend)">
+                        done
+                    </mat-icon>
+                    <mat-icon class="friend-item" color="warn" matTooltip="Reject Friend Request."
+                        (click)="updateFriendStatus('rejected', userFriend)">
+                        close
                     </mat-icon>
                 </div>
             </div>
-            <div *ngSwitchCase="'received'" class="friend-actions-container">
-                <mat-icon class="friend-item" style="color: green" matTooltip="Accept Friend Request." (click)="updateFriendStatus('accepted', userFriend)">
-                    done
-                </mat-icon>
-                <mat-icon class="friend-item" color="warn" matTooltip="Reject Friend Request." (click)="updateFriendStatus('rejected', userFriend)">
-                    close
-                </mat-icon>
-            </div>
         </div>
-    </mat-card-actions>
+    </mat-card-content>
 </mat-card>

@@ -69,6 +69,7 @@ import { UserChatComponent } from './components/user-profile/user-chat/user-chat
 import { AddUserChatComponent } from './components/user-profile/user-chat/add-user-chat/add-user-chat.component';
 import { UserMessageComponent } from './components/user-profile/user-chat/user-message/user-message.component';
 import { ImageUploadComponent } from './components/reusable/image-upload/image-upload.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -145,7 +146,8 @@ import { ImageUploadComponent } from './components/reusable/image-upload/image-u
     NgxMaskDirective,
     NgxMaskPipe,
     MatButtonToggleModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    FlexLayoutModule
   ],
   exports: [
     MatButtonModule,
