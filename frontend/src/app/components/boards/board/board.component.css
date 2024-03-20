@@ -1,4 +1,4 @@
-.thread-container {
+.thread-item-container {
     width: 100%;
     max-width: 1200px;
     position: relative;
@@ -6,10 +6,6 @@
     padding: 10px 10px 30px;
     margin: 10px 10px 10px 10px;
     background-color: #f5f5f5;
-}
-
-.thread-item {
-    padding: 3px 3px 3px 3px;
 }
 
 .search-form-container{

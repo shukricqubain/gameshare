@@ -17,9 +17,8 @@
       <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button"
         (click)="addThread()">Add Thread</button>
     </div>
-    <br>
-    <div fxLayout="row" fxFlex.md="70" fxLayoutWrap class="thread-container mat-elevation-z4">
-      <div fxFlex *ngFor="let thread of allThreads" class="thread-item">
+    <div fxLayout="column" fxLayoutGap="10px" fxFlex.md="70" fxLayoutWrap class="thread-item-container mat-elevation-z4">
+      <div *ngFor="let thread of allThreads">
         <mat-card class="thread-card">
           <mat-card-header>
             <mat-card-title>{{thread.threadName}}</mat-card-title>

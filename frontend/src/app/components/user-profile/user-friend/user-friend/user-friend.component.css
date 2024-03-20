@@ -66,13 +66,14 @@
 .mutual-friends-container {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    margin-right: 10px;
 }
 
 .mutual-friends-row {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .mutual-friend-padding {

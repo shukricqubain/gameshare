@@ -31,7 +31,7 @@
         <div fxFlex.gt-sm="40%" class="mutual-friends-container">
             <h4 [hidden]="mutualFriends.length == 0" class="title-style">Mutual Friends</h4>
             <div class="mutual-friends-row">
-                <div fxFlex *ngFor="let mutualFriend of mutualFriends" class="mutual-friend-padding">
+                <div *ngFor="let mutualFriend of mutualFriends" class="mutual-friend-padding">
                     <app-mutual-friend [mutualFriend]="mutualFriend"></app-mutual-friend>
                 </div>
             </div>

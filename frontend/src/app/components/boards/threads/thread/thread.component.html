@@ -18,8 +18,8 @@
                 (click)="addThreadItem()">Post</button>
         </div>
         <br>
-        <div fxLayout="row" fxFlex.md="70" fxLayoutWrap class="thread-item-container mat-elevation-z4">
-            <div fxFlex *ngFor="let threadItem of allThreadItems" class="thread-item">
+        <div fxLayout="column" fxLayoutGap="10px" fxFlex.md="70" fxLayoutWrap class="thread-item-container mat-elevation-z4">
+            <div *ngFor="let threadItem of allThreadItems" class="thread-item">
                 <mat-card [ngStyle]="{'margin-left': threadItem.depthStyle}">
                     <mat-card-header>
                         <mat-card-title
