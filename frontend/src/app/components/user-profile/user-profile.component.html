@@ -188,7 +188,7 @@
                     </div>
                 </mat-tab>
                 <mat-tab label="Friend Requests">
-                    <div [ngSwitch]="userFriendsLoaded">
+                    <div [ngSwitch]="userFriendRequestsLoaded">
                         <div *ngSwitchCase="false" class="loading-container">
                             <mat-spinner [diameter]="100"></mat-spinner>
                         </div>
@@ -256,8 +256,7 @@
             <div class="form-column">
                 <div class="header-row">
                     <h1 style="text-align: center;">Edit Profile</h1>
-                    <mat-slide-toggle style="margin-left: 1.23rem;margin-top:1.70rem;" [matTooltip]="enableMessage"
-                        [(ngModel)]="editEnabled" (ngModelChange)="changeForm()">
+                    <mat-slide-toggle style="margin-left: 1.23rem;margin-top:1.70rem;" [matTooltip]="enableMessage" [(ngModel)]="editEnabled" (ngModelChange)="changeForm()">
                     </mat-slide-toggle>
                 </div>
                 <div *ngIf="!userLoaded" class="loading-container">

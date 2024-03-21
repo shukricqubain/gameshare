@@ -34,7 +34,16 @@ router.post('/allUserFriends', async function (req, res) {
                     searchCriteria.userFriendCount = userFriendCount;
                     allUserFriends = await userFriendController.findAll(searchCriteria);
                     if(allUserFriends.message !== 'No data in user friend table to fetch.'){
+
+                        for(let userFriend of allUserFriends){
+                            ///get mutual friends
+                            let userIDOne = userFriend.userIDSentRequest;
+                            let userIDTwo = userFriend.userIDReceivedRequest;
+                            let mutualFriends = await userFriendController.getMutualFriends({userIDOne, userIDTwo});
+                            userFriend.mutualFriends = mutualFriends;
+                        }
                         searchCriteria.data = allUserFriends;
+
                         return res.status(200).json(searchCriteria);
                     } else {
                         return res.status(200).send({message:'No data in user friend table to fetch.'})
@@ -46,7 +55,16 @@ router.post('/allUserFriends', async function (req, res) {
                 allUserFriends = await userFriendController.findAll(searchCriteria);
                 userFriendCount = allUserFriends.length;
                 if(allUserFriends.message !== 'No data in user friend table to fetch.'){
+
+                    for(let userFriend of allUserFriends){
+                        ///get mutual friends
+                        let userIDOne = userFriend.userIDSentRequest;
+                        let userIDTwo = userFriend.userIDReceivedRequest;
+                        let mutualFriends = await userFriendController.getMutualFriends({userIDOne, userIDTwo});
+                        userFriend.mutualFriends = mutualFriends;
+                    }
                     searchCriteria.data = allUserFriends;
+
                     return res.status(200).json(searchCriteria);
                 } else {
                     return res.status(200).send({message:'No data in user friend table to fetch.'})

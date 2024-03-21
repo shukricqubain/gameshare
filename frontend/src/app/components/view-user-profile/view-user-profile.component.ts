@@ -97,7 +97,6 @@ export class ViewUserProfileComponent {
             this.userThreadHighlights = [];
             this.threadContent = 'No recent thread activity.';
           }
-          console.log(this.userThreadHighlights)
           this.userThreadHighlightsLoaded = true;
         }
         

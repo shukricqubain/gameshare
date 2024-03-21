@@ -286,20 +286,30 @@ async function findAll(searchCriteria) {
             }
             return await userFriend.findAll({
                 where: where,
+                attributes: [
+                    'areFriends',
+                    'createdAt',
+                    'createdBy',
+                    'updatedAt',
+                    'updatedBy',
+                    'userFriendID',
+                    'userIDReceivedRequest',
+                    'userIDSentRequest',
+                    [Sequelize.col("SentBy.userName"), "sentByUserName"],
+                    [Sequelize.col("SentBy.profilePicture"), "sentByProfilePicture"],
+                    [Sequelize.col("ReceivedBy.userName"), "receivedByUserName"],
+                    [Sequelize.col("ReceivedBy.profilePicture"), "receivedByProfilePicture"],
+                ],
                 include: [
                     {    
                         model: sentBy,
                         as: 'SentBy',
-                        attributes: [
-                            'userName'
-                        ],
+                        attributes: [],
                     },
                     {    
                         model: receivedBy,
                         as: 'ReceivedBy',
-                        attributes: [
-                            'userName'
-                        ],
+                        attributes: [],
                     },
                 ],
                 order: [
@@ -307,25 +317,36 @@ async function findAll(searchCriteria) {
                     ['userFriendID', 'ASC']
                 ],
                 limit: limit,
-                offset: offset
+                offset: offset,
+                raw: true
             });
         } else {
             return await userFriend.findAll({
                 where: where,
+                attributes: [
+                    'areFriends',
+                    'createdAt',
+                    'createdBy',
+                    'updatedAt',
+                    'updatedBy',
+                    'userFriendID',
+                    'userIDReceivedRequest',
+                    'userIDSentRequest',
+                    [Sequelize.col("SentBy.userName"), "sentByUserName"],
+                    [Sequelize.col("SentBy.profilePicture"), "sentByProfilePicture"],
+                    [Sequelize.col("ReceivedBy.userName"), "receivedByUserName"],
+                    [Sequelize.col("ReceivedBy.profilePicture"), "receivedByProfilePicture"],
+                ],
                 include: [
                     {    
                         model: sentBy,
                         as: 'SentBy',
-                        attributes: [
-                            'userName'
-                        ],
+                        attributes: [],
                     },
                     {    
                         model: receivedBy,
                         as: 'ReceivedBy',
-                        attributes: [
-                            'userName'
-                        ],
+                        attributes: [],
                     },
                 ],
                 order: [
@@ -410,6 +431,14 @@ async function getUserSentAndUserReceivedID(req) {
 async function getMutualFriends(req){
     try {
         let friendListOne = await userFriend.findAll({
+            attributes: [
+                [Sequelize.col("SentBy.userID"), "sentByUserID"],
+                [Sequelize.col("ReceivedBy.userID"), "receivedByUserID"],
+                [Sequelize.col("SentBy.userName"), "sentByUserName"],
+                [Sequelize.col("SentBy.profilePicture"), "sentByProfilePicture"],
+                [Sequelize.col("ReceivedBy.userName"), "receivedByUserName"],
+                [Sequelize.col("ReceivedBy.profilePicture"), "receivedByProfilePicture"],
+            ],
             where: {
                 [Op.and]: {
                     areFriends: 'accepted',
@@ -428,21 +457,25 @@ async function getMutualFriends(req){
                 {    
                     model: sentBy,
                     as: 'SentBy',
-                    attributes: [
-                        'userName'
-                    ],
+                    attributes: [],
                 },
                 {    
                     model: receivedBy,
                     as: 'ReceivedBy',
-                    attributes: [
-                        'userName'
-                    ],
+                    attributes: [],
                 },
             ],
             raw: true
         });
         let friendListTwo = await userFriend.findAll({
+            attributes: [
+                [Sequelize.col("SentBy.userID"), "sentByUserID"],
+                [Sequelize.col("SentBy.userName"), "sentByUserName"],
+                [Sequelize.col("SentBy.profilePicture"), "sentByProfilePicture"],
+                [Sequelize.col("ReceivedBy.userID"), "receivedByUserID"],
+                [Sequelize.col("ReceivedBy.userName"), "receivedByUserName"],
+                [Sequelize.col("ReceivedBy.profilePicture"), "receivedByProfilePicture"],
+            ],
             where: {
                 [Op.and]: {
                     areFriends: 'accepted',
@@ -461,16 +494,12 @@ async function getMutualFriends(req){
                 {    
                     model: sentBy,
                     as: 'SentBy',
-                    attributes: [
-                        'userName'
-                    ],
+                    attributes: [],
                 },
                 {    
                     model: receivedBy,
                     as: 'ReceivedBy',
-                    attributes: [
-                        'userName'
-                    ],
+                    attributes: [],
                 },
             ],
             raw: true
@@ -480,28 +509,48 @@ async function getMutualFriends(req){
         let mutualFriends = [];
         ///find all friendships for first user
         for(let friend of friendListOne){
-            if(friend.userIDReceivedRequest != req.userIDOne){
-                potentialMutualsOne.push(friend.userIDReceivedRequest);
-            } else if(friend.userIDSentRequest != req.userIDOne){
-                potentialMutualsOne.push(friend.userIDSentRequest);
+            if(friend.receivedByUserID != req.userIDOne){
+                let mutualFriend = {
+                    userID: friend.receivedByUserID,
+                    userName: friend.receivedByUserName,
+                    profilePicture: friend.receivedByProfilePicture
+                }
+                potentialMutualsOne.push(mutualFriend);
+            } else if(friend.sentByUserID != req.userIDOne){
+                let mutualFriend = {
+                    userID: friend.sentByUserID,
+                    userName: friend.sentByUserName,
+                    profilePicture: friend.sentByProfilePicture
+                }
+                potentialMutualsOne.push(mutualFriend);
             }
         }
         ///find all friendships for second user
         for(let friend of friendListTwo){
-            if(friend.userIDSentRequest != req.userIDTwo){
-                potentialMutualsTwo.push(friend.userIDSentRequest);
-            } else if (friend.userIDReceivedRequest != req.userIDTwo){
-                potentialMutualsTwo.push(friend.userIDReceivedRequest);
+            if(friend.sentByUserID != req.userIDTwo){
+                let mutualFriend = {
+                    userID: friend.sentByUserID,
+                    userName: friend.sentByUserName,
+                    profilePicture: friend.sentByProfilePicture
+                }
+                potentialMutualsTwo.push(mutualFriend);
+            } else if (friend.receivedByUserID != req.userIDTwo){
+                let mutualFriend = {
+                    userID: friend.receivedByUserID,
+                    userName: friend.receivedByUserName,
+                    profilePicture: friend.receivedByProfilePicture
+                }
+                potentialMutualsTwo.push(mutualFriend);
             }
         }
         ///find intersecting friends
         for(let friend of potentialMutualsOne){
-            if(potentialMutualsTwo.includes(friend) && !mutualFriends.includes(friend)){
+            if(potentialMutualsTwo.find(obj => obj.userID == friend.userID) && !mutualFriends.find(obj => obj.userID == friend.userID)){
                 mutualFriends.push(friend);
             }
         }
         for(let friend of potentialMutualsTwo){
-            if(potentialMutualsOne.includes(friend) && !mutualFriends.includes(friend)){
+            if(potentialMutualsOne.find(obj => obj.userID == friend.userID) && !mutualFriends.find(obj => obj.userID == friend.userID)){
                 mutualFriends.push(friend);
             }
         }

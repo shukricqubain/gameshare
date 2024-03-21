@@ -49,6 +49,8 @@
 .profile-icon {
     font-size: 100px;
     background-size: 100px 100px;
+    max-width: 100px;
+    max-height: 100px;
 }
 
 .image-cropper {
@@ -66,7 +68,7 @@
 .mutual-friends-container {
     display: flex;
     flex-direction: column;
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 .mutual-friends-row {

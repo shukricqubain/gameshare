@@ -1,14 +1,19 @@
 import { User } from "./user.model";
 
 export class UserFriend {
-    userFriendID?: Number;
-    userIDSentRequest?: Number;
-    userIDReceivedRequest?: Number;
+    userFriendID?: number;
+    userIDSentRequest?: number;
+    userIDReceivedRequest?: number;
     SentBy?: User;
     ReceivedBy?: User;
-    areFriends?: String;
-    createdBy?: Number;
-    updatedBy?: Number;
-    createdAt?: String;
-    updatedAt?: String;
+    areFriends?: string;
+    createdBy?: number;
+    updatedBy?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    receivedByProfilePicture?: string;
+    sentByProfilePicture?: string;
+    receivedByUserName?: string;
+    sentByUserName?: string;
+    mutualFriends?: UserFriend[];
 }

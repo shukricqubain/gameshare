@@ -1,7 +1,7 @@
 <mat-card
     [ngClass]="{'accepted': userFriend.areFriends === 'accepted', 'pending': userFriend.areFriends === 'pending', 'rejected': userFriend.areFriends === 'rejected'}">
     <mat-card-content fxFlex fxLayout="row">
-        <div fxFlex.gt-sm="10%" class="profile-container">
+        <div fxFlex.gt-sm="10%">
             <ng-container
                 *ngIf="this.profilePicture != null && this.profilePicture != undefined && this.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
             <ng-template #hasImage>
