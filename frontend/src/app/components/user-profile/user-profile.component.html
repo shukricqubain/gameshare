@@ -163,7 +163,15 @@
                 <mat-tab label="Friends">
                     <div [ngSwitch]="userFriendsLoaded">
                         <div *ngSwitchCase="false" class="loading-container">
-                            <mat-spinner [diameter]="100"></mat-spinner>
+                            <app-ghost [type]="'userFriend'" class="ghost-style"></app-ghost>
+                            <mat-paginator class="paginator-style"
+                                [pageSize]="this.userFriendsPageSize"
+                                [pageIndex]="this.userFriendsPageIndex"
+                                [pageSizeOptions]="[5, 10, 25, 50]"
+                                [length]="this.totalUserFriends"
+                                [showFirstLastButtons]="true" 
+                                (page)="onUserFriendsPageChange($event, 'friends')"
+                            ></mat-paginator>
                         </div>
                         <div *ngSwitchCase="true" class="user-friend-container">
                             <div [ngSwitch]="totalUserFriends == 0">
@@ -171,7 +179,7 @@
                                     <p>Currently no friends.</p>
                                 </div>
                                 <div *ngSwitchCase="false" fxLayout="column" fxLayoutGap="10px">
-                                    <ng-container *ngFor="let userFriend of userFriends" class="friend-margin">
+                                    <ng-container *ngFor="let userFriend of userFriends">
                                         <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendEvent)="loadAllUserFriends()"></app-user-friend>
                                     </ng-container>
                                 </div>
@@ -190,7 +198,15 @@
                 <mat-tab label="Friend Requests">
                     <div [ngSwitch]="userFriendRequestsLoaded">
                         <div *ngSwitchCase="false" class="loading-container">
-                            <mat-spinner [diameter]="100"></mat-spinner>
+                            <app-ghost [type]="'userFriend'" class="ghost-style"></app-ghost>
+                            <mat-paginator class="paginator-style"
+                                [pageSize]="this.userFriendRequestsPageSize"
+                                [pageIndex]="this.userFriendRequestsPageIndex"
+                                [pageSizeOptions]="[5, 10, 25, 50]"
+                                [length]="this.totalUserFriendRequests"
+                                [showFirstLastButtons]="true" 
+                                (page)="onUserFriendsPageChange($event, 'not-friends')"
+                            ></mat-paginator>
                         </div>
                         <div *ngSwitchCase="true" class="user-friend-container">
                             <div [ngSwitch]="totalUserFriendRequests == 0">
@@ -198,7 +214,7 @@
                                     <p>Currently no friends.</p>
                                 </div>
                                 <div *ngSwitchCase="false" fxLayout="column" fxLayoutGap="10px">
-                                    <ng-container *ngFor="let userFriend of userFriendRequests" class="friend-margin">
+                                    <ng-container *ngFor="let userFriend of userFriendRequests">
                                         <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendEvent)="loadAllUserFriends()"></app-user-friend>
                                     </ng-container>
                                 </div>

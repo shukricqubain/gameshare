@@ -47,22 +47,22 @@
 }
 
 .profile-icon {
-    font-size: 100px;
-    background-size: 100px 100px;
-    max-width: 100px;
-    max-height: 100px;
+    font-size: 136px;
+    background-size: 136px 136px;
+    max-width: 136px;
+    max-height: 136px;
 }
 
 .image-cropper {
-    width: 90px;
-    height: 90px;
+    width: 118px;
+    height: 118px;
     position: relative;
     overflow: hidden;
     border-radius: 50%;
-    margin-top: 5px;
+    margin-top: 15px;
     margin-bottom: 5px;
     margin-left: 5px;
-    background-size: 100px 100px;
+    background-size: 118px 118px;
 }
 
 .mutual-friends-container {
@@ -102,4 +102,9 @@ h4 {
     box-sizing: border-box;
     min-height: 0px;
     padding: 0px;
+}
+
+.mat-mdc-card-content:first-child, .mat-mdc-card-content:last-child {
+    padding-top: 0px;
+    padding-bottom: 0px;
 }

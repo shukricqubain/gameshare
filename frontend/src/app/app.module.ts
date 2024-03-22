@@ -70,6 +70,7 @@ import { AddUserChatComponent } from './components/user-profile/user-chat/add-us
 import { UserMessageComponent } from './components/user-profile/user-chat/user-message/user-message.component';
 import { ImageUploadComponent } from './components/reusable/image-upload/image-upload.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { GhostComponent } from './components/ghost/ghost/ghost.component';
 
 @NgModule({
   declarations: [
@@ -111,7 +112,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     UserChatComponent,
     AddUserChatComponent,
     UserMessageComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
+    GhostComponent
   ],
   imports: [
     BrowserModule,
