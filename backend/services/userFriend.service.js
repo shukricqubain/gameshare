@@ -237,11 +237,6 @@ async function findAll(searchCriteria) {
                     where = {
                         [Op.and]: {
                             [Op.or]: {
-                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
-                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
-                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
-                            },
-                            [Op.or]: {
                                 userIDSentRequest: searchCriteria.userID,
                                 userIDReceivedRequest: searchCriteria.userID,
                             },
@@ -253,11 +248,6 @@ async function findAll(searchCriteria) {
                 } else if(searchCriteria.areFriends === 'not-accepted'){
                     where = {
                         [Op.and]: {
-                            [Op.or]: {
-                                userFriendID: { [Op.like]: '%' + searchTerm + '%' },
-                                userIDSentRequest: { [Op.like]: '%' + searchTerm + '%' },
-                                userIDReceivedRequest: { [Op.like]: '%' + searchTerm + '%' },
-                            },
                             [Op.or]: {
                                 userIDSentRequest: searchCriteria.userID,
                                 userIDReceivedRequest: searchCriteria.userID,
