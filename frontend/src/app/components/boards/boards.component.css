@@ -35,5 +35,17 @@
 
 .card-actions-container{
     display: flex;
-    flex-direction: space-around;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.icon-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.icon-style {
+    cursor: pointer;
 }
