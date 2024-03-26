@@ -77,7 +77,7 @@ Use this space to show useful examples of how a project can be used. Additional 
    - [ ] User Chat/User Messeges [#62](https://github.com/shukricqubain/gameshare/issues/62)
    - [ ] Game collection [#63](https://github.com/shukricqubain/gameshare/issues/63)
    - [ ] Achievement Collection [#64](https://github.com/shukricqubain/gameshare/issues/64)
-   - [ ] Boards Page [#65](https://github.com/shukricqubain/gameshare/issues/65)
+   - [x] Boards Page [#65](https://github.com/shukricqubain/gameshare/issues/65)
    - [ ] Thread Page [#66](https://github.com/shukricqubain/gameshare/issues/66)
 
 ### Version 1.3
