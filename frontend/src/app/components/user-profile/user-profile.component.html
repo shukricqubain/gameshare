@@ -255,7 +255,7 @@
                 <div *ngIf="totalUserChats == 0" class="no-chats-container">
                     <p>Currently no chats.</p>
                 </div>
-                <div fxFlex *ngFor="let userChat of userChats" class="chat-margin">
+                <div *ngFor="let userChat of userChats" class="chat-margin">
                     <app-user-chat [userChat]="userChat" [currentUser]="user" (loadMessageEvent)="loadAllUserChats($event)"></app-user-chat>
                 </div>
                 <mat-paginator class="paginator-style"

@@ -13,7 +13,6 @@ export class GhostComponent {
   constructor(){}
 
   ngOnInit(){
-    console.log(this.type)
   }
 
 }

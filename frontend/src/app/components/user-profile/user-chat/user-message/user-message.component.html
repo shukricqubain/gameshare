@@ -11,36 +11,24 @@
                 <div *ngSwitchCase="false">
                     <p style="text-align: center;">Currently no messages.</p>
                 </div>
-                <div *ngSwitchCase="true" fxLayout="row" fxFlex.md="70" fxLayoutWrap class="message-item">
-                    <div fxFlex *ngFor="let message of userMessages">
+                <div *ngSwitchCase="true" fxLayout="column" fxLayoutGap="10px">
+                    <div *ngFor="let message of userMessages">
                         <div [ngSwitch]="message.messageImage?.includes('data')">
-                            <div *ngSwitchCase="true">
-                                <mat-card [ngClass]="{
-                                    'sent-image': message.userIDSentMessage == user.userID, 
-                                    'received-image': message.userIDReceivedMessage == user.userID}">
-                                    <mat-card-content>
-                                        <img src="{{message.messageImage}}" class="message-image">
-                                    </mat-card-content>
-                                </mat-card>
-                                <div [ngClass]="{
-                                    'sent-timestamp-style': message.userIDSentMessage == user.userID, 
-                                    'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
-                                    <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID">Read</p>
+                            <div *ngSwitchCase="true"  [ngClass]="{'sent-message-container': message.userIDSentMessage == user.userID, 'received-message-container': message.userIDReceivedMessage == user.userID}">
+                                <img src="{{message.messageImage}}" class="image-style">
+                                <div [ngClass]="{'sent-timestamp-style': message.userIDSentMessage == user.userID, 'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
+                                    <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read</p>
                                     <p>{{prepareMessageDate(message)}}</p>
                                 </div>
                             </div>
-                            <div *ngSwitchCase="false">
-                                <mat-card [ngClass]="{
-                                    'sent-message-card': message.userIDSentMessage == user.userID, 
-                                    'received-message-card': message.userIDReceivedMessage == user.userID}">
+                            <div *ngSwitchCase="false" [ngClass]="{'sent-message-container': message.userIDSentMessage == user.userID, 'received-message-container': message.userIDReceivedMessage == user.userID}">
+                                <mat-card [ngClass]="{'sent-message-card': message.userIDSentMessage == user.userID, 'received-message-card': message.userIDReceivedMessage == user.userID}">
                                     <mat-card-content>
                                         {{message.userMessage}}
                                     </mat-card-content>
                                 </mat-card>
-                                <div [ngClass]="{
-                                    'sent-timestamp-style': message.userIDSentMessage == user.userID, 
-                                    'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
-                                    <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID">Read</p>
+                                <div [ngClass]="{'sent-timestamp-style': message.userIDSentMessage == user.userID, 'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
+                                    <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read</p>
                                     <p>{{prepareMessageDate(message)}}</p>
                                 </div>
                             </div>
@@ -60,9 +48,7 @@
             </form>
             <button type="button" [disabled]="!userMessageForm.valid || !userMessageForm.dirty"
                 matTooltip="Click to send a message." mat-icon-button (click)="onSubmit()">
-                <mat-icon [ngClass]="{
-                    'icon-style': userMessageForm.valid && userMessageForm.dirty, 
-                    'disabled-icon': !userMessageForm.valid}">
+                <mat-icon [ngClass]="{'icon-style': userMessageForm.valid && userMessageForm.dirty, 'disabled-icon': !userMessageForm.valid}">
                     send
                 </mat-icon>
             </button>

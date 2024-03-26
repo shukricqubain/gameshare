@@ -9,6 +9,74 @@
     place-items: center;
 }
 
+.messages-container {
+    display: flex;
+    justify-content: center;
+    border-style: solid;
+    border-color: #673ab7;
+    width: 80vw;
+    height: 60vh;
+    max-width: 80vw;
+    max-height: 60vh;
+    overflow-y: scroll;
+}
+
+.sent-message-container {
+    display: flex;
+    flex-direction: column;
+    float: right;
+}
+
+.received-message-container {
+    display: flex;
+    flex-direction: column;
+    float: left;
+}
+
+.message-image {
+    object-fit: contain;
+    max-width: 50%;
+    max-height: 50%;
+    width: 50%;
+    height: 50%;
+}
+
+.image-style {
+    object-fit: contain;
+    max-width: 50%;
+    max-height: 50%;
+    width: 50%;
+    height: 50%;
+}
+
+.sent-message-card {
+    background-color: #7049b4;
+    color: white;
+}
+
+.received-message-card {
+    background-color: #b14581;
+    color: white;
+}
+
+.sent-timestamp-style {
+    display: flex;
+    flex-direction: row;
+    padding: 16px;
+}
+
+.received-timestamp-style {
+    display: flex;
+    flex-direction: row;
+    padding: 16px;
+}
+
+p {
+    margin: 0;
+    padding: 0px;
+}
+
+
 .send-message-container{
     display: flex;
     flex-direction: row;
@@ -31,66 +99,4 @@
 .disabled-icon {
     color: grey;
     font-size: 25px;
-}
-
-.messages-container {
-    display: flex;
-    justify-content: center;
-    border-style: solid;
-    border-color: #673ab7;
-    width: 80vw;
-    height: 60vh;
-    max-width: 80vw;
-    max-height: 60vh;
-    overflow-y: scroll;
-}
-
-.message-item {
-    width: 80vw;
-    display: flex;
-    flex-direction: column;
-}
-
-.message-image {
-    width: 250px;
-    height: 250px;
-}
-
-.sent-image {
-    background-color: #7049b4;
-    float: right;
-}
-
-.received-image {
-    float: left;
-    background-color: #b14581;
-}
-
-.sent-message-card {
-    float: right;
-    background-color: #7049b4;
-    color: white;
-}
-
-.received-message-card {
-    float: left;
-    background-color: #b14581;
-    color: white;
-}
-
-.sent-timestamp-style {
-    display: flex;
-    flex-direction: column;
-    float: right;
-}
-
-.received-timestamp-style {
-    display: flex;
-    flex-direction: column;
-    float: left;
-}
-
-p {
-    margin: 0;
-    padding: 0px;
 }
