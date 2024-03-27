@@ -203,4 +203,15 @@ export class UserMessageComponent {
     let formattedDate = this.dateFunction.formatDateTime(date);
     return formattedDate;
   }
+
+  editUserMessage(message: UserMessage){
+    console.log(message)
+    let userMessage = message.userMessage ? message.userMessage : '';
+    let userMessageID = message.userMessageID ? message.userMessageID : 0;
+    this.userMessageForm.controls.userMessage.patchValue(userMessage);
+  }
+
+  editImageMessage(message: UserMessage){
+    console.log(message)
+  }
 }

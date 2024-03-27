@@ -13,23 +13,37 @@
                 </div>
                 <div *ngSwitchCase="true" fxLayout="column" fxLayoutGap="10px">
                     <div *ngFor="let message of userMessages">
-                        <div [ngSwitch]="message.messageImage?.includes('data')">
-                            <div *ngSwitchCase="true"  [ngClass]="{'sent-message-container': message.userIDSentMessage == user.userID, 'received-message-container': message.userIDReceivedMessage == user.userID}">
-                                <img src="{{message.messageImage}}" class="image-style">
-                                <div [ngClass]="{'sent-timestamp-style': message.userIDSentMessage == user.userID, 'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
-                                    <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read</p>
-                                    <p>{{prepareMessageDate(message)}}</p>
+                        <div [ngSwitch]="message.userIDSentMessage == user.userID">
+                            <div *ngSwitchCase="true">
+                                <div class="sent-message-container">
+                                    <div *ngIf="message.messageImage?.includes('data')" (click)="editImageMessage(message)">
+                                        <img src="{{message.messageImage}}" class="sent-image-style">
+                                    </div>
+                                    <mat-card *ngIf="!message.messageImage?.includes('data')" class="sent-message-card" (click)="editUserMessage(message)">
+                                        <mat-card-content>
+                                            {{message.userMessage}}
+                                        </mat-card-content>
+                                    </mat-card>
+                                    <div class="sent-timestamp-style">
+                                        <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read</p>
+                                        <p>{{prepareMessageDate(message)}}</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div *ngSwitchCase="false" [ngClass]="{'sent-message-container': message.userIDSentMessage == user.userID, 'received-message-container': message.userIDReceivedMessage == user.userID}">
-                                <mat-card [ngClass]="{'sent-message-card': message.userIDSentMessage == user.userID, 'received-message-card': message.userIDReceivedMessage == user.userID}">
-                                    <mat-card-content>
-                                        {{message.userMessage}}
-                                    </mat-card-content>
-                                </mat-card>
-                                <div [ngClass]="{'sent-timestamp-style': message.userIDSentMessage == user.userID, 'received-timestamp-style': message.userIDReceivedMessage == user.userID}">
-                                    <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read</p>
-                                    <p>{{prepareMessageDate(message)}}</p>
+                            <div *ngSwitchCase="false">
+                                <div class="received-message-container">
+                                    <div *ngIf="message.messageImage?.includes('data')">
+                                        <img src="{{message.messageImage}}" class="received-image-style">
+                                    </div>
+                                    <mat-card *ngIf="!message.messageImage?.includes('data')" class="received-message-card">
+                                        <mat-card-content>
+                                            {{message.userMessage}}
+                                        </mat-card-content>
+                                    </mat-card>
+                                    <div class="received-timestamp-style">
+                                        <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read</p>
+                                        <p>{{prepareMessageDate(message)}}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

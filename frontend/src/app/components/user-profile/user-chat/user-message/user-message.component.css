@@ -33,25 +33,29 @@
     float: left;
 }
 
-.message-image {
+.sent-image-style {
     object-fit: contain;
     max-width: 50%;
     max-height: 50%;
     width: 50%;
     height: 50%;
+    float: right;
+    cursor: pointer;
 }
 
-.image-style {
+.received-image-style {
     object-fit: contain;
     max-width: 50%;
     max-height: 50%;
     width: 50%;
     height: 50%;
+    float: left;
 }
 
 .sent-message-card {
     background-color: #7049b4;
     color: white;
+    cursor: pointer;
 }
 
 .received-message-card {
@@ -62,12 +66,14 @@
 .sent-timestamp-style {
     display: flex;
     flex-direction: row;
+    justify-content: flex-end;
     padding: 16px;
 }
 
 .received-timestamp-style {
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
     padding: 16px;
 }
 
