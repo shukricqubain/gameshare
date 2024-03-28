@@ -35,6 +35,8 @@ export class UserMessageComponent {
   otherUser: string;
   otherUserID: number;
   fileName: string;
+  isEdit: boolean = false;
+  editMessage: UserMessage;
 
   userMessageForm = new FormGroup({
     userChatID: new FormControl(''),
@@ -68,7 +70,7 @@ export class UserMessageComponent {
   }
 
   prepareMessageDate(message: UserMessage){
-    if(message.isRead){
+    if(message.isRead || message.isEdit){
       return this.formatDate(message.updatedAt);
     } else {
       return this.formatDate(message.createdAt);
@@ -143,29 +145,63 @@ export class UserMessageComponent {
   }
 
   onSubmit(){
-    let newUserMessage: UserMessage = {
-      userMessageID: 0,
-      userChatID: 0,  
-      userIDSentMessage: 0,
-      userIDReceivedMessage: 0,
-      userMessage: '',
-      isRead: 0,
-      messageImage: '',
-      createdBy: 0,
-      updatedBy: 0,
-      createdAt: '',
-      updatedAt: ''
-    };
-    newUserMessage.userChatID = this.userChat.userChatID;
-    newUserMessage.userIDSentMessage = this.user.userID;
-    newUserMessage.userIDReceivedMessage = this.otherUserID;
-    newUserMessage.userMessage = this.userMessageForm.controls.userMessage.value ? this.userMessageForm.controls.userMessage.value: '';
-    newUserMessage.messageImage = this.userMessageForm.controls.messageImage.value ? this.userMessageForm.controls.messageImage.value: '';
-    newUserMessage.createdBy = this.user.userID;
-    this.userMessageService.create(newUserMessage).subscribe({
-      next: this.handleCreateResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
+    if(this.isEdit){
+      let editUserMessage: UserMessage = {
+        userMessageID: 0,
+        userChatID: 0,  
+        userIDSentMessage: 0,
+        userIDReceivedMessage: 0,
+        userMessage: '',
+        isRead: 0,
+        isEdit: 0,
+        messageImage: '',
+        createdBy: 0,
+        updatedBy: 0,
+        createdAt: '',
+        updatedAt: ''
+      };
+      editUserMessage.userMessageID = this.editMessage.userMessageID;
+      editUserMessage.userChatID = this.editMessage.userChatID;
+      editUserMessage.userIDSentMessage = this.editMessage.userIDSentMessage;
+      editUserMessage.userIDReceivedMessage = this.editMessage.userIDReceivedMessage;
+      editUserMessage.userMessage = this.userMessageForm.controls.userMessage.value ? this.userMessageForm.controls.userMessage.value: '';
+      editUserMessage.messageImage = this.userMessageForm.controls.messageImage.value ? this.userMessageForm.controls.messageImage.value: '';
+      editUserMessage.createdBy = this.editMessage.createdBy;
+      editUserMessage.updatedBy = this.user.userID;
+      editUserMessage.createdAt = this.editMessage.createdAt;
+      editUserMessage.isRead = 0;
+      editUserMessage.isEdit = 1;
+      this.userMessageService.update(editUserMessage).subscribe({
+        next: this.handleUpdateResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    } else {
+      let newUserMessage: UserMessage = {
+        userMessageID: 0,
+        userChatID: 0,  
+        userIDSentMessage: 0,
+        userIDReceivedMessage: 0,
+        userMessage: '',
+        isRead: 0,
+        isEdit: 0,
+        messageImage: '',
+        createdBy: 0,
+        updatedBy: 0,
+        createdAt: '',
+        updatedAt: ''
+      };
+      newUserMessage.userChatID = this.userChat.userChatID;
+      newUserMessage.userIDSentMessage = this.user.userID;
+      newUserMessage.userIDReceivedMessage = this.otherUserID;
+      newUserMessage.userMessage = this.userMessageForm.controls.userMessage.value ? this.userMessageForm.controls.userMessage.value: '';
+      newUserMessage.messageImage = this.userMessageForm.controls.messageImage.value ? this.userMessageForm.controls.messageImage.value: '';
+      newUserMessage.createdBy = this.user.userID;
+      this.userMessageService.create(newUserMessage).subscribe({
+        next: this.handleCreateResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
+    
   }
 
   async handleCreateResponse(data: any) {
@@ -205,13 +241,16 @@ export class UserMessageComponent {
   }
 
   editUserMessage(message: UserMessage){
-    console.log(message)
+    this.isEdit = true;
     let userMessage = message.userMessage ? message.userMessage : '';
-    let userMessageID = message.userMessageID ? message.userMessageID : 0;
     this.userMessageForm.controls.userMessage.patchValue(userMessage);
+    this.editMessage = message;
   }
 
   editImageMessage(message: UserMessage){
-    console.log(message)
+    this.isEdit = true;
+    let messageImage = message.messageImage ? message.messageImage : '';
+    this.userMessageForm.controls.messageImage.patchValue(messageImage);
+    this.editMessage = message;
   }
 }

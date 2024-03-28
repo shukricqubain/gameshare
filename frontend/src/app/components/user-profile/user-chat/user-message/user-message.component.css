@@ -13,7 +13,7 @@
     display: flex;
     justify-content: center;
     border-style: solid;
-    border-color: #673ab7;
+    border-color: #9152fe;
     width: 80vw;
     height: 60vh;
     max-width: 80vw;
@@ -88,6 +88,15 @@ p {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    background-color: #9152fe;
+}
+
+.edit-message-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #52d6fe;
 }
 
 .input-style {
@@ -96,13 +105,19 @@ p {
     width: 500px;
 }
 
-.icon-style {
+.send-icon-style {
     font-size: 25px;
     cursor: pointer;
-    color: #673ab7;
+    color: #ffffff;
 }
 
-.disabled-icon {
-    color: grey;
+.edit-icon-style {
+    font-size: 25px;
+    cursor: pointer;
+    color: #9152fe;
+}
+
+.disabled-icon-style {
+    color: #ffffff;
     font-size: 25px;
 }

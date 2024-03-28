@@ -25,7 +25,8 @@
                                         </mat-card-content>
                                     </mat-card>
                                     <div class="sent-timestamp-style">
-                                        <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read</p>
+                                        <p *ngIf="message.isRead == 1 && message.isEdit != 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read</p>
+                                        <p *ngIf="message.isEdit == 1" style="margin-right: 10px;">Edited at</p>
                                         <p>{{prepareMessageDate(message)}}</p>
                                     </div>
                                 </div>
@@ -41,7 +42,8 @@
                                         </mat-card-content>
                                     </mat-card>
                                     <div class="received-timestamp-style">
-                                        <p *ngIf="message.isRead == 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read</p>
+                                        <p *ngIf="message.isRead == 1 && message.isEdit != 1 && message.userIDReceivedMessage != user.userID" style="margin-right: 10px;">Read at</p>
+                                        <p *ngIf="message.isEdit == 1" style="margin-right: 10px;">Edited at</p>
                                         <p>{{prepareMessageDate(message)}}</p>
                                     </div>
                                 </div>
@@ -51,18 +53,24 @@
                 </div>
             </div>
         </div>
-        <div class="send-message-container mat-elevation-z8">
+        <div class="mat-elevation-z8" [ngClass]="{'send-message-container': !isEdit,'edit-message-container': isEdit}">
             <app-image-upload (loadImageEvent)="loadImageEvent($event)"></app-image-upload>
             <form [formGroup]="userMessageForm">
                 <mat-form-field appearance="fill" class="input-style">
-                    <label>Message</label>
+                    <div [ngSwitch]="isEdit">
+                        <label *ngSwitchCase="false">Message</label>
+                        <label *ngSwitchCase="true">Edit Message</label>
+                    </div>
                     <input matInput name="userMessage" id="userMessage" type="text" formControlName="userMessage"
                         placeholder="Enter your message" [maxlength]="255" />
                 </mat-form-field>
             </form>
             <button type="button" [disabled]="!userMessageForm.valid || !userMessageForm.dirty"
                 matTooltip="Click to send a message." mat-icon-button (click)="onSubmit()">
-                <mat-icon [ngClass]="{'icon-style': userMessageForm.valid && userMessageForm.dirty, 'disabled-icon': !userMessageForm.valid}">
+                <mat-icon [ngClass]="{
+                    'send-icon-style': userMessageForm.valid && userMessageForm.dirty && !isEdit,
+                    'edit-icon-style': userMessageForm.valid && userMessageForm.dirty && isEdit,
+                    'disabled-icon-style': !userMessageForm.valid}">
                     send
                 </mat-icon>
             </button>

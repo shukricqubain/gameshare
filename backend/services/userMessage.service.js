@@ -293,6 +293,7 @@ async function createUserMessage(newUserMessage) {
             userIDReceivedMessage: newUserMessage.userIDReceivedMessage,
             userMessage: newUserMessage.userMessage,
             isRead: newUserMessage.isRead,
+            isEdit: newUserMessage.isEdit,
             messageImage: newUserMessage.messageImage,
             createdBy: newUserMessage.createdBy
         });

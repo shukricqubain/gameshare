@@ -40,6 +40,11 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
             }
         },
+        isEdit: {
+            type: Sequelize.INTEGER,
+            validate: {
+            }
+        },
         messageImage:{
             type: Sequelize.TEXT('long'),
             validate: {

@@ -11,6 +11,7 @@ export class UserMessage {
     ReceivedBy?: User;
     userMessage?: string;
     isRead?: number;
+    isEdit?: number;
     messageImage?: string;
     createdBy?: number;
     updatedBy?: number;
