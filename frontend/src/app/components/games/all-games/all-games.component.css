@@ -123,32 +123,42 @@ table {
 
 .game-container {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: space-evenly;
 }
 
-.game-margin {
+.game-cards {
+    display: grid;
+    place-items: center;
+    grid-template-columns: repeat(auto-fill,minmax(300px, 1fr));
+}
+
+.margin {
     padding: 3px 3px 3px 3px;
 }
 
 .game-image {
-    width: 250px;
+    width: 200px;
     height: 250px;
 }
 
 .loading-container {
-    display: grid; 
+    display: grid;
     place-items: center;
 }
 
-.search-icon{
+.search-icon {
     margin-left: 10px;
     cursor: pointer;
 }
 
-.actions-style{
-    display:flex;
+.actions-style {
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.paginator-style {
+    display: flex;
+    justify-content: center;
 }

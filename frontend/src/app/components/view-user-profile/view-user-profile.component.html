@@ -77,19 +77,18 @@
                                     <div class="column-div">
                                         <div class="row-div">
                                             <h3 class="name-style">{{gameHighlight.game?.gameName}}</h3>
-                                            <mat-icon class="icon-style"
-                                                matTooltip="Click to read information about a game." color="primary"
-                                                (click)="gameInfoPopup(gameHighlight.game)">
-                                                info
-                                            </mat-icon>
                                         </div>
                                         <p>Enjoyment Rating: {{gameHighlight.gameEnjoymentRating}}/10</p>
-                                        <p>Achievement Progress:
+                                        <p *ngIf="gameHighlight.achievementProgress != 0">Achievement Progress:
                                             {{gameHighlight.completedAchievements}}/{{gameHighlight.totalAchievements}}
                                         </p>
-                                        <mat-progress-bar class="progress-bar" [color]="color" [mode]="mode"
+                                        <mat-progress-bar *ngIf="gameHighlight.achievementProgress != 0" class="progress-bar" [color]="color" [mode]="mode"
                                             [value]="(gameHighlight.achievementProgress) * 100" [bufferValue]="100">
                                         </mat-progress-bar>
+                                        <mat-icon matTooltip="Click to read information about a game." color="primary"
+                                                (click)="gameInfoPopup(gameHighlight.game)">
+                                                info
+                                        </mat-icon>
                                     </div>
                                 </mat-card-content>
                             </mat-card>
