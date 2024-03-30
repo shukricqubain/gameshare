@@ -6,7 +6,6 @@
 .game-column{
     display: flex;
     flex-direction: column;
-    margin-top: 1rem;
     margin-bottom: 1rem;
     margin-right: 1rem;
     margin-left: 1rem;
@@ -72,9 +71,12 @@
 }
 
 .game-container {
-    display: flex;
+    /* display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: wrap; */
+    display: grid;
+    place-items: center;
+    grid-template-columns: repeat(auto-fill,minmax(300px, 1fr));
 } 
 
 .no-games-container {
@@ -152,8 +154,8 @@
 }
 
 .tab-group-container {
-    max-width: 80%;
-    width: 80%;
+    margin-right: 2rem;
+    margin-left: 2rem;
 }
 
 .paginator-style {

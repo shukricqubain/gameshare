@@ -1,14 +1,18 @@
-.game-item {
-    cursor: pointer;
-}
-
 .game-image {
     width: 200px;
-    height: 200px;
+    height: 250px;
 }
 
-.actions-style{
-    display:flex;
+.icon-overlay {
+    position: fixed;
+    cursor: pointer;
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width: 200px;
+    top: 50%;
+}
+
+.mat-mdc-card-content:last-child {
+    padding: 0px;
 }

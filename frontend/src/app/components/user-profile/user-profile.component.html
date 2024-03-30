@@ -1,352 +1,331 @@
-<div class="child-component">
-    <mat-tab-group class="tab-group-container" (selectedIndexChange)="onSelectedIndexChange($event)" (selectedTabChange)="onSelectedTabChange($event)">
-        <mat-tab label="Thread Collection">
-            <div class="form-column">
-                <div class="search-form-container">
-                    <form [formGroup]="threadSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyThreadSearch()">
-                        <mat-form-field>
-                            <mat-label>Search</mat-label>
-                            <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
-                        </mat-form-field>
-                        <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyThreadSearch()">
-                            search
-                        </mat-icon>
-                        <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearThreadSearch()">
-                            clear
-                        </mat-icon>
-                    </form>
-                    <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUserThread()">Follow Thread</button>
-                </div>
-                <div *ngIf="!userThreadsLoaded" class="loading-container">
-                    <mat-spinner [diameter]="100"></mat-spinner>
-                </div>
-                <div *ngIf="userThreadsLoaded" class="thread-container">
-                    <div *ngIf="totalUserThreads == 0" class="no-threads-container">
-                        <p>Currently following no threads.</p>
-                    </div>
-                    <div fxFlex *ngFor="let userThread of userThreads" class="thread-item">
-                        <app-user-thread [userThread]="userThread" (unfollowThreadEvent)="loadUserThreads($event)"></app-user-thread>
-                    </div>
-                </div>
-                <mat-paginator class="paginator-style"
-                    [pageSize]="this.userThreadsPageSize"
-                    [pageIndex]="this.userThreadsPageIndex"
-                    [pageSizeOptions]="[5, 10, 25, 50]"
-                    [length]="this.totalUserThreads"
-                    [showFirstLastButtons]="true" 
-                    (page)="onUserThreadsPageChange($event)"
-                ></mat-paginator>
-            </div>
-        </mat-tab>
-        <mat-tab label="Board Collection">
-            <div class="form-column">
-                <div class="search-form-container">
-                    <form [formGroup]="boardSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyBoardSearch()">
-                        <mat-form-field>
-                            <mat-label>Search</mat-label>
-                            <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
-                        </mat-form-field>
-                        <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyBoardSearch()">
-                            search
-                        </mat-icon>
-                        <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearBoardSearch()">
-                            clear
-                        </mat-icon>
-                    </form>
-                    <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUserBoard()">Follow Board</button>
-                </div>
-                <div *ngIf="!userBoardsLoaded" class="loading-container">
-                    <mat-spinner [diameter]="100"></mat-spinner>
-                </div>
-                <div *ngIf="userBoardsLoaded" class="board-container">
-                    <div *ngIf="totalUserBoards == 0" class="no-boards-container">
-                        <p>Currently following no boards.</p>
-                    </div>
-                    <div fxFlex *ngFor="let userBoard of userBoards" class="board-item">
-                        <app-user-board [userBoard]="userBoard" (unfollowBoardEvent)="loadUserBoards($event)"></app-user-board>
-                    </div>
-                </div>
-                <mat-paginator class="paginator-style"
-                    [pageSize]="this.userBoardsPageSize"
-                    [pageIndex]="this.userBoardsPageIndex"
-                    [pageSizeOptions]="[5, 10, 25, 50]"
-                    [length]="this.totalUserBoards"
-                    [showFirstLastButtons]="true" 
-                    (page)="onUserBoardsPageChange($event)"
-                ></mat-paginator>
-            </div>
-        </mat-tab>
-        <mat-tab label="Game Collection">
-            <div class="game-column">
-                <div class="search-form-container">
-                    <form [formGroup]="userGameSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyUserGameSearch()">
-                        <mat-form-field>
-                            <mat-label>Search</mat-label>
-                            <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
-                        </mat-form-field>
-                        <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyUserGameSearch()">
-                            search
-                        </mat-icon>
-                        <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearGameSearch()">
-                            clear
-                        </mat-icon>
-                    </form>
-                    <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addUserGame()">Add Game</button>
-                </div>
-                <div *ngIf="!userGamesLoaded" class="loading-container">
-                    <mat-spinner [diameter]="100"></mat-spinner>
-                </div>
-                <div *ngIf="userGamesLoaded">
-                    <div [ngSwitch]="this.hasGames">
-                        <div *ngSwitchCase="true" class="game-container">
-                            <div fxFlex *ngFor="let userGame of userGames" class="game-margin">
-                                <app-user-game [userGame]="userGame" (loadGameEvent)="loadGameEvent($event)"></app-user-game>
-                            </div>
-                        </div>
-                        <div *ngSwitchCase="false">
-                            <div *ngIf="totalUserGames == 0" class="no-games-container">
-                                <p>Currently no games in your collection.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <mat-paginator class="paginator-style"
-                    [pageSize]="this.userGamesPageSize"
-                    [pageIndex]="this.userGamesPageIndex"
-                    [pageSizeOptions]="[5, 10, 25, 50]"
-                    [length]="this.totalUserGames"
-                    [showFirstLastButtons]="true" 
-                    (page)="onUserGamesPageChange($event)"
-                ></mat-paginator>
-            </div>
-        </mat-tab>
-        <mat-tab label="Achievement Collection">
+<mat-tab-group class="tab-group-container" (selectedIndexChange)="onSelectedIndexChange($event)"
+    (selectedTabChange)="onSelectedTabChange($event)">
+    <mat-tab label="Thread Collection">
+        <div class="form-column">
             <div class="search-form-container">
-                <form [formGroup]="userAchievementSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyAchievementSearch()">
+                <form [formGroup]="threadSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyThreadSearch()">
                     <mat-form-field>
                         <mat-label>Search</mat-label>
                         <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
                     </mat-form-field>
-                    <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyAchievementSearch()">
+                    <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyThreadSearch()">
                         search
                     </mat-icon>
-                    <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearAchievementSearch()">
+                    <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearThreadSearch()">
                         clear
                     </mat-icon>
-                    <mat-icon style="margin-left: 10px;cursor: pointer;" class="search-icon" matTooltip="Click for a more detailed search." (click)="filterForm()">
-                        filter_list
-                    </mat-icon>
                 </form>
+                <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button"
+                    (click)="addUserThread()">Follow Thread</button>
             </div>
-            <div *ngIf="!userAchievementsLoaded" class="loading-container">
+            <div *ngIf="!userThreadsLoaded" class="loading-container">
                 <mat-spinner [diameter]="100"></mat-spinner>
             </div>
-            <div *ngIf="userAchievementsLoaded" class="achievement-container">
-                <div *ngIf="totalUserAchievements == 0" class="no-achievements-container">
-                    <p>Currently no achievements.</p>
+            <div *ngIf="userThreadsLoaded" class="thread-container">
+                <div *ngIf="totalUserThreads == 0" class="no-threads-container">
+                    <p>Currently following no threads.</p>
                 </div>
-                <div fxFlex *ngFor="let userAchievement of userAchievements" class="achievement-margin">
-                    <app-user-achievement [userAchievement]="userAchievement" (loadAchievementEvent)="loadAllUserAchievements($event)"></app-user-achievement>
+                <div fxFlex *ngFor="let userThread of userThreads" class="thread-item">
+                    <app-user-thread [userThread]="userThread"
+                        (unfollowThreadEvent)="loadUserThreads($event)"></app-user-thread>
                 </div>
-                <mat-paginator class="paginator-style"
-                    [pageSize]="this.userAchievementsPageSize"
-                    [pageIndex]="this.userAchievementsPageIndex"
-                    [pageSizeOptions]="[5, 10, 25, 50]"
-                    [length]="this.totalUserAchievements"
-                    [showFirstLastButtons]="true" 
-                    (page)="onUserAchievementsPageChange($event)"
-                ></mat-paginator>
             </div>
-        </mat-tab>
-        <mat-tab label="Friends">
-            <mat-tab-group class="friend-tab-container">
-                <mat-tab label="Friends">
-                    <div [ngSwitch]="userFriendsLoaded">
-                        <div *ngSwitchCase="false" class="loading-container">
-                            <app-ghost [type]="'userFriend'" class="ghost-style"></app-ghost>
-                            <mat-paginator class="paginator-style"
-                                [pageSize]="this.userFriendsPageSize"
-                                [pageIndex]="this.userFriendsPageIndex"
-                                [pageSizeOptions]="[5, 10, 25, 50]"
-                                [length]="this.totalUserFriends"
-                                [showFirstLastButtons]="true" 
-                                (page)="onUserFriendsPageChange($event, 'friends')"
-                            ></mat-paginator>
-                        </div>
-                        <div *ngSwitchCase="true" class="user-friend-container">
-                            <div [ngSwitch]="totalUserFriends == 0">
-                                <div *ngSwitchCase="true" class="no-friends-container">
-                                    <p>Currently no friends.</p>
-                                </div>
-                                <div *ngSwitchCase="false" fxLayout="column" fxLayoutGap="10px">
-                                    <ng-container *ngFor="let userFriend of userFriends">
-                                        <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendEvent)="loadAllUserFriends()"></app-user-friend>
-                                    </ng-container>
-                                </div>
-                            </div>
-                            <mat-paginator class="paginator-style"
-                                [pageSize]="this.userFriendsPageSize"
-                                [pageIndex]="this.userFriendsPageIndex"
-                                [pageSizeOptions]="[5, 10, 25, 50]"
-                                [length]="this.totalUserFriends"
-                                [showFirstLastButtons]="true" 
-                                (page)="onUserFriendsPageChange($event, 'friends')"
-                            ></mat-paginator>
-                        </div>
-                    </div>
-                </mat-tab>
-                <mat-tab label="Friend Requests">
-                    <div [ngSwitch]="userFriendRequestsLoaded">
-                        <div *ngSwitchCase="false" class="loading-container">
-                            <app-ghost [type]="'userFriend'" class="ghost-style"></app-ghost>
-                            <mat-paginator class="paginator-style"
-                                [pageSize]="this.userFriendRequestsPageSize"
-                                [pageIndex]="this.userFriendRequestsPageIndex"
-                                [pageSizeOptions]="[5, 10, 25, 50]"
-                                [length]="this.totalUserFriendRequests"
-                                [showFirstLastButtons]="true" 
-                                (page)="onUserFriendsPageChange($event, 'not-friends')"
-                            ></mat-paginator>
-                        </div>
-                        <div *ngSwitchCase="true" class="user-friend-container">
-                            <div [ngSwitch]="totalUserFriendRequests == 0">
-                                <div *ngSwitchCase="true" class="no-friends-container">
-                                    <p>Currently no friends.</p>
-                                </div>
-                                <div *ngSwitchCase="false" fxLayout="column" fxLayoutGap="10px">
-                                    <ng-container *ngFor="let userFriend of userFriendRequests">
-                                        <app-user-friend [userFriend]="userFriend" [currentUser]="user" (loadFriendEvent)="loadAllUserFriends()"></app-user-friend>
-                                    </ng-container>
-                                </div>
-                            </div>
-                            <mat-paginator class="paginator-style"
-                                [pageSize]="this.userFriendRequestsPageSize"
-                                [pageIndex]="this.userFriendRequestsPageIndex"
-                                [pageSizeOptions]="[5, 10, 25, 50]"
-                                [length]="this.totalUserFriendRequests"
-                                [showFirstLastButtons]="true" 
-                                (page)="onUserFriendsPageChange($event, 'not-friends')"
-                            ></mat-paginator>
-                        </div>
-                    </div>
-                </mat-tab>
-            </mat-tab-group>
-        </mat-tab>
-        <mat-tab label="Chat">
+            <mat-paginator class="paginator-style" [pageSize]="this.userThreadsPageSize"
+                [pageIndex]="this.userThreadsPageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
+                [length]="this.totalUserThreads" [showFirstLastButtons]="true"
+                (page)="onUserThreadsPageChange($event)"></mat-paginator>
+        </div>
+    </mat-tab>
+    <mat-tab label="Board Collection">
+        <div class="form-column">
             <div class="search-form-container">
-                <form [formGroup]="chatSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyChatSearch()">
+                <form [formGroup]="boardSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyBoardSearch()">
                     <mat-form-field>
                         <mat-label>Search</mat-label>
                         <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
                     </mat-form-field>
-                    <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyChatSearch()">
+                    <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyBoardSearch()">
                         search
                     </mat-icon>
-                    <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearChatSearch()">
+                    <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearBoardSearch()">
                         clear
                     </mat-icon>
                 </form>
-                <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button" (click)="addChat()">Add Chat</button>
+                <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button"
+                    (click)="addUserBoard()">Follow Board</button>
             </div>
-            <div *ngIf="!userChatsLoaded" class="loading-container">
+            <div *ngIf="!userBoardsLoaded" class="loading-container">
                 <mat-spinner [diameter]="100"></mat-spinner>
             </div>
-            <div *ngIf="userChatsLoaded" class="chat-container">
-                <div *ngIf="totalUserChats == 0" class="no-chats-container">
-                    <p>Currently no chats.</p>
+            <div *ngIf="userBoardsLoaded" class="board-container">
+                <div *ngIf="totalUserBoards == 0" class="no-boards-container">
+                    <p>Currently following no boards.</p>
                 </div>
-                <div *ngFor="let userChat of userChats" class="chat-margin">
-                    <app-user-chat [userChat]="userChat" [currentUser]="user" (loadMessageEvent)="loadAllUserChats($event)"></app-user-chat>
+                <div fxFlex *ngFor="let userBoard of userBoards" class="board-item">
+                    <app-user-board [userBoard]="userBoard"
+                        (unfollowBoardEvent)="loadUserBoards($event)"></app-user-board>
                 </div>
-                <mat-paginator class="paginator-style"
-                    [pageSize]="this.userChatsPageSize"
-                    [pageIndex]="this.userChatsPageIndex"
-                    [pageSizeOptions]="[5, 10, 25, 50]"
-                    [length]="this.totalUserChats"
-                    [showFirstLastButtons]="true" 
-                    (page)="onUserChatsPageChange($event)"
-                ></mat-paginator>
             </div>
-        </mat-tab>
-        <mat-tab label="User Details">
-            <div class="form-column">
-                <div class="header-row">
-                    <h1 style="text-align: center;">Edit Profile</h1>
-                    <mat-slide-toggle style="margin-left: 1.23rem;margin-top:1.70rem;" [matTooltip]="enableMessage" [(ngModel)]="editEnabled" (ngModelChange)="changeForm()">
-                    </mat-slide-toggle>
+            <mat-paginator class="paginator-style" [pageSize]="this.userBoardsPageSize"
+                [pageIndex]="this.userBoardsPageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
+                [length]="this.totalUserBoards" [showFirstLastButtons]="true"
+                (page)="onUserBoardsPageChange($event)"></mat-paginator>
+        </div>
+    </mat-tab>
+    <mat-tab label="Game Collection">
+        <div class="game-column">
+            <div class="search-form-container">
+                <form [formGroup]="userGameSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyUserGameSearch()">
+                    <mat-form-field>
+                        <mat-label>Search</mat-label>
+                        <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
+                    </mat-form-field>
+                    <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyUserGameSearch()">
+                        search
+                    </mat-icon>
+                    <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearGameSearch()">
+                        clear
+                    </mat-icon>
+                </form>
+                <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button"
+                    (click)="addUserGame()">Add Game</button>
+            </div>
+            <div *ngIf="!userGamesLoaded" class="loading-container">
+                <mat-spinner [diameter]="100"></mat-spinner>
+            </div>
+            <div *ngIf="userGamesLoaded">
+                <div [ngSwitch]="this.hasGames">
+                    <div *ngSwitchCase="true" class="game-container">
+                        <div *ngFor="let userGame of userGames">
+                            <app-user-game [userGame]="userGame"
+                                (loadGameEvent)="loadGameEvent($event)"></app-user-game>
+                        </div>
+                    </div>
+                    <div *ngSwitchCase="false">
+                        <div *ngIf="totalUserGames == 0" class="no-games-container">
+                            <p>Currently no games in your collection.</p>
+                        </div>
+                    </div>
                 </div>
-                <div *ngIf="!userLoaded" class="loading-container">
-                    <mat-spinner [diameter]="100"></mat-spinner>
+            </div>
+            <mat-paginator class="paginator-style" [pageSize]="this.userGamesPageSize"
+                [pageIndex]="this.userGamesPageIndex" [pageSizeOptions]="[5, 10, 25, 50]" [length]="this.totalUserGames"
+                [showFirstLastButtons]="true" (page)="onUserGamesPageChange($event)"></mat-paginator>
+        </div>
+    </mat-tab>
+    <mat-tab label="Achievement Collection">
+        <div class="search-form-container">
+            <form [formGroup]="userAchievementSearchCriteria" style="margin-top: 25px;"
+                (ngSubmit)="applyAchievementSearch()">
+                <mat-form-field>
+                    <mat-label>Search</mat-label>
+                    <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
+                </mat-form-field>
+                <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyAchievementSearch()">
+                    search
+                </mat-icon>
+                <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearAchievementSearch()">
+                    clear
+                </mat-icon>
+                <mat-icon style="margin-left: 10px;cursor: pointer;" class="search-icon"
+                    matTooltip="Click for a more detailed search." (click)="filterForm()">
+                    filter_list
+                </mat-icon>
+            </form>
+        </div>
+        <div *ngIf="!userAchievementsLoaded" class="loading-container">
+            <mat-spinner [diameter]="100"></mat-spinner>
+        </div>
+        <div *ngIf="userAchievementsLoaded" class="achievement-container">
+            <div *ngIf="totalUserAchievements == 0" class="no-achievements-container">
+                <p>Currently no achievements.</p>
+            </div>
+            <div fxFlex *ngFor="let userAchievement of userAchievements" class="achievement-margin">
+                <app-user-achievement [userAchievement]="userAchievement"
+                    (loadAchievementEvent)="loadAllUserAchievements($event)"></app-user-achievement>
+            </div>
+            <mat-paginator class="paginator-style" [pageSize]="this.userAchievementsPageSize"
+                [pageIndex]="this.userAchievementsPageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
+                [length]="this.totalUserAchievements" [showFirstLastButtons]="true"
+                (page)="onUserAchievementsPageChange($event)"></mat-paginator>
+        </div>
+    </mat-tab>
+    <mat-tab label="Friends">
+        <mat-tab-group class="friend-tab-container">
+            <mat-tab label="Friends">
+                <div [ngSwitch]="userFriendsLoaded">
+                    <div *ngSwitchCase="false" class="loading-container">
+                        <app-ghost [type]="'userFriend'" class="ghost-style"></app-ghost>
+                        <mat-paginator class="paginator-style" [pageSize]="this.userFriendsPageSize"
+                            [pageIndex]="this.userFriendsPageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
+                            [length]="this.totalUserFriends" [showFirstLastButtons]="true"
+                            (page)="onUserFriendsPageChange($event, 'friends')"></mat-paginator>
+                    </div>
+                    <div *ngSwitchCase="true" class="user-friend-container">
+                        <div [ngSwitch]="totalUserFriends == 0">
+                            <div *ngSwitchCase="true" class="no-friends-container">
+                                <p>Currently no friends.</p>
+                            </div>
+                            <div *ngSwitchCase="false" fxLayout="column" fxLayoutGap="10px">
+                                <ng-container *ngFor="let userFriend of userFriends">
+                                    <app-user-friend [userFriend]="userFriend" [currentUser]="user"
+                                        (loadFriendEvent)="loadAllUserFriends()"></app-user-friend>
+                                </ng-container>
+                            </div>
+                        </div>
+                        <mat-paginator class="paginator-style" [pageSize]="this.userFriendsPageSize"
+                            [pageIndex]="this.userFriendsPageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
+                            [length]="this.totalUserFriends" [showFirstLastButtons]="true"
+                            (page)="onUserFriendsPageChange($event, 'friends')"></mat-paginator>
+                    </div>
                 </div>
-                <div *ngIf="userLoaded">
-                    <form [formGroup]="userProfileForm" (ngSubmit)="onSubmit()">
-                        <div class="form-column">
-                            <div class="form-row">
-                                <ng-container *ngIf="userProfileForm.controls.profilePicture.value !== ''; then hasImage; else blankImage"></ng-container>
-                                <ng-template #hasImage>
-                                    <div matTooltip="Click to update your profile image." class="image-cropper" (click)="updateProfileImage()">
-                                        <img src="{{userProfileForm.controls.profilePicture.value}}" class="profile-image">
-                                    </div>
-                                </ng-template>
-                                <ng-template #blankImage>
-                                    <div class="profile-icon">
-                                        <mat-icon matTooltip="Click to update your profile image." [inline]="true" (click)="updateProfileImage()">
-                                            account_circle
-                                        </mat-icon>
-                                    </div>
-                                </ng-template>
+            </mat-tab>
+            <mat-tab label="Friend Requests">
+                <div [ngSwitch]="userFriendRequestsLoaded">
+                    <div *ngSwitchCase="false" class="loading-container">
+                        <app-ghost [type]="'userFriend'" class="ghost-style"></app-ghost>
+                        <mat-paginator class="paginator-style" [pageSize]="this.userFriendRequestsPageSize"
+                            [pageIndex]="this.userFriendRequestsPageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
+                            [length]="this.totalUserFriendRequests" [showFirstLastButtons]="true"
+                            (page)="onUserFriendsPageChange($event, 'not-friends')"></mat-paginator>
+                    </div>
+                    <div *ngSwitchCase="true" class="user-friend-container">
+                        <div [ngSwitch]="totalUserFriendRequests == 0">
+                            <div *ngSwitchCase="true" class="no-friends-container">
+                                <p>Currently no friends.</p>
                             </div>
-                            <div class="form-row">
-                                <mat-form-field appearance="outline">
-                                    <label>Firstname</label>
-                                    <input matInput gameName="firstName" id="firstName" type="text"
-                                        formControlName="firstName" placeholder="Enter firstname." required />
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" style="margin-left:10px;">
-                                    <label>Lastname</label>
-                                    <input matInput gameName="lastName" id="lastName" type="text" formControlName="lastName"
-                                        placeholder="Enter lastname." required />
-                                </mat-form-field>
+                            <div *ngSwitchCase="false" fxLayout="column" fxLayoutGap="10px">
+                                <ng-container *ngFor="let userFriend of userFriendRequests">
+                                    <app-user-friend [userFriend]="userFriend" [currentUser]="user"
+                                        (loadFriendEvent)="loadAllUserFriends()"></app-user-friend>
+                                </ng-container>
                             </div>
-                            <div class="form-row">
-                                <mat-form-field appearance="outline">
-                                    <label>Username</label>
-                                    <input matInput gameName="userName" id="userName" type="text" formControlName="userName"
-                                        placeholder="Enter username." required />
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" style="margin-left:10px;">
-                                    <label>Password</label>
-                                    <input matInput gameName="userPassword" id="userPassword"
-                                        [type]=" showPassword ? 'text' : 'password' " formControlName="userPassword"
-                                        placeholder="Enter password." required />
-                                </mat-form-field>
-                            </div>
-                            <div class="form-row">
-                                <mat-form-field appearance="outline">
-                                    <label>Email</label>
-                                    <input matInput gameName="email" id="email" type="text" formControlName="email"
-                                        placeholder="Enter email." required [pattern]="emailValidation" />
-                                </mat-form-field>
-                                <mat-form-field appearance="outline" style="margin-left:10px;">
-                                    <label>Phone Number</label>
-                                    <input matInput gameName="phoneNumber" id="phoneNumber" type="text" mask="(000)-000-0000"
-                                        formControlName="phoneNumber" placeholder="Enter phone number." required />
-                                </mat-form-field>
-                            </div>
-                            <div class="submit-row">
-                                <div style="margin-right:120px;">
-                                    <input [matDatepicker]="picker" placeholder="Choose a date" [max]="minDate" required
+                        </div>
+                        <mat-paginator class="paginator-style" [pageSize]="this.userFriendRequestsPageSize"
+                            [pageIndex]="this.userFriendRequestsPageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
+                            [length]="this.totalUserFriendRequests" [showFirstLastButtons]="true"
+                            (page)="onUserFriendsPageChange($event, 'not-friends')"></mat-paginator>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-tab>
+    <mat-tab label="Chat">
+        <div class="search-form-container">
+            <form [formGroup]="chatSearchCriteria" style="margin-top: 25px;" (ngSubmit)="applyChatSearch()">
+                <mat-form-field>
+                    <mat-label>Search</mat-label>
+                    <input matInput formControlName="searchTerm" placeholder="Search Table" #input>
+                </mat-form-field>
+                <mat-icon style="margin-left: 10px;cursor: pointer; color: green;" (click)="applyChatSearch()">
+                    search
+                </mat-icon>
+                <mat-icon style="margin-left: 10px;cursor: pointer;" color="warn" (click)="clearChatSearch()">
+                    clear
+                </mat-icon>
+            </form>
+            <button mat-raised-button style="cursor: pointer; margin-top:25px;" color="primary" type="button"
+                (click)="addChat()">Add Chat</button>
+        </div>
+        <div *ngIf="!userChatsLoaded" class="loading-container">
+            <mat-spinner [diameter]="100"></mat-spinner>
+        </div>
+        <div *ngIf="userChatsLoaded" class="chat-container">
+            <div *ngIf="totalUserChats == 0" class="no-chats-container">
+                <p>Currently no chats.</p>
+            </div>
+            <div *ngFor="let userChat of userChats" class="chat-margin">
+                <app-user-chat [userChat]="userChat" [currentUser]="user"
+                    (loadMessageEvent)="loadAllUserChats($event)"></app-user-chat>
+            </div>
+            <mat-paginator class="paginator-style" [pageSize]="this.userChatsPageSize"
+                [pageIndex]="this.userChatsPageIndex" [pageSizeOptions]="[5, 10, 25, 50]" [length]="this.totalUserChats"
+                [showFirstLastButtons]="true" (page)="onUserChatsPageChange($event)"></mat-paginator>
+        </div>
+    </mat-tab>
+    <mat-tab label="User Details">
+        <div class="form-column">
+            <div class="header-row">
+                <h1 style="text-align: center;">Edit Profile</h1>
+                <mat-slide-toggle style="margin-left: 1.23rem;margin-top:1.70rem;" [matTooltip]="enableMessage"
+                    [(ngModel)]="editEnabled" (ngModelChange)="changeForm()">
+                </mat-slide-toggle>
+            </div>
+            <div *ngIf="!userLoaded" class="loading-container">
+                <mat-spinner [diameter]="100"></mat-spinner>
+            </div>
+            <div *ngIf="userLoaded">
+                <form [formGroup]="userProfileForm" (ngSubmit)="onSubmit()">
+                    <div class="form-column">
+                        <div class="form-row">
+                            <ng-container
+                                *ngIf="userProfileForm.controls.profilePicture.value !== ''; then hasImage; else blankImage"></ng-container>
+                            <ng-template #hasImage>
+                                <div matTooltip="Click to update your profile image." class="image-cropper"
+                                    (click)="updateProfileImage()">
+                                    <img src="{{userProfileForm.controls.profilePicture.value}}" class="profile-image">
+                                </div>
+                            </ng-template>
+                            <ng-template #blankImage>
+                                <div class="profile-icon">
+                                    <mat-icon matTooltip="Click to update your profile image." [inline]="true"
+                                        (click)="updateProfileImage()">
+                                        account_circle
+                                    </mat-icon>
+                                </div>
+                            </ng-template>
+                        </div>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline">
+                                <label>Firstname</label>
+                                <input matInput gameName="firstName" id="firstName" type="text"
+                                    formControlName="firstName" placeholder="Enter firstname." required />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" style="margin-left:10px;">
+                                <label>Lastname</label>
+                                <input matInput gameName="lastName" id="lastName" type="text" formControlName="lastName"
+                                    placeholder="Enter lastname." required />
+                            </mat-form-field>
+                        </div>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline">
+                                <label>Username</label>
+                                <input matInput gameName="userName" id="userName" type="text" formControlName="userName"
+                                    placeholder="Enter username." required />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" style="margin-left:10px;">
+                                <label>Password</label>
+                                <input matInput gameName="userPassword" id="userPassword"
+                                    [type]=" showPassword ? 'text' : 'password' " formControlName="userPassword"
+                                    placeholder="Enter password." required />
+                            </mat-form-field>
+                        </div>
+                        <div class="form-row">
+                            <mat-form-field appearance="outline">
+                                <label>Email</label>
+                                <input matInput gameName="email" id="email" type="text" formControlName="email"
+                                    placeholder="Enter email." required [pattern]="emailValidation" />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" style="margin-left:10px;">
+                                <label>Phone Number</label>
+                                <input matInput gameName="phoneNumber" id="phoneNumber" type="text"
+                                    mask="(000)-000-0000" formControlName="phoneNumber"
+                                    placeholder="Enter phone number." required />
+                            </mat-form-field>
+                        </div>
+                        <div class="submit-row">
+                            <div style="margin-right:120px;">
+                                <input [matDatepicker]="picker" placeholder="Choose a date" [max]="minDate" required
                                     formControlName="dateOfBirth" />
-                                    <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
-                                    <mat-datepicker #picker></mat-datepicker>
-                                </div>
-                                <button mat-raised-button [disabled]="!userProfileForm.dirty || !userProfileForm.valid"
-                                type="submit">Submit</button>
+                                <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
                             </div>
+                            <button mat-raised-button [disabled]="!userProfileForm.dirty || !userProfileForm.valid"
+                                type="submit">Submit</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
-        </mat-tab>
-    </mat-tab-group>
-</div>
+        </div>
+    </mat-tab>
+</mat-tab-group>
