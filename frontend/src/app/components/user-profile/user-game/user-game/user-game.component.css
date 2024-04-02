@@ -3,16 +3,8 @@
     height: 250px;
 }
 
-.icon-overlay {
-    position: fixed;
-    cursor: pointer;
+.actions-style {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 200px;
-    top: 50%;
-}
-
-.mat-mdc-card-content:last-child {
-    padding: 0px;
 }

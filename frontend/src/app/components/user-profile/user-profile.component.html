@@ -96,7 +96,7 @@
             <div *ngIf="userGamesLoaded">
                 <div [ngSwitch]="this.hasGames">
                     <div *ngSwitchCase="true" class="game-container">
-                        <div *ngFor="let userGame of userGames">
+                        <div *ngFor="let userGame of userGames" class="game-margin">
                             <app-user-game [userGame]="userGame"
                                 (loadGameEvent)="loadGameEvent($event)"></app-user-game>
                         </div>

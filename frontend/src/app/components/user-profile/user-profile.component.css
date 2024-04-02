@@ -11,6 +11,12 @@
     margin-left: 1rem;
 }
 
+.game-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+} 
+
 .form-row{
     display: flex;
     flex-direction: row;
@@ -69,15 +75,6 @@
 .thread-item {
     padding: 3px 3px 3px 3px;
 }
-
-.game-container {
-    /* display: flex;
-    flex-direction: row;
-    flex-wrap: wrap; */
-    display: grid;
-    place-items: center;
-    grid-template-columns: repeat(auto-fill,minmax(300px, 1fr));
-} 
 
 .no-games-container {
     display: flex;
