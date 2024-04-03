@@ -40,7 +40,7 @@ export class ThreadComponent {
   });
 
   allThreadItems: ThreadItem[];
-  finishedLoadingData: boolean = false;
+  threadItemsLoaded: boolean = false;
   thread: any;
   userName: any;
   user: User;
@@ -74,10 +74,10 @@ export class ThreadComponent {
     if (result !== null && result.message == undefined) {
       this.allThreadItems = result.data;
       this.checkReplyDepth();
-      this.finishedLoadingData = true;
+      this.threadItemsLoaded = true;
     } else {
       this.allThreadItems = [];
-      this.finishedLoadingData = true;
+      this.threadItemsLoaded = true;
     }
   }
 

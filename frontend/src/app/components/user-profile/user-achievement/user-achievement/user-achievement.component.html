@@ -1,18 +1,22 @@
 <mat-card [ngClass]="{'not_started': userAchievement.achievementStatus === 'not_started', 'in_progress': userAchievement.achievementStatus === 'in_progress','completed': userAchievement.achievementStatus === 'completed'}">
-    <mat-card-content class="achievement-content">
-        <img src="{{userAchievement.achievement?.achievementIcon}}">
-        <div style="margin-left: 15px;">
+    <mat-card-content fxFlex fxLayout="row">
+        <div fxFlex.gt-sm="5%">
+            <img src="{{userAchievement.achievement?.achievementIcon}}">
+        </div>
+        <div fxFlex.gt-sm="15%">
             <mat-card-title>{{userAchievement.achievementName}}</mat-card-title>
             <mat-card-subtitle>{{userAchievement.achievement?.achievementDescription}}</mat-card-subtitle>
         </div>
+        <div fxFlex.gt-sm="40%">
+            <mat-button-toggle-group class="achievement-item" [value]="userAchievement.achievementStatus" (change)="updateAchievementStatus($event.value, userAchievement)" matTooltip="Change achievement status.">
+                <mat-button-toggle value="not_started">Not Started</mat-button-toggle>
+                <mat-button-toggle value="in_progress">In Progress</mat-button-toggle>
+                <mat-button-toggle value="completed">Completed</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+        <div fxFlex.gt-sm="15%">
+            <p *ngIf="userAchievement.achievementStatus === 'completed'" >Completed on {{formatDate(userAchievement.updatedAt)}}</p>
+            <p *ngIf="userAchievement.achievementStatus === 'completed'" >Rate of completion: {{userAchievement.completedUserAchievementRatio | number:'1.0-2'}}%</p>
+        </div>
     </mat-card-content>
-    <mat-card-actions class="achievement-actions-container">
-        <mat-button-toggle-group class="achievement-item" [value]="userAchievement.achievementStatus" (change)="updateAchievementStatus($event.value, userAchievement)" matTooltip="Change achievement status.">
-            <mat-button-toggle value="not_started">Not Started</mat-button-toggle>
-            <mat-button-toggle value="in_progress">In Progress</mat-button-toggle>
-            <mat-button-toggle value="completed">Completed</mat-button-toggle>
-        </mat-button-toggle-group>
-        <p *ngIf="userAchievement.achievementStatus === 'completed'" >Completed on {{formatDate(userAchievement.updatedAt)}}</p>
-        <p *ngIf="userAchievement.achievementStatus === 'completed'" >Rate of completion: {{userAchievement.completedUserAchievementRatio | number:'1.0-2'}}%</p>
-    </mat-card-actions>
 </mat-card>
