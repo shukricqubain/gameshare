@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 import { lastValueFrom } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
+import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
 
 @Component({
   selector: 'app-thread',
@@ -25,7 +26,8 @@ export class ThreadComponent {
     private location: Location,
     private threadItemService: ThreadItemService,
     private matDialog: MatDialog,
-    private userService: UserService
+    private userService: UserService,
+    private dateFunction: DateFunctionsService
   ) {
   }
 
@@ -46,6 +48,7 @@ export class ThreadComponent {
   user: User;
   allUserNames: User[];
   allUserNamesLoaded: boolean = false;
+  replyString = `<<Replying to `
 
 
   async ngOnInit() {
@@ -83,7 +86,7 @@ export class ThreadComponent {
 
   checkReplyDepth(){
     ///go through each post in thread
-    for(let item of this.allThreadItems){
+    for(let item of this.allThreadItems){      
       let currentItem: any = item;
       ///if no replyID depth is 0
       if(item.replyID == null){
@@ -98,6 +101,9 @@ export class ThreadComponent {
           let replyID = check.replyID;
           currentItem.depth += 1;
           check = this.allThreadItems.find(obj => obj.threadItemID == replyID);
+          if(currentItem.depth == 1){
+            currentItem.replyingTo = check.userID;
+          }
         }
         currentItem.depthStyle = `${currentItem.depth}rem`;
       }
@@ -290,5 +296,10 @@ export class ThreadComponent {
         }
       });
     }
+  }
+
+  public formatDate(date: any) {
+    let formattedDate = this.dateFunction.formatDateMMDDYYYY(date);
+    return formattedDate;
   }
 }

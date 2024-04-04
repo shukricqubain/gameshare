@@ -4,6 +4,7 @@ export class ThreadItem {
     threadMessage?: string;
     userID?: Number;
     replyID?: Number;
+    replyingTo?: string;
     threadItemImage?: string;
     depth?: number;
     depthStyle?: string;

@@ -1,9 +1,9 @@
 <mat-card [ngClass]="{'not_started': userAchievement.achievementStatus === 'not_started', 'in_progress': userAchievement.achievementStatus === 'in_progress','completed': userAchievement.achievementStatus === 'completed'}">
     <mat-card-content fxFlex fxLayout="row">
         <div fxFlex.gt-sm="5%">
-            <img src="{{userAchievement.achievement?.achievementIcon}}">
+            <img src="{{userAchievement.achievement?.achievementIcon}}" class="icon-cropper">
         </div>
-        <div fxFlex.gt-sm="15%">
+        <div fxFlex.gt-sm="25%">
             <mat-card-title>{{userAchievement.achievementName}}</mat-card-title>
             <mat-card-subtitle>{{userAchievement.achievement?.achievementDescription}}</mat-card-subtitle>
         </div>

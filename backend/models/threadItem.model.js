@@ -46,7 +46,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         updatedAt: {
             type: Sequelize.DATEONLY,
-            defaultValue: Sequelize.NOW,
+            defaultValue: null,
             validate:{
             }
         },

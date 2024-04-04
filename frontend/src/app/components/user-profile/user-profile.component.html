@@ -147,11 +147,11 @@
                             (loadAchievementEvent)="loadAllUserAchievements($event)"></app-user-achievement>
                     </ng-container>
                 </div>
-            </div>
-            <mat-paginator class="paginator-style" [pageSize]="this.userAchievementsPageSize"
+                <mat-paginator class="paginator-style" [pageSize]="this.userAchievementsPageSize"
                 [pageIndex]="this.userAchievementsPageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
                 [length]="this.totalUserAchievements" [showFirstLastButtons]="true"
                 (page)="onUserAchievementsPageChange($event)"></mat-paginator>
+            </div>
         </div>
     </mat-tab>
     <mat-tab label="Friends">
