@@ -72,13 +72,13 @@ Use this space to show useful examples of how a project can be used. Additional 
 ## Roadmap
 
 ### Version 1.4
-- [ ] UI/UX Updates
+- [x] UI/UX Updates
    - [x] Friends page [#61](https://github.com/shukricqubain/gameshare/issues/61)
    - [x] User Chat/User Messeges [#62](https://github.com/shukricqubain/gameshare/issues/62)
    - [x] Game collection [#63](https://github.com/shukricqubain/gameshare/issues/63)
    - [x] Achievement Collection [#64](https://github.com/shukricqubain/gameshare/issues/64)
    - [x] Boards Page [#65](https://github.com/shukricqubain/gameshare/issues/65)
-   - [ ] Thread Page [#66](https://github.com/shukricqubain/gameshare/issues/66)
+   - [x] Thread Page [#66](https://github.com/shukricqubain/gameshare/issues/66)
 
 ### Version 1.3
 - [x] User Profile Task/Enhancements
