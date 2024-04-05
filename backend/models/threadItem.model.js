@@ -38,6 +38,12 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
             }
         },
+        isRemoved: {
+            type: Sequelize.INTEGER,
+            validate: {
+                isInt: true
+            }
+        },
         createdAt: {
             type: Sequelize.DATEONLY,
             defaultValue: Sequelize.NOW,

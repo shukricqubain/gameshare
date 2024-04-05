@@ -8,6 +8,8 @@ export class ThreadItem {
     threadItemImage?: string;
     depth?: number;
     depthStyle?: string;
+    threadItemHeader?: string;
+    isRemoved?: number;
     createdAt?: string;
     updatedAt?: string;
 }

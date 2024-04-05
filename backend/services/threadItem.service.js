@@ -151,7 +151,8 @@ async function create(newThreadItem){
             threadMessage: newThreadItem.threadMessage,
             userID: newThreadItem.userID,
             replyID: newThreadItem.replyID,
-            threadItemImage: newThreadItem.threadItemImage
+            threadItemImage: newThreadItem.threadItemImage,
+            isRemoved: 0
         });
     } catch(err){
         console.log(err)

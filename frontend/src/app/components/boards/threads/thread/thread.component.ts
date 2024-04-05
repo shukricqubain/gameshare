@@ -9,7 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThreadItemService } from 'src/app/services/threadItem.service';
 import { AddThreadItemComponent } from './add-thread-item/add-thread-item.component';
 import { UserService } from 'src/app/services/user.service';
-import { lastValueFrom } from 'rxjs';
+import { elementAt, lastValueFrom } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
@@ -55,9 +55,9 @@ export class ThreadComponent {
     let data: any = this.location.getState();
     await this.checkCurrentUser();
     await this.loadAllUsers();
-    if(data.thread != undefined){
+    if (data.thread != undefined) {
       this.thread = data.thread;
-    } else if(data.userThread != undefined){
+    } else if (data.userThread != undefined) {
       this.thread = data.userThread;
     }
     if (this.thread !== null && this.thread !== undefined && this.thread.threadID !== undefined && this.thread.threadID !== null) {
@@ -84,12 +84,29 @@ export class ThreadComponent {
     }
   }
 
-  checkReplyDepth(){
+  checkReplyDepth() {
     ///go through each post in thread
-    for(let item of this.allThreadItems){      
+    for (let item of this.allThreadItems) {
       let currentItem: any = item;
+
+      ///update item header
+      if (currentItem.updatedAt != null) {
+
+        if(currentItem.isRemoved){
+          let updateTime = this.formatDate(item.updatedAt);
+          item.threadItemHeader = `Post deleted at ${updateTime}`;
+        } else {
+          let updateTime = this.formatDate(item.updatedAt);
+          item.threadItemHeader = ` edited at ${updateTime}`;
+        }
+    
+      } else {
+        let createTime = this.formatDate(item.createdAt);
+        item.threadItemHeader = ` at ${createTime}`;
+      }
+
       ///if no replyID depth is 0
-      if(item.replyID == null){
+      if (item.replyID == null) {
         currentItem.depth = 0;
       } else {
         ///if replyID, increment depth
@@ -97,16 +114,25 @@ export class ThreadComponent {
         ///while incrementing the depth along the way 
         currentItem.depth = 0;
         let check: any = item;
-        while(check != undefined && check.replyID !== null){
+        while (check != undefined && check.replyID !== null) {
           let replyID = check.replyID;
           currentItem.depth += 1;
           check = this.allThreadItems.find(obj => obj.threadItemID == replyID);
-          if(currentItem.depth == 1){
+          if (currentItem.depth == 1) {
             currentItem.replyingTo = check.userID;
           }
         }
         currentItem.depthStyle = `${currentItem.depth}rem`;
       }
+    }
+  }
+
+  async handleUpdateResponse(data: any) {
+    if (data !== null && data !== undefined) {
+      this.snackBar.open('Successfully deleted a post!', 'dismiss', {
+        duration: 3000
+      });
+      this.ngOnInit();
     }
   }
 
@@ -117,8 +143,8 @@ export class ThreadComponent {
     this.allThreadItems = [];
   }
 
-  public handleDeleteResponse(data:any){
-    if(data == null){
+  public handleDeleteResponse(data: any) {
+    if (data == null) {
       this.clearThreadSearch();
     } else {
       this.clearThreadSearch();
@@ -173,7 +199,7 @@ export class ThreadComponent {
 
   editThreadItem(threadItem: ThreadItem) {
     let data;
-    if(threadItem.replyID !== undefined && threadItem.replyID !== null){
+    if (threadItem.replyID !== undefined && threadItem.replyID !== null) {
       data = {
         thread: this.thread,
         isEdit: true,
@@ -187,7 +213,7 @@ export class ThreadComponent {
         threadItem: threadItem
       }
     }
-    
+
     const dialogRefAdd = this.matDialog.open(AddThreadItemComponent, {
       width: '100%',
       disableClose: true,
@@ -203,7 +229,7 @@ export class ThreadComponent {
     });
   }
 
-  replyToThreadItem(threadItem: ThreadItem){
+  replyToThreadItem(threadItem: ThreadItem) {
     let post = threadItem;
     const dialogRefAdd = this.matDialog.open(AddThreadItemComponent, {
       width: '100%',
@@ -225,12 +251,12 @@ export class ThreadComponent {
     });
   }
 
-  async checkCurrentUser(){
-    this.userName = localStorage.getItem('userName') ? localStorage.getItem('userName'): '';
+  async checkCurrentUser() {
+    this.userName = localStorage.getItem('userName') ? localStorage.getItem('userName') : '';
     this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
   }
 
-  public deleteThreadItem(element: any){
+  public deleteThreadItem(element: any) {
     const dialogRefDelete = this.matDialog.open(PopUpComponent, {
       width: '100%',
       disableClose: true,
@@ -240,34 +266,41 @@ export class ThreadComponent {
       }
     });
 
+    /// remove any info
+    element.threadItemImage = '';
+    element.userID = 0;
+    // update thread message
+    element.threadMessage = 'This message was deleted.'
+    element.isRemoved = 1;
+
     dialogRefDelete.afterClosed().subscribe(result => {
-      if(result.event === 'delete'){
-        this.threadItemService.delete(element.threadItemID).subscribe({
-          next: this.handleDeleteResponse.bind(this),
+      if (result.event === 'delete') {
+        this.threadItemService.update(element).subscribe({
+          next: this.handleUpdateResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
-        this.snackBar.open(`Post has been deleted.`, 'dismiss',{
+        this.snackBar.open(`Post has been deleted.`, 'dismiss', {
           duration: 3000
         });
       } else {
-        this.snackBar.open(`Post has not been deleted.`, 'dismiss',{
+        this.snackBar.open(`Post has not been deleted.`, 'dismiss', {
           duration: 3000
         });
       }
     });
   }
 
-  async loadAllUsers(){
-    if(!this.allUserNamesLoaded){
-      try{
+  async loadAllUsers() {
+    if (!this.allUserNamesLoaded) {
+      try {
         let result = await lastValueFrom(this.userService.getAllUserNames().pipe());
-        if(result != null && result != undefined){
+        if (result != null && result != undefined) {
           this.allUserNames = result;
         }
         this.allUserNamesLoaded = true;
-      }catch(err){
+      } catch (err) {
         console.error(err);
-        this.snackBar.open(`Error loading all users.`, 'dismiss',{
+        this.snackBar.open(`Error loading all users.`, 'dismiss', {
           duration: 3000
         });
         throw err;
@@ -275,10 +308,10 @@ export class ThreadComponent {
     }
   }
 
-  getUserNameByUserID(userID: any){
-    if(userID != undefined){
+  getUserNameByUserID(userID: any) {
+    if (userID != undefined) {
       let userName = this.allUserNames.find(obj => obj.userID == userID);
-      if(userName != undefined){
+      if (userName != undefined) {
         return userName.userName;
       } else {
         return 'userName not found';
@@ -288,13 +321,14 @@ export class ThreadComponent {
     }
   }
 
-  viewUserProfile(element: any){
-    if(element.userID != this.user.userID){
-      this.router.navigate([`/view-user-profile/${element.userID}`], 
-      { state: {
-          userID: element.userID
-        }
-      });
+  viewUserProfile(element: any) {
+    if (element.userID != this.user.userID) {
+      this.router.navigate([`/view-user-profile/${element.userID}`],
+        {
+          state: {
+            userID: element.userID
+          }
+        });
     }
   }
 

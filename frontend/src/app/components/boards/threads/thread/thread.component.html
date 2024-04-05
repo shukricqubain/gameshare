@@ -26,28 +26,29 @@
             <div *ngFor="let threadItem of allThreadItems" class="thread-item">
                 <mat-card [ngStyle]="{'margin-left': threadItem.depthStyle}">
                     <mat-card-header>
-                        <div [ngSwitch]="threadItem.updatedAt != null">
+                        <div [ngSwitch]="threadItem.isRemoved == 0">
                             <div *ngSwitchCase="true">
                                 <mat-card-title (click)="viewUserProfile(threadItem)">
                                     <span
                                         [ngClass]="{'is-user-style': user.userID == threadItem.userID, 'not-user-style': user.userID != threadItem.userID}">{{getUserNameByUserID(threadItem.userID)}}</span>
-                                    edited at {{formatDate(threadItem.updatedAt)}}
+                                    {{threadItem.threadItemHeader}}
                                 </mat-card-title>
-                                <mat-card-subtitle *ngIf="threadItem.replyingTo">{{replyString}}{{getUserNameByUserID(threadItem.replyingTo)}}</mat-card-subtitle>
+                                <mat-card-subtitle
+                                    *ngIf="threadItem.replyingTo">{{replyString}}{{getUserNameByUserID(threadItem.replyingTo)}}</mat-card-subtitle>
                             </div>
                             <div *ngSwitchCase="false">
-                                <mat-card-title (click)="viewUserProfile(threadItem)">
-                                    <span
-                                        [ngClass]="{'is-user-style': user.userID == threadItem.userID, 'not-user-style': user.userID != threadItem.userID}">{{getUserNameByUserID(threadItem.userID)}}</span>
-                                    at {{formatDate(threadItem.createdAt)}}
+                                <mat-card-title>
+                                    {{threadItem.threadItemHeader}}
                                 </mat-card-title>
-                                <mat-card-subtitle *ngIf="threadItem.replyingTo">{{replyString}}{{getUserNameByUserID(threadItem.replyingTo)}}</mat-card-subtitle>
+                                <mat-card-subtitle
+                                    *ngIf="threadItem.replyingTo">{{replyString}}{{getUserNameByUserID(threadItem.replyingTo)}}</mat-card-subtitle>
                             </div>
                         </div>
                     </mat-card-header>
                     <mat-card-content>
                         <p>{{threadItem?.threadMessage}}</p>
-                        <img *ngIf="threadItem?.threadItemImage != undefined && threadItem?.threadItemImage != null && threadItem?.threadItemImage !== ''" src="{{threadItem?.threadItemImage}}" class="thread-item-image">
+                        <img *ngIf="threadItem?.threadItemImage != undefined && threadItem?.threadItemImage != null && threadItem?.threadItemImage !== ''"
+                            src="{{threadItem?.threadItemImage}}" class="thread-item-image">
                     </mat-card-content>
                     <mat-card-actions>
                         <button mat-button (click)="replyToThreadItem(threadItem)">Reply</button>
