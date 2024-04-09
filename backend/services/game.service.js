@@ -104,7 +104,8 @@ async function create(game) {
             genre: game.genre,
             releaseDate: game.releaseDate,
             gameCover: game.gameCover,
-            platform: game.platform
+            platform: game.platform,
+            gameCoverFileName: game.gameCoverFileName
         });
     } catch (err) {
         console.log(err)

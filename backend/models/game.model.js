@@ -44,6 +44,11 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
             }
         },
+        gameCoverFileName: {
+            type: Sequelize.STRING,
+            validate: {
+            }
+        },
         createdAt: {
             type: Sequelize.DATE,
         },
