@@ -1,48 +1,45 @@
 const express = require("express");
-const multer = require('multer');
 const router = express.Router();
 const gameController = require("../controllers/game.controller");
+const uploadFile = require("../middleware/upload")
 
-const DIR = '../backend/assets/game_covers';
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, DIR);
-    },
-    filename: (req, file, cb) => {
-        const fileName = file.originalname.toLowerCase().split(' ').join('-');
-        cb(null, fileName)
-    }
-});
-
-var upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+// upload gameCover
+router.post('/uploadGameCover', async function (req, res) {
+    try {
+        await uploadFile(req, res);
+        if (req.file == undefined) {
+            return res.status(400).send({ message: "Please upload a file!" });
         }
+        res.status(200).send({
+            message: "Uploaded the file successfully: " + req.file.originalname,
+        });
+    } catch (err) {
+        console.error(err);
+        if (err.code == "LIMIT_FILE_SIZE") {
+            return res.status(500).send({
+                message: "File size cannot be larger than 2MB!",
+            });
+        }
+
+        res.status(500).send({
+            message: `Could not upload the file: ${req.file.originalname}. ${err}`,
+        });
     }
 });
 
 // create game
-router.post('/addGame', upload.single('gameCover'), async function (req, res) {
+router.post('/addGame', async function (req, res) {
     try {
-
-        console.log(req.body);
-        console.log(req.files);
-
-        // ///create new game
-        // let newGame = await gameController.create(req.body);
-        // if (typeof newGame === 'string') {
-        //     res.status(403).send(newGame);
-        // } else {
-        //     newGame = newGame['dataValues'];
-        //     res.status(201).json({
-        //         newGame: newGame
-        //     });
-        // }
+        ///create new game
+        let newGame = await gameController.create(req.body);
+        if (typeof newGame === 'string') {
+            res.status(403).send(newGame);
+        } else {
+            newGame = newGame['dataValues'];
+            res.status(201).json({
+                newGame: newGame
+            });
+        }
     } catch (err) {
         res.status(500).json({
             message: "There was an error adding a game to the database.",
