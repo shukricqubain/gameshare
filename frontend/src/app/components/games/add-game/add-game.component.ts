@@ -40,7 +40,7 @@ export class AddGameComponent {
   fileName: string;
 
   ngOnInit() {
-    if(this.data !== null && this.data != undefined && this.data.isEdit == true){
+    if (this.data !== null && this.data != undefined && this.data.isEdit == true) {
       this.isEdit = true;
       let gameName = `${this.data.element.gameName}`;
       let developers = `${this.data.element.developers}`;
@@ -63,7 +63,7 @@ export class AddGameComponent {
     }
   }
 
-  onSubmit(){
+  onSubmit() {
     let newGame: Game = {
       gameID: 0,
       gameName: '',
@@ -85,7 +85,7 @@ export class AddGameComponent {
     newGame.platform = this.addGameForm.controls.platform.value || '';
     newGame.createdAt = this.addGameForm.controls.createdAt.value || '';
     newGame.updatedAt = this.addGameForm.controls.updatedAt.value || '';
-    if(this.isEdit){
+    if (this.isEdit) {
       newGame.gameID = this.data.element?.gameID;
       this.gameService.update(newGame).subscribe({
         next: this.handleEditResponse.bind(this),
@@ -99,106 +99,102 @@ export class AddGameComponent {
     }
   }
 
-  handleCreateResponse(data:any){
-    if(data !== null){
+  handleCreateResponse(data: any) {
+    if (data !== null) {
 
-      if(this.data !== null){
-        this.snackBar.open('Successfully created a new game!', 'dismiss',{
+      if (this.data !== null) {
+        this.snackBar.open('Successfully created a new game!', 'dismiss', {
           duration: 3000
         });
         this.closeDialog(data)
       } else {
-        this.snackBar.open('Successfully created a new game!', 'dismiss',{
+        this.snackBar.open('Successfully created a new game!', 'dismiss', {
           duration: 3000
         });
         this.router.navigate(['/all-games']);
       }
-      
+
     }
   }
 
-  handleEditResponse(data:any){
-    if(data !== null && data !== undefined){
-      this.snackBar.open('Successfully edited a game!', 'dismiss',{
+  handleUploadResponse(data: any){
+    console.log(data);
+    this.snackBar.open('Successfully uploaded game cover!', 'dismiss', {
+      duration: 3000
+    });
+  }
+
+  handleEditResponse(data: any) {
+    if (data !== null && data !== undefined) {
+      this.snackBar.open('Successfully edited a game!', 'dismiss', {
         duration: 3000
       });
       this.closeDialog(data);
     }
   }
 
-  handleErrorResponse(error:any){
-    this.snackBar.open(error.message, 'dismiss',{
+  handleErrorResponse(error: any) {
+    this.snackBar.open(error.message, 'dismiss', {
       duration: 3000
     });
   }
 
-  editGame(){
+  editGame() {
     this.dialogRef?.close({
-      data:this.data
+      data: this.data
     });
   }
 
-  closeDialog(data?:any){
-    if(data !== null){
-      this.dialogRef?.close({event: 'Edited Game', data: data});
+  closeDialog(data?: any) {
+    if (data !== null) {
+      this.dialogRef?.close({ event: 'Edited Game', data: data });
     } else {
-      this.dialogRef?.close({event:'Cancel'});
+      this.dialogRef?.close({ event: 'Cancel' });
     }
   }
 
-  checkGameExists(){
-    if(!this.isEdit){
-      let gameName = this.addGameForm.controls.gameName.value ? this.addGameForm.controls.gameName.value: '';
-      if(gameName !== ''){
+  checkGameExists() {
+    if (!this.isEdit) {
+      let gameName = this.addGameForm.controls.gameName.value ? this.addGameForm.controls.gameName.value : '';
+      if (gameName !== '') {
         this.gameService!.getByName(gameName).subscribe({
           next: this.handleGetResponse.bind(this),
           error: this.handleErrorResponse.bind(this)
         });
       }
     }
-    
+
   }
 
-  handleGetResponse(data:any){
-    if(data == null && data == undefined){
-      this.snackBar.open('No game found with that name.', 'dismiss',{
+  handleGetResponse(data: any) {
+    if (data == null && data == undefined) {
+      this.snackBar.open('No game found with that name.', 'dismiss', {
         duration: 3000
       });
       this.gameNotFound = true;
     } else {
-      this.snackBar.open('Game already exists with this name, please enter another name.', 'dismiss',{
+      this.snackBar.open('Game already exists with this name, please enter another name.', 'dismiss', {
         duration: 3000
       });
       this.gameNotFound = false;
       this.existingGame = data;
     }
-    
+
   }
 
-  async onFileSelected(event: any){
-    const file = event.target.files[0] ?? null;
-    this.fileName = file.name;
-    let reader = new FileReader();
-    reader.onloadend = function() {
-      //console.log('RESULT', reader.result)
-    }
-    
-    if(file){
-      let imgCompressed = await this.compressImage(file, 50);
-      imgCompressed = 'data:image/png;base64,' + imgCompressed.split(',')[1];
-      this.addGameForm.controls.gameCover.patchValue(imgCompressed);
-      this.addGameForm.controls.gameCover.markAsDirty();
-    }
-  }
+  onFileSelected(event: any) {
 
-  async compressImage(blobImg: any, percent: any){
-    let bitmap = await createImageBitmap(blobImg);
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext('2d');
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
-    ctx?.drawImage(bitmap, 0, 0);
-    let dataURL = canvas.toDataURL("images/png", percent / 100);
-    return dataURL;
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fileName = file.name;
+      const formData = new FormData();
+      formData.append("fileName", file.name);
+      formData.append("imageFile", file);
+      let assetLocation = 'game-covers';
+      this.gameService.uploadGameCover(assetLocation, formData).subscribe({
+        next: this.handleUploadResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
+    }
   }
 }

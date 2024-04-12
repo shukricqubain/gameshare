@@ -1,18 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const gameController = require("../controllers/game.controller");
-const uploadFile = require("../middleware/upload")
+const upload = require("../middleware/upload");
 
 // upload gameCover
-router.post('/uploadGameCover', async function (req, res) {
+router.post('/uploadGameCover/:assetLocation', async function (req, res) {
     try {
-        await uploadFile(req, res);
-        if (req.file == undefined) {
-            return res.status(400).send({ message: "Please upload a file!" });
-        }
-        res.status(200).send({
-            message: "Uploaded the file successfully: " + req.file.originalname,
-        });
+        upload(req, res, (err) => {
+            if (err) {
+                console.error(err);
+                res.status(400).send(err)
+            } else {
+                res.status(200).json({
+                    message: "File Uploaded Successfully"
+                });
+            }
+        })
     } catch (err) {
         console.error(err);
         if (err.code == "LIMIT_FILE_SIZE") {
@@ -20,9 +23,8 @@ router.post('/uploadGameCover', async function (req, res) {
                 message: "File size cannot be larger than 2MB!",
             });
         }
-
         res.status(500).send({
-            message: `Could not upload the file: ${req.file.originalname}. ${err}`,
+            message: `Could not upload the file: ${req.body.fileName}. ${err}`,
         });
     }
 });

@@ -38,4 +38,8 @@ export class GameService {
   delete(id: any): Observable<any> {
     return this.http.delete(`${baseUrl}/deleteGame/${id}`);
   }
+
+  uploadGameCover(assetLocation: string, data: any){
+    return this.http.post(`${baseUrl}/uploadGameCover/${assetLocation}`, data);
+  }
 }

@@ -9,17 +9,11 @@
     justify-content: center;
 }
 
-.file-row {
-    display: flex;
-    flex-direction: space-between;
-    width: 100%;
-}
-
-.file-name {
-    margin-top: 1rem;
-}
-
 .add-game-container {
     display: flex;
     flex-direction: column;
+}
+
+.file-input{
+    display: none;
 }

@@ -33,26 +33,28 @@
                             required />
                     </mat-form-field>
                 </div>
-                <div class="file-row">
-                    <input [matDatepicker]="picker" placeholder="Choose a date" required
-                        formControlName="releaseDate" />
-                    <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                    <button type="button" mat-icon-button (click)="fileInput.click()">
-                        <mat-icon>
-                            file_upload
-                        </mat-icon>
-                    </button>
-                    <input hidden (change)="onFileSelected($event)" #fileInput type="file" id="file">
-                    <span class="file-name">{{fileName}}</span>
-                </div>
-                <br>
                 <div class="form-row">
+                    <div>
+                        <input [matDatepicker]="picker" placeholder="Choose a date" required
+                            formControlName="releaseDate" />
+                        <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </div>
+                    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
                     <mat-form-field appearance="outline">
                         <label>Platform</label>
                         <input matInput name="platform" id="platform" type="text" formControlName="platform"
                             placeholder="Enter platform." required />
                     </mat-form-field>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="file-upload">
+                        {{fileName || "No file uploaded yet."}}
+                        <button type="button" mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                            <mat-icon>attach_file</mat-icon>
+                        </button>
+                    </div>
                 </div>
             </div>
             <br>
@@ -60,11 +62,11 @@
                 <ng-container *ngIf="isEdit; then dontCheckNameFound; else checkNameFound"></ng-container>
                 <ng-template #checkNameFound>
                     <button mat-raised-button [disabled]="!addGameForm.dirty || !addGameForm.valid || !gameNotFound"
-                    type="submit">Submit</button>
+                        type="submit">Submit</button>
                 </ng-template>
                 <ng-template #dontCheckNameFound>
                     <button mat-raised-button [disabled]="!addGameForm.dirty || !addGameForm.valid"
-                    type="submit">Submit</button>
+                        type="submit">Submit</button>
                 </ng-template>
                 <button mat-raised-button type="button" style="margin-left:10px;"
                     (click)="closeDialog()">Cancel</button>
