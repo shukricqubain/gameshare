@@ -34,11 +34,6 @@ module.exports = (sequelize, Sequelize) => {
             validate:{
             }
         },
-        gameCover:{
-            type: Sequelize.TEXT('long'),
-            validate: {
-            }
-        },
         platform: {
             type: Sequelize.STRING,
             validate: {

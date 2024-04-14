@@ -5,7 +5,7 @@ export class Game {
     publishers?: string;
     genre?: string;
     releaseDate?: string;
-    gameCover?: string;
+    gameCoverFileName?: string;
     platform?: string;
     createdAt?: string;
     updatedAt?: string;

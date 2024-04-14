@@ -28,7 +28,7 @@ export class AddGameComponent {
     publishers: new FormControl('', [Validators.required]),
     genre: new FormControl('', [Validators.required]),
     releaseDate: new FormControl('', [Validators.required]),
-    gameCover: new FormControl('', [Validators.required]),
+    gameCoverFileName: new FormControl(''),
     platform: new FormControl('', [Validators.required]),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
@@ -47,7 +47,7 @@ export class AddGameComponent {
       let publishers = `${this.data.element.publishers}`;
       let genre = `${this.data.element.genre}`;
       let releaseDate = `${this.data.element.releaseDate}`;
-      let gameCover = `${this.data.element.gameCover}`;
+      let gameCoverFileName = `${this.data.element.gameCoverFileName}`;
       let platform = `${this.data.element.platform}`;
       let createdAt = `${this.data.element.createdAt}`;
       let updatedAt = `${this.data.element.updatedAt}`;
@@ -56,7 +56,7 @@ export class AddGameComponent {
       this.addGameForm.controls.publishers.patchValue(publishers);
       this.addGameForm.controls.genre.patchValue(genre);
       this.addGameForm.controls.releaseDate.patchValue(releaseDate);
-      this.addGameForm.controls.gameCover.patchValue(gameCover);
+      this.addGameForm.controls.gameCoverFileName.patchValue(gameCoverFileName);
       this.addGameForm.controls.platform.patchValue(platform);
       this.addGameForm.controls.createdAt.patchValue(createdAt);
       this.addGameForm.controls.updatedAt.patchValue(updatedAt);
@@ -71,7 +71,7 @@ export class AddGameComponent {
       publishers: '',
       genre: '',
       releaseDate: '',
-      gameCover: '',
+      gameCoverFileName: '',
       platform: '',
       createdAt: '',
       updatedAt: ''
@@ -81,7 +81,7 @@ export class AddGameComponent {
     newGame.publishers = this.addGameForm.controls.publishers.value || '';
     newGame.genre = this.addGameForm.controls.genre.value || '';
     newGame.releaseDate = this.addGameForm.controls.releaseDate.value || '';
-    newGame.gameCover = this.addGameForm.controls.gameCover.value || '';
+    newGame.gameCoverFileName = this.addGameForm.controls.gameCoverFileName.value || '';
     newGame.platform = this.addGameForm.controls.platform.value || '';
     newGame.createdAt = this.addGameForm.controls.createdAt.value || '';
     newGame.updatedAt = this.addGameForm.controls.updatedAt.value || '';
@@ -118,10 +118,16 @@ export class AddGameComponent {
   }
 
   handleUploadResponse(data: any){
-    console.log(data);
-    this.snackBar.open('Successfully uploaded game cover!', 'dismiss', {
-      duration: 3000
-    });
+    if(data){
+      this.snackBar.open('Successfully uploaded game cover!', 'dismiss', {
+        duration: 3000
+      });
+      this.addGameForm.controls.gameCoverFileName.markAsDirty();
+    } else {
+      this.snackBar.open('Error occurred uploading game cover!', 'dismiss', {
+        duration: 3000
+      });
+    }
   }
 
   handleEditResponse(data: any) {
@@ -191,6 +197,8 @@ export class AddGameComponent {
       formData.append("fileName", file.name);
       formData.append("imageFile", file);
       let assetLocation = 'game-covers';
+      let gameCoverFileName = `assets/${assetLocation}/${this.fileName}`;
+      this.addGameForm.controls.gameCoverFileName.patchValue(gameCoverFileName);
       this.gameService.uploadGameCover(assetLocation, formData).subscribe({
         next: this.handleUploadResponse.bind(this),
         error: this.handleErrorResponse.bind(this)

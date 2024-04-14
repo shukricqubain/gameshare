@@ -127,7 +127,7 @@ async function getAllUserGames(searchCriteria) {
                 include: { 
                     model: game,
                     attributes: [
-                        'gameCover'
+                        'gameCoverFileName'
                     ]
                 },
                 order: [
@@ -144,7 +144,7 @@ async function getAllUserGames(searchCriteria) {
                 include: { 
                     model: game,
                     attributes: [
-                        'gameCover'
+                        'gameCoverFileName'
                     ]
                 },
                 order: [

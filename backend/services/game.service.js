@@ -103,7 +103,6 @@ async function create(game) {
             publishers: game.publishers,
             genre: game.genre,
             releaseDate: game.releaseDate,
-            gameCover: game.gameCover,
             platform: game.platform,
             gameCoverFileName: game.gameCoverFileName
         });
