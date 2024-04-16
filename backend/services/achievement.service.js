@@ -78,7 +78,7 @@ async function getAll(searchCriteria) {
                     'gameID',
                     'achievementName',
                     'achievementDescription',
-                    'achievementIcon',
+                    'achievementIconFileName',
                     'gameName',
                     'createdAt',
                     'updatedAt'
@@ -97,7 +97,7 @@ async function getAll(searchCriteria) {
                     'gameID',
                     'achievementName',
                     'achievementDescription',
-                    'achievementIcon',
+                    'achievementIconFileName',
                     'gameName',
                     'createdAt',
                     'updatedAt'
@@ -136,7 +136,7 @@ async function create(achievement){
             gameID: achievement.gameID,
             achievementName: achievement.achievementName,
             achievementDescription: achievement.achievementDescription,
-            achievementIcon: achievement.achievementIcon,
+            achievementIconFileName: achievement.achievementIconFileName,
             gameName: achievement.gameName
         });
     } catch(err){

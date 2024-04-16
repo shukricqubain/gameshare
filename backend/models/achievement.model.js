@@ -26,14 +26,14 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
             }
         },
-        achievementIcon: {
-            type: Sequelize.TEXT('long'),
-            validate:{
-            }
-        },
         gameName: {
             type: Sequelize.STRING,
             validate:{
+            }
+        },
+        achievementIconFileName: {
+            type: Sequelize.STRING,
+            validate: {
             }
         },
         createdAt: {

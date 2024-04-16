@@ -139,7 +139,7 @@ async function getAll(searchCriteria) {
                 include: { 
                     model: achievement,
                     attributes: [
-                        'achievementIcon',
+                        'achievementIconFileName',
                         'achievementDescription'
                     ]
                 },
@@ -156,7 +156,7 @@ async function getAll(searchCriteria) {
                 include: { 
                     model: achievement,
                     attributes: [
-                        'achievementIcon',
+                        'achievementIconFileName',
                         'achievementDescription'
                     ]
                 },

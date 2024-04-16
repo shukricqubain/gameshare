@@ -51,6 +51,7 @@ export class AddGameComponent {
       let platform = `${this.data.element.platform}`;
       let createdAt = `${this.data.element.createdAt}`;
       let updatedAt = `${this.data.element.updatedAt}`;
+      let fileName = `${this.data.element.gameCoverFileName}`;
       this.addGameForm.controls.gameName.patchValue(gameName);
       this.addGameForm.controls.developers.patchValue(developers);
       this.addGameForm.controls.publishers.patchValue(publishers);
@@ -60,6 +61,8 @@ export class AddGameComponent {
       this.addGameForm.controls.platform.patchValue(platform);
       this.addGameForm.controls.createdAt.patchValue(createdAt);
       this.addGameForm.controls.updatedAt.patchValue(updatedAt);
+      this.addGameForm.controls.gameCoverFileName.patchValue(fileName);
+      this.fileName = fileName;
     }
   }
 
@@ -192,7 +195,7 @@ export class AddGameComponent {
 
     const file: File = event.target.files[0];
     if (file) {
-      this.fileName = file.name;
+      this.fileName = file.name.toLowerCase();
       const formData = new FormData();
       formData.append("fileName", file.name);
       formData.append("imageFile", file);

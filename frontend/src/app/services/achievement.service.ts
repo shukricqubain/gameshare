@@ -42,4 +42,8 @@ export class AchievementService {
   delete(achievementID: any): Observable<any> {
     return this.http.delete(`${baseUrl}/deleteAchievement/${achievementID}`);
   }
+
+  uploadAchievementIcon(assetLocation: string, data: any){
+    return this.http.post(`${baseUrl}/uploadAchievementIcon/${assetLocation}`, data);
+  }
 }

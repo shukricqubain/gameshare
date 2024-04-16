@@ -4,7 +4,7 @@ export class Achievement {
     gameName?: string;
     achievementName?: string;
     achievementDescription?: string;
-    achievementIcon?: string;
+    achievementIconFileName?: string;
     createdAt?: string;
     updatedAt?: string;
 }

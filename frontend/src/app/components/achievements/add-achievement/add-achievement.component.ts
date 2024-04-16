@@ -31,7 +31,7 @@ export class AddAchievementComponent {
     gameID: new FormControl(0, [Validators.required]),
     achievementName: new FormControl('', [Validators.required]),
     achievementDescription: new FormControl('', [Validators.required]),
-    achievementIcon: new FormControl(''),
+    achievementIconFileName: new FormControl(''),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
   });
@@ -54,13 +54,13 @@ export class AddAchievementComponent {
       }
       let achievementName = `${this.data.achievementName}`;
       let achievementDescription = `${this.data.achievementDescription}`;
-      let achievementIcon = `${this.data.achievementIcon}`;
+      let achievementIconFileName = `${this.data.achievementIconFileName}`;
       let createdAt = `${this.data.createdAt}`;
       let updatedAt = `${this.data.updatedAt}`;
       
       this.addAchievementForm.controls.achievementName.patchValue(achievementName);
       this.addAchievementForm.controls.achievementDescription.patchValue(achievementDescription);
-      this.addAchievementForm.controls.achievementIcon.patchValue(achievementIcon);
+      this.addAchievementForm.controls.achievementIconFileName.patchValue(achievementIconFileName);
       this.addAchievementForm.controls.createdAt.patchValue(createdAt);
       this.addAchievementForm.controls.updatedAt.patchValue(updatedAt);
     }
@@ -73,7 +73,7 @@ export class AddAchievementComponent {
       gameName: '',
       achievementName: '',
       achievementDescription: '',
-      achievementIcon: '',
+      achievementIconFileName: '',
       createdAt: '',
       updatedAt: ''
     }
@@ -82,7 +82,7 @@ export class AddAchievementComponent {
     newAchievement.gameName = game?.gameName;
     newAchievement.achievementName = this.addAchievementForm.controls.achievementName.value || '';
     newAchievement.achievementDescription = this.addAchievementForm.controls.achievementDescription.value || '';
-    newAchievement.achievementIcon = this.addAchievementForm.controls.achievementIcon.value || '';
+    newAchievement.achievementIconFileName = this.addAchievementForm.controls.achievementIconFileName.value || '';
     newAchievement.createdAt = this.addAchievementForm.controls.createdAt.value || '';
     newAchievement.updatedAt = this.addAchievementForm.controls.updatedAt.value || '';
     if(this.isEdit){
@@ -127,6 +127,20 @@ export class AddAchievementComponent {
     }
   }
 
+  handleUploadResponse(data: any){
+    if(data){
+      this.snackBar.open('Successfully uploaded achievement icon!', 'dismiss', {
+        duration: 3000
+      });
+      this.addAchievementForm.controls.achievementIconFileName.markAsDirty();
+      console.log(this.addAchievementForm.dirty)
+    } else {
+      this.snackBar.open('Error occurred uploading achievement icon!', 'dismiss', {
+        duration: 3000
+      });
+    }
+  }
+
   editGame(){
     this.dialogRef?.close({
       data:this.data
@@ -142,7 +156,6 @@ export class AddAchievementComponent {
   }
 
   async loadAllGameNames(){
-    
     try{
       this.allGameNames = await lastValueFrom(this.gameService.getAllGameNames().pipe());
     } catch(err){
@@ -153,31 +166,20 @@ export class AddAchievementComponent {
     }
   }
 
-  async onFileSelected(event: any){
-    const file = event.target.files[0] ?? null;
-    this.fileName = file.name;
-    let reader = new FileReader();
-    reader.onloadend = function() {
-      //console.log('RESULT', reader.result)
-    }
-    
-    if(file){
-      let imgCompressed = await this.compressImage(file, 50);
-      imgCompressed = 'data:image/png;base64,' + imgCompressed.split(',')[1];
-      this.addAchievementForm.controls.achievementIcon.patchValue(imgCompressed);
-      this.addAchievementForm.controls.achievementIcon.markAsDirty();
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fileName = file.name.toLowerCase();
+      const formData = new FormData();
+      formData.append("fileName", file.name);
+      formData.append("imageFile", file);
+      let assetLocation = 'achievement-icons';
+      let achievementIconFileName = `assets/${assetLocation}/${this.fileName}`;
+      this.addAchievementForm.controls.achievementIconFileName.patchValue(achievementIconFileName);
+      this.achievementService.uploadAchievementIcon(assetLocation, formData).subscribe({
+        next: this.handleUploadResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
     }
   }
-
-  async compressImage(blobImg: any, percent: any){
-    let bitmap = await createImageBitmap(blobImg);
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext('2d');
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
-    ctx?.drawImage(bitmap, 0, 0);
-    let dataURL = canvas.toDataURL("images/png", percent / 100);
-    return dataURL;
-  }
-
 }
