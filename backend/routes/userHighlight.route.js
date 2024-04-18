@@ -71,7 +71,7 @@ router.get('/getUserGameHighlights/:userID', async function (req, res) {
                     publishers: userGameHighlight['game.publishers'],
                     genre: userGameHighlight['game.genre'],
                     releaseDate: userGameHighlight['game.releaseDate'],
-                    gameCover: userGameHighlight['game.gameCover'],
+                    gameCoverFileName: userGameHighlight['game.gameCoverFileName'],
                     platform: userGameHighlight['game.platform'],
                 }
                 let highlight = {

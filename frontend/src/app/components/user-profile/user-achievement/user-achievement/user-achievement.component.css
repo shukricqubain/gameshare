@@ -36,3 +36,10 @@ p {
     margin-bottom: 5px;
     margin-left: 5px;
 }
+
+.blank-icon {
+    font-size: 80px;
+    background-size: 80px 80px;
+    max-width: 80px;
+    max-height: 80px;
+}

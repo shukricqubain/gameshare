@@ -26,30 +26,43 @@
                 <mat-spinner [diameter]="100"></mat-spinner>
             </div>
             <div *ngIf="!isLoadingAchievements" class="achievement-container">
-                <div fxFlex *ngFor="let achievement of achievementData" class="achievement-margin">
+                <div *ngFor="let achievement of achievementData" class="achievement-margin">
                     <mat-card class="achievement-item">
-                        <mat-card-content class="achievement-content">
-                            <img src="{{achievement.achievementIconFileName}}">
-                            <div style="margin-left: 15px;">
+                        <mat-card-content class="achievement-content" fxFlex fxLayout="row">
+                            <div fxFlex.gt-sm="25%">
+                                <div [ngSwitch]="achievement?.achievementIconFileName != undefined">
+                                    <div *ngSwitchCase="true">
+                                        <img src="{{achievement?.achievementIconFileName}}" class="icon-cropper">
+                                    </div>
+                                    <div *ngSwitchCase="false">
+                                        <div matTooltip="No image has been uploaded for this icon." class="blank-icon">
+                                            <mat-icon [inline]="true">
+                                                help
+                                            </mat-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div fxFlex.gt-sm="40%">
                                 <mat-card-title>{{achievement.achievementName}}</mat-card-title>
                                 <mat-card-subtitle>{{achievement.achievementDescription}}</mat-card-subtitle>
                             </div>
+                            <div fxFlex.gt-sm="35%" class="actions-style">
+                                <mat-icon class="icon-style" matTooltip="Click to edit an achievement."
+                                    style="color: green;" (click)="editAchievement(achievement)">
+                                    edit
+                                </mat-icon>
+                                <mat-icon class="icon-style" matTooltip="Click to delete an achievement." color="warn"
+                                    (click)="deleteAchievement(achievement)">
+                                    delete
+                                </mat-icon>
+                            </div>
                         </mat-card-content>
-                        <mat-card-actions class="actions-style">
-                            <mat-icon class="icon-style" matTooltip="Click to edit an achievement." style="color: green;"
-                                (click)="editAchievement(achievement)">
-                                edit
-                            </mat-icon>
-                            <mat-icon class="icon-style" matTooltip="Click to delete an achievement." color="warn"
-                                (click)="deleteAchievement(achievement)">
-                                delete
-                            </mat-icon>
-                        </mat-card-actions>
                     </mat-card>
                 </div>
-                <mat-paginator [pageSize]="this.pageSize" [pageIndex]="this.pageIndex" [pageSizeOptions]="[5, 10, 25, 50]"
-                [length]="this.resultsLength" [showFirstLastButtons]="true"
-                (page)="onPageChange($event)"></mat-paginator>
+                <mat-paginator [pageSize]="this.pageSize" [pageIndex]="this.pageIndex"
+                    [pageSizeOptions]="[5, 10, 25, 50]" [length]="this.resultsLength" [showFirstLastButtons]="true"
+                    (page)="onPageChange($event)"></mat-paginator>
             </div>
         </div>
     </div>

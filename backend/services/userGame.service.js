@@ -205,6 +205,19 @@ async function findOneByUserIDAndGameID(body) {
 async function findGameHighlights(userID){
     try {
         return await userGame.findAll({
+            attributes: [
+                'userGameID',
+                'userID',
+                'gameEnjoymentRating',
+                [Sequelize.col("game.gameID"), "gameID"],
+                [Sequelize.col("game.gameName"), "gameName"],
+                [Sequelize.col("game.developers"), "developers"],
+                [Sequelize.col('game.publishers'), "publishers"],
+                [Sequelize.col('game.genre'), 'genre'],
+                [Sequelize.col('game.releaseDate'),'releaseDate'],
+                [Sequelize.col('game.gameCoverFileName'),'gameCoverFileName'],
+                [Sequelize.col('game.platform'),'platform'],
+            ],
             include: [
                 {
                     model: game,

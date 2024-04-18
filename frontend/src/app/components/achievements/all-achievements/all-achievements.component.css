@@ -5,7 +5,7 @@
     margin-left: 2rem;
 }
 
-.search-form-container{
+.search-form-container {
     display: flex;
     justify-content: space-between;
     margin-top: 0.5rem;
@@ -121,24 +121,44 @@ table {
     cursor: pointer;
 }
 
-.achievement-content{
+.achievement-content {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
 
-.actions-style{
-    display:flex;
+.actions-style {
+    display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .loading-container {
-    display: grid; 
+    display: grid;
     place-items: center;
 }
 
-.search-icon{
+.search-icon {
     margin-left: 10px;
     cursor: pointer;
+}
+
+.icon-cropper {
+    width: 70px;
+    height: 70px;
+    max-height: 70px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+    background-size: 70px 70px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+}
+
+.blank-icon {
+    font-size: 80px;
+    background-size: 80px 80px;
+    max-width: 80px;
+    max-height: 80px;
 }
