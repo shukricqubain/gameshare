@@ -8,7 +8,7 @@ export class User {
     phoneNumber?: string;
     userRole?: number;
     userPassword?: string;
-    profilePicture?: string;
+    profilePictureFileName?: string;
     createdAt?: string;
     updatedAt?: string;
 }

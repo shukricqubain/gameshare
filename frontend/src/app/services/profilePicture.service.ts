@@ -13,7 +13,7 @@ export class ProfilePictureService {
         return this.profilePictureObs$.asObservable();
     }
 
-    setProfilePictureObs(role: string) {
-        this.profilePictureObs$.next(role);
+    setProfilePictureObs(profilePictureFileName: string) {
+        this.profilePictureObs$.next(profilePictureFileName);
     }
 }

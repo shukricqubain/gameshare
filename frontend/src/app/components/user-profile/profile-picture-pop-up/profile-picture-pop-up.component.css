@@ -11,6 +11,6 @@
     margin-bottom: 20px;
 }
 
-.file-name {
-    margin-top: 1rem;
+.file-input{
+    display: none;
 }

@@ -30,7 +30,7 @@ export class UserFriendComponent {
     private router: Router,
   ) { }
 
-  profilePicture: string = '';
+  profilePictureFileName: string = '';
   mutualFriends: any[] = [];
   titleString: string = '';
   titleUserName: string = '';
@@ -55,10 +55,7 @@ export class UserFriendComponent {
       this.subtitleString = 'Sent By:';      
       this.subtitleUserName = `${this.userFriend.sentByUserName}`;
       this.actionsDisplay = 'sent';
-      this.profilePicture = this.userFriend.receivedByProfilePicture ? this.userFriend.receivedByProfilePicture : '';
-      if(!this.profilePicture.includes('data:')){
-        this.profilePicture = '';
-      }
+      this.profilePictureFileName = this.userFriend.receivedByProfilePictureFileName ? this.userFriend.receivedByProfilePictureFileName : '';
       switch (this.userFriend.areFriends){
         case ('accepted'):
           this.actionsDisplay = 'hide';
@@ -77,10 +74,7 @@ export class UserFriendComponent {
       this.subtitleString = 'Recieved By:';
       this.subtitleUserName = `${this.userFriend.receivedByUserName}`;
       this.actionsDisplay = 'received';
-      this.profilePicture = this.userFriend.sentByProfilePicture ? this.userFriend.sentByProfilePicture : '';
-      if(!this.profilePicture.includes('data:')){
-        this.profilePicture = '';
-      }
+      this.profilePictureFileName = this.userFriend.sentByProfilePictureFileName ? this.userFriend.sentByProfilePictureFileName : '';
       switch (this.userFriend.areFriends){
         case ('accepted'):
           this.actionsDisplay = 'hide';

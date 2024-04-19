@@ -107,7 +107,7 @@ async function getAll(searchCriteria) {
                     'phoneNumber',
                     'userRole',
                     'userPassword',
-                    'profilePicture',
+                    'profilePictureFileName',
                     'createdAt',
                     'updatedAt'
                 ],
@@ -151,7 +151,7 @@ async function getAll(searchCriteria) {
                     'phoneNumber',
                     'userRole',
                     'userPassword',
-                    'profilePicture',
+                    'profilePictureFileName',
                     'createdAt',
                     'updatedAt'
                 ],
@@ -177,7 +177,7 @@ async function create(user) {
         createdString = `${createdArray[0]}`;
         user.createdAt = createdString;
         return await db.sequelize.query(
-            `INSERT INTO user ( userName, firstName, lastName, dateOfBirth, email, phoneNumber, userRole, userPassword, profilePicture, createdAt ) VALUES
+            `INSERT INTO user ( userName, firstName, lastName, dateOfBirth, email, phoneNumber, userRole, userPassword, profilePictureFileName, createdAt ) VALUES
             ( 
                 '${user.userName}', 
                 AES_ENCRYPT('${user.firstName}','${secretKey}'), 
@@ -187,7 +187,7 @@ async function create(user) {
                 '${user.phoneNumber}', 
                 '${user.userRole}', 
                 '${user.userPassword}', 
-                '${user.profilePicture}',
+                '${user.profilePictureFileName}',
                 STR_TO_DATE('${user.createdAt}',"%Y-%m-%d %H:%i:%s") 
             );`
         );
@@ -236,7 +236,7 @@ async function getOne(userID) {
                 'phoneNumber',
                 'userRole',
                 'userPassword',
-                'profilePicture',
+                'profilePictureFileName',
                 'createdAt',
                 'updatedAt'
             ],
@@ -282,7 +282,7 @@ async function getUserByUserName(username) {
                 'phoneNumber',
                 'userRole',
                 'userPassword',
-                'profilePicture',
+                'profilePictureFileName',
                 'createdAt',
                 'updatedAt'
             ],
@@ -322,7 +322,7 @@ async function update(userID, user) {
             phoneNumber = '${user.phoneNumber}',
             userRole = '${user.userRole}',
             userPassword = '${user.userPassword}',
-            profilePicture = '${user.profilePicture}',
+            profilePictureFileName = '${user.profilePictureFileName}',
             createdAt = STR_TO_DATE('${user.createdAt}',"%Y-%m-%d %H:%i:%s"),
             updatedAt = STR_TO_DATE('${user.updatedAt}',"%m-%d-%Y")
             WHERE user.userID = ${userID};`
@@ -369,7 +369,7 @@ async function getAllProfilePicturesByIDs(userFriends){
         attributes: [
             'userID',
             'userName',
-            'profilePicture'
+            'profilePictureFileName'
         ],
         order: [
             ['userName', 'ASC'],

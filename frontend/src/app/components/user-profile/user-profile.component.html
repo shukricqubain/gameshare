@@ -263,11 +263,11 @@
                     <div class="form-column">
                         <div class="form-row">
                             <ng-container
-                                *ngIf="userProfileForm.controls.profilePicture.value !== ''; then hasImage; else blankImage"></ng-container>
+                                *ngIf="userProfileForm.controls.profilePictureFileName.value !== ''; then hasImage; else blankImage"></ng-container>
                             <ng-template #hasImage>
                                 <div matTooltip="Click to update your profile image." class="image-cropper"
                                     (click)="updateProfileImage()">
-                                    <img src="{{userProfileForm.controls.profilePicture.value}}" class="profile-image">
+                                    <img src="{{userProfileForm.controls.profilePictureFileName.value}}" class="profile-image">
                                 </div>
                             </ng-template>
                             <ng-template #blankImage>

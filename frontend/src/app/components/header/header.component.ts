@@ -30,7 +30,7 @@ export class HeaderComponent {
   unsubscribe$: Subject<boolean> = new Subject();
   userName: string = '';
   roleID: number = 0;
-  profilePicture: string;
+  profilePictureFileName: string;
 
   async ngOnInit(){
     this.usernameService.getUsernameObs()
@@ -41,14 +41,14 @@ export class HeaderComponent {
     .subscribe(roleID => this.roleID = Number(roleID));
     this.profilePictureService.getProfilePictureObs()
     .pipe(takeUntil(this.unsubscribe$))
-    .subscribe(profilePicture => this.profilePicture = profilePicture);
+    .subscribe(profilePictureFileName => this.profilePictureFileName = profilePictureFileName);
     let localUserName = localStorage.getItem('userName');
     let localRoleID = localStorage.getItem('roleID');
-    let localProfilePicture = localStorage.getItem('profilePicture');
-    if(localUserName != null && localRoleID != null && localProfilePicture != null){
+    let localProfilePictureFileName = localStorage.getItem('profilePictureFileName');
+    if(localUserName != null && localRoleID != null && localProfilePictureFileName != null){
       this.userName = localUserName;
       this.roleID = Number(localRoleID);
-      this.profilePicture = localProfilePicture; 
+      this.profilePictureFileName = localProfilePictureFileName; 
     }
   }
 
@@ -68,8 +68,8 @@ export class HeaderComponent {
   logout(){
     localStorage.removeItem("userName");
     localStorage.removeItem('roleID');
-    localStorage.removeItem('profilePicture');
-    this.profilePicture = '';
+    localStorage.removeItem('profilePictureFileName');
+    this.profilePictureFileName = '';
     this.router.navigate(['/login']);
   }
 

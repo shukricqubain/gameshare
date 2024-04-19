@@ -286,9 +286,9 @@ async function findAll(searchCriteria) {
                     'userIDReceivedRequest',
                     'userIDSentRequest',
                     [Sequelize.col("SentBy.userName"), "sentByUserName"],
-                    [Sequelize.col("SentBy.profilePicture"), "sentByProfilePicture"],
+                    [Sequelize.col("SentBy.profilePictureFileName"), "sentByProfilePictureFileName"],
                     [Sequelize.col("ReceivedBy.userName"), "receivedByUserName"],
-                    [Sequelize.col("ReceivedBy.profilePicture"), "receivedByProfilePicture"],
+                    [Sequelize.col("ReceivedBy.profilePictureFileName"), "receivedByProfilePictureFileName"],
                 ],
                 include: [
                     {    
@@ -323,9 +323,9 @@ async function findAll(searchCriteria) {
                     'userIDReceivedRequest',
                     'userIDSentRequest',
                     [Sequelize.col("SentBy.userName"), "sentByUserName"],
-                    [Sequelize.col("SentBy.profilePicture"), "sentByProfilePicture"],
+                    [Sequelize.col("SentBy.profilePictureFileName"), "sentByProfilePictureFileName"],
                     [Sequelize.col("ReceivedBy.userName"), "receivedByUserName"],
-                    [Sequelize.col("ReceivedBy.profilePicture"), "receivedByProfilePicture"],
+                    [Sequelize.col("ReceivedBy.profilePictureFileName"), "receivedByProfilePictureFileName"],
                 ],
                 include: [
                     {    
@@ -425,9 +425,9 @@ async function getMutualFriends(req){
                 [Sequelize.col("SentBy.userID"), "sentByUserID"],
                 [Sequelize.col("ReceivedBy.userID"), "receivedByUserID"],
                 [Sequelize.col("SentBy.userName"), "sentByUserName"],
-                [Sequelize.col("SentBy.profilePicture"), "sentByProfilePicture"],
+                [Sequelize.col("SentBy.profilePictureFileName"), "sentByProfilePictureFileName"],
                 [Sequelize.col("ReceivedBy.userName"), "receivedByUserName"],
-                [Sequelize.col("ReceivedBy.profilePicture"), "receivedByProfilePicture"],
+                [Sequelize.col("ReceivedBy.profilePictureFileName"), "receivedByProfilePictureFileName"],
             ],
             where: {
                 [Op.and]: {
@@ -461,10 +461,10 @@ async function getMutualFriends(req){
             attributes: [
                 [Sequelize.col("SentBy.userID"), "sentByUserID"],
                 [Sequelize.col("SentBy.userName"), "sentByUserName"],
-                [Sequelize.col("SentBy.profilePicture"), "sentByProfilePicture"],
+                [Sequelize.col("SentBy.profilePictureFileName"), "sentByProfilePictureFileName"],
                 [Sequelize.col("ReceivedBy.userID"), "receivedByUserID"],
                 [Sequelize.col("ReceivedBy.userName"), "receivedByUserName"],
-                [Sequelize.col("ReceivedBy.profilePicture"), "receivedByProfilePicture"],
+                [Sequelize.col("ReceivedBy.profilePictureFileName"), "receivedByProfilePictureFileName"],
             ],
             where: {
                 [Op.and]: {
@@ -503,14 +503,14 @@ async function getMutualFriends(req){
                 let mutualFriend = {
                     userID: friend.receivedByUserID,
                     userName: friend.receivedByUserName,
-                    profilePicture: friend.receivedByProfilePicture
+                    profilePictureFileName: friend.receivedByProfilePictureFileName
                 }
                 potentialMutualsOne.push(mutualFriend);
             } else if(friend.sentByUserID != req.userIDOne){
                 let mutualFriend = {
                     userID: friend.sentByUserID,
                     userName: friend.sentByUserName,
-                    profilePicture: friend.sentByProfilePicture
+                    profilePictureFileName: friend.sentByProfilePictureFileName
                 }
                 potentialMutualsOne.push(mutualFriend);
             }
@@ -521,14 +521,14 @@ async function getMutualFriends(req){
                 let mutualFriend = {
                     userID: friend.sentByUserID,
                     userName: friend.sentByUserName,
-                    profilePicture: friend.sentByProfilePicture
+                    profilePictureFileName: friend.sentByProfilePictureFileName
                 }
                 potentialMutualsTwo.push(mutualFriend);
             } else if (friend.receivedByUserID != req.userIDTwo){
                 let mutualFriend = {
                     userID: friend.receivedByUserID,
                     userName: friend.receivedByUserName,
-                    profilePicture: friend.receivedByProfilePicture
+                    profilePictureFileName: friend.receivedByProfilePictureFileName
                 }
                 potentialMutualsTwo.push(mutualFriend);
             }

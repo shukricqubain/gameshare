@@ -57,7 +57,7 @@ export class ProfilePicturePopUpComponent {
         email: '',
         dateOfBirth: '',
         userID: 0,
-        profilePicture: '',
+        profilePictureFileName: '',
         createdAt: '',
         updatedAt: ''
       };
@@ -72,7 +72,7 @@ export class ProfilePicturePopUpComponent {
       updatedUser.phoneNumber = this.userProfileForm.controls.phoneNumber.value || '';
       updatedUser.createdAt = this.userProfileForm.controls.createdAt.value || '';
       updatedUser.updatedAt = this.userProfileForm.controls.updatedAt.value || '';
-      updatedUser.profilePicture = this.profilePictureForm.controls.profilePicture.value || '';
+      updatedUser.profilePictureFileName = this.profilePictureForm.controls.profilePicture.value || '';
       await this.userService.update(updatedUser).subscribe({
         next: this.handleUpdateResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
@@ -82,31 +82,21 @@ export class ProfilePicturePopUpComponent {
     }
   }
 
-  async onFileSelected(event: any){
-    const file = event.target.files[0] ?? null;
-    this.fileName = file.name;
-    let reader = new FileReader();
-    reader.onloadend = function() {
-      //console.log('RESULT', reader.result)
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fileName = file.name.toLowerCase();
+      const formData = new FormData();
+      formData.append("fileName", file.name);
+      formData.append("imageFile", file);
+      let assetLocation = 'profile-pictures';
+      let profilePictureFileName = `assets/${assetLocation}/${this.fileName}`;
+      this.profilePictureForm.controls.profilePicture.patchValue(profilePictureFileName);
+      this.userService.uploadProfilePicture(assetLocation, formData).subscribe({
+        next: this.handleUploadResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
     }
-    
-    if(file){
-      let imgCompressed = await this.compressImage(file, 50);
-      imgCompressed = 'data:image/png;base64,' + imgCompressed.split(',')[1];
-      this.profilePictureForm.controls.profilePicture.patchValue(imgCompressed);
-      this.profilePictureForm.controls.profilePicture.markAsDirty();
-    }
-  }
-
-  async compressImage(blobImg: any, percent: any){
-    let bitmap = await createImageBitmap(blobImg);
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext('2d');
-    canvas.width = bitmap.width;
-    canvas.height = bitmap.height;
-    ctx?.drawImage(bitmap, 0, 0);
-    let dataURL = canvas.toDataURL("images/png", percent / 100);
-    return dataURL;
   }
 
   handleUpdateResponse(data: any) {
@@ -120,5 +110,18 @@ export class ProfilePicturePopUpComponent {
     this.snackBar.open(data.message, 'dismiss', {
       duration: 2000
     });
+  }
+
+  handleUploadResponse(data: any){
+    if(data){
+      this.snackBar.open('Successfully uploaded profile picture!', 'dismiss', {
+        duration: 3000
+      });
+      this.profilePictureForm.controls.profilePicture.markAsDirty();
+    } else {
+      this.snackBar.open('Error occurred uploading profile picture!', 'dismiss', {
+        duration: 3000
+      });
+    }
   }
 }

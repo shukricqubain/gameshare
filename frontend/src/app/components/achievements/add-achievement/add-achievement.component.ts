@@ -133,7 +133,6 @@ export class AddAchievementComponent {
         duration: 3000
       });
       this.addAchievementForm.controls.achievementIconFileName.markAsDirty();
-      console.log(this.addAchievementForm.dirty)
     } else {
       this.snackBar.open('Error occurred uploading achievement icon!', 'dismiss', {
         duration: 3000

@@ -45,10 +45,10 @@
         <div class="user-container">
             <h2>{{userName}}</h2>
             <ng-container
-                *ngIf="this.profilePicture != undefined && this.profilePicture != null && this.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
+                *ngIf="this.profilePictureFileName != undefined && this.profilePictureFileName != null && this.profilePictureFileName !== ''; then hasImage; else blankImage"></ng-container>
             <ng-template #hasImage>
                 <div matTooltip="Click to view your profile image." (click)="viewProfile()">
-                    <img src="{{this.profilePicture}}" class="profile-icon">
+                    <img src="{{this.profilePictureFileName}}" class="profile-icon">
                 </div>
             </ng-template>
             <ng-template #blankImage>

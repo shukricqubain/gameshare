@@ -50,4 +50,8 @@ export class UserService {
   delete(id: any): Observable<any> {
     return this.http.delete(`${baseUrl}/deleteUser/${id}`);
   }
+
+  uploadProfilePicture(assetLocation: string, data: any){
+    return this.http.post(`${baseUrl}/uploadProfilePicture/${assetLocation}`, data);
+  }
 }

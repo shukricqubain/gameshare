@@ -4,10 +4,10 @@
     </div>
     <div *ngIf="userLoaded" class="header-container">
         <ng-container
-            *ngIf="viewedUser.profilePicture != null && viewedUser.profilePicture != undefined && viewedUser.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
+            *ngIf="viewedUser.profilePictureFileName != null && viewedUser.profilePictureFileName != undefined && viewedUser.profilePictureFileName !== ''; then hasImage; else blankImage"></ng-container>
         <ng-template #hasImage>
             <div class="image-cropper">
-                <img src="{{viewedUser.profilePicture}}" class="profile-class">
+                <img src="{{viewedUser.profilePictureFileName}}" class="profile-class">
             </div>
         </ng-template>
         <ng-template #blankImage>

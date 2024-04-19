@@ -82,18 +82,18 @@ export class LoginComponent {
       });
       this.usernameService.setUsernameObs(data.userName);
       this.roleService.setRoleObs(data.roleID);
-      this.profilePictureService.setProfilePictureObs(data.profilePicture);
+      this.profilePictureService.setProfilePictureObs(data.profilePictureFileName);
       localStorage.setItem('userName', data.userName);
       localStorage.setItem('roleID', data.roleID);
-      if(data.profilePicture == undefined){
-        data.profilePicture = '';
+      if(data.profilePictureFileName == undefined){
+        data.profilePictureFileName = '';
       }
-      localStorage.setItem('profilePicture', data.profilePicture);
+      localStorage.setItem('profilePictureFileName', data.profilePictureFileName);
       this.router.navigate(['/home']);
     } else if(data.message === 'Token deleted, reload login.') {
       localStorage.removeItem('userName'); 
       localStorage.removeItem('roleID');
-      localStorage.removeItem('profilePicture');
+      localStorage.removeItem('profilePictureFileName');
       this.loginForm.controls.username.patchValue('');
       this.loginForm.controls.password.patchValue('');
       this.snackBar.open('Token expired. Please login again.', 'dismiss', {
@@ -102,7 +102,7 @@ export class LoginComponent {
     } else {
       localStorage.removeItem('userName'); 
       localStorage.removeItem('roleID');
-      localStorage.removeItem('profilePicture');
+      localStorage.removeItem('profilePictureFileName');
       this.loginForm.controls.username.patchValue('');
       this.loginForm.controls.password.patchValue('');
     }

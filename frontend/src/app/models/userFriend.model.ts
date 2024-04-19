@@ -11,8 +11,8 @@ export class UserFriend {
     updatedBy?: number;
     createdAt?: string;
     updatedAt?: string;
-    receivedByProfilePicture?: string;
-    sentByProfilePicture?: string;
+    receivedByProfilePictureFileName?: string;
+    sentByProfilePictureFileName?: string;
     receivedByUserName?: string;
     sentByUserName?: string;
     mutualFriends?: UserFriend[];

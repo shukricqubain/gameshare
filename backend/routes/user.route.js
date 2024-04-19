@@ -7,6 +7,34 @@ const bcrypt = require('bcrypt');
 const user = require('../models/user.model');
 const tokenUtility = require('../utility/token');
 
+const upload = require("../middleware/upload");
+
+//upload profile picture
+router.post('/uploadProfilePicture/:assetLocation', async function(req, res){
+    try {
+        upload(req, res, (err) => {
+            if (err) {
+                console.error(err);
+                res.status(400).send(err)
+            } else {
+                res.status(200).json({
+                    message: "File Uploaded Successfully"
+                });
+            }
+        })
+    } catch (err) {
+        console.error(err);
+        if (err.code == "LIMIT_FILE_SIZE") {
+            return res.status(500).send({
+                message: "File size cannot be larger than 2MB!",
+            });
+        }
+        res.status(500).send({
+            message: `Could not upload the file: ${req.body.fileName}. ${err}`,
+        });
+    }
+});
+
 // sign up user
 router.post('/signupUser', async function (req, res) {
     try {
@@ -89,7 +117,7 @@ router.post('/loginUser', async function (req, res) {
                         userName: username,
                         token: token.token,
                         roleID: result.roleID,
-                        profilePicture: user.profilePicture
+                        profilePictureFileName: user.profilePictureFileName
                     });
                 }
                 ///need to check username and password, then generate new token

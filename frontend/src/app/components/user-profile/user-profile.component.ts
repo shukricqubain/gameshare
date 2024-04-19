@@ -78,7 +78,7 @@ export class UserProfileComponent {
     phoneNumber: new FormControl('', [Validators.required]),
     userRole: new FormControl(''),
     userPassword: new FormControl('', [Validators.required]),
-    profilePicture: new FormControl(''),
+    profilePictureFileName: new FormControl(''),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
   });
@@ -376,7 +376,7 @@ export class UserProfileComponent {
     this.userProfileForm.controls.phoneNumber.setValue(data.phoneNumber ? data.phoneNumber : '');
     this.userProfileForm.controls.userRole.setValue(data.userRole ? `${data.userRole}` : '');
     this.userProfileForm.controls.userPassword.setValue(data.userPassword ? data.userPassword : '');
-    this.userProfileForm.controls.profilePicture.setValue(data.profilePicture ? data.profilePicture: '');
+    this.userProfileForm.controls.profilePictureFileName.setValue(data.profilePictureFileName ? data.profilePictureFileName: '');
     this.userProfileForm.controls.createdAt.setValue(data.createdAt ? data.createdAt : '');
     this.userProfileForm.controls.updatedAt.setValue(data.updatedAt ? data.updatedAt : '');
     //patch search forms with userID for each collection

@@ -49,9 +49,9 @@ module.exports = (sequelize, Sequelize) => {
             validate:{
             }
         },
-        profilePicture:{
-            type: Sequelize.TEXT('long'),
-            validate: {
+        profilePictureFileName:{
+            type: Sequelize.STRING,
+            validate:{
             }
         },
         createdAt: {

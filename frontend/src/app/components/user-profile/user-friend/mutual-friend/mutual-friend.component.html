@@ -1,9 +1,9 @@
-<div [ngSwitch]="mutualFriend.profilePicture != null && mutualFriend.profilePicture !== ''" class="mutual-container">
+<div [ngSwitch]="mutualFriend.profilePictureFileName != null && mutualFriend.profilePictureFileName !== ''" class="mutual-container">
     <div *ngSwitchCase="true">
         <mat-card
             [ngClass]="{'accepted': mutualFriend.areFriends === 'accepted', 'pending': mutualFriend.areFriends === 'pending','rejected': mutualFriend.areFriends === 'rejected'}">
             <mat-card-content class="mutual-style">
-                <img src="{{mutualFriend.profilePicture}}" class="mutual-cropper">
+                <img src="{{mutualFriend.profilePictureFileName}}" class="mutual-cropper">
                 <h5 (click)="viewUserProfile()" class="friend-name">{{mutualFriend.userName}}</h5>
             </mat-card-content>
         </mat-card>

@@ -3,10 +3,10 @@
     <mat-card-content fxFlex fxLayout="row">
         <div fxFlex.gt-sm="10%">
             <ng-container
-                *ngIf="this.profilePicture != null && this.profilePicture != undefined && this.profilePicture !== ''; then hasImage; else blankImage"></ng-container>
+                *ngIf="this.profilePictureFileName != null && this.profilePictureFileName != undefined && this.profilePictureFileName !== ''; then hasImage; else blankImage"></ng-container>
             <ng-template #hasImage>
                 <div>
-                    <img src="{{this.profilePicture}}" class="image-cropper">
+                    <img src="{{this.profilePictureFileName}}" class="image-cropper">
                 </div>
             </ng-template>
             <ng-template #blankImage>

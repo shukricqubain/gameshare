@@ -58,7 +58,7 @@ export class SignupComponent {
       email: '',
       dateOfBirth: '',
       userID: 0,
-      profilePicture: ''
+      profilePictureFileName: ''
     };
     newUser.firstName = this.signupForm.controls.firstName.value || '';
     newUser.lastName = this.signupForm.controls.lastName.value || '';
