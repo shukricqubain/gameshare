@@ -8,3 +8,7 @@
     cursor: pointer;
     color: #ffffff;
 }
+
+.file-input{
+    display: none;
+}

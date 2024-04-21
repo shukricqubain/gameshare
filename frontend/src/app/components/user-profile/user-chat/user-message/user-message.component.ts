@@ -37,6 +37,8 @@ export class UserMessageComponent {
   fileName: string;
   isEdit: boolean = false;
   editMessage: UserMessage;
+  assetLocation: string = 'user-messages';
+
 
   userMessageForm = new FormGroup({
     userChatID: new FormControl(''),

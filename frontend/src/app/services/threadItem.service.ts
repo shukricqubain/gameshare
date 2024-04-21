@@ -31,4 +31,8 @@ export class ThreadItemService {
   delete(threadItemID: any): Observable<any> {
     return this.http.delete(`${baseUrl}/deleteThreadItem/${threadItemID}`);
   }
+
+  uploadThreadItemImage(assetLocation: string, data: any){
+    return this.http.post(`${baseUrl}/uploadThreadItemImage/${assetLocation}`, data);
+  }
 }

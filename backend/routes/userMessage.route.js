@@ -2,6 +2,33 @@ const express = require("express");
 const router = express.Router();
 const userMessageController = require('../controllers/userMessage.controller.js');
 const db = require('../models/index');
+const upload = require("../middleware/upload");
+
+//upload user message image
+router.post('/uploadUserMessageImage/:assetLocation', async function(req, res){
+    try {
+        upload(req, res, (err) => {
+            if (err) {
+                console.error(err);
+                res.status(400).send(err)
+            } else {
+                res.status(200).json({
+                    message: "File Uploaded Successfully"
+                });
+            }
+        })
+    } catch (err) {
+        console.error(err);
+        if (err.code == "LIMIT_FILE_SIZE") {
+            return res.status(500).send({
+                message: "File size cannot be larger than 2MB!",
+            });
+        }
+        res.status(500).send({
+            message: `Could not upload the file: ${req.body.fileName}. ${err}`,
+        });
+    }
+});
 
 // create userMessage
 router.post('/addUserMessage', async function (req, res) {

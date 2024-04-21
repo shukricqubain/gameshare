@@ -46,7 +46,7 @@
                         </div>
                     </mat-card-header>
                     <mat-card-content>
-                        <p>{{threadItem?.threadMessage}}</p>
+                        <p *ngIf="threadItem.isRemoved == 0">{{threadItem?.threadMessage}}</p>
                         <img *ngIf="threadItem?.threadItemImage != undefined && threadItem?.threadItemImage != null && threadItem?.threadItemImage !== ''"
                             src="{{threadItem?.threadItemImage}}" class="thread-item-image">
                     </mat-card-content>

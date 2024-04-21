@@ -43,4 +43,7 @@ export class UserMessageService {
     return this.http.delete(`${baseUrl}/deleteUserMessage/${userMessageID}`);
   }
 
+  uploadUserMessageImage(assetLocation: string, data: any){
+    return this.http.post(`${baseUrl}/uploadUserMessageImage/${assetLocation}`, data);
+  }
 }

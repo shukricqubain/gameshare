@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="mat-elevation-z8" [ngClass]="{'send-message-container': !isEdit,'edit-message-container': isEdit}">
-            <app-image-upload (loadImageEvent)="loadImageEvent($event)"></app-image-upload>
+            <app-image-upload (loadImageEvent)="loadImageEvent($event)"  [assetLocation]="assetLocation"></app-image-upload>
             <form [formGroup]="userMessageForm">
                 <mat-form-field appearance="fill" class="input-style">
                     <div [ngSwitch]="isEdit">

@@ -41,6 +41,7 @@ export class AddThreadItemComponent {
   userID: Number = 0;
   thread: Thread;
   threadItem: ThreadItem;
+  assetLocation: string = 'thread-items';
 
   async ngOnInit() {
 

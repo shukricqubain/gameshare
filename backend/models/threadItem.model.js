@@ -33,8 +33,8 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
             }
         },
-        threadItemImage: {
-            type: Sequelize.TEXT('long'),
+        threadItemImageFileName: {
+            type: Sequelize.STRING,
             validate: {
             }
         },
