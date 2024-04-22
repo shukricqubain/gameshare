@@ -31,7 +31,7 @@ export class AddThreadItemComponent {
     threadID: new FormControl('', [Validators.required]),
     threadMessage: new FormControl('', [Validators.required]),
     userID: new FormControl('', [Validators.required]),
-    threadItemImage: new FormControl(''),
+    threadItemImageFileName: new FormControl(''),
     replyID: new FormControl(''),
     createdAt: new FormControl(''),
     updatedAt: new FormControl('')
@@ -55,7 +55,7 @@ export class AddThreadItemComponent {
         let threadID = `${this.thread.threadID}`;
         let threadMessage = `${this.threadItem.threadMessage}`;
         let userID = `${this.threadItem.userID}`;
-        let threadItemImage = `${this.data.threadItem.threadItemImage}`;
+        let threadItemImageFileName = `${this.data.threadItem.threadItemImageFileName}`;
         let createdAt = `${this.threadItem.createdAt}`;
         let updatedAt = `${this.threadItem.updatedAt}`;
         ///check if post is a reply
@@ -66,7 +66,7 @@ export class AddThreadItemComponent {
         this.addThreadItemForm.controls.threadItemID.patchValue(threadItemID);
         this.addThreadItemForm.controls.threadID.patchValue(threadID);
         this.addThreadItemForm.controls.threadMessage.patchValue(threadMessage);
-        this.addThreadItemForm.controls.threadItemImage.patchValue(threadItemImage);
+        this.addThreadItemForm.controls.threadItemImageFileName.patchValue(threadItemImageFileName);
         this.addThreadItemForm.controls.userID.patchValue(userID);
         this.addThreadItemForm.controls.createdAt.patchValue(createdAt);
         this.addThreadItemForm.controls.updatedAt.patchValue(updatedAt);
@@ -108,7 +108,7 @@ export class AddThreadItemComponent {
       threadMessage: '',
       userID: 0,
       replyID: 0,
-      threadItemImage: '',
+      threadItemImageFileName: '',
       createdAt: '',
       updatedAt: ''
     }
@@ -129,8 +129,8 @@ export class AddThreadItemComponent {
       if (this.addThreadItemForm.controls.createdAt.value !== null) {
         threadItem.createdAt = this.addThreadItemForm.controls.createdAt.value;
       }
-      if(this.addThreadItemForm.controls.threadItemImage.value !== null){
-        threadItem.threadItemImage = this.addThreadItemForm.controls.threadItemImage.value;
+      if(this.addThreadItemForm.controls.threadItemImageFileName.value !== null){
+        threadItem.threadItemImageFileName = this.addThreadItemForm.controls.threadItemImageFileName.value;
       }
       this.threadItemService.update(threadItem).subscribe({
         next: this.handleUpdateResponse.bind(this),
@@ -147,8 +147,8 @@ export class AddThreadItemComponent {
       if (this.addThreadItemForm.controls.replyID.value !== null) {
         threadItem.replyID = parseInt(this.addThreadItemForm.controls.replyID.value);
       }
-      if(this.addThreadItemForm.controls.threadItemImage.value !== null){
-        threadItem.threadItemImage = this.addThreadItemForm.controls.threadItemImage.value;
+      if(this.addThreadItemForm.controls.threadItemImageFileName.value !== null){
+        threadItem.threadItemImageFileName = this.addThreadItemForm.controls.threadItemImageFileName.value;
       }
       this.threadItemService.create(threadItem).subscribe({
         next: this.handleCreateResponse.bind(this),
@@ -194,7 +194,7 @@ export class AddThreadItemComponent {
   }
 
   loadImageEvent(imgCompressed: string){
-    this.addThreadItemForm.controls.threadItemImage.patchValue(imgCompressed);
-    this.addThreadItemForm.controls.threadItemImage.markAsDirty();
+    this.addThreadItemForm.controls.threadItemImageFileName.patchValue(imgCompressed);
+    this.addThreadItemForm.controls.threadItemImageFileName.markAsDirty();
   }
 }

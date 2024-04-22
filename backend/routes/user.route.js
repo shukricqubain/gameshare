@@ -134,7 +134,7 @@ router.post('/loginUser', async function (req, res) {
                                 userName: username,
                                 token: token,
                                 roleID: user.userRole,
-                                profilePicture: user.profilePicture
+                                profilePictureFileName: user.profilePictureFileName
                             });
                         } catch (err) {
                             return res.status(500).send({

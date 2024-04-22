@@ -42,9 +42,6 @@ export class ImageUploadComponent {
       const formData = new FormData();
       formData.append("fileName", file.name);
       formData.append("imageFile", file);
-      console.log(this.fileName)
-      console.log(formData)
-      console.log(this.assetLocation)
       switch (this.assetLocation) {
         case 'thread-items':
           this.threadItemService.uploadThreadItemImage(this.assetLocation, formData).subscribe({
@@ -59,23 +56,30 @@ export class ImageUploadComponent {
           });
           break;
       }
-      this.loadImageEvent.emit(this.fileName);
+      let assetPathFileName = `assets/${this.assetLocation}/${this.fileName}`;
+      this.loadImageEvent.emit(assetPathFileName);
     }
   }
 
   handleErrorResponse(error: any) {
     console.error(error);
-    switch (this.assetLocation) {
-      case 'thread-items':
-        this.snackBar.open(this.threadItemErrorMessage, 'dismiss', {
-          duration: 3000
-        });
-        break;
-      case 'user-messages':
-        this.snackBar.open(this.userMessageErrorMessage, 'dismiss', {
-          duration: 3000
-        });
-        break;
+    if(error.message === 'File too large'){
+      this.snackBar.open('Image uploaded is too large. Please, upload a smaller version.', 'dismiss', {
+        duration: 3000
+      });
+    } else {
+      switch (this.assetLocation) {
+        case 'thread-items':
+          this.snackBar.open(this.threadItemErrorMessage, 'dismiss', {
+            duration: 3000
+          });
+          break;
+        case 'user-messages':
+          this.snackBar.open(this.userMessageErrorMessage, 'dismiss', {
+            duration: 3000
+          });
+          break;
+      }
     }
   }
 

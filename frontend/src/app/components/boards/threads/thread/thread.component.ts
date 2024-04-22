@@ -267,7 +267,7 @@ export class ThreadComponent {
     });
 
     /// remove any info
-    element.threadItemImage = '';
+    element.threadItemImageFileName = '';
     element.userID = 0;
     // update thread message
     element.threadMessage = 'This message was deleted.'

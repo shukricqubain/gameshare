@@ -5,7 +5,7 @@ export class ThreadItem {
     userID?: Number;
     replyID?: Number;
     replyingTo?: string;
-    threadItemImage?: string;
+    threadItemImageFileName?: string;
     depth?: number;
     depthStyle?: string;
     threadItemHeader?: string;
