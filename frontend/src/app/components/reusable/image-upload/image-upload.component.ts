@@ -38,26 +38,32 @@ export class ImageUploadComponent {
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      this.fileName = file.name.toLowerCase();
-      const formData = new FormData();
-      formData.append("fileName", file.name);
-      formData.append("imageFile", file);
-      switch (this.assetLocation) {
-        case 'thread-items':
-          this.threadItemService.uploadThreadItemImage(this.assetLocation, formData).subscribe({
-            next: this.handleUploadResponse.bind(this),
-            error: this.handleErrorResponse.bind(this)
-          });
-          break;
-        case 'user-messages':
-          this.userMessageService.uploadUserMessageImage(this.assetLocation, formData).subscribe({
-            next: this.handleUploadResponse.bind(this),
-            error: this.handleErrorResponse.bind(this)
-          });
-          break;
+      if(file.name.includes('(') || file.name.includes(')')){
+        this.snackBar.open(`File name cannot include these characters:'(,)'`, 'dismiss', {
+          duration: 3000
+        });
+      } else {
+        this.fileName = file.name.toLowerCase();
+        const formData = new FormData();
+        formData.append("fileName", file.name);
+        formData.append("imageFile", file);
+        switch (this.assetLocation) {
+          case 'thread-items':
+            this.threadItemService.uploadThreadItemImage(this.assetLocation, formData).subscribe({
+              next: this.handleUploadResponse.bind(this),
+              error: this.handleErrorResponse.bind(this)
+            });
+            break;
+          case 'user-messages':
+            this.userMessageService.uploadUserMessageImage(this.assetLocation, formData).subscribe({
+              next: this.handleUploadResponse.bind(this),
+              error: this.handleErrorResponse.bind(this)
+            });
+            break;
+        }
+        let assetPathFileName = `assets/${this.assetLocation}/${this.fileName}`;
+        this.loadImageEvent.emit(assetPathFileName);
       }
-      let assetPathFileName = `assets/${this.assetLocation}/${this.fileName}`;
-      this.loadImageEvent.emit(assetPathFileName);
     }
   }
 

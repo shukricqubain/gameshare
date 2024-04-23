@@ -43,7 +43,7 @@ export class UserMessageComponent {
   userMessageForm = new FormGroup({
     userChatID: new FormControl(''),
     userMessage: new FormControl(''),
-    messageImage: new FormControl('')
+    messageImageFileName: new FormControl('')
   });
 
   async ngOnInit(){
@@ -156,7 +156,7 @@ export class UserMessageComponent {
         userMessage: '',
         isRead: 0,
         isEdit: 0,
-        messageImage: '',
+        messageImageFileName: '',
         createdBy: 0,
         updatedBy: 0,
         createdAt: '',
@@ -167,7 +167,7 @@ export class UserMessageComponent {
       editUserMessage.userIDSentMessage = this.editMessage.userIDSentMessage;
       editUserMessage.userIDReceivedMessage = this.editMessage.userIDReceivedMessage;
       editUserMessage.userMessage = this.userMessageForm.controls.userMessage.value ? this.userMessageForm.controls.userMessage.value: '';
-      editUserMessage.messageImage = this.userMessageForm.controls.messageImage.value ? this.userMessageForm.controls.messageImage.value: '';
+      editUserMessage.messageImageFileName = this.userMessageForm.controls.messageImageFileName.value ? this.userMessageForm.controls.messageImageFileName.value: '';
       editUserMessage.createdBy = this.editMessage.createdBy;
       editUserMessage.updatedBy = this.user.userID;
       editUserMessage.createdAt = this.editMessage.createdAt;
@@ -186,7 +186,7 @@ export class UserMessageComponent {
         userMessage: '',
         isRead: 0,
         isEdit: 0,
-        messageImage: '',
+        messageImageFileName: '',
         createdBy: 0,
         updatedBy: 0,
         createdAt: '',
@@ -196,7 +196,7 @@ export class UserMessageComponent {
       newUserMessage.userIDSentMessage = this.user.userID;
       newUserMessage.userIDReceivedMessage = this.otherUserID;
       newUserMessage.userMessage = this.userMessageForm.controls.userMessage.value ? this.userMessageForm.controls.userMessage.value: '';
-      newUserMessage.messageImage = this.userMessageForm.controls.messageImage.value ? this.userMessageForm.controls.messageImage.value: '';
+      newUserMessage.messageImageFileName = this.userMessageForm.controls.messageImageFileName.value ? this.userMessageForm.controls.messageImageFileName.value: '';
       newUserMessage.createdBy = this.user.userID;
       this.userMessageService.create(newUserMessage).subscribe({
         next: this.handleCreateResponse.bind(this),
@@ -227,8 +227,8 @@ export class UserMessageComponent {
   }
 
   loadImageEvent(imgCompressed: string){
-    this.userMessageForm.controls.messageImage.patchValue(imgCompressed);
-    this.userMessageForm.controls.messageImage.markAsDirty();
+    this.userMessageForm.controls.messageImageFileName.patchValue(imgCompressed);
+    this.userMessageForm.controls.messageImageFileName.markAsDirty();
   }
 
   handleErrorResponse(error: any) {
@@ -251,8 +251,8 @@ export class UserMessageComponent {
 
   editImageMessage(message: UserMessage){
     this.isEdit = true;
-    let messageImage = message.messageImage ? message.messageImage : '';
-    this.userMessageForm.controls.messageImage.patchValue(messageImage);
+    let messageImageFileName = message.messageImageFileName ? message.messageImageFileName : '';
+    this.userMessageForm.controls.messageImageFileName.patchValue(messageImageFileName);
     this.editMessage = message;
   }
 }

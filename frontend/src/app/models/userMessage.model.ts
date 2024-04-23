@@ -12,7 +12,7 @@ export class UserMessage {
     userMessage?: string;
     isRead?: number;
     isEdit?: number;
-    messageImage?: string;
+    messageImageFileName?: string;
     createdBy?: number;
     updatedBy?: number;
     createdAt?: string;

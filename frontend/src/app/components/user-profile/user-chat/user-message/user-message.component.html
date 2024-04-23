@@ -7,19 +7,19 @@
             <mat-spinner [diameter]="100"></mat-spinner>
         </div>
         <div *ngIf="messagesLoaded" class="messages-container">
-            <div [ngSwitch]="userMessages.length > 0">
+            <div [ngSwitch]="userMessages.length > 0" style="width: inherit;">
                 <div *ngSwitchCase="false">
                     <p style="text-align: center;">Currently no messages.</p>
                 </div>
-                <div *ngSwitchCase="true" fxLayout="column" fxLayoutGap="10px">
+                <div *ngSwitchCase="true" fxLayout="column" fxLayoutGap="10px" style="width: inherit;">
                     <div *ngFor="let message of userMessages">
                         <div [ngSwitch]="message.userIDSentMessage == user.userID">
                             <div *ngSwitchCase="true">
                                 <div class="sent-message-container">
-                                    <div *ngIf="message.messageImage?.includes('data')" (click)="editImageMessage(message)">
-                                        <img src="{{message.messageImage}}" class="sent-image-style">
+                                    <div *ngIf="message.messageImageFileName" (click)="editImageMessage(message)">
+                                        <img src="{{message.messageImageFileName}}" class="sent-image-style">
                                     </div>
-                                    <mat-card *ngIf="!message.messageImage?.includes('data')" class="sent-message-card" (click)="editUserMessage(message)">
+                                    <mat-card *ngIf="!message.messageImageFileName" class="sent-message-card" (click)="editUserMessage(message)">
                                         <mat-card-content>
                                             {{message.userMessage}}
                                         </mat-card-content>
@@ -33,10 +33,10 @@
                             </div>
                             <div *ngSwitchCase="false">
                                 <div class="received-message-container">
-                                    <div *ngIf="message.messageImage?.includes('data')">
-                                        <img src="{{message.messageImage}}" class="received-image-style">
+                                    <div *ngIf="message.messageImageFileName">
+                                        <img src="{{message.messageImageFileName}}" class="received-image-style">
                                     </div>
-                                    <mat-card *ngIf="!message.messageImage?.includes('data')" class="received-message-card">
+                                    <mat-card *ngIf="!message.messageImageFileName" class="received-message-card">
                                         <mat-card-content>
                                             {{message.userMessage}}
                                         </mat-card-content>

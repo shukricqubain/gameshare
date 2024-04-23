@@ -294,7 +294,7 @@ async function createUserMessage(newUserMessage) {
             userMessage: newUserMessage.userMessage,
             isRead: newUserMessage.isRead,
             isEdit: newUserMessage.isEdit,
-            messageImage: newUserMessage.messageImage,
+            messageImageFileName: newUserMessage.messageImageFileName,
             createdBy: newUserMessage.createdBy
         });
     } catch (err) {
