@@ -35,7 +35,7 @@ module.exports = (sequelize, Sequelize) => {
             }
         },
         phoneNumber: {
-            type: Sequelize.STRING,
+            type: 'VARBINARY(255)',
             validate:{
             }
         },

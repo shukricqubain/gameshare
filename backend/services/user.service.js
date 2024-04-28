@@ -104,7 +104,14 @@ async function getAll(searchCriteria) {
                         ),
                         "CHAR"
                     ),'email'],
-                    'phoneNumber',
+                    [Sequelize.cast(
+                        Sequelize.fn(
+                            "AES_DECRYPT",
+                            Sequelize.col("user.phoneNumber"),
+                            secretKey
+                        ),
+                        "CHAR"
+                    ),'phoneNumber'],
                     'userRole',
                     'userPassword',
                     'profilePictureFileName',
@@ -148,7 +155,14 @@ async function getAll(searchCriteria) {
                         ),
                         "CHAR"
                     ),'email'],
-                    'phoneNumber',
+                    [Sequelize.cast(
+                        Sequelize.fn(
+                            "AES_DECRYPT",
+                            Sequelize.col("user.phoneNumber"),
+                            secretKey
+                        ),
+                        "CHAR"
+                    ),'phoneNumber'],
                     'userRole',
                     'userPassword',
                     'profilePictureFileName',
@@ -184,7 +198,7 @@ async function create(user) {
                 AES_ENCRYPT('${user.lastName}','${secretKey}'), 
                 STR_TO_DATE('${user.dateOfBirth}',"%Y-%m-%d %H:%i:%s"), 
                 AES_ENCRYPT('${user.email}','${secretKey}'), 
-                '${user.phoneNumber}', 
+                AES_ENCRYPT('${user.phoneNumber}','${secretKey}'),
                 '${user.userRole}', 
                 '${user.userPassword}', 
                 '${user.profilePictureFileName}',
@@ -233,7 +247,14 @@ async function getOne(userID) {
                     ),
                     "CHAR"
                 ),'email'],
-                'phoneNumber',
+                [Sequelize.cast(
+                    Sequelize.fn(
+                        "AES_DECRYPT",
+                        Sequelize.col("user.phoneNumber"),
+                        secretKey
+                    ),
+                    "CHAR"
+                ),'phoneNumber'],
                 'userRole',
                 'userPassword',
                 'profilePictureFileName',
@@ -279,7 +300,14 @@ async function getUserByUserName(username) {
                     ),
                     "CHAR"
                 ),'email'],
-                'phoneNumber',
+                [Sequelize.cast(
+                    Sequelize.fn(
+                        "AES_DECRYPT",
+                        Sequelize.col("user.phoneNumber"),
+                        secretKey
+                    ),
+                    "CHAR"
+                ),'phoneNumber'],
                 'userRole',
                 'userPassword',
                 'profilePictureFileName',
@@ -319,7 +347,7 @@ async function update(userID, user) {
             lastName = AES_ENCRYPT('${user.lastName}','${secretKey}'),
             dateOfBirth = STR_TO_DATE('${user.dateOfBirth}',"%Y-%m-%d %H:%i:%s"),
             email = AES_ENCRYPT('${user.email}','${secretKey}'),
-            phoneNumber = '${user.phoneNumber}',
+            phoneNumber = AES_ENCRYPT('${user.phoneNumber}','${secretKey}'),
             userRole = '${user.userRole}',
             userPassword = '${user.userPassword}',
             profilePictureFileName = '${user.profilePictureFileName}',
