@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddUserComponent } from '../add-user/add-user.component';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { jwtDecode } from "jwt-decode";
 import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 
 @Component({
@@ -139,11 +140,15 @@ export class AllUsersComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      let userRole = localStorage.getItem('roleID');
-      if(userRole !== '1'){
-        this.router.navigate(['/home']);
-      } else {
-        this.ngAfterViewInit();
+      let token = localStorage.getItem('token');
+      if(token){
+        let decoded: any = jwtDecode(token);
+        let userRole = decoded.roleID;
+        if(userRole !== '1'){
+          this.router.navigate(['/home']);
+        } else {
+          this.ngAfterViewInit();
+        }
       }
     });
   }
@@ -158,11 +163,15 @@ export class AllUsersComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      let userRole = localStorage.getItem('roleID');
-      if(userRole !== '1'){
-        this.router.navigate(['/home']);
-      } else {
-        this.ngAfterViewInit();
+      let token = localStorage.getItem('token');
+      if(token){
+        let decoded: any = jwtDecode(token);
+        let userRole = decoded.roleID;
+        if(userRole !== '1'){
+          this.router.navigate(['/home']);
+        } else {
+          this.ngAfterViewInit();
+        }
       }
     });
   }

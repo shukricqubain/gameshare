@@ -1,6 +1,6 @@
 import { Component, Inject, Optional } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Thread } from 'src/app/models/thread.model';
@@ -8,6 +8,7 @@ import { ThreadItem } from 'src/app/models/threadItem.model';
 import { ThreadItemService } from 'src/app/services/threadItem.service';
 import { UserService } from 'src/app/services/user.service';
 import { lastValueFrom } from 'rxjs';
+import { jwtDecode } from "jwt-decode";
 
 @Component({
   selector: 'app-add-thread-item',
@@ -73,24 +74,28 @@ export class AddThreadItemComponent {
       } else {
         this.thread = this.data.thread;
         let threadID = `${this.thread.threadID}`;
-        let localUserName = localStorage.getItem('userName');
-        ///grabbing userName to populate userID for threadItem
-        if (localUserName !== undefined && localUserName !== null) {
-          let user = await lastValueFrom(this.userService.getUserByName(localUserName).pipe());
-          if (user !== undefined) {
-            let userID = `${user.userID}`;
-            this.addThreadItemForm.controls.userID.patchValue(userID);
-          } else {
-            this.snackBar.open(`Error fetching user data needed for posting or editing a post: user undefined.`, 'dismiss', {
-              duration: 3000
-            });
+        let token = localStorage.getItem('token');
+        if(token){
+          let decoded: any = jwtDecode(token);
+          let localUserName = decoded.userName;
+          ///grabbing userName to populate userID for threadItem
+          if (localUserName !== undefined && localUserName !== null) {
+            let user = await lastValueFrom(this.userService.getUserByName(localUserName).pipe());
+            if (user !== undefined) {
+              let userID = `${user.userID}`;
+              this.addThreadItemForm.controls.userID.patchValue(userID);
+            } else {
+              this.snackBar.open(`Error fetching user data needed for posting or editing a post: user undefined.`, 'dismiss', {
+                duration: 3000
+              });
+            }
           }
-        }
-        this.addThreadItemForm.controls.threadID.patchValue(threadID);
-        ///check if post is a reply
-        if(this.data.replyID !== undefined){
-          let replyID = `${this.data.replyID}`;
-          this.addThreadItemForm.controls.replyID.patchValue(replyID);
+          this.addThreadItemForm.controls.threadID.patchValue(threadID);
+          ///check if post is a reply
+          if(this.data.replyID !== undefined){
+            let replyID = `${this.data.replyID}`;
+            this.addThreadItemForm.controls.replyID.patchValue(replyID);
+          }
         }
       }
 

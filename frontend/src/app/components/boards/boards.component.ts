@@ -6,11 +6,9 @@ import { lastValueFrom } from 'rxjs';
 import { Board } from 'src/app/models/board.model';
 import { BoardService } from 'src/app/services/board.service';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
-import { MatCard } from '@angular/material/card';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { BoardComponent } from './board/board.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddBoardComponent } from './add-board/add-board.component';
 import { User } from 'src/app/models/user.model';
@@ -18,7 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 import { UserBoardService } from 'src/app/services/userBoard.service';
 import { UserBoard } from 'src/app/models/userBoard.model';
-
+import { jwtDecode } from "jwt-decode";
 
 @Component({
   selector: 'app-boards',
@@ -148,8 +146,12 @@ export class BoardsComponent {
   }
 
   async checkCurrentUser() {
-    this.userName = localStorage.getItem('userName') ? localStorage.getItem('userName') : '';
-    this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+    let token = localStorage.getItem('token');
+    if(token){
+      let decoded: any = jwtDecode(token);
+      this.userName = decoded.userName;
+      this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+    }
   }
 
   async editBoard(board: Board) {

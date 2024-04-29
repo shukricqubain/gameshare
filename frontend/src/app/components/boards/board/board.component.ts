@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Thread } from 'src/app/models/thread.model';
 import { ThreadService } from 'src/app/services/thread.service';
-import { Board } from 'src/app/models/board.model';
+import { jwtDecode } from "jwt-decode";
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { AddThreadComponent } from '../threads/add-thread/add-thread.component';
@@ -67,8 +67,12 @@ export class BoardComponent {
     if(data.user !== undefined && data.user !== null){
       this.user = data.user;
     } else {
-      this.userName = localStorage.getItem('userName') ? localStorage.getItem('userName') : '';
-      this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+      let token = localStorage.getItem('token');
+      if(token){
+        let decoded: any = jwtDecode(token);
+        this.userName = decoded.userName;
+        this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+      }
     }
     
   }

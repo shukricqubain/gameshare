@@ -151,7 +151,7 @@ async function create(newThreadItem){
             threadMessage: newThreadItem.threadMessage,
             userID: newThreadItem.userID,
             replyID: newThreadItem.replyID,
-            threadItemImage: newThreadItem.threadItemImage,
+            threadItemImageFileName: newThreadItem.threadItemImageFileName,
             isRemoved: 0
         });
     } catch(err){
@@ -209,7 +209,7 @@ async function findThreadItemHighlights(userID){
             attributes: [
                 "threadID",
                 "threadMessage",
-                "threadItemImage",
+                "threadItemImageFileName",
                 "createdAt",
                 "updatedAt",
                 [Sequelize.col("thread.threadName"), "threadName"],

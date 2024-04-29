@@ -2,7 +2,6 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/user.controller");
-const tokenController = require('../controllers/token.controller');
 const bcrypt = require('bcrypt');
 const user = require('../models/user.model');
 const tokenUtility = require('../utility/token');
@@ -91,64 +90,30 @@ router.post('/loginUser', async function (req, res) {
             if (typeof user === 'string') {
                 return res.status(404).send(user);
             }
-            //find user token and return
-            let token = await tokenController.findUsername(username);
-            if (token !== null && token !== 'Cannot find token with specified username.') {
-                ///verify token
-                let result = await tokenUtility.verifyToken(token);
-                if (result.returnString === 'TokenExpiredError') {
-                    let result = await tokenController.delete(token.tokenID);
-                    if (result == 1) {
-                        return res.status(200).json({
-                            message: 'Token deleted, reload login.'
+            
+            ///compare the password and the user hash
+            bcrypt.compare(password, user.userPassword).then(async compare_result => {
+                if (compare_result == true) {
+
+                    //generate token
+                    try {
+                        const token = await tokenUtility.generateToken(user);
+                        return res.status(200).send({
+                            message: "Logged in successfully.",
+                            token: token
                         });
-                    } else {
-                        return res.status(500).json({
-                            message: 'Error deleting token.'
+                    } catch (err) {
+                        return res.status(500).send({
+                            message: "Error generating token."
                         });
                     }
-                } else if (result.returnString === 'JsonWebTokenError') {
-                    return res.status(401).send({
-                        message: 'JsonWebTokenError'
-                    });
-                } else if (result.returnString === 'Logged in successfully.') {
-                    return res.status(200).send({
-                        message: "Logged in successfully.",
-                        userName: username,
-                        token: token.token,
-                        roleID: result.roleID,
-                        profilePictureFileName: user.profilePictureFileName
+
+                } else {
+                    return res.status(400).json({
+                        message: "Either the password or username is incorrect."
                     });
                 }
-                ///need to check username and password, then generate new token
-            } else {
-                ///compare the password and the user hash
-                bcrypt.compare(password, user.userPassword).then(async compare_result => {
-                    if (compare_result == true) {
-
-                        //generate token
-                        try {
-                            const token = await tokenUtility.generateToken(user);
-                            return res.status(200).send({
-                                message: "Logged in successfully.",
-                                userName: username,
-                                token: token,
-                                roleID: user.userRole,
-                                profilePictureFileName: user.profilePictureFileName
-                            });
-                        } catch (err) {
-                            return res.status(500).send({
-                                message: "Error generating token."
-                            });
-                        }
-
-                    } else {
-                        return res.status(400).json({
-                            message: "Either the password or username is incorrect."
-                        });
-                    }
-                }).catch(err => console.error(err.message));
-            }
+            }).catch(err => console.error(err.message));
 
         } else if (req.body.username == undefined) {
             return res.status(400).json({
@@ -172,18 +137,10 @@ router.post('/loginUser', async function (req, res) {
 
 router.post('/checkUserIsLoggedIn', async function (req, res) {
     try {
-        if (req.body.userName !== undefined) {
-            let userName = req.body.userName;
-            //find user token and return
-            let token = await tokenController.findUsername(userName);
-            /// if token doesn't exist, log user out
-            if (token === 'Cannot find token with specified username.') {
-                return res.status(401).send({
-                    message: `Token doesn't exist, please login again.`
-                });
-            }
+        if (req.body.token !== undefined) {
+            let token = req.body.token;
             ///decode token to get result and roleID
-            if (token !== null && token !== 'Cannot find token with specified username.') {
+            if (token !== null) {
                 let result = await tokenUtility.verifyToken(token);
                 if (result.returnString === 'Token deleted, reload login.') {
                     return res.status(200).json({
@@ -198,16 +155,9 @@ router.post('/checkUserIsLoggedIn', async function (req, res) {
                         message: 'JsonWebTokenError'
                     });
                 } else if (result.returnString === 'Logged in successfully.') {
-                    const user = await userController.findUsername(userName);
-                    if (typeof user === 'string') {
-                        return res.status(404).send(user);
-                    }
                     return res.status(200).send({
                         message: "Logged in successfully.",
-                        userName: userName,
-                        token: token.token,
-                        roleID: result.roleID,
-                        profilePicture: user.profilePicture
+                        token: token
                     });
                 }
             } else {
@@ -215,9 +165,9 @@ router.post('/checkUserIsLoggedIn', async function (req, res) {
                     message: "Token is null.",
                 });
             }
-        } else if (req.body.username == undefined) {
+        } else if (req.body.token == undefined) {
             return res.status(400).json({
-                message: "The username is required."
+                message: "The token is required."
             });
         }
     } catch (err) {
@@ -373,11 +323,16 @@ router.put('/editUser', async function (req, res) {
                 req.body.userPassword = hash;
 
             }
-
-            ///if roleID is being updated we need to update the token
-            if (req.body.userRole != undefined && user.userRole != undefined && req.body.userRole != user.userRole) {
+            let token = 'no token update.';
+            ///if roleID, userName, or profilePictureFileName are being updated we need to update the token
+            if (
+                (req.body.userRole != undefined && user.userRole != undefined && req.body.userRole != user.userRole) || (req.body.userName != undefined && user.userName != undefined && req.body.userName != user.userName)
+                || (req.body.profilePictureFileName != undefined && user.profilePictureFileName != undefined && req.body.profilePictureFileName != user.profilePictureFileName)
+            ) {
                 user.userRole = req.body.userRole;
-                await tokenUtility.updateToken(user);
+                user.userName = req.body.userName;
+                user.profilePictureFileName = req.body.profilePictureFileName;
+                token = await tokenUtility.generateToken(user);
             }
 
             ///update user
@@ -388,7 +343,7 @@ router.put('/editUser', async function (req, res) {
             } else if (updatedUser !== undefined) {
                 res.status(200).json({
                     message: "The user was updated successfully.",
-                    user_id: req.body.userID
+                    token: token
                 });
             } else {
                 res.status(503).send('User was not updated successfully.');

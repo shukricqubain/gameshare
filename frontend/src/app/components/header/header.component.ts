@@ -1,13 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, lastValueFrom, takeUntil } from 'rxjs';
-import { User } from 'src/app/models/user.model';
+import { Subject, takeUntil } from 'rxjs';
+import { jwtDecode } from "jwt-decode";
 import { ProfilePictureService } from 'src/app/services/profilePicture.service';
 import { RoleService } from 'src/app/services/roleID.service';
-
-import { UserService } from 'src/app/services/user.service';
 import { UsernameService } from 'src/app/services/username.service';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -22,8 +20,7 @@ export class HeaderComponent {
     private router: Router,
     private usernameService: UsernameService,
     private roleService: RoleService,
-    private profilePictureService: ProfilePictureService,
-    private snackBar: MatSnackBar
+    private profilePictureService: ProfilePictureService
   ){
   }
 
@@ -42,13 +39,12 @@ export class HeaderComponent {
     this.profilePictureService.getProfilePictureObs()
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe(profilePictureFileName => this.profilePictureFileName = profilePictureFileName);
-    let localUserName = localStorage.getItem('userName');
-    let localRoleID = localStorage.getItem('roleID');
-    let localProfilePictureFileName = localStorage.getItem('profilePictureFileName');
-    if(localUserName != null && localRoleID != null && localProfilePictureFileName != null){
-      this.userName = localUserName;
-      this.roleID = Number(localRoleID);
-      this.profilePictureFileName = localProfilePictureFileName; 
+    let token = localStorage.getItem('token');
+    if(token != null){
+      let decoded: any = jwtDecode(token);
+      this.userName = decoded.userName;
+      this.roleID = decoded.roleID;
+      this.profilePictureFileName = decoded.profilePictureFileName;
     }
   }
 
@@ -66,9 +62,7 @@ export class HeaderComponent {
   }
 
   logout(){
-    localStorage.removeItem("userName");
-    localStorage.removeItem('roleID');
-    localStorage.removeItem('profilePictureFileName');
+    localStorage.removeItem("token");
     this.profilePictureFileName = '';
     this.router.navigate(['/login']);
   }

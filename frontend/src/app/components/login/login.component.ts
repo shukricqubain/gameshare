@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { User } from 'src/app/models/user.model';
+import { jwtDecode } from "jwt-decode";
 import { UserService } from 'src/app/services/user.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { UsernameService } from 'src/app/services/username.service';
 import { RoleService } from 'src/app/services/roleID.service';
 import { ProfilePictureService } from 'src/app/services/profilePicture.service';
@@ -80,29 +80,21 @@ export class LoginComponent {
       this.snackBar.open(data.message, 'dismiss', {
         duration: 3000
       });
-      this.usernameService.setUsernameObs(data.userName);
-      this.roleService.setRoleObs(data.roleID);
-      this.profilePictureService.setProfilePictureObs(data.profilePictureFileName);
-      localStorage.setItem('userName', data.userName);
-      localStorage.setItem('roleID', data.roleID);
-      if(data.profilePictureFileName == undefined){
-        data.profilePictureFileName = '';
-      }
-      localStorage.setItem('profilePictureFileName', data.profilePictureFileName);
+      localStorage.setItem('token',data.token);
+      let decoded: any = jwtDecode(data.token);
+      this.usernameService.setUsernameObs(decoded.userName);
+      this.roleService.setRoleObs(decoded.roleID);
+      this.profilePictureService.setProfilePictureObs(decoded.profilePictureFileName);
       this.router.navigate(['/home']);
     } else if(data.message === 'Token deleted, reload login.') {
-      localStorage.removeItem('userName'); 
-      localStorage.removeItem('roleID');
-      localStorage.removeItem('profilePictureFileName');
+      localStorage.removeItem('token');
       this.loginForm.controls.username.patchValue('');
       this.loginForm.controls.password.patchValue('');
       this.snackBar.open('Token expired. Please login again.', 'dismiss', {
         duration: 3000
       });
     } else {
-      localStorage.removeItem('userName'); 
-      localStorage.removeItem('roleID');
-      localStorage.removeItem('profilePictureFileName');
+      localStorage.removeItem('token');
       this.loginForm.controls.username.patchValue('');
       this.loginForm.controls.password.patchValue('');
     }

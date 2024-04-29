@@ -27,7 +27,6 @@ db.sequelize.sync({alter: false, force: false}).then(() => {
 const home = require('./routes/home.route');
 const role = require('./routes/role.route');
 const user = require('./routes/user.route');
-const token = require('./routes/token.route');
 const game = require('./routes/game.route');
 const achievement = require('./routes/achievement.route');
 const userGame = require('./routes/userGame.route');
@@ -45,7 +44,6 @@ const userHighlight = require('./routes/userHighlight.route');
 app.use("/home", home);
 app.use("/user", user);
 app.use("/role", role);
-app.use("/token", token);
 app.use("/game", game);
 app.use("/achievement", achievement);
 app.use("/userGame", userGame);

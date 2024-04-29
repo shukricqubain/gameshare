@@ -10,6 +10,7 @@ import { UserChat } from 'src/app/models/userChat.model';
 import { UserMessage } from 'src/app/models/userMessage.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FileNameService } from 'src/app/services/filename.service';
+import { jwtDecode } from "jwt-decode";
 
 @Component({
   selector: 'app-user-message',
@@ -80,8 +81,12 @@ export class UserMessageComponent {
   }
 
   async checkCurrentUser() {
-    this.userName = localStorage.getItem('userName') ? localStorage.getItem('userName') : '';
-    this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+    let token = localStorage.getItem('token');
+    if(token){
+      let decoded: any = jwtDecode(token);
+      this.userName = decoded.userName;
+      this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+    }
   }
 
   async loadAllMessages(){

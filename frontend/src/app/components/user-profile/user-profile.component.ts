@@ -36,6 +36,7 @@ import { UserChat } from 'src/app/models/userChat.model';
 import { UserChatService } from 'src/app/services/userChat.service';
 import { AddUserChatComponent } from './user-chat/add-user-chat/add-user-chat.component';
 import { UserName } from 'src/app/models/userName.model';
+import { jwtDecode } from "jwt-decode";
 
 @Component({
   selector: 'app-user-profile',
@@ -284,25 +285,31 @@ export class UserProfileComponent {
   async onSubmit() {
     let initial_username = this.user.userName;
     let updated_username = this.userProfileForm.controls.userName.value;
-    let initial_role = localStorage.getItem('roleID');
-    let updated_role = this.userProfileForm.controls.userRole.value;
-    if (initial_username !== null && updated_username !== null && initial_username !== updated_username) {
-      this.usernameService.setUsernameObs(updated_username);
+    let token = localStorage.getItem('token');
+    if(token){
+      let decoded: any = jwtDecode(token);
+      let initial_role = decoded.roleID;
+      let updated_role = this.userProfileForm.controls.userRole.value;
+      if (initial_username !== null && updated_username !== null && initial_username !== updated_username) {
+        this.usernameService.setUsernameObs(updated_username);
+      }
+      if (initial_role !== null && updated_role !== null && initial_role !== updated_role) {
+        this.roleService.setRoleObs(updated_role);
+      }
+      await this.userService.update(this.userProfileForm.value).subscribe({
+        next: this.handleUpdateResponse.bind(this),
+        error: this.handleErrorResponse.bind(this)
+      });
     }
-    if (initial_role !== null && updated_role !== null && initial_role !== updated_role) {
-      this.roleService.setRoleObs(updated_role);
-      localStorage.setItem('roleID', updated_role);
-    }
-    await this.userService.update(this.userProfileForm.value).subscribe({
-      next: this.handleUpdateResponse.bind(this),
-      error: this.handleErrorResponse.bind(this)
-    });
   }
 
   handleUpdateResponse(data: any) {
     this.snackBar.open(data.message, 'dismiss', {
       duration: 2000
     });
+    if(data.token !== 'no token update.'){
+      localStorage.setItem('token', data.token);
+    }
     this.editEnabled = false;
     this.changeForm();
   }
@@ -345,10 +352,14 @@ export class UserProfileComponent {
       if(!this.userLoaded){
 
         if (data.userID == undefined) {
-          let userName = localStorage.getItem('userName');
-          if (userName !== null) {
-            let result = await lastValueFrom(this.userService.getUserByName(userName).pipe());
-            this.setupUser(result);
+          let token = localStorage.getItem('token');
+          if(token){
+            let decoded: any = jwtDecode(token);
+            let userName = decoded.userName;
+            if (userName !== null) {
+              let result = await lastValueFrom(this.userService.getUserByName(userName).pipe());
+              this.setupUser(result);
+            }
           }
         } else {
           let result = await lastValueFrom(this.userService.get(data.userID).pipe());

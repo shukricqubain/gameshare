@@ -9,6 +9,7 @@ import { BoardService } from 'src/app/services/board.service';
 import { ThreadService } from 'src/app/services/thread.service';
 import { BoardName } from 'src/app/models/boardName.model';
 import { UserService } from 'src/app/services/user.service';
+import { jwtDecode } from "jwt-decode";
 
 @Component({
   selector: 'app-add-thread',
@@ -39,34 +40,38 @@ export class AddThreadComponent {
   userID: Number = 0;
 
   async ngOnInit() {
-    let localUserName = localStorage.getItem('userName');
-    if(localUserName !== '' && localUserName !== undefined && localUserName !== null){
-      let user =  await lastValueFrom(this.userService.getUserByName(localUserName).pipe());
-      if(user !== null && user !== undefined && user.userID !== undefined){
-        this.userID = user.userID;
+    let token = localStorage.getItem('token');
+    if(token != null){
+      let decoded: any = jwtDecode(token);
+      let localUserName = decoded.userName;
+      if(localUserName !== '' && localUserName !== undefined && localUserName !== null){
+        let user =  await lastValueFrom(this.userService.getUserByName(localUserName).pipe());
+        if(user !== null && user !== undefined && user.userID !== undefined){
+          this.userID = user.userID;
+        }
       }
-    }
-    if(this.data !== null && this.data !== undefined && this.data.allBoards !== null && this.data.allBoards !== undefined){
-      this.allBoardNames = this.data.allBoardNames;
-    } else {
-      await this.loadAllBoardNames();
-    }
-    if(this.data !== null && this.data != undefined && this.data.isEdit == true){
-      this.isEdit = true;
-      let boardName = `${this.data.element.boardName}`;
-      let threadName = `${this.data.element.threadName}`;
-      let createdAt = `${this.data.element.createdAt}`;
-      let updatedAt = `${this.data.element.updatedAt}`;
-      this.addThreadForm.controls.boardName.patchValue(boardName);
-      this.addThreadForm.controls.threadName.patchValue(threadName);
-      this.addThreadForm.controls.createdAt.patchValue(createdAt);
-      this.addThreadForm.controls.updatedAt.patchValue(updatedAt);
-    }
-    if(this.data.board !== null && this.data.board !== undefined && this.data.isEdit == false){
-      let boardID = this.data.board.boardID;
-      let boardName = this.allBoardNames.find(obj => obj.boardID == boardID)?.boardName;
-      boardName = `${boardName}`;
-      this.addThreadForm.controls.boardName.patchValue(boardName);
+      if(this.data !== null && this.data !== undefined && this.data.allBoards !== null && this.data.allBoards !== undefined){
+        this.allBoardNames = this.data.allBoardNames;
+      } else {
+        await this.loadAllBoardNames();
+      }
+      if(this.data !== null && this.data != undefined && this.data.isEdit == true){
+        this.isEdit = true;
+        let boardName = `${this.data.element.boardName}`;
+        let threadName = `${this.data.element.threadName}`;
+        let createdAt = `${this.data.element.createdAt}`;
+        let updatedAt = `${this.data.element.updatedAt}`;
+        this.addThreadForm.controls.boardName.patchValue(boardName);
+        this.addThreadForm.controls.threadName.patchValue(threadName);
+        this.addThreadForm.controls.createdAt.patchValue(createdAt);
+        this.addThreadForm.controls.updatedAt.patchValue(updatedAt);
+      }
+      if(this.data.board !== null && this.data.board !== undefined && this.data.isEdit == false){
+        let boardID = this.data.board.boardID;
+        let boardName = this.allBoardNames.find(obj => obj.boardID == boardID)?.boardName;
+        boardName = `${boardName}`;
+        this.addThreadForm.controls.boardName.patchValue(boardName);
+      }
     }
   }
 

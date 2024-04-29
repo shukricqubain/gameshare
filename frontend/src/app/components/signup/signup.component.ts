@@ -7,7 +7,7 @@ import { UserService } from 'src/app/services/user.service';
 import { UsernameService } from 'src/app/services/username.service';
 import { Location } from '@angular/common';
 import { User } from 'src/app/models/user.model';
-
+import { jwtDecode } from "jwt-decode";
 
 @Component({
   selector: 'app-signup',
@@ -78,10 +78,10 @@ export class SignupComponent {
     let userName = this.signupForm.controls.userName.value;
     let role = this.signupForm.controls.userRole.value;
     if(data.user_id !== null && data.created_user !== null && userName !== null && role !== null){
-      localStorage.setItem('roleID', role);
-      localStorage.setItem('userName', userName);
-      this.usernameService.setUsernameObs(userName);
-      this.roleService.setRoleObs(role);
+      localStorage.setItem('token',data.token);
+      let decoded: any = jwtDecode(data.token);
+      this.usernameService.setUsernameObs(decoded.userName);
+      this.roleService.setRoleObs(decoded.roleID);
       this.snackBar.open('Successfully signed up!', 'dismiss',{
         duration: 3000
       });

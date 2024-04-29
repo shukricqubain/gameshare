@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Thread } from 'src/app/models/thread.model';
+import { jwtDecode } from "jwt-decode";
 import { Location } from '@angular/common';
 import { ThreadItem } from 'src/app/models/threadItem.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThreadItemService } from 'src/app/services/threadItem.service';
 import { AddThreadItemComponent } from './add-thread-item/add-thread-item.component';
 import { UserService } from 'src/app/services/user.service';
-import { elementAt, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { PopUpComponent } from 'src/app/components/reusable/pop-up/pop-up.component';
 import { DateFunctionsService } from 'src/app/services/dateFunctions.service';
@@ -252,8 +252,12 @@ export class ThreadComponent {
   }
 
   async checkCurrentUser() {
-    this.userName = localStorage.getItem('userName') ? localStorage.getItem('userName') : '';
-    this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+    let token = localStorage.getItem('token');
+    if(token){
+      let decoded: any = jwtDecode(token);
+      this.userName = decoded.userName;
+      this.user = await lastValueFrom(this.userService.getUserByName(this.userName).pipe());
+    }
   }
 
   public deleteThreadItem(element: any) {

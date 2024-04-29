@@ -20,19 +20,17 @@ export class AppComponent {
   }
 
   async ngOnInit(){
-    /// check if userName and roleID is in local storage
-    let localUserName = localStorage.getItem('userName');
-    let localRoleID = localStorage.getItem('roleID');
+    ///grab token from localstorage
+    let token = localStorage.getItem('token');
     ///see if token is expired
-    if(localUserName !== null && localRoleID !== null){
-      let data = {
-        userName: localUserName,
-        roleID: localRoleID
-      }
-      await this.userService.checkLoggedIn(data).subscribe({
+    if(token){
+      await this.userService.checkLoggedIn({token:token}).subscribe({
         next: this.handleLoginResponse.bind(this),
         error: this.handleErrorResponse.bind(this)
       });
+    } else {
+      localStorage.removeItem("token"); 
+      this.router.navigate(['/login']);
     }
 
     this.router.events.subscribe((event: any) => {
@@ -48,28 +46,20 @@ export class AppComponent {
 
   handleLoginResponse(data: any) {
     if (data.message === 'Logged in successfully.') {
-      localStorage.setItem('userName', data.userName);
-      localStorage.setItem('roleID', data.roleID);
-    ///if token expired, remove role and username from local storage reload login
+      localStorage.setItem('token', data.token);
+    ///if token expired, remove token from local storage reload login
     } else if(data.message === 'Token deleted, reload login.') {
-      localStorage.removeItem("userName"); 
-      localStorage.removeItem("roleID");
+      localStorage.removeItem("token"); 
       this.router.navigate(['/login']);
       this.snackBar.open('Token expired. Please login again.', 'dismiss', {
         duration: 3000
       });
-    ///if no token exists on db reroute to login page
-    } else {
-      localStorage.removeItem("userName"); 
-      localStorage.removeItem("roleID");
-      this.router.navigate(['/login']);
     }
   }
 
   handleErrorResponse(error: any) {
     if (error.error.message !== undefined && error.error.message === `Token doesn't exist, please login again.`) {
-      localStorage.removeItem("userName"); 
-      localStorage.removeItem("roleID");
+      localStorage.removeItem("token");
       this.router.navigate(['/login']);
       this.snackBar.open(error.error.message, 'dismiss', {
         duration: 3000

@@ -12,6 +12,7 @@ import { Game } from 'src/app/models/game.model';
 import { GameInfoComponent } from '../games/game-info/game-info.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { jwtDecode } from "jwt-decode";
 import { Thread } from 'src/app/models/thread.model';
 
 @Component({
@@ -52,12 +53,16 @@ export class ViewUserProfileComponent {
 
   async ngAfterViewInit(){
     let data: any = this.location.getState();
-    let userName: any = localStorage.getItem('userName');
-    await this.loadCurrentUser(userName);
-    await this.loadUserToView(data);
-    await this.checkFriendStatus();
-    await this.loadGameHighlights();
-    await this.loadThreadHighlights();
+    let token = localStorage.getItem('token');
+    if(token){
+      let decoded: any = jwtDecode(token);
+      let userName: any = decoded.userName;
+      await this.loadCurrentUser(userName);
+      await this.loadUserToView(data);
+      await this.checkFriendStatus();
+      await this.loadGameHighlights();
+      await this.loadThreadHighlights();
+    }
   }
 
   async loadGameHighlights(){

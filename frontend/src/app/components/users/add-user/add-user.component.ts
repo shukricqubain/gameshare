@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UsernameService } from 'src/app/services/username.service';
+import { jwtDecode } from "jwt-decode";
 import { RoleService } from 'src/app/services/roleID.service';
 
 @Component({
@@ -96,26 +97,29 @@ export class AddUserComponent {
     newUser.createdAt = this.addUserForm.controls.createdAt.value || '';
     newUser.updatedAt = this.addUserForm.controls.updatedAt.value || '';
     if(this.isEdit){
-      let currentUser = localStorage.getItem('userName');
-      ///only update roleID and username if user being edited is the same one as the logged in user.
-      if(currentUser === newUser.userName){
-        let initial_username = newUser.userName;
-        let updated_username = this.addUserForm.controls.userName.value;
-        let initial_role = localStorage.getItem('roleID');
-        let updated_role = this.addUserForm.controls.userRole.value;
-        if(initial_username !== null && updated_username !== null && initial_username !== updated_username){
-          this.usernameService.setUsernameObs(updated_username);
+      let token = localStorage.getItem('token');
+      if(token){
+        let decoded: any = jwtDecode(token);
+        let currentUser = decoded.userName;
+        ///only update roleID and username if user being edited is the same one as the logged in user.
+        if(currentUser === newUser.userName){
+          let initial_username = newUser.userName;
+          let updated_username = this.addUserForm.controls.userName.value;
+          let initial_role = decoded.roleID;
+          let updated_role = this.addUserForm.controls.userRole.value;
+          if(initial_username !== null && updated_username !== null && initial_username !== updated_username){
+            this.usernameService.setUsernameObs(updated_username);
+          }
+          if(initial_role !== null && updated_role !== null && initial_role !== updated_role){
+            this.roleService.setRoleObs(updated_role);
+          }
         }
-        if(initial_role !== null && updated_role !== null && initial_role !== updated_role){
-          this.roleService.setRoleObs(updated_role);
-          localStorage.setItem('roleID', updated_role);
-        }
+        newUser.userID = this.data?.element.userID;
+        this.userService.update(newUser).subscribe({
+          next: this.handleEditResponse.bind(this),
+          error: this.handleErrorResponse.bind(this)
+        });
       }
-      newUser.userID = this.data?.element.userID;
-      this.userService.update(newUser).subscribe({
-        next: this.handleEditResponse.bind(this),
-        error: this.handleErrorResponse.bind(this)
-      });
     } else {
       this.userService.create(newUser).subscribe({
         next: this.handleCreateResponse.bind(this),
