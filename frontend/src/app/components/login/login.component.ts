@@ -101,15 +101,10 @@ export class LoginComponent {
   }
 
   handleErrorResponse(error: any) {
-    if (error.error === 'Cannot find user with specified username') {
-      this.snackBar.open(`This user doesn't exist. Please signup.`, 'dismiss', {
-        duration: 3000
-      });
-    } else {
-      this.snackBar.open(error.error.message, 'dismiss', {
-        duration: 3000
-      });
-    }
+    console.error(error);
+    this.snackBar.open(error, 'dismiss', {
+      duration: 3000
+    });
   }
 
 }

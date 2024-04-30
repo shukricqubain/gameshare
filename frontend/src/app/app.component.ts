@@ -58,16 +58,11 @@ export class AppComponent {
   }
 
   handleErrorResponse(error: any) {
-    if (error.error.message !== undefined && error.error.message === `Token doesn't exist, please login again.`) {
-      localStorage.removeItem("token");
-      this.router.navigate(['/login']);
-      this.snackBar.open(error.error.message, 'dismiss', {
-        duration: 3000
-      });
-    } else {
-      this.snackBar.open(error.message, 'dismiss', {
-        duration: 3000
-      });
-    }
+    console.log(error)
+    localStorage.removeItem("token");
+    this.router.navigate(['/login']);
+    this.snackBar.open(error.error.message, 'dismiss', {
+      duration: 3000
+    });
   }
 }

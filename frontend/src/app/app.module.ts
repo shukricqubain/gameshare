@@ -71,6 +71,9 @@ import { UserMessageComponent } from './components/user-profile/user-chat/user-m
 import { ImageUploadComponent } from './components/reusable/image-upload/image-upload.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { GhostComponent } from './components/ghost/ghost/ghost.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthService } from './auth/auth.service';
+import { AuthInterceptor } from './auth/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -113,7 +116,7 @@ import { GhostComponent } from './components/ghost/ghost/ghost.component';
     AddUserChatComponent,
     UserMessageComponent,
     ImageUploadComponent,
-    GhostComponent
+    GhostComponent,
   ],
   imports: [
     BrowserModule,
@@ -170,7 +173,13 @@ import { GhostComponent } from './components/ghost/ghost/ghost.component';
   ],
   providers: [
     MatDatepickerModule,
-    provideNgxMask()
+    provideNgxMask(),
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
