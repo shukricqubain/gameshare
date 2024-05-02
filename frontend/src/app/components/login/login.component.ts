@@ -102,7 +102,7 @@ export class LoginComponent {
 
   handleErrorResponse(error: any) {
     console.error(error);
-    this.snackBar.open(error, 'dismiss', {
+    this.snackBar.open(error.statusText, 'dismiss', {
       duration: 3000
     });
   }

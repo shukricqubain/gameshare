@@ -47,6 +47,7 @@ export class AppComponent {
   handleLoginResponse(data: any) {
     if (data.message === 'Logged in successfully.') {
       localStorage.setItem('token', data.token);
+      this.router.navigate(['/home']);
     ///if token expired, remove token from local storage reload login
     } else if(data.message === 'Token deleted, reload login.') {
       localStorage.removeItem("token"); 
@@ -58,7 +59,6 @@ export class AppComponent {
   }
 
   handleErrorResponse(error: any) {
-    console.log(error)
     localStorage.removeItem("token");
     this.router.navigate(['/login']);
     this.snackBar.open(error.error.message, 'dismiss', {
